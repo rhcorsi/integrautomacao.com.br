@@ -38,7 +38,8 @@ site/
 ├── functions/api/           # Cloudflare Pages Functions
 │   └── contact.ts           # POST /api/contact (Turnstile + Resend)
 ├── workers/
-│   └── legacy-redirects.ts  # Worker para ?p=N (deploy via wrangler)
+│   ├── legacy-redirects.ts  # Worker para ?p=N (deploy via wrangler)
+│   └── wrangler.toml        # config do Worker (NÃO do Pages)
 ├── src/
 │   ├── assets/              # imagens otimizadas via astro:assets
 │   ├── components/          # componentes reutilizáveis
@@ -188,13 +189,17 @@ build.
 Roda **separado** do site Pages, em zone-level. Após o cutover de DNS:
 
 ```bash
+cd workers
 npx wrangler login                  # interativo, primeira vez
-npx wrangler deploy                 # deploya o Worker
+npx wrangler deploy                 # deploya o Worker (lê workers/wrangler.toml)
 ```
 
 No painel: **Workers & Pages → integrautomacao-legacy-redirects → Triggers**
 adicione a route `integrautomacao.com.br/*` (Zone:
 integrautomacao.com.br).
+
+> O `wrangler.toml` fica em `workers/`, não no root, para que o Cloudflare
+> Pages não o leia como config de Pages durante o build.
 
 ## Branch protection (recomendado)
 

@@ -1,0 +1,21 @@
+name = "integrautomacao-legacy-redirects"
+main = "legacy-redirects.ts"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# This config is for the legacy-redirects Worker only — NOT for Pages.
+# It lives in workers/ so Cloudflare Pages doesn't try to read it as a
+# Pages config (which would require pages_build_output_dir).
+#
+# Deploy from this directory:
+#   cd workers && npx wrangler deploy
+#
+# After deploy, attach the Worker to a route in the Cloudflare dashboard:
+#   Workers & Pages → integrautomacao-legacy-redirects → Triggers
+#     → Add route: integrautomacao.com.br/*  (zone integrautomacao.com.br)
+#
+# Or uncomment below to set the route declaratively (the zone must
+# already exist in this Cloudflare account):
+# routes = [
+#   { pattern = "integrautomacao.com.br/*", zone_name = "integrautomacao.com.br" }
+# ]
