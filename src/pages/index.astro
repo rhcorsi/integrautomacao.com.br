@@ -12,6 +12,7 @@ import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.j
 import factorytalkReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
+import devicewiseReference from "@/assets/manuals/telit-devicewise-platform-introduction.jpg";
 
 const values = [
   {
@@ -122,6 +123,50 @@ const evidence = [
   </section>
 
   <CredentialStrip />
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-10 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-20">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red">
+          Integrador de sistemas
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Rockwell no centro. deviceWISE e multi-vendor onde a planta exige.
+        </h2>
+        <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          A Integra carrega com orgulho a bandeira de integradora de sistemas:
+          guiar o cliente entre fabricantes, redes, softwares, versões legadas
+          e novas plataformas sem perder segurança, documentação e manutenção.
+          Além da parceria Rockwell, atuamos com TC deviceWISE em IIoT e
+          atendemos tecnologias Siemens, Elipse E3 e Schneider quando a base da
+          planta pede integração multi-vendor.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          {[
+            { href: "/tecnologias/tc-devicewise", label: "TC deviceWISE" },
+            { href: "/tecnologias/tia-portal", label: "Siemens" },
+            { href: "/tecnologias/elipse-e3", label: "Elipse E3" },
+            { href: "/tecnologias/schneider-control-expert", label: "Schneider" },
+          ].map((item) => (
+            <a
+              href={item.href}
+              class="inline-flex items-center rounded-md border border-integra-gray-300 px-4 py-2 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-red hover:text-integra-red"
+            >
+              {item.label}
+              <span class="ml-1.5" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <ManualReference
+        image={devicewiseReference}
+        alt="Diagrama Telit Cinterion deviceWISE com camadas Connect, Manage e Integrate"
+        title="TC deviceWISE para integração OT/IT"
+        source="Telit Cinterion · deviceWISE IoT Platform Introduction"
+        caption="Referência pública usada para explicar gateway industrial, conectividade multi-vendor, edge, cloud e integração de dados com sistemas externos."
+      />
+    </div>
+  </section>
 
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-16 lg:py-20">

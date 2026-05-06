@@ -3,13 +3,16 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import { Image } from "astro:assets";
+import integratorManifestoPost from "@/assets/manuals/integra-system-integrator-linkedin.jpg";
+import telitPartnerPost from "@/assets/manuals/telit-devicewise-partner-linkedin.jpg";
 
 const programs = [
   {
     id: "rockwell",
     title: "Rockwell Automation Partner Network",
     summary:
-      "Programa oficial da Rockwell para integradores qualificados. Acesso a treinamentos, suporte técnico de produto e canais de coordenação técnica direta.",
+      "Programa oficial da Rockwell para integradores qualificados. É o eixo principal da Integra em automação industrial, com acesso a treinamentos, suporte técnico de produto e canais de coordenação técnica direta.",
     items: [
       "Silver System Integrator",
       "PlantPAx DCS Certified Partner",
@@ -37,6 +40,22 @@ const programs = [
     },
   },
   {
+    id: "telit-devicewise",
+    title: "Telit Cinterion — integrador TC deviceWISE",
+    summary:
+      "Parceria formal para aplicação da plataforma TC deviceWISE em projetos IIoT, edge gateways e integração OT/IT. É a segunda frente formal da Integra, complementar ao foco Rockwell.",
+    items: [
+      "TC deviceWISE para integração industrial e IIoT",
+      "Edge + cloud, drivers industriais e fluxos no-code",
+      "Conectividade multi-vendor: PLCs, sensores, bancos, APIs e MQTT",
+    ],
+    note: "Parceria pública divulgada pela Telit Cinterion e pela Integra. Escopo técnico deve sempre ser aplicado por diagnóstico de arquitetura.",
+    cta: {
+      href: "/tecnologias/tc-devicewise",
+      label: "Ver tecnologia deviceWISE",
+    },
+  },
+  {
     id: "cisco",
     title: "Cisco Networking Academy",
     summary:
@@ -49,10 +68,18 @@ const programs = [
   },
   {
     id: "siemens",
-    title: "Siemens — SIMATIC PCS 7",
+    title: "Siemens — capacitação e tecnologias atendidas",
     summary:
-      "Capacitação Siemens em PCS 7 versão 9, com certificação de Industrial Networks Certification (CPIN-LEVEL).",
-    items: ["SIMATIC PCS 7 V9", "Industrial Networks Certification (CPIN)"],
+      "Experiência e capacitação técnica em ferramentas Siemens usadas em plantas industriais. Não representa programa formal de integrador certificado Siemens.",
+    items: [
+      "TIA Portal, SIMATIC Manager / STEP 7 Classic e WinCC",
+      "Treinamento em SIMATIC PCS 7 V9",
+      "Industrial Networks Certification (CPIN-Level)",
+    ],
+    cta: {
+      href: "/tecnologias/tia-portal",
+      label: "Ver tecnologias Siemens",
+    },
   },
   {
     id: "isa",
@@ -65,21 +92,23 @@ const programs = [
 ---
 
 <BaseLayout
-  title="Certificações"
-  description="Certificações e capacitações oficiais da Integra: Rockwell Automation Partner Network, Cisco Networking Academy, Siemens PCS 7, ISA Senior Member."
+  title="Certificações e Parcerias"
+  description="Parcerias, certificações e capacitações da Integra: Rockwell Automation Partner Network, PlantPAx DCS, Telit Cinterion TC deviceWISE, Cisco, Siemens e ISA."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
       <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
-        Certificações
+        Certificações e parcerias
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Credibilidade verificável.
+        Credibilidade verificável, sem misturar selo com experiência.
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Nossas certificações são públicas e podem ser verificadas
-        diretamente nos programas oficiais dos fabricantes. Capacitação
-        contínua é parte do nosso valor inegociável de Evolução Contínua.
+        A Integra separa parcerias formais, certificações, capacitações e
+        tecnologias atendidas. Rockwell Automation continua no centro do
+        posicionamento; Telit Cinterion deviceWISE entra como parceria formal
+        de IIoT; Siemens, Elipse e Schneider aparecem no catálogo técnico como
+        tecnologias multi-vendor atendidas com responsabilidade.
       </p>
     </div>
   </section>
@@ -87,8 +116,9 @@ const programs = [
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">
       <SectionHeader
-        eyebrow="Programas oficiais"
-        title="Onde investimos formação"
+        eyebrow="Base verificável"
+        title="Parcerias formais, certificações e capacitações"
+        description="Cada item abaixo indica o que é programa formal, certificação, capacitação ou tecnologia atendida. A transparência evita prometer mais do que a engenharia consegue sustentar."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-2">
@@ -131,15 +161,88 @@ const programs = [
     </div>
   </section>
 
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Bandeira Integra"
+        title="Integrador de sistemas é quem transforma tecnologia em planta funcionando"
+        description="O valor da Integra não está em repetir brochure de fabricante. Está em guiar o cliente por um ecossistema complexo, escolher o caminho técnico correto, integrar equipamentos diferentes e deixar o sistema operável, documentado e sustentável."
+        accent={true}
+      />
+
+      <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7">
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+            Orgulho de ser integrador
+          </p>
+          <h2 class="text-2xl font-semibold text-integra-gray-900">
+            A Integra conecta fabricantes, softwares, redes e pessoas.
+          </h2>
+          <p class="mt-4 text-sm leading-relaxed text-integra-gray-700">
+            Em uma planta real, raramente existe uma única tecnologia. Há CLPs
+            Rockwell e Siemens, supervisórios FactoryTalk, Elipse ou Schneider,
+            gateways IIoT, redes industriais, bancos, servidores, painéis e
+            equipes de operação e manutenção. O integrador organiza esse
+            conjunto para que ele funcione com segurança e possa ser mantido.
+          </p>
+          <ul class="mt-6 space-y-3 border-t border-integra-gray-200 pt-5">
+            {[
+              "Traduzir necessidade de produção em arquitetura técnica.",
+              "Escolher tecnologia pelo contexto da planta, não por preferência de catálogo.",
+              "Garantir testes, documentação, backup, handover e suporte.",
+              "Preservar confidencialidade quando o projeto exige NDA.",
+            ].map((item) => (
+              <li class="flex gap-2 text-sm leading-relaxed text-integra-gray-900">
+                <span class="mt-0.5 text-integra-red" aria-hidden="true">›</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <figure class="overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-white shadow-lg">
+            <Image
+              src={integratorManifestoPost}
+              alt="Publicação da Integra sobre o orgulho de ser integrador de sistemas"
+              widths={[420, 640, 900]}
+              sizes="(min-width: 1024px) 340px, 100vw"
+              class="h-auto max-h-[30rem] w-full object-contain"
+            />
+            <figcaption class="border-t border-integra-gray-200 p-4 text-xs leading-relaxed text-integra-gray-600">
+              Publicação institucional usada como base editorial para reforçar
+              a bandeira de integrador de sistemas.
+            </figcaption>
+          </figure>
+
+          <figure class="overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-white shadow-lg">
+            <Image
+              src={telitPartnerPost}
+              alt="Publicação sobre a Integra como parceira Telit Cinterion deviceWISE"
+              widths={[420, 640, 900]}
+              sizes="(min-width: 1024px) 340px, 100vw"
+              class="h-auto max-h-[30rem] w-full object-contain"
+            />
+            <figcaption class="border-t border-integra-gray-200 p-4 text-xs leading-relaxed text-integra-gray-600">
+              Registro público da parceria Telit Cinterion/deviceWISE,
+              aplicada a projetos IIoT e integração OT/IT.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="border-b border-integra-gray-200">
     <div class="container-fluid py-20 max-w-4xl">
       <TechnicalCallout variant="note" title="Política de transparência">
         <p>
-          Listamos apenas certificações que estão atualmente ativas e
-          verificáveis em fontes oficiais (Rockwell PartnerLocator, ISA,
-          Cisco, Siemens). Não usamos selos como decoração — cada um
-          aparece com escopo, nível e data de validação correta. Se
-          encontrar inconsistência, fale conosco.
+          Listamos como certificação ou parceria formal apenas o que pode ser
+          comprovado em programa oficial, documento público ou comunicação
+          validável do fabricante. Siemens, Elipse e Schneider aparecem como
+          tecnologias atendidas, não como selo de integrador certificado.
+          Não usamos logos como decoração: cada claim precisa ter escopo,
+          nível e contexto corretos.
         </p>
       </TechnicalCallout>
     </div>
@@ -147,8 +250,8 @@ const programs = [
 
   <CtaBlock
     variant="dark"
-    title="Quer validar uma certificação específica?"
-    description="Encaminhamos comprovantes oficiais e contato direto com o fabricante quando necessário durante o processo de qualificação."
+    title="Quer validar uma parceria ou tecnologia atendida?"
+    description="Encaminhamos comprovantes oficiais quando aplicável e explicamos o escopo técnico real de cada frente antes de qualquer qualificação."
     primaryCta={{ href: "/contato?assunto=certificacoes", label: "Solicitar comprovação" }}
   />
 </BaseLayout>

@@ -148,6 +148,8 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           { href: "/tecnologias/plantpax-library", label: "PlantPAx Library" },
           { href: "/tecnologias/controllogix-compactlogix", label: "ControlLogix / CompactLogix" },
           { href: "/tecnologias/pid-intertravamentos-sequenciamento", label: "PID e sequenciamento" },
+          { href: "/tecnologias/tia-portal", label: "Siemens TIA Portal" },
+          { href: "/tecnologias/simatic-manager-step7", label: "SIMATIC Manager / STEP 7" },
         ],
       },
       {
@@ -157,6 +159,17 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           { href: "/tecnologias/factorytalk-batch", label: "FactoryTalk Batch" },
           { href: "/tecnologias/factorytalk-historian", label: "FactoryTalk Historian" },
           { href: "/tecnologias/factorytalk-datamosaix", label: "DataMosaix" },
+          { href: "/tecnologias/tc-devicewise", label: "TC deviceWISE" },
+        ],
+      },
+      {
+        title: "Multi-vendor",
+        links: [
+          { href: "/tecnologias/elipse-e3", label: "Elipse E3" },
+          { href: "/tecnologias/siemens-wincc-pcs7", label: "SIMATIC WinCC / PCS 7" },
+          { href: "/tecnologias/schneider-control-expert", label: "Schneider Control Expert" },
+          { href: "/tecnologias/schneider-machine-expert", label: "Schneider Machine Expert" },
+          { href: "/tecnologias/schneider-machine-scada-expert", label: "Schneider Machine SCADA" },
         ],
       },
       {
@@ -164,6 +177,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         links: [
           { href: "/tecnologias/ethernet-ip-cpwe", label: "EtherNet/IP e CPwE" },
           { href: "/tecnologias/iec-62443-nist-ot", label: "IEC 62443 / NIST OT" },
+          { href: "/tecnologias/siemens-redes-industriais", label: "Siemens Redes / Startdrive" },
           { href: "/tecnologias/data-centers-industriais", label: "Data Centers OT" },
           { href: "/tecnologias/backup-recuperacao-desastres", label: "Backup e DR OT" },
         ],
@@ -217,7 +231,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
   "/certificacoes": {
     columns: [
       {
-        title: "Parceria Técnica",
+        title: "Parcerias formais",
         links: [
           {
             href: "/certificacoes/silver-system-integrator",
@@ -229,10 +243,15 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
             label: "PlantPAx DCS Partner",
             description: "Rockwell Automation",
           },
+          {
+            href: "/certificacoes#telit-devicewise",
+            label: "TC deviceWISE Integrator",
+            description: "Telit Cinterion",
+          },
         ],
       },
       {
-        title: "Capacitação",
+        title: "Capacitação e entidades",
         links: [
           {
             href: "/certificacoes#cisco",
@@ -241,8 +260,8 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           },
           {
             href: "/certificacoes#siemens",
-            label: "Siemens PCS 7",
-            description: "CPIN-Level",
+            label: "Siemens PCS 7 / CPIN",
+            description: "Tecnologias atendidas",
           },
           {
             href: "/certificacoes#isa",
@@ -250,15 +269,23 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           },
         ],
       },
+      {
+        title: "Tecnologias atendidas",
+        links: [
+          { href: "/tecnologias/tia-portal", label: "Siemens TIA Portal" },
+          { href: "/tecnologias/elipse-e3", label: "Elipse E3" },
+          { href: "/tecnologias/schneider-control-expert", label: "Schneider Electric" },
+        ],
+      },
     ],
     promo: {
-      eyebrow: "Programa Silver",
-      title: "Rockwell Automation Partner Network",
+      eyebrow: "Integrador de sistemas",
+      title: "Rockwell no centro, deviceWISE e multi-vendor ao redor",
       description:
-        "Certificação que reconhece integradoras com alta qualidade técnica e comercial em automação industrial.",
+        "A Integra diferencia parceria formal de tecnologia atendida e assume o papel de guiar o cliente entre fabricantes, redes, softwares e ciclo de vida.",
       cta: {
-        href: "/certificacoes/silver-system-integrator",
-        label: "Conhecer a parceria",
+        href: "/certificacoes",
+        label: "Ver credenciais",
       },
       imageSrc: "/images/rockwell-si-silver.png",
     },

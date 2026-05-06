@@ -10,6 +10,14 @@ import datamosaixCpweReference from "@/assets/manuals/factorytalk-datamosaix-cpw
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
+import devicewiseReference from "@/assets/manuals/telit-devicewise-platform-introduction.jpg";
+import siemensTiaReference from "@/assets/manuals/siemens-tia-portal-engineering.jpg";
+import siemensWinccReference from "@/assets/manuals/siemens-wincc-unified-engineering.jpg";
+import siemensStartdriveReference from "@/assets/manuals/siemens-startdrive-tia-portal.jpg";
+import elipseE3Reference from "@/assets/manuals/elipse-e3-architecture.jpg";
+import schneiderControlReference from "@/assets/manuals/schneider-control-expert-topology.jpg";
+import schneiderMachineReference from "@/assets/manuals/schneider-machine-expert-engineering.jpg";
+import schneiderScadaReference from "@/assets/manuals/schneider-machine-scada-expert.jpg";
 
 export type TechGroup =
   | "Controle e DCS"
@@ -60,6 +68,14 @@ const dataMosaixSource = "Rockwell Automation - FactoryTalk DataMosaix Reference
 const cpweSource = "Cisco + Rockwell Automation - CPwE Design and Implementation Guides";
 const logixSource = "Rockwell Automation - ControlLogix High Availability Reference Architectures";
 const securitySource = "Rockwell Automation - FactoryTalk Security System Design";
+const devicewiseSource = "Telit Cinterion - deviceWISE IoT Platform Introduction";
+const siemensTiaSource = "Siemens - Totally Integrated Automation Portal";
+const siemensWinccSource = "Siemens - SIMATIC WinCC Unified Engineering";
+const siemensStartdriveSource = "Siemens - SINAMICS Startdrive / TIA Portal";
+const elipseE3Source = "Elipse Software - Elipse E3";
+const schneiderControlSource = "Schneider Electric - EcoStruxure Control Expert";
+const schneiderMachineSource = "Schneider Electric - EcoStruxure Machine Expert";
+const schneiderScadaSource = "Schneider Electric - EcoStruxure Machine SCADA Expert";
 
 const plantpaxRelated = [
   { href: "/solucoes/plantpax", label: "Solução PlantPAx" },
@@ -89,6 +105,11 @@ const cyberRelated = [
 const serviceRelated = [
   { href: "/solucoes", label: "Todas as soluções" },
   { href: "/contato", label: "Falar com especialista" },
+];
+
+const multiVendorRelated = [
+  { href: "/tecnologias", label: "Catálogo técnico" },
+  { href: "/contato?assunto=tecnologias-multivendor", label: "Avaliar stack existente" },
 ];
 
 const commonEngineering = [
@@ -1797,6 +1818,505 @@ export const techCatalog: TechPage[] = [
       { href: "/solucoes/redes-iec-62443", label: "Redes Industriais" },
     ],
     relatedTech: ["controllogix-compactlogix", "pid-intertravamentos-sequenciamento", "factorytalk-view-se"],
+  },
+  {
+    slug: "tc-devicewise",
+    group: "Dados Industriais e IIoT",
+    type: "Software",
+    title: "TC deviceWISE",
+    shortTitle: "TC deviceWISE",
+    description:
+      "Plataforma IIoT da Telit Cinterion para conectar ativos industriais, executar lógica no edge e integrar dados OT com sistemas de negócio.",
+    intro:
+      "TC deviceWISE entra quando a planta precisa transformar dados industriais em integração real: PLCs, sensores, gateways, bancos, APIs, MQTT, dashboards e sistemas corporativos trabalhando com rastreabilidade. A Integra aplica a plataforma como integradora de sistemas, conectando OT e TI sem tratar IoT como painel bonito.",
+    image: devicewiseReference,
+    imageAlt: "Diagrama da plataforma deviceWISE com camadas Connect, Manage e Integrate",
+    imageTitle: "deviceWISE organiza conectividade, gestão e integração IIoT",
+    imageSource: devicewiseSource,
+    imageCaption:
+      "Print de material público Telit Cinterion usado para explicar a lógica da plataforma: conectar dispositivos, gerenciar dados e integrar sistemas de negócio.",
+    useCases: [
+      "Coleta de dados de PLCs, sensores, equipamentos e sistemas multi-vendor.",
+      "Gateway industrial para enviar dados a bancos, APIs, MQTT, sistemas corporativos ou nuvem.",
+      "Triggers e fluxos no-code para eventos, alarmes, condições e integrações OT/IT.",
+      "Projetos de retrofit onde a planta precisa evoluir dados sem reescrever toda a automação.",
+    ],
+    howIntegraActs: [
+      "Mapeia ativos, protocolos, redes, tags, frequência de coleta e destino dos dados.",
+      "Define arquitetura edge/cloud, gateways, drivers, segurança, usuários e retenção.",
+      "Configura conectores, triggers, fluxos, dashboards e integrações com sistemas externos.",
+      "Documenta tags, regras, endpoints, testes e rotina de sustentação para manutenção futura.",
+    ],
+    deliverables: [
+      "Arquitetura deviceWISE com gateway, fontes de dados, destinos e premissas de segurança.",
+      "Mapa de tags, drivers, protocolos e cadência de coleta.",
+      "Fluxos, triggers e integrações com bancos, APIs, MQTT ou sistemas corporativos.",
+      "Painéis iniciais e evidências de teste de comunicação.",
+      "Runbook de operação, backup de configuração e handover técnico.",
+    ],
+    standards: [
+      { code: "deviceWISE", description: "Plataforma IIoT" },
+      { code: "MQTT", description: "Mensageria industrial" },
+      { code: "OPC UA", description: "Interoperabilidade OT" },
+      { code: "Modbus TCP", description: "Conectividade legado" },
+      { code: "REST/API", description: "Integração TI" },
+      { code: "Edge", description: "Processamento local" },
+    ],
+    faq: [
+      {
+        q: "deviceWISE substitui SCADA ou historian?",
+        a: "Não necessariamente. Ele pode complementar SCADA, historian e MES ao organizar conectividade, eventos e integração OT/IT. A arquitetura define se ele coleta, transforma, publica ou apenas conecta dados.",
+      },
+      {
+        q: "Dá para conectar equipamentos de fabricantes diferentes?",
+        a: "Sim. Esse é um dos pontos fortes em projetos multi-vendor: avaliar protocolos, drivers e gateways para criar uma camada de integração sem depender de uma única família de PLC.",
+      },
+    ],
+    relatedSolutions: dataRelated,
+    relatedTech: ["edge-computing-industrial", "thingworx-kepware", "factorytalk-datamosaix", "protocolos-industriais"],
+  },
+  {
+    slug: "tia-portal",
+    group: "Controle e DCS",
+    type: "Software",
+    title: "Siemens TIA Portal",
+    shortTitle: "TIA Portal",
+    description:
+      "Ambiente Siemens para engenharia de PLCs, IHMs, redes PROFINET e drives em arquiteturas SIMATIC modernas.",
+    intro:
+      "TIA Portal concentra engenharia de controladores, IHMs, redes e acionamentos Siemens em um fluxo integrado. A Integra atende projetos com TIA Portal em versões antigas e atuais, principalmente quando a planta já possui base SIMATIC e precisa manter, expandir ou padronizar sistemas sem perder governança.",
+    image: siemensTiaReference,
+    imageAlt: "Material Siemens sobre Totally Integrated Automation Portal",
+    imageTitle: "TIA Portal como ambiente integrado de engenharia Siemens",
+    imageSource: siemensTiaSource,
+    imageCaption:
+      "Print de material público Siemens usado como referência visual. A Integra trabalha com ferramentas Siemens como tecnologia atendida, sem afirmar programa formal de integrador Siemens.",
+    useCases: [
+      "Programação e manutenção de PLCs SIMATIC S7-1200 e S7-1500.",
+      "Expansão de sistemas existentes com IHMs, redes PROFINET e bibliotecas de projeto.",
+      "Padronização de blocos, tags, telas, alarmes e critérios de diagnóstico.",
+      "Migração gradual de projetos clássicos para ambientes Siemens mais atuais.",
+    ],
+    howIntegraActs: [
+      "Analisa versão, hardware, licenças, rede, backups e dependências do projeto.",
+      "Organiza blocos, tags, comentários, telas e diagnósticos com padrão de manutenção.",
+      "Valida comunicação PROFINET, dispositivos, drives e integração com supervisórios.",
+      "Entrega backups, documentação, evidências de teste e orientação de sustentação.",
+    ],
+    deliverables: [
+      "Backup e baseline do projeto TIA Portal.",
+      "Padrão de blocos, tags, comentários, alarmes e telas.",
+      "Configuração e validação de PLC, IHM, rede e dispositivos associados.",
+      "Plano de testes e evidências de comissionamento.",
+      "Documentação as-built e handover para manutenção.",
+    ],
+    standards: [
+      { code: "TIA Portal", description: "Engenharia integrada" },
+      { code: "S7-1200", description: "PLC compacto" },
+      { code: "S7-1500", description: "PLC modular" },
+      { code: "PROFINET", description: "Rede industrial" },
+      { code: "WinCC", description: "HMI/SCADA Siemens" },
+      { code: "Startdrive", description: "Drives no TIA Portal" },
+    ],
+    faq: [
+      {
+        q: "A Integra é integradora certificada Siemens?",
+        a: "Não tratamos Siemens como certificação formal no site. É uma família de tecnologias atendidas pela equipe, com experiência prática e treinamentos específicos.",
+      },
+      {
+        q: "Vocês atendem versões antigas do TIA Portal?",
+        a: "Sim. A primeira etapa é confirmar versão, hardware, firmware e licenças para evitar conversões arriscadas ou perda de compatibilidade.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["simatic-manager-step7", "siemens-wincc-pcs7", "siemens-redes-industriais"],
+  },
+  {
+    slug: "simatic-manager-step7",
+    group: "Controle e DCS",
+    type: "Software",
+    title: "SIMATIC Manager e STEP 7 Classic",
+    shortTitle: "SIMATIC Manager / STEP 7",
+    description:
+      "Manutenção, diagnóstico e evolução de sistemas Siemens legados com STEP 7 Classic, S7-300, S7-400 e arquiteturas anteriores.",
+    intro:
+      "Muitas plantas ainda rodam em SIMATIC Manager, STEP 7 Classic, S7-300, S7-400 e redes industriais antigas. A Integra trata esses sistemas como ativos críticos: antes de mexer, entende backup, comunicação, símbolos, blocos, intertravamentos e impacto de parada.",
+    image: siemensTiaReference,
+    imageAlt: "Referência Siemens de engenharia SIMATIC",
+    imageTitle: "Legado Siemens exige leitura cuidadosa de versão e arquitetura",
+    imageSource: siemensTiaSource,
+    imageCaption:
+      "Material Siemens usado como referência institucional. Em sistemas STEP 7 Classic, a abordagem prioriza backup, compatibilidade e redução de risco antes de qualquer alteração.",
+    useCases: [
+      "Diagnóstico e manutenção de PLCs S7-300 e S7-400.",
+      "Correções em lógicas legadas com blocos, símbolos e comentários incompletos.",
+      "Backup, restauração, comparação de versões e documentação de programas existentes.",
+      "Planejamento de migração para TIA Portal, S7-1500 ou nova arquitetura.",
+    ],
+    howIntegraActs: [
+      "Levanta versão de software, firmware, cartões, redes, backups e senhas disponíveis.",
+      "Cria baseline antes de qualquer intervenção e registra diferenças encontradas.",
+      "Analisa blocos, DBs, intertravamentos, comunicação e interface com supervisório.",
+      "Planeja alterações com janela, teste, rollback e documentação.",
+    ],
+    deliverables: [
+      "Backup validado e inventário do sistema legado.",
+      "Mapa de PLCs, redes, blocos, interfaces e pontos críticos.",
+      "Relatório de riscos e recomendações de modernização.",
+      "Alterações documentadas com evidências de teste.",
+      "Plano de migração ou sustentação para ciclo de vida.",
+    ],
+    standards: [
+      { code: "STEP 7", description: "Engenharia clássica" },
+      { code: "S7-300", description: "PLC legado" },
+      { code: "S7-400", description: "PLC legado" },
+      { code: "PROFIBUS", description: "Rede industrial" },
+      { code: "PROFINET", description: "Rede industrial" },
+      { code: "Rollback", description: "Retorno controlado" },
+    ],
+    faq: [
+      {
+        q: "Vale migrar tudo de uma vez?",
+        a: "Nem sempre. Sistemas legados precisam de matriz de risco, disponibilidade de peças, criticidade operacional e janela de parada antes de definir ritmo de migração.",
+      },
+      {
+        q: "Vocês trabalham com projetos sem documentação?",
+        a: "Sim, mas com cuidado maior. Primeiro preservamos evidências, backup e comportamento existente; depois propomos correção ou reestruturação.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["tia-portal", "siemens-wincc-pcs7", "migracao-plc5-slc500"],
+  },
+  {
+    slug: "siemens-wincc-pcs7",
+    group: "Supervisão e Operação",
+    type: "Software",
+    title: "SIMATIC WinCC e PCS 7",
+    shortTitle: "SIMATIC WinCC / PCS 7",
+    description:
+      "Sistemas Siemens de supervisão, operação e processo, incluindo WinCC clássico, WinCC 7.x, WinCC Unified e bases PCS 7 quando aplicável.",
+    intro:
+      "WinCC e PCS 7 aparecem em plantas que precisam operar processo, telas, alarmes, históricos e diagnósticos dentro do ecossistema Siemens. A Integra atende manutenção, evolução e integração desses ambientes, deixando claro que a atuação é técnica e não um selo formal de integrador Siemens.",
+    image: siemensWinccReference,
+    imageAlt: "Material Siemens sobre SIMATIC WinCC Unified Engineering",
+    imageTitle: "WinCC organiza operação, telas, alarmes e engenharia de supervisão",
+    imageSource: siemensWinccSource,
+    imageCaption:
+      "Print público Siemens usado como referência visual. Projetos com WinCC clássico, WinCC 7.x, Unified ou PCS 7 são avaliados conforme versão, licenças, arquitetura e ciclo de vida.",
+    useCases: [
+      "Manutenção e evolução de supervisórios Siemens existentes.",
+      "Padronização de telas, alarmes, históricos, usuários e diagnósticos.",
+      "Integração de WinCC com PLCs SIMATIC, redes e sistemas externos.",
+      "Apoio técnico em ambientes PCS 7 quando há necessidade de diagnóstico e evolução controlada.",
+    ],
+    howIntegraActs: [
+      "Levanta versão, arquitetura, servidores, clientes, licenças, tags e dependências.",
+      "Organiza telas, alarmes, permissões, históricos e comunicação com PLCs.",
+      "Planeja mudanças sem quebrar operação, com teste de navegação, comandos e alarmes.",
+      "Documenta arquitetura, backups, parâmetros críticos e rotina de restauração.",
+    ],
+    deliverables: [
+      "Inventário de arquitetura WinCC/PCS 7.",
+      "Backup e baseline de aplicação.",
+      "Padrões de telas, alarmes, tags, usuários e históricos.",
+      "Plano de teste funcional e evidências de operação.",
+      "Documentação as-built e orientação de suporte.",
+    ],
+    standards: [
+      { code: "WinCC", description: "Supervisão Siemens" },
+      { code: "PCS 7", description: "Process control system" },
+      { code: "HMI", description: "Operação" },
+      { code: "Alarmes", description: "Governança" },
+      { code: "Historian", description: "Dados operacionais" },
+    ],
+    faq: [
+      {
+        q: "PCS 7 é foco principal da Integra?",
+        a: "Não é o foco principal atual. A Integra possui treinamento e atende necessidades técnicas específicas, mas o posicionamento central continua em Rockwell/PlantPAx e integração multi-vendor.",
+      },
+      {
+        q: "WinCC clássico ainda pode ser mantido?",
+        a: "Sim, desde que versão, licenças, sistema operacional e backups sejam avaliados. Em alguns casos a recomendação será sustentação controlada; em outros, roadmap de modernização.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["tia-portal", "simatic-manager-step7", "elipse-e3", "factorytalk-view-se"],
+  },
+  {
+    slug: "siemens-redes-industriais",
+    group: "Redes e Cibersegurança OT",
+    type: "Tecnologia",
+    title: "Redes Siemens, PROFINET e Startdrive",
+    shortTitle: "Siemens Redes / Startdrive",
+    description:
+      "Redes industriais Siemens, PROFINET, Industrial Ethernet, diagnóstico de comunicação e integração de drives via Startdrive.",
+    intro:
+      "Projetos Siemens dependem de rede bem estruturada: endereçamento, topologia, PROFINET, switches industriais, diagnóstico, drives e comunicação com supervisórios. A Integra aplica conhecimento de redes industriais e treinamento CPIN-Level para sustentar essa camada com método.",
+    image: siemensStartdriveReference,
+    imageAlt: "Material Siemens SINAMICS Startdrive integrado ao TIA Portal",
+    imageTitle: "Redes, drives e engenharia Siemens precisam caminhar juntos",
+    imageSource: siemensStartdriveSource,
+    imageCaption:
+      "Print público Siemens usado para contextualizar o comissionamento de drives no TIA Portal e a importância de rede industrial estável.",
+    theme: "ot",
+    useCases: [
+      "Diagnóstico de falhas de comunicação PROFINET ou Industrial Ethernet.",
+      "Comissionamento e ajuste de drives SINAMICS via Startdrive.",
+      "Organização de topologia, endereçamento, nomes de dispositivo e diagnóstico.",
+      "Integração de PLC, IHM, drives, switches e supervisório em projetos Siemens.",
+    ],
+    howIntegraActs: [
+      "Mapeia topologia, dispositivos, nomes, IPs, firmware e sintomas de falha.",
+      "Valida comunicação, diagnóstico, parametrização e dependências de rede.",
+      "Documenta arquitetura, pontos críticos e critérios de manutenção.",
+      "Recomenda melhorias de segmentação, disponibilidade e governança de acesso quando necessário.",
+    ],
+    deliverables: [
+      "Mapa de rede e inventário de dispositivos Siemens.",
+      "Checklist de comunicação, diagnóstico e parametrização.",
+      "Configuração ou revisão de drives quando aplicável.",
+      "Relatório de riscos e recomendações de segmentação.",
+      "Backup e documentação de parâmetros relevantes.",
+    ],
+    standards: [
+      { code: "PROFINET", description: "Rede Siemens" },
+      { code: "Industrial Ethernet", description: "Camada OT" },
+      { code: "Startdrive", description: "Drives" },
+      { code: "SINAMICS", description: "Acionamentos" },
+      { code: "CPIN", description: "Treinamento redes industriais" },
+    ],
+    faq: [
+      {
+        q: "Rede Siemens é só configurar IP?",
+        a: "Não. PROFINET envolve nomes de dispositivo, topologia, diagnóstico, tempo de atualização, switches, firmware e dependência entre PLC, I/O, drives e supervisório.",
+      },
+      {
+        q: "Vocês podem atuar junto com TI?",
+        a: "Sim. O ponto é traduzir necessidades OT para uma arquitetura que TI consiga governar sem comprometer operação, disponibilidade e manutenção.",
+      },
+    ],
+    relatedSolutions: cyberRelated,
+    relatedTech: ["tia-portal", "protocolos-industriais", "monitoramento-redes-industriais", "iec-62443-nist-ot"],
+  },
+  {
+    slug: "elipse-e3",
+    group: "Supervisão e Operação",
+    type: "Software",
+    title: "Elipse E3",
+    shortTitle: "Elipse E3",
+    description:
+      "Supervisório brasileiro robusto para operação, alarmes, históricos e integração com múltiplas famílias de PLCs e sistemas industriais.",
+    intro:
+      "Elipse E3 é uma solução brasileira reconhecida em supervisão industrial, usada para conectar PLCs, servidores, clientes, históricos, alarmes e operação remota. A Integra desenvolve e mantém sistemas E3 em plantas multi-vendor, com foco em telas coerentes, comunicação confiável e documentação.",
+    image: elipseE3Reference,
+    imageAlt: "Diagrama de arquitetura Elipse E3 com PLCs, servidores, viewers e acesso remoto",
+    imageTitle: "Elipse E3 como camada supervisória multi-vendor",
+    imageSource: elipseE3Source,
+    imageCaption:
+      "Print de material público Elipse usado para explicar arquitetura de servidores, viewers, dispositivos e camadas de acesso.",
+    useCases: [
+      "Desenvolvimento de supervisórios para plantas com PLCs de diferentes fabricantes.",
+      "Modernização de telas, alarmes, históricos, usuários e relatórios.",
+      "Integração de operação local, clientes remotos, bancos de dados e dispositivos de campo.",
+      "Sustentação de aplicações E3 existentes com documentação e backup.",
+    ],
+    howIntegraActs: [
+      "Define arquitetura de servidores, viewers, drivers, bancos, tags e permissões.",
+      "Padroniza telas, objetos, alarmes, históricos e navegação operacional.",
+      "Configura comunicação com PLCs e valida perda/retorno de comunicação.",
+      "Entrega backup, documentação e orientação de manutenção para evolução futura.",
+    ],
+    deliverables: [
+      "Arquitetura Elipse E3 documentada.",
+      "Lista de tags, drivers, telas, alarmes e históricos.",
+      "Padrões de navegação, objetos e permissões.",
+      "Plano de teste de comunicação, comandos e alarmes.",
+      "Backup de aplicação e handover técnico.",
+    ],
+    standards: [
+      { code: "Elipse E3", description: "SCADA/HMI" },
+      { code: "OPC", description: "Integração" },
+      { code: "SQL", description: "Históricos e relatórios" },
+      { code: "Multi-vendor", description: "PLCs diversos" },
+      { code: "Alarmes", description: "Operação" },
+    ],
+    faq: [
+      {
+        q: "Elipse E3 funciona com PLCs de vários fabricantes?",
+        a: "Sim. A viabilidade depende de drivers, protocolos e arquitetura de rede. A Integra avalia cada comunicação antes de fechar escopo.",
+      },
+      {
+        q: "Dá para modernizar uma aplicação existente sem refazer tudo?",
+        a: "Em muitos casos, sim. O diagnóstico separa o que deve ser preservado do que precisa ser padronizado, documentado ou redesenhado.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["factorytalk-view-se", "siemens-wincc-pcs7", "protocolos-industriais", "tc-devicewise"],
+  },
+  {
+    slug: "schneider-control-expert",
+    group: "Controle e DCS",
+    type: "Software",
+    title: "Schneider EcoStruxure Control Expert",
+    shortTitle: "Schneider Control Expert",
+    description:
+      "Engenharia e manutenção de PLCs Schneider/Modicon em ambientes Control Expert, Unity Pro e arquiteturas de controle menores.",
+    intro:
+      "A Integra atende tecnologias Schneider em projetos de PLCs, IHMs, supervisórios e equipamentos de menor porte. O escopo não inclui posicionamento como integrador Foxboro DCS; aqui o foco é engenharia aplicada a Control Expert, Unity Pro, Modicon e sistemas de máquina/processo discreto.",
+    image: schneiderControlReference,
+    imageAlt: "Topologia Schneider EcoStruxure Control Expert",
+    imageTitle: "Control Expert organiza engenharia de PLCs Modicon",
+    imageSource: schneiderControlSource,
+    imageCaption:
+      "Print público Schneider Electric usado como referência visual para PLCs, estações de engenharia, rede e diagnóstico no ecossistema EcoStruxure.",
+    useCases: [
+      "Manutenção e evolução de PLCs Modicon em Control Expert ou Unity Pro.",
+      "Diagnóstico de comunicação, I/O, lógica, alarmes e integração com supervisório.",
+      "Padronização de backups, comentários, blocos e documentação técnica.",
+      "Modernização gradual de sistemas Schneider existentes.",
+    ],
+    howIntegraActs: [
+      "Levanta hardware, versão de software, firmware, rede, backups e dependências.",
+      "Analisa lógica, comunicação, I/O, tags e pontos críticos de manutenção.",
+      "Executa alterações com teste, janela, rollback e registro técnico.",
+      "Entrega documentação, backup e recomendações de sustentação.",
+    ],
+    deliverables: [
+      "Inventário de PLCs Schneider, módulos, redes e versões.",
+      "Backup validado e baseline de aplicação.",
+      "Alterações documentadas em lógica, comunicação ou diagnóstico.",
+      "Plano de teste funcional e evidências.",
+      "Relatório de riscos e roadmap de modernização quando necessário.",
+    ],
+    standards: [
+      { code: "Control Expert", description: "Engenharia Schneider" },
+      { code: "Unity Pro", description: "Base instalada" },
+      { code: "Modicon", description: "PLCs Schneider" },
+      { code: "Ethernet", description: "Comunicação" },
+      { code: "FAT/SAT", description: "Validação" },
+    ],
+    faq: [
+      {
+        q: "Vocês trabalham com Foxboro DCS?",
+        a: "Não posicionamos Foxboro DCS como tecnologia atendida principal. O foco Schneider da Integra está em PLCs menores, IHMs, supervisórios e ferramentas EcoStruxure aplicadas à base instalada.",
+      },
+      {
+        q: "Unity Pro e Control Expert são tratados juntos?",
+        a: "Sim, dentro do cuidado de versão e compatibilidade. Antes de alterar, avaliamos software, firmware, backup e dependências do sistema.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["schneider-machine-expert", "schneider-machine-scada-expert", "protocolos-industriais"],
+  },
+  {
+    slug: "schneider-machine-expert",
+    group: "Controle e DCS",
+    type: "Software",
+    title: "Schneider EcoStruxure Machine Expert",
+    shortTitle: "Schneider Machine Expert",
+    description:
+      "Programação e manutenção de PLCs de máquina Schneider, IHMs e dispositivos em ambientes Machine Expert e bases SoMachine.",
+    intro:
+      "Machine Expert aparece em máquinas, células e sistemas menores com PLCs Schneider. A Integra atua na manutenção, ajustes, expansão e documentação desses sistemas, conectando lógica, IHM, redes e diagnóstico para que a máquina continue sustentável.",
+    image: schneiderMachineReference,
+    imageAlt: "Material Schneider EcoStruxure Machine Expert",
+    imageTitle: "Machine Expert para automação de máquinas e células",
+    imageSource: schneiderMachineSource,
+    imageCaption:
+      "Print público Schneider Electric usado para contextualizar engenharia de máquinas, controladores menores, dispositivos e interface operacional.",
+    useCases: [
+      "Programação e ajustes em PLCs Schneider de máquinas e equipamentos.",
+      "Manutenção de aplicações Machine Expert ou SoMachine.",
+      "Integração com IHMs, inversores, sensores, redes e supervisórios.",
+      "Padronização de backups, comentários e documentação para manutenção.",
+    ],
+    howIntegraActs: [
+      "Identifica controlador, I/O, versão, firmware, bibliotecas, redes e backup disponível.",
+      "Analisa lógica, telas, comunicação e comportamento operacional da máquina.",
+      "Executa alterações com validação em campo e critério de rollback.",
+      "Documenta parâmetros, versões, backups e pontos críticos.",
+    ],
+    deliverables: [
+      "Backup e inventário de controladores e dispositivos.",
+      "Alterações de lógica e IHM documentadas.",
+      "Lista de parâmetros críticos e comunicação.",
+      "Teste funcional com operação/manutenção.",
+      "As-built e recomendações de sustentação.",
+    ],
+    standards: [
+      { code: "Machine Expert", description: "Engenharia de máquina" },
+      { code: "SoMachine", description: "Base instalada" },
+      { code: "HMI", description: "Operação local" },
+      { code: "Modbus TCP", description: "Comunicação" },
+      { code: "Ethernet", description: "Rede" },
+    ],
+    faq: [
+      {
+        q: "Vocês atendem máquinas com Schneider antigo?",
+        a: "Sim, quando há acesso a software, backup e condições de comunicação. O primeiro passo é preservar o estado atual antes de qualquer modificação.",
+      },
+      {
+        q: "Machine Expert entra como solução principal do site?",
+        a: "Não. Ele entra como tecnologia atendida dentro da capacidade multi-vendor da Integra, com prioridade menor que Rockwell e deviceWISE.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["schneider-control-expert", "schneider-machine-scada-expert", "protocolos-industriais"],
+  },
+  {
+    slug: "schneider-machine-scada-expert",
+    group: "Supervisão e Operação",
+    type: "Software",
+    title: "Schneider EcoStruxure Machine SCADA Expert",
+    shortTitle: "Schneider Machine SCADA",
+    description:
+      "Supervisão, telas, alarmes e comunicação para sistemas Schneider em Machine SCADA Expert e aplicações de operação de máquina.",
+    intro:
+      "Machine SCADA Expert apoia aplicações de supervisão em máquinas e sistemas de menor porte. A Integra atende esse tipo de ambiente quando a planta precisa manter, revisar ou integrar telas, alarmes, tags e comunicação com PLCs Schneider ou outros dispositivos.",
+    image: schneiderScadaReference,
+    imageAlt: "Tela de referência Schneider EcoStruxure Machine SCADA Expert",
+    imageTitle: "Machine SCADA Expert para operação e supervisão de máquinas",
+    imageSource: schneiderScadaSource,
+    imageCaption:
+      "Print público Schneider Electric usado como referência visual de ambiente SCADA/HMI. A aplicação final depende do hardware, versão e arquitetura existente.",
+    useCases: [
+      "Manutenção de supervisórios Machine SCADA Expert existentes.",
+      "Criação ou revisão de telas, alarmes, usuários, tags e relatórios.",
+      "Integração com PLCs Schneider e dispositivos multi-vendor.",
+      "Padronização de operação e documentação para manutenção local.",
+    ],
+    howIntegraActs: [
+      "Levanta versão, licenças, tags, drivers, telas, alarmes e comunicação.",
+      "Organiza objetos, navegação, permissões, históricos e diagnósticos.",
+      "Valida comandos, alarmes, tendências e comportamento em falhas de comunicação.",
+      "Entrega backup, documentação e roteiro de restauração.",
+    ],
+    deliverables: [
+      "Inventário da aplicação Machine SCADA Expert.",
+      "Padrão de telas, tags, alarmes, usuários e comunicação.",
+      "Plano de teste de comandos, navegação, alarmes e históricos.",
+      "Backup e documentação as-built.",
+      "Recomendações de manutenção e evolução.",
+    ],
+    standards: [
+      { code: "Machine SCADA", description: "Supervisão Schneider" },
+      { code: "HMI", description: "Operação" },
+      { code: "OPC", description: "Integração" },
+      { code: "Modbus", description: "Comunicação" },
+      { code: "Alarmes", description: "Governança" },
+    ],
+    faq: [
+      {
+        q: "Machine SCADA Expert substitui Elipse ou FactoryTalk?",
+        a: "Depende do contexto. Para base Schneider e aplicações de máquina pode fazer sentido. Em plantas maiores, avaliamos arquitetura, licenças e ciclo de vida antes de recomendar caminho.",
+      },
+      {
+        q: "Vocês desenvolvem telas do zero?",
+        a: "Sim, quando o diagnóstico mostra que vale refazer. Em sistemas existentes, muitas vezes é melhor padronizar e documentar primeiro.",
+      },
+    ],
+    relatedSolutions: multiVendorRelated,
+    relatedTech: ["schneider-control-expert", "schneider-machine-expert", "elipse-e3"],
   },
 ];
 
