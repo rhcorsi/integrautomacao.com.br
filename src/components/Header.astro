@@ -1,13 +1,97 @@
 ---
 import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 import logoColorido from "@/assets/logos/Colorido.png";
-import { NAV, MEGA_MENUS, COMPANY } from "@/utils/site";
+import { NAV, MEGA_MENUS, COMPANY, type MegaMenu } from "@/utils/site";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
 
 const phoneCommercial = COMPANY.phones[0];
+
+// Build dynamic mega-menus for Cases and Blog from content collections.
+// Static list-based, so the header re-renders on every page (Astro caches
+// the import) — no extra round trips at runtime.
+const recentCases = (await getCollection("cases", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 5);
+
+const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 5);
+
+const blogTags = Array.from(
+  new Set(recentPosts.flatMap((p) => p.data.tags)),
+).slice(0, 8);
+
+const dynamicMegas: Record<string, MegaMenu> = {
+  "/cases": {
+    intro: { title: "Ver todos os cases", href: "/cases" },
+    columns: [
+      {
+        title: "Cases publicados",
+        links: recentCases.length > 0
+          ? recentCases.map((c) => ({
+              href: `/cases/${c.slug}/`,
+              label: c.data.title,
+              description: c.data.sector,
+            }))
+          : [{ href: "/cases", label: "Cases sendo publicados gradualmente" }],
+      },
+      {
+        title: "Setores com cases",
+        links: Array.from(
+          new Set(recentCases.map((c) => c.data.sector)),
+        )
+          .slice(0, 5)
+          .map((s) => ({
+            href: "/setores",
+            label: s,
+          })),
+      },
+    ],
+    promo: {
+      eyebrow: "Sob NDA",
+      title: "Portfólio detalhado em reunião técnica",
+      description:
+        "Apresentamos cases não publicados em reunião, mediante acordo de confidencialidade quando o projeto exigir.",
+      cta: { href: "/contato?assunto=portfolio", label: "Solicitar portfólio" },
+    },
+  },
+
+  "/blog": {
+    intro: { title: "Ver todos os artigos", href: "/blog" },
+    columns: [
+      {
+        title: "Artigos recentes",
+        links: recentPosts.length > 0
+          ? recentPosts.map((p) => ({
+              href: `/blog/${p.slug}/`,
+              label: p.data.title,
+              description: p.data.tags.slice(0, 2).join(" · "),
+            }))
+          : [{ href: "/blog", label: "Em breve" }],
+      },
+      {
+        title: "Tópicos",
+        links: blogTags.map((t) => ({ href: "/blog", label: t })),
+      },
+    ],
+    promo: {
+      eyebrow: "Sugira um tema",
+      title: "Tem uma dúvida técnica de planta?",
+      description:
+        "Sugestões de artigos vindas de quem está em campo são bem-vindas — frequentemente viram pauta.",
+      cta: { href: "/contato?assunto=blog", label: "Sugerir tema" },
+    },
+  },
+};
+
+const allMegas: Record<string, MegaMenu> = {
+  ...MEGA_MENUS,
+  ...dynamicMegas,
+};
 ---
 
 <header class="sticky top-0 z-50 bg-integra-white shadow-sm">
@@ -32,7 +116,7 @@ const phoneCommercial = COMPANY.phones[0];
 
   <!-- Main header bar -->
   <div class="border-b border-integra-gray-200">
-    <div class="container-fluid flex h-20 items-center gap-8 lg:h-24">
+    <div class="container-fluid flex h-20 items-center gap-8 lg:h-28">
       <a
         href="/"
         class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
@@ -41,9 +125,9 @@ const phoneCommercial = COMPANY.phones[0];
         <Image
           src={logoColorido}
           alt="Integra Automação Industrial"
-          class="h-10 w-auto lg:h-12"
-          widths={[200, 320, 480]}
-          sizes="(min-width: 1024px) 280px, 200px"
+          class="h-12 w-auto lg:h-16"
+          widths={[240, 360, 540]}
+          sizes="(min-width: 1024px) 360px, 240px"
           loading="eager"
           decoding="async"
         />
@@ -51,16 +135,16 @@ const phoneCommercial = COMPANY.phones[0];
 
       <nav class="hidden lg:flex items-center gap-1 ml-auto" aria-label="Principal">
         {NAV.map(({ href, label }) => {
-          const mega = MEGA_MENUS[href];
+          const mega = allMegas[href];
           if (!mega) {
             return (
               <a
                 href={href}
                 class:list={[
-                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  "px-3 py-2 text-[13px] font-bold uppercase tracking-wider rounded-md transition-colors",
                   isActive(href)
                     ? "text-integra-red"
-                    : "text-integra-gray-700 hover:text-integra-gray-900",
+                    : "text-integra-gray-900 hover:text-integra-red",
                 ]}
                 aria-current={isActive(href) ? "page" : undefined}
               >
@@ -74,11 +158,11 @@ const phoneCommercial = COMPANY.phones[0];
               <a
                 href={href}
                 class:list={[
-                  "inline-flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  "inline-flex items-center gap-1 px-3 py-2 text-[13px] font-bold uppercase tracking-wider rounded-md transition-colors",
                   "group-hover/menu:text-integra-red group-focus-within/menu:text-integra-red",
                   isActive(href)
                     ? "text-integra-red"
-                    : "text-integra-gray-700 hover:text-integra-gray-900",
+                    : "text-integra-gray-900 hover:text-integra-red",
                 ]}
                 aria-current={isActive(href) ? "page" : undefined}
                 aria-haspopup="true"
@@ -233,16 +317,16 @@ const phoneCommercial = COMPANY.phones[0];
   >
     <div class="container-default py-4 grid gap-1">
       {NAV.map(({ href, label }) => {
-        const mega = MEGA_MENUS[href];
+        const mega = allMegas[href];
         if (!mega) {
           return (
             <a
               href={href}
               class:list={[
-                "px-3 py-2.5 text-base font-medium rounded-md transition-colors",
+                "px-3 py-2.5 text-sm font-bold uppercase tracking-wider rounded-md transition-colors",
                 isActive(href)
                   ? "text-integra-red bg-integra-red/5"
-                  : "text-integra-gray-700 hover:bg-integra-gray-100",
+                  : "text-integra-gray-900 hover:bg-integra-gray-100",
               ]}
               aria-current={isActive(href) ? "page" : undefined}
             >
@@ -253,10 +337,10 @@ const phoneCommercial = COMPANY.phones[0];
         return (
           <details class="group">
             <summary class:list={[
-              "flex items-center justify-between px-3 py-2.5 text-base font-medium rounded-md cursor-pointer list-none",
+              "flex items-center justify-between px-3 py-2.5 text-sm font-bold uppercase tracking-wider rounded-md cursor-pointer list-none",
               isActive(href)
                 ? "text-integra-red bg-integra-red/5"
-                : "text-integra-gray-700 hover:bg-integra-gray-100",
+                : "text-integra-gray-900 hover:bg-integra-gray-100",
             ]}>
               <span>{label}</span>
               <svg class="size-4 opacity-60 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
