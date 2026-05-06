@@ -8,6 +8,34 @@ const setStatus = (status, message, tone = "info") => {
   if (tone === "success") status.classList.add("text-emerald-700");
 };
 
+const getField = (formData, name) => String(formData.get(name) ?? "").trim();
+
+const openMailFallback = (form, formData) => {
+  const subjectSelect = form.querySelector('select[name="subject"]');
+  const subjectLabel =
+    subjectSelect?.selectedOptions?.[0]?.textContent?.trim() ||
+    getField(formData, "subject") ||
+    "Contato pelo site";
+
+  const lines = [
+    `Nome: ${getField(formData, "name")}`,
+    `E-mail: ${getField(formData, "email")}`,
+    getField(formData, "phone") && `Telefone: ${getField(formData, "phone")}`,
+    getField(formData, "company") && `Empresa: ${getField(formData, "company")}`,
+    `Assunto: ${subjectLabel}`,
+    "",
+    "Mensagem:",
+    getField(formData, "message"),
+  ].filter(Boolean);
+
+  const params = new URLSearchParams({
+    subject: `[Site] Novo contato - ${subjectLabel}`,
+    body: lines.join("\n"),
+  });
+
+  window.location.href = `mailto:comercial@integrautomacao.com.br?${params.toString()}`;
+};
+
 for (const form of contactForms) {
   const status = form.querySelector('[role="status"]');
   const submitBtn = form.querySelector('button[type="submit"]');
@@ -40,6 +68,16 @@ for (const form of contactForms) {
 
     const turnstileToken = formData.get("cf-turnstile-response");
     if (!turnstileToken) {
+      if (!form.querySelector(".cf-turnstile")) {
+        setStatus(
+          status,
+          "Abrindo seu e-mail para concluir o envio da mensagem.",
+          "info",
+        );
+        openMailFallback(form, formData);
+        return;
+      }
+
       setStatus(
         status,
         "Aguarde a verificação de segurança e tente novamente.",
