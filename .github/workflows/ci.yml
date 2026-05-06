@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Astro check (TypeScript + content collections)
+        run: npm run check
+
+      - name: Build site
+        run: npm run build
+
+      - name: Smoke-test built output
+        run: |
+          test -f dist/index.html
+          test -f dist/404.html
+          test -f dist/sitemap-index.xml
+          test -f dist/rss.xml
+          test -f dist/_redirects
+          test -f dist/_headers
+          # Confirm at least one Astro asset (hashed bundle) is produced
+          ls dist/_astro/ | head -3
+          echo "Smoke checks passed"
+
+      - name: Upload build artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+          retention-days: 7

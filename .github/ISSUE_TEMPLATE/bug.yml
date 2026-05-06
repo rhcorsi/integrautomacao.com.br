@@ -1,0 +1,38 @@
+name: Bug report
+description: Algo está quebrado ou se comportando de forma inesperada
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o problema com clareza
+      placeholder: "Acessei /solucoes/plantpax e ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL afetada
+      placeholder: https://integrautomacao.com.br/...
+  - type: dropdown
+    id: where
+    attributes:
+      label: Onde foi reproduzido?
+      options:
+        - Produção (integrautomacao.com.br)
+        - Preview do CF Pages (*.pages.dev)
+        - Localmente (npm run dev)
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Browser / dispositivo
+      placeholder: Chrome 132 / iPhone 15 / ...

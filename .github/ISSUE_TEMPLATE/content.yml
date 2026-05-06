@@ -1,0 +1,23 @@
+name: Conteúdo / Texto
+description: Sugestão ou correção de conteúdo de página, post ou case
+labels: [content]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Página afetada
+      placeholder: /solucoes/plantpax — seção "Quando faz sentido"
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Mudança proposta
+      description: Texto antigo (se aplicável) → texto novo
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Por quê?
+      placeholder: Está desatualizado / cliente perguntou / ...

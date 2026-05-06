@@ -124,27 +124,81 @@ Antes de publicar qualquer case/post derivado de propostas internas:
 
 ## Deploy
 
-### Cloudflare Pages
+Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesmo tempo.
 
-1. Conecte o repositório GitHub a Cloudflare Pages
-2. Configure o build:
-   - Framework preset: **Astro**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Root directory: `/site` (se o repo for o monorepo do projeto)
-   - Environment variables (em **Settings → Environment Variables**):
+### Opção A — Conexão direta GitHub ↔ Cloudflare Pages (mais simples)
 
-     ```
-     NODE_VERSION=22
-     PUBLIC_TURNSTILE_SITE_KEY=<site key do Turnstile>
-     TURNSTILE_SECRET_KEY=<secret do Turnstile>
-     RESEND_API_KEY=<API key do Resend>
-     CONTACT_EMAIL_TO=comercial@integrautomacao.com.br
-     CONTACT_EMAIL_FROM=noreply@forms.integrautomacao.com.br
-     ```
+1. Acesse https://dash.cloudflare.com/ → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**
+2. Autorize a Cloudflare a acessar o repositório `rhcorsi/integrautomacao.com`
+3. Configure o build:
+   - **Project name**: `integrautomacao`
+   - **Production branch**: `main`
+   - **Framework preset**: Astro
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+4. Em **Settings → Environment Variables → Production**, adicione:
 
-3. Adicione um **custom domain** apontando para `integrautomacao.com.br`
-   (apenas após cutover de DNS planejado)
+   ```
+   NODE_VERSION              = 22
+   PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
+   TURNSTILE_SECRET_KEY      = <secret>       # encrypted
+   RESEND_API_KEY            = <API key>      # encrypted
+   CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
+   CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com.br
+   ```
+
+   Marque os três últimos como **Encrypted** para não vazarem nos logs.
+
+5. Em **Custom domains**, adicione `integrautomacao.com.br` e `www.integrautomacao.com.br`
+   *— apenas depois do cutover de DNS planejado para a Cloudflare.*
+
+### Opção B — Deploy via GitHub Actions (uma fonte da verdade no CI)
+
+O workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) faz
+o build e o deploy via `wrangler pages deploy`. Em PRs gera preview com
+URL postada como comentário. Em pushes para `main` deploya para produção.
+
+**Secrets necessários** (Settings → Secrets and variables → Actions):
+
+| Secret                       | Onde obter |
+|------------------------------|-----|
+| `CLOUDFLARE_API_TOKEN`       | https://dash.cloudflare.com/profile/api-tokens — escopo `Account: Cloudflare Pages: Edit` |
+| `CLOUDFLARE_ACCOUNT_ID`      | Visível no dashboard CF, painel direito de qualquer página |
+| `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare → Turnstile → Site → Public site key |
+
+Os secrets server-side (`TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`,
+`CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
+porque eles são consumidos pela Pages Function em runtime, não pelo
+build.
+
+> **Escolha apenas uma das opções.** Misturar Opção A (auto-build do CF
+> com base no Git) com Opção B (deploy via Actions) gera deploys
+> duplicados e disputa de CDN cache.
+
+### Worker `legacy-redirects`
+
+Roda **separado** do site Pages, em zone-level. Após o cutover de DNS:
+
+```bash
+npx wrangler login                  # interativo, primeira vez
+npx wrangler deploy                 # deploya o Worker
+```
+
+No painel: **Workers & Pages → integrautomacao-legacy-redirects → Triggers**
+adicione a route `integrautomacao.com.br/*` (Zone:
+integrautomacao.com.br).
+
+## Branch protection (recomendado)
+
+Settings → Branches → Add branch ruleset → Apply to **default branch**:
+
+- Require a pull request before merging (1 approval mínima)
+- Require status checks to pass before merging:
+  - `Lint and build` (do workflow CI)
+- Require conversation resolution before merging
+- Require linear history (opcional, mantém histórico limpo)
+- Restrict deletions
+- Block force pushes
 
 ### Cloudflare Worker (legacy-redirects)
 
