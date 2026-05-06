@@ -1,4 +1,4 @@
-# Security and caching headers applied by Cloudflare Pages.
+﻿# Security and caching headers applied by Cloudflare Pages.
 # References: https://developers.cloudflare.com/pages/configuration/headers/
 
 /*
@@ -7,7 +7,7 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self' data:; object-src 'none'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com 'sha256-/cwC5Tfks0f/GC5VGfQcJ9F1i8yKUqBqmvoukJSwazY=' 'sha256-0pElox/GYiS/dDGZs4vd9E9HDEwnqPPSh4cQEJrKIRA=' 'sha256-1UIfMaSGvKJ+wtsvgkUYfOkqHaWk+ltgoDbYelULyjk=' 'sha256-35YxECWdSUusocf3oShbzjRlTIvPGZgmNsin3Pen5T4=' 'sha256-3A27ip3qRrVm3lGzOnN/m5qkLL8A5MeZFLlNPotYBHo=' 'sha256-5+f88rol2hcvEWxatcJUlPSG/4lDGx3gs8oAoJn5Nso=' 'sha256-5056eN/Hzu/LE4a+34A8wz+rZ4VKc/TfFtUQgG73oaM=' 'sha256-6dzyPXYJDEfLPqVyjur4DZ81x0CwWfrrpS6bYVgPIuU=' 'sha256-7C2QqsehYyWeIeZi9xYwOm961sdNWIGYZfbRghQVGcY=' 'sha256-94N+JLBIPfSOtVMX2+FD7y47owYcwj7ADNZkDCsxb1E=' 'sha256-D+vSA/q9MrXpsZkAnh8b6cspC79u435Cv+vt+N81cO8=' 'sha256-E3H2Q6pG6nUHYleQrHt2byv0W5Z/f89DCacF3bkfrco=' 'sha256-ECQ/cyEp++afsDSfGFGYuTxFIriKCagqQnGmkVdmdeU=' 'sha256-IDP7QvGdeLfYrYW1m4OMSPI3T594RuXOIMjTUPQfRX0=' 'sha256-NRGIWj5OSgv5ED56FMft8//UfIQlyQlt3m+g9JuBGd8=' 'sha256-NjMzRLY2linro4aajruTB96cl82GgMUhHQYZniXKV74=' 'sha256-PLN1QYXtkG4W0RupoGmW03prvGMD1ST9JyIGdTGMsJY=' 'sha256-ShMkHADG6BUt0TcsIx0tyF6MFeYkT8MJGbR4neKrODs=' 'sha256-U7vN6SFFMVLlYY+iOrTDFv4mTP8g5n1S2AiQQVNFStc=' 'sha256-VALWy4Y6x1X+MoXGJ/ufiNjnWvh3YK21ZF9I6KRfnZg=' 'sha256-WZ98tNNi3uyEZ/G5VtXTI+UGi5pM4VVg3zEkTIJVkaI=' 'sha256-Y+vzZ+M3Trlpjx+PecnB0Y2+iGWt0YNbQm9PxxRiWIs=' 'sha256-YOCVMLKl061KSdO6IY5nOaMh5hibB9bznRo/NTPFbRA=' 'sha256-YOsVZCLfdQgs4MsJ7moqaYAGgt1/tgFsLi959ve2mro=' 'sha256-ZCtdJA//MSngDQqd0Ol3UeBIq/Dn5G9lIuW+03506og=' 'sha256-ZKH9d5AC2RZXOs8hjkGPUeJJGzk6AjETGh1LSnWLjCc=' 'sha256-Zs7zo+AE+O079mXog+MRjMyiES8/7YubjHHZ3iBQhKU=' 'sha256-aMiQCGz2Z55btajOQMjDH8MhQpc3GZmmgTxB6kXIWQA=' 'sha256-b8tiYrnyTEJAuFlyrfYoxfd5jl92uf8JsWSzrBKoD28=' 'sha256-cKWMdrGGyXU2Z+alA6auQFioAjjvkbUNSeBBU9BIgC8=' 'sha256-e2MxUoZEfVjIQnlwQSAQOUvoYKOP7fdzPb8ZHTzlZ6g=' 'sha256-f+yEh+eNbwwjUQebhWXFZVXmv3ZTIIVZC07ns6JtXBA=' 'sha256-hgKwVdSoVMl4KuQ+67jv/ilPXT7jm+rhC5Vt7JTBo4M=' 'sha256-hwbGufozvxFlkd3cItDO5d+r/ypxJJb7iN6Qc0cfMuk=' 'sha256-l4vvm1DcsY5qXZ/Ll0o7ScK3Vsiz4OFbCr8MBjESbtw=' 'sha256-lXxMfPMgQDroZb/BhPPSwpCJ9GPz+QOvXjJgEkUQkL8=' 'sha256-nS/zKCGpo+iOSDb7iMkW8gRDUM2HLRNwbcobtAIam0U=' 'sha256-pfTyg74egAfTwWw0Zm2BaTwMaZY3nfZZptB9TCMYkXA=' 'sha256-pfgrzN34l+qq4iSmj3Xa4YoBDusvkRuWabiRNWLeGdw=' 'sha256-sW59CwMHUBIxmC2FxtwB1A88K2IamX9VaEsYwSYWomQ=' 'sha256-whDqgpaFwCLwWrKEU46Q3JeMVoZDZZNtSYgQUEpRiO0='; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self' data:; object-src 'none'
 
 # Aggressive cache for fingerprinted Astro build assets
 /_astro/*
@@ -17,6 +17,6 @@
 /images/*
   Cache-Control: public, max-age=2592000
 
-# Standard cache for HTML — allow CDN to revalidate frequently
+# Standard cache for HTML â€” allow CDN to revalidate frequently
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
