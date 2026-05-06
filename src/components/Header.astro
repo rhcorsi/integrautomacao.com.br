@@ -153,8 +153,12 @@ const allMegas: Record<string, MegaMenu> = {
             );
           }
           // Item with mega-menu
+          const menuIntro = {
+            title: label === "Blog" ? "Ver tudo no Blog" : `Ver tudo em ${label}`,
+            href: mega.intro?.href ?? href,
+          };
           return (
-            <div class="group/menu relative">
+            <div class="group/menu">
               <a
                 href={href}
                 class:list={[
@@ -173,24 +177,32 @@ const allMegas: Record<string, MegaMenu> = {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
               </a>
-              {/* Bridge — invisible area to keep menu open while moving cursor */}
-              <div class="absolute left-0 right-0 top-full h-2 invisible group-hover/menu:visible group-focus-within/menu:visible" aria-hidden="true" />
+              {/* Bridge: keeps the full-width menu open while the cursor leaves the nav item. */}
+              <div
+                class="fixed inset-x-0 top-[7rem] z-[59] h-9 invisible pointer-events-none group-hover/menu:visible group-hover/menu:pointer-events-auto group-focus-within/menu:visible group-focus-within/menu:pointer-events-auto"
+                aria-hidden="true"
+              />
               <div
                 class:list={[
-                  "absolute left-1/2 top-full mt-2 -translate-x-1/2 w-screen max-w-6xl",
-                  "invisible opacity-0 -translate-y-1 transition-all duration-150",
-                  "group-hover/menu:visible group-hover/menu:opacity-100 group-hover/menu:translate-y-0",
-                  "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0",
+                  "fixed inset-x-0 top-[9.25rem] z-[60]",
+                  "invisible opacity-0 -translate-y-1 pointer-events-none transition-all duration-150",
+                  "group-hover/menu:visible group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto",
+                  "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0 group-focus-within/menu:pointer-events-auto",
                 ]}
               >
-                <div class="rounded-lg border border-integra-gray-200 bg-integra-white shadow-2xl overflow-hidden">
-                  {mega.intro && (
-                    <a href={mega.intro.href} class="block px-8 py-3 bg-integra-gray-50 border-b border-integra-gray-200 text-sm font-semibold text-integra-gray-900 hover:text-integra-red transition-colors">
-                      {mega.intro.title} <span aria-hidden="true">→</span>
-                    </a>
-                  )}
-                  <div class="grid grid-cols-12 gap-8 p-8">
-                    <div class:list={[mega.promo ? "col-span-8" : "col-span-12", "grid grid-cols-3 gap-8"]}>
+                <div class="border-y border-integra-gray-200 bg-integra-white shadow-2xl max-h-[calc(100vh-9.25rem)] overflow-y-auto">
+                  <div class="bg-integra-gray-50 border-b border-integra-gray-200">
+                    <div class="container-wide">
+                      <a href={menuIntro.href} class="inline-flex items-center gap-1.5 py-3 text-sm font-semibold text-integra-gray-900 hover:text-integra-red transition-colors">
+                        {menuIntro.title} <span aria-hidden="true">→</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class:list={[
+                    "container-wide grid gap-8 py-8",
+                    mega.promo ? "xl:grid-cols-[minmax(0,1fr)_22rem]" : "grid-cols-1",
+                  ]}>
+                    <div class="grid gap-x-10 gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(13rem,1fr))]">
                       {mega.columns.map((col) => (
                         <div>
                           <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
@@ -219,7 +231,7 @@ const allMegas: Record<string, MegaMenu> = {
                       ))}
                     </div>
                     {mega.promo && (
-                      <aside class="col-span-4 border-l border-integra-gray-200 pl-8">
+                      <aside class="border-l border-integra-gray-200 pl-8">
                         <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
                           {mega.promo.eyebrow}
                         </p>
@@ -249,15 +261,17 @@ const allMegas: Record<string, MegaMenu> = {
                     )}
                   </div>
                   {mega.quickLinks && mega.quickLinks.length > 0 && (
-                    <div class="bg-integra-gray-50 border-t border-integra-gray-200 px-8 py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
-                      {mega.quickLinks.map((q) => (
-                        <a
-                          href={q.href}
-                          class="text-sm font-medium text-integra-gray-900 hover:text-integra-red transition-colors"
-                        >
-                          {q.label} <span aria-hidden="true">→</span>
-                        </a>
-                      ))}
+                    <div class="bg-integra-gray-50 border-t border-integra-gray-200">
+                      <div class="container-wide py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
+                        {mega.quickLinks.map((q) => (
+                          <a
+                            href={q.href}
+                            class="text-sm font-medium text-integra-gray-900 hover:text-integra-red transition-colors"
+                          >
+                            {q.label} <span aria-hidden="true">→</span>
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
