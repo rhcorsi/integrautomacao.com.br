@@ -11,6 +11,22 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - dependencies
+    # Ignore major updates for frameworks where breaking changes need
+    # manual review (Astro 5→6, MDX 4→5 alongside Astro, Zod 3→4 typing
+    # changes, etc.). Bump these by hand after reading the changelog.
+    ignore:
+      - dependency-name: "astro"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@astrojs/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@tailwindcss/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "zod"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       astro:
         patterns:
@@ -40,3 +56,15 @@ updates:
     labels:
       - dependencies
       - github-actions
+    # Major updates of Actions sometimes change input/output names;
+    # review by hand. cloudflare/wrangler-action and actions/setup-node
+    # are most likely to introduce breaking changes.
+    ignore:
+      - dependency-name: "actions/setup-node"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "actions/github-script"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "actions/upload-artifact"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "cloudflare/wrangler-action"
+        update-types: ["version-update:semver-major"]
