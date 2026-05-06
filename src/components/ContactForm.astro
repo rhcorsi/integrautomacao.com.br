@@ -1,14 +1,15 @@
 ---
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const turnstileSiteKey =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.TURNSTILE_SITE_KEY ?? "";
 const isDev = import.meta.env.DEV;
 ---
 
 <form
   id="contact-form"
+  data-contact-form
   method="POST"
   action="/api/contact"
   class="grid gap-5"
-  novalidate
 >
   <div class="grid gap-2">
     <label for="cf-name" class="text-sm font-medium text-integra-gray-900">
@@ -167,91 +168,4 @@ const isDev = import.meta.env.DEV;
   async
   defer></script>
 
-<script>
-  const form = document.getElementById("contact-form") as HTMLFormElement | null;
-  const status = document.getElementById("cf-status") as HTMLElement | null;
-  if (!form || !status) {
-    // not on this page
-  } else {
-    const submitBtn = form.querySelector<HTMLButtonElement>("button[type=submit]");
-
-    const setStatus = (
-      message: string,
-      tone: "info" | "success" | "error" = "info",
-    ) => {
-      status.textContent = message;
-      status.classList.remove("text-integra-red", "text-emerald-700");
-      if (tone === "error") status.classList.add("text-integra-red");
-      if (tone === "success") status.classList.add("text-emerald-700");
-    };
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
-      const formData = new FormData(form);
-
-      // Honeypot — silently drop if filled
-      if (formData.get("website")) {
-        setStatus("Mensagem enviada.", "success");
-        form.reset();
-        return;
-      }
-
-      // Cloudflare injects cf-turnstile-response into the form on success
-      const turnstileToken = formData.get("cf-turnstile-response");
-      if (!turnstileToken) {
-        setStatus(
-          "Aguarde a verificação de segurança e tente novamente.",
-          "error",
-        );
-        return;
-      }
-
-      submitBtn?.setAttribute("disabled", "true");
-      setStatus("Enviando...", "info");
-
-      try {
-        const payload: Record<string, string> = {};
-        for (const [k, v] of formData.entries()) {
-          if (typeof v === "string") payload[k] = v;
-        }
-
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-        if (res.ok) {
-          setStatus(
-            "Mensagem recebida. Retornamos em até 1 dia útil.",
-            "success",
-          );
-          form.reset();
-          // Reset turnstile widget
-          const ts = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
-          if (ts) ts.reset();
-        } else {
-          const data = (await res.json().catch(() => ({}))) as { message?: string };
-          setStatus(
-            data.message ??
-              "Não foi possível enviar agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
-            "error",
-          );
-        }
-      } catch (err) {
-        console.error(err);
-        setStatus(
-          "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
-          "error",
-        );
-      } finally {
-        submitBtn?.removeAttribute("disabled");
-      }
-    });
-  }
-</script>
+<script is:inline type="module" src="/scripts/contact-form.js"></script>

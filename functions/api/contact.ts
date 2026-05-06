@@ -40,6 +40,21 @@ const json = (data: unknown, status = 200): Response =>
     headers: { "content-type": "application/json; charset=utf-8" },
   });
 
+const methodNotAllowed = (): Response =>
+  new Response(
+    JSON.stringify({
+      ok: false,
+      message: "Endpoint disponível apenas via POST do formulário de contato.",
+    }),
+    {
+      status: 405,
+      headers: {
+        allow: "POST",
+        "content-type": "application/json; charset=utf-8",
+      },
+    },
+  );
+
 const isEmail = (s: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim()) && s.length <= 180;
 
@@ -206,10 +221,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   return json({ ok: true });
 };
 
-// Reject other methods explicitly
-export const onRequest: PagesFunction = async ({ request }) => {
-  return new Response(`Method ${request.method} not allowed`, {
-    status: 405,
-    headers: { allow: "POST" },
-  });
-};
+// Reject other methods explicitly with a clear JSON response.
+export const onRequestGet: PagesFunction = async () => methodNotAllowed();
+export const onRequestPut: PagesFunction = async () => methodNotAllowed();
+export const onRequestPatch: PagesFunction = async () => methodNotAllowed();
+export const onRequestDelete: PagesFunction = async () => methodNotAllowed();
