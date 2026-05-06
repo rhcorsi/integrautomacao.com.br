@@ -1,0 +1,74 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  highlight?: string;
+  description: string;
+  primaryCta?: { href: string; label: string };
+  secondaryCta?: { href: string; label: string };
+}
+
+const {
+  eyebrow = "Engenharia com Integridade",
+  title,
+  highlight,
+  description,
+  primaryCta = { href: "/contato", label: "Falar com especialista" },
+  secondaryCta = { href: "/solucoes", label: "Ver soluções" },
+} = Astro.props;
+---
+
+<section
+  class="relative overflow-hidden border-b border-integra-gray-200 bg-integra-white"
+>
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
+    aria-hidden="true"
+    style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 48px 48px;"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute -top-32 -right-32 -z-10 h-96 w-96 rounded-full bg-integra-red/5 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-default py-20 lg:py-28">
+    <div class="max-w-4xl">
+      <p
+        class="inline-flex items-center gap-2 rounded-full border border-integra-gray-200 bg-integra-gray-50 px-3 py-1 text-xs font-mono uppercase tracking-widest text-integra-gray-700 mb-6"
+      >
+        <span class="size-1.5 rounded-full bg-integra-red"></span>
+        {eyebrow}
+      </p>
+      <h1
+        class="text-4xl font-semibold tracking-tight text-integra-gray-900 sm:text-5xl lg:text-6xl"
+      >
+        {title}{" "}
+        {highlight && (
+          <span class="text-integra-red">{highlight}</span>
+        )}
+      </h1>
+      <p
+        class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-2xl lg:text-xl"
+      >
+        {description}
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a
+          href={primaryCta.href}
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-gray-900 hover:bg-integra-black rounded-md transition-colors"
+        >
+          {primaryCta.label}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href={secondaryCta.href}
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 bg-integra-white border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+        >
+          {secondaryCta.label}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,136 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const products = [
+  {
+    name: "FactoryTalk View SE",
+    role: "Supervisão e SCADA distribuído com governança de alarmes e telas padronizadas.",
+  },
+  {
+    name: "FactoryTalk Optix",
+    role: "Visualização moderna baseada em web, ideal para integração com sistemas corporativos.",
+  },
+  {
+    name: "FactoryTalk Batch",
+    role: "Controle de bateladas conforme ISA-88, com receitas, fases e equipamentos padronizados.",
+  },
+  {
+    name: "FactoryTalk Historian",
+    role: "Coleta, contextualização e armazenamento de dados industriais em alta resolução.",
+  },
+  {
+    name: "FactoryTalk AssetCentre",
+    role: "Gestão de ativos, versionamento de software e auditoria de mudanças nos sistemas.",
+  },
+  {
+    name: "ThinManager",
+    role: "Gestão centralizada de thin clients industriais — segurança, mobilidade e disponibilidade.",
+  },
+];
+
+const deliverables = [
+  "Padrão de telas de supervisão (style guide visual e de interação)",
+  "Governança de alarmes alinhada à ISA-18.2",
+  "Estrutura de áreas, equipamentos e tags padronizada",
+  "Configuração de servidores redundantes (HMI/Data/Application)",
+  "Integração com Historian e AF Templates do PI System / AVEVA",
+  "Receitas e fases padronizadas (ISA-88) em FactoryTalk Batch",
+  "Política de acesso por perfil e autenticação centralizada",
+  "Documentação operacional, treinamento e roadmap de evolução",
+];
+
+const faq = [
+  {
+    q: "Vocês mantêm sistemas FactoryTalk View SE antigos ou só implantam novos?",
+    a: "Atuamos em ambos. Avaliamos sistemas existentes para identificar dívidas técnicas (alarmes mal configurados, telas inconsistentes, redundância parcial) e propomos roadmap de modernização sem parar a operação.",
+  },
+  {
+    q: "FactoryTalk Optix é maduro o bastante para SCADA crítico?",
+    a: "Sim, em casos específicos. Optix é excelente para visualização moderna, mobilidade e integração com sistemas corporativos. Para SCADA tradicional crítico, View SE ainda é a referência — frequentemente fazemos arquiteturas híbridas.",
+  },
+  {
+    q: "Como FactoryTalk se conecta com o PI System / AVEVA?",
+    a: "Via FactoryTalk Historian para coleta de tags, e via OPC UA / AF Templates para contextualização no PI. A integração é parte do projeto de engenharia, com testes de tempo de resposta e consistência documentados.",
+  },
+];
+---
+
+<BaseLayout
+  title="FactoryTalk Suite — Supervisão e Informação"
+  description="Engenharia, implementação e suporte da suíte FactoryTalk: View SE, Optix, Batch, Historian, AssetCentre e ThinManager. Padronização e governança técnica."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Solução · Supervisão e Informação
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        FactoryTalk Suite
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Trabalhamos com toda a suíte FactoryTalk para entregar supervisão,
+        gestão de bateladas, historiação, gestão de ativos e thin clients
+        industriais — integrados de ponta a ponta com governança de alarmes,
+        padronização de telas e auditoria de mudanças.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Componentes da suíte"
+        title="O que dominamos hoje"
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {products.map(({ name, role }) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <code
+              class="inline-block font-mono text-xs font-semibold text-integra-red mb-3"
+            >
+              {name}
+            </code>
+            <p class="text-sm leading-relaxed text-integra-gray-700">{role}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-default py-20 max-w-4xl">
+      <SectionHeader
+        eyebrow="Como atuamos"
+        title="Padronização visual + governança de alarmes + auditoria"
+        description="Nossa entrega não é só configuração de telas. Cobre o ecossistema FactoryTalk com regras claras de operação, manutenção e evolução."
+        accent={true}
+      />
+
+      <DeliverableList items={deliverables} twoColumn={true} />
+
+      <StandardsBadges
+        standards={[
+          { code: "ISA-88", description: "Bateladas em FactoryTalk Batch" },
+          { code: "ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA-101", description: "Padrões de HMI" },
+          { code: "ISA/IEC 62443", description: "Segurança em sistemas FactoryTalk" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer modernizar sua supervisão sem parar a planta?"
+    description="Avaliamos seu ambiente FactoryTalk atual e propomos roadmap faseado de modernização — preservando o que funciona, padronizando o que merece."
+    primaryCta={{ href: "/contato?assunto=factorytalk", label: "Conversar sobre FactoryTalk" }}
+    secondaryCta={{ href: "/solucoes/plantpax", label: "Ver PlantPAx" }}
+  />
+</BaseLayout>

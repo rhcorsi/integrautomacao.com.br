@@ -1,0 +1,107 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+
+const dateFmt = (d: Date) =>
+  d.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+---
+
+<BaseLayout
+  title="Blog técnico"
+  description="Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443, migração de PLC e governança de engenharia industrial."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Blog técnico
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Engenharia que ensina.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Não escrevemos para vender. Escrevemos para esclarecer arquiteturas,
+        normas e decisões técnicas que aparecem no dia a dia das plantas
+        industriais — em linguagem direta, baseada em fatos.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      {posts.length === 0 ? (
+        <p class="text-base text-integra-gray-700 text-center py-12">
+          Artigos sendo publicados em breve.
+        </p>
+      ) : (
+        <ul class="grid gap-px bg-integra-gray-200 rounded-lg overflow-hidden">
+          {posts.map((post) => (
+            <li>
+              <a
+                href={`/blog/${post.slug}/`}
+                class="group block bg-integra-white p-7 lg:p-8 hover:bg-integra-gray-50 transition-colors"
+              >
+                <div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+                  <div>
+                    <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+                      {dateFmt(post.data.pubDate)}
+                      {post.data.tags.length > 0 && (
+                        <>
+                          {" · "}
+                          {post.data.tags.slice(0, 3).join(" · ")}
+                        </>
+                      )}
+                    </p>
+                    <h2 class="text-xl font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors mb-2 max-w-2xl">
+                      {post.data.title}
+                    </h2>
+                    <p class="text-sm leading-relaxed text-integra-gray-700 max-w-2xl">
+                      {post.data.description}
+                    </p>
+                  </div>
+                  <span
+                    class="text-integra-gray-400 group-hover:text-integra-red transition-colors lg:self-center"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="size-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M7 17L17 7M17 7H8M17 7v9"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p class="mt-8 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
+        <a href="/rss.xml" class="hover:text-integra-red transition-colors">
+          RSS Feed →
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Tem um tema técnico que gostaria de ver aqui?"
+    description="Sugestões de artigos são bem-vindas — especialmente quando vêm de quem está em planta lidando com o problema diariamente."
+    primaryCta={{ href: "/contato?assunto=blog", label: "Sugerir tema" }}
+  />
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  primaryCta?: { href: string; label: string };
+  secondaryCta?: { href: string; label: string };
+  variant?: "light" | "dark";
+}
+
+const {
+  title = "Pronto para uma conversa técnica?",
+  description = "Apresentamos arquitetura, método e referências antes de qualquer proposta. Conversamos com gerentes de manutenção, produção, projetos e TI/OT — em linguagem clara, sem jargão desnecessário.",
+  primaryCta = { href: "/contato", label: "Falar com especialista" },
+  secondaryCta = { href: "/cases", label: "Ver cases" },
+  variant = "dark",
+} = Astro.props;
+
+const isDark = variant === "dark";
+---
+
+<section
+  class:list={[
+    "border-y",
+    isDark
+      ? "bg-integra-gray-950 border-integra-gray-950"
+      : "bg-integra-gray-50 border-integra-gray-200",
+  ]}
+>
+  <div class="container-default py-16 lg:py-20 grid gap-8 lg:grid-cols-3 lg:items-center">
+    <div class="lg:col-span-2">
+      <h2
+        class:list={[
+          "text-2xl font-semibold sm:text-3xl",
+          isDark ? "text-integra-white" : "text-integra-gray-900",
+        ]}
+      >
+        {title}
+      </h2>
+      <p
+        class:list={[
+          "mt-4 text-base leading-relaxed lg:text-lg max-w-2xl",
+          isDark ? "text-integra-gray-300" : "text-integra-gray-700",
+        ]}
+      >
+        {description}
+      </p>
+    </div>
+    <div class="flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end lg:justify-self-end">
+      <a
+        href={primaryCta.href}
+        class="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
+      >
+        {primaryCta.label}
+        <span aria-hidden="true">→</span>
+      </a>
+      {secondaryCta && (
+        <a
+          href={secondaryCta.href}
+          class:list={[
+            "inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold rounded-md transition-colors",
+            isDark
+              ? "text-integra-white border border-integra-gray-700 hover:border-integra-white"
+              : "text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900",
+          ]}
+        >
+          {secondaryCta.label}
+        </a>
+      )}
+    </div>
+  </div>
+</section>

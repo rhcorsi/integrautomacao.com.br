@@ -1,0 +1,160 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const layers = [
+  {
+    title: "Camada de Controle",
+    description:
+      "PLCs, IEDs IEC 61850, dispositivos EtherNet/IP. Comunicação determinística com latência controlada.",
+  },
+  {
+    title: "Camada de Supervisão",
+    description:
+      "SCADA, servidores HMI, estações de operação. Segregada do controle por VLANs industriais.",
+  },
+  {
+    title: "Camada de Informação",
+    description:
+      "Historian, AF Templates, dashboards. Saída estruturada para sistemas corporativos via DMZ.",
+  },
+  {
+    title: "Camada de Segurança",
+    description:
+      "Firewalls industriais, controle de acesso, monitoramento de eventos OT, segmentação Purdue.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de rede industrial existente com análise de risco e maturidade",
+  "Projeto de topologia (anel de fibra, DLR, PRP) com switches Cisco e Stratix",
+  "Segmentação Purdue / CPwE com VLANs, ACLs e firewalls industriais",
+  "Endurecimento de configuração de switches (port security, BPDU guard, storm control)",
+  "Integração OPC UA com camada de supervisão e informação",
+  "Roteiro de cibersegurança alinhado à IEC 62443 SL-T por zona",
+  "Programa de gestão de patches e atualizações (FactoryTalk AssetCentre)",
+  "Documentação de rede, plano de resposta a incidentes e treinamento OT",
+];
+
+const faq = [
+  {
+    q: "IEC 62443 é obrigatória no Brasil?",
+    a: "Não há lei brasileira específica obrigando IEC 62443 ainda, mas ela é referência internacional e cada vez mais exigida por seguradoras, auditorias corporativas e clientes finais (especialmente em alimentos, agronegócio e farmacêutica). É o padrão que recomendamos para projetos novos.",
+  },
+  {
+    q: "Como vocês fazem segmentação sem parar a planta?",
+    a: "Trabalhamos por fases: primeiro mapeamos tráfego real (port mirror + análise), desenhamos a segmentação alvo, validamos em ambiente de homologação ou laboratório, e fazemos o cutover em janela planejada com plano de rollback. Nunca cego, nunca improvisado.",
+  },
+  {
+    q: "Vocês entregam o equipamento de rede também?",
+    a: "Não fornecemos hardware diretamente — somos integradores, não revenda. Trabalhamos com a especificação ideal (Stratix, Cisco IE) e indicamos canais de aquisição com a Rockwell ou parceiros, garantindo que o que chega na planta é o que foi projetado.",
+  },
+  {
+    q: "Como CPwE se relaciona com IEC 62443?",
+    a: "CPwE (Converged Plantwide Ethernet) é a arquitetura de referência conjunta da Rockwell e da Cisco para implementar exatamente os princípios de IEC 62443 em redes industriais — segmentação, defense-in-depth e zonas de segurança. Aplicamos os dois em conjunto.",
+  },
+];
+---
+
+<BaseLayout
+  title="Redes Industriais e IEC 62443"
+  description="Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-ot mb-3">
+        Solução · Redes & Cibersegurança OT
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Redes Industriais e <span class="text-integra-ot">IEC 62443</span>
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Projetamos e implementamos redes industriais robustas, segmentadas e
+        seguras — alinhadas ao modelo CPwE (Converged Plantwide Ethernet) e
+        ao framework de cibersegurança IEC 62443. Defense in depth do
+        chão de fábrica até a integração corporativa.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Arquitetura em camadas"
+        title="Como segregamos o ambiente OT"
+        description="Cada camada tem regras claras de quem fala com quem. Sem rede flat, sem caminho direto entre chão de fábrica e internet."
+        accent={true}
+      />
+      <ol class="grid gap-px bg-integra-gray-200 rounded-lg overflow-hidden lg:grid-cols-4">
+        {layers.map((layer, i) => (
+          <li class="bg-integra-white p-6 flex flex-col gap-3">
+            <span
+              class="font-mono text-xs font-semibold text-integra-ot"
+            >
+              L{4 - i}
+            </span>
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {layer.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {layer.description}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-default py-20 max-w-4xl">
+      <SectionHeader
+        eyebrow="Como atuamos"
+        title="Do diagnóstico ao plano de resposta"
+        accent={true}
+      />
+      <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg max-w-3xl">
+        Cibersegurança OT não é firewall na borda. É segmentação correta,
+        endurecimento de configuração, gestão de identidades, auditoria de
+        mudanças e plano de resposta. Aplicamos os controles da IEC 62443
+        com base no nível de segurança (SL-T) definido por zona.
+      </p>
+
+      <TechnicalCallout variant="ot" title="Cybersecurity by design">
+        <p>
+          Não tratamos segurança como camada adicional. Ela está presente
+          desde o desenho da arquitetura — autenticação, segmentação, logs
+          centralizados e monitoramento entram no projeto, não no
+          comissionamento.
+        </p>
+      </TechnicalCallout>
+
+      <DeliverableList items={deliverables} twoColumn={true} />
+
+      <StandardsBadges
+        title="Frameworks e referências aplicadas"
+        standards={[
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT (zonas e SL)" },
+          { code: "NIST SP 800-82", description: "Guia de segurança ICS/OT" },
+          { code: "CPwE", description: "Arquitetura Rockwell + Cisco + Panduit" },
+          { code: "IEC 61850", description: "Comunicação em subestações" },
+          { code: "DLR / PRP", description: "Redes de alta disponibilidade" },
+          { code: "OPC UA", description: "Comunicação segura entre sistemas" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Sua planta precisa de uma análise de rede e cibersegurança OT?"
+    description="Começamos com diagnóstico documentado: o que existe hoje, qual o risco operacional, qual o gap até IEC 62443 SL-T desejado. Sem alarmismo, sem checklist de produto."
+    primaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar diagnóstico OT" }}
+    secondaryCta={{ href: "/solucoes/plantpax", label: "Ver PlantPAx" }}
+  />
+</BaseLayout>

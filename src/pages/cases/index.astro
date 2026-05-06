@@ -1,0 +1,94 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+---
+
+<BaseLayout
+  title="Cases"
+  description="Cases técnicos da Integra Automação Industrial: arquitetura, tecnologias aplicadas, problema, abordagem e resultados."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Cases
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Engenharia em campo, documentada.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Cada case mostra problema, abordagem técnica, tecnologias aplicadas
+        e resultados. Nomes de clientes preservados conforme acordo de
+        confidencialidade.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      {cases.length === 0 ? (
+        <div class="text-center py-16">
+          <p class="text-base text-integra-gray-700 max-w-md mx-auto">
+            Cases sendo publicados gradualmente. Para um portfólio detalhado
+            sob NDA,
+            <a href="/contato" class="text-integra-red hover:underline">
+              entre em contato</a>.
+          </p>
+        </div>
+      ) : (
+        <div class="grid gap-8 md:grid-cols-2">
+          {cases.map((c) => (
+            <article class="group rounded-lg border border-integra-gray-200 bg-integra-white overflow-hidden hover:border-integra-gray-900 transition-colors">
+              <a href={`/cases/${c.slug}/`} class="block">
+                {c.data.heroImage && (
+                  <div class="aspect-[16/10] overflow-hidden bg-integra-gray-100">
+                    <Image
+                      src={c.data.heroImage}
+                      alt={c.data.heroAlt ?? c.data.title}
+                      widths={[400, 800, 1200]}
+                      sizes="(min-width: 768px) 600px, 100vw"
+                      loading="lazy"
+                      decoding="async"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+                <div class="p-6">
+                  <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+                    {c.data.sector}
+                  </p>
+                  <h2 class="text-xl font-semibold text-integra-gray-900 mb-3 group-hover:text-integra-red transition-colors">
+                    {c.data.title}
+                  </h2>
+                  <p class="text-sm leading-relaxed text-integra-gray-700 mb-4">
+                    {c.data.summary}
+                  </p>
+                  {c.data.tech.length > 0 && (
+                    <ul class="flex flex-wrap gap-2 pt-3 border-t border-integra-gray-100">
+                      {c.data.tech.slice(0, 5).map((t) => (
+                        <li class="text-[11px] font-mono uppercase tracking-wider text-integra-gray-500 px-2 py-1 bg-integra-gray-50 rounded-sm">
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer detalhes de cases sob NDA?"
+    description="Apresentamos portfólio detalhado em reunião técnica, mediante acordo de confidencialidade quando o projeto exigir."
+    primaryCta={{ href: "/contato?assunto=portfolio", label: "Solicitar portfólio" }}
+  />
+</BaseLayout>

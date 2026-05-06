@@ -1,0 +1,147 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import HeroIntegridade from "@/components/HeroIntegridade.astro";
+import CredentialStrip from "@/components/CredentialStrip.astro";
+import ValueCard from "@/components/ValueCard.astro";
+import LifecycleRail from "@/components/LifecycleRail.astro";
+import SolutionCard from "@/components/SolutionCard.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const values = [
+  {
+    icon: "lucide:shield",
+    title: "Segurança Estrutural",
+    description:
+      "Arquiteturas dimensionadas segundo as melhores práticas do fabricante e normas internacionais. A garantia de que a planta não vai parar por falhas sistêmicas evitáveis.",
+  },
+  {
+    icon: "lucide:file-cog",
+    title: "Governança Técnica",
+    description:
+      "Sistemas que qualquer engenheiro qualificado pode manter no futuro, graças à padronização e à documentação criteriosa de cada entrega.",
+  },
+  {
+    icon: "lucide:heart-handshake",
+    title: "Paz de Espírito",
+    description:
+      "Para o gerente de manutenção e o gerente de produção: a segurança de saber que o sistema é confiável, documentado e suportado por especialistas sérios.",
+  },
+];
+
+const solutions = [
+  {
+    href: "/solucoes/plantpax",
+    title: "PlantPAx",
+    summary:
+      "Sistema de controle distribuído moderno da Rockwell Automation. Arquitetura escalável, biblioteca de objetos de processo e integração plant-wide.",
+    icon: "lucide:layers-3",
+    tags: ["DCS", "ControlLogix", "FactoryTalk"],
+  },
+  {
+    href: "/solucoes/factorytalk",
+    title: "FactoryTalk Suite",
+    summary:
+      "Supervisão, batch, historiador, gestão de ativos e thin clients industriais — integrados de ponta a ponta com governança de alarmes e dados.",
+    icon: "lucide:gauge",
+    tags: ["View SE", "Optix", "Historian", "Batch"],
+  },
+  {
+    href: "/solucoes/redes-iec-62443",
+    title: "Redes Industriais e IEC 62443",
+    summary:
+      "Topologia, segmentação, switches Stratix/Cisco e arquiteturas alinhadas ao CPwE. Cibersegurança OT do projeto à operação.",
+    icon: "lucide:shield-check",
+    tags: ["CPwE", "IEC 62443", "Stratix"],
+  },
+];
+---
+
+<BaseLayout
+  title="Engenharia em Automação Industrial"
+  description="Engenharia e integração de sistemas industriais para plantas críticas: PlantPAx, FactoryTalk, redes industriais e cibersegurança OT, com método e documentação."
+>
+  <HeroIntegridade
+    eyebrow="Engenharia com Integridade"
+    title="Sistemas industriais"
+    highlight="seguros, estruturados e mantíveis."
+    description="A Integra não vende apenas programação ou telas de supervisão. Entregamos arquiteturas robustas, governança de engenharia e responsabilidade técnica de ponta a ponta — do projeto ao handover, do start-up ao suporte contínuo."
+    primaryCta={{ href: "/contato", label: "Falar com especialista" }}
+    secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
+  />
+
+  <CredentialStrip />
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-default py-20 lg:py-24">
+      <SectionHeader
+        eyebrow="O que entregamos"
+        title="Três ativos intangíveis de alto valor"
+        description="Quando uma planta industrial madura contrata um integrador, não está comprando horas técnicas. Está comprando a certeza de que o sistema entregue vai funcionar com estabilidade por anos, com documentação clara e parceiro presente quando a planta precisar."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-3">
+        {values.map((value, i) => (
+          <ValueCard
+            icon={value.icon}
+            title={value.title}
+            description={value.description}
+            index={i + 1}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20 lg:py-24">
+      <SectionHeader
+        eyebrow="Soluções prioritárias"
+        title="Tecnologias que dominamos com profundidade"
+        description="Não atuamos como revenda nem como consultoria genérica. Nossa equipe é capacitada continuamente nas trilhas oficiais Rockwell Automation e nas normas internacionais aplicáveis."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {solutions.map((sol) => <SolutionCard {...sol} />)}
+      </div>
+      <div class="mt-10">
+        <a
+          href="/solucoes"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-integra-gray-900 hover:text-integra-red transition-colors"
+        >
+          Ver todas as soluções
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <LifecycleRail />
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-950 text-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <div class="max-w-3xl">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          Manifesto
+        </p>
+        <p class="text-2xl leading-relaxed text-integra-gray-100 sm:text-3xl">
+          Acreditamos que por trás de toda grande indústria existe uma fundação
+          invisível — feita de
+          <span class="text-integra-white">rigor</span>,
+          <span class="text-integra-white">disciplina</span> e pessoas que se
+          importam de verdade com o que constroem.
+        </p>
+        <p class="mt-6 text-base leading-relaxed text-integra-gray-300 lg:text-lg max-w-2xl">
+          Não trabalhamos apenas para resolver. Trabalhamos para transformar.
+          Para que cada operação seja mais segura, mais previsível e pronta
+          para crescer.
+        </p>
+        <p class="mt-6 font-mono text-xs uppercase tracking-widest text-integra-gray-500">
+          Integra · Engenharia em Automação Industrial
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock variant="light" />
+</BaseLayout>

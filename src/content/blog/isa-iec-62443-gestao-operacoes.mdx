@@ -1,0 +1,106 @@
+---
+title: "ISA/IEC 62443: o que o gerente de operações precisa saber"
+description: "Não é norma para o time de TI. IEC 62443 é referência de cibersegurança industrial que afeta diretamente disponibilidade, manutenção e contratos. Resumo prático para quem decide investimentos em automação."
+pubDate: 2026-04-08
+tags: ["IEC 62443", "Cibersegurança", "Gestão"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+## Quem precisa entender IEC 62443
+
+Em 90% das plantas brasileiras, IEC 62443 é tratada como assunto técnico
+do integrador de sistemas — algo que aparece em proposta, gera mais um
+parágrafo de documentação, e some. Esse é exatamente o motivo pelo qual
+a maioria das plantas falha em auditorias quando elas chegam.
+
+A norma não é um produto que se compra. É um **framework de governança
+de cibersegurança industrial** que determina decisões em três níveis:
+
+- **Estratégico** — gerentes de planta, diretores de operações, CFO
+- **Tático** — engenheiros de projetos, gestores de contratos, TI
+- **Operacional** — automação, manutenção, integradores
+
+Se o nível estratégico não entende o framework, os outros dois ficam
+sem direção — e a planta acumula dívida técnica de cibersegurança.
+
+## O que a norma realmente exige
+
+IEC 62443 é dividida em quatro grupos de documentos:
+
+- **62443-1** — definições e conceitos gerais
+- **62443-2** — políticas e procedimentos (organização)
+- **62443-3** — requisitos de sistema (componentes e arquitetura)
+- **62443-4** — requisitos de produto (fabricantes de equipamento)
+
+Para um gerente de operações, o foco prático está em **62443-2-1**
+(programa de cibersegurança industrial) e **62443-3-3** (requisitos de
+sistema por nível de segurança).
+
+## Security Levels (SL) — o que escolher
+
+A norma define quatro níveis de segurança:
+
+- **SL-1** — proteção contra violação casual
+- **SL-2** — proteção contra ataques intencionais com recursos limitados
+- **SL-3** — proteção contra ataques sofisticados
+- **SL-4** — proteção contra ataques sofisticados e bem financiados
+
+Para a maioria das plantas industriais brasileiras, **SL-2 é o alvo
+realista** para zonas críticas. SL-3 e SL-4 fazem sentido para
+infraestruturas críticas (energia, água, saneamento de grande porte)
+ou plantas-alvo de espionagem industrial.
+
+<TechnicalCallout variant="ot" title="SL não é one-size-fits-all">
+  A norma permite (e recomenda) diferentes SLs por zona dentro da
+  mesma planta. Zona de controle de caldeira pode ser SL-2 enquanto
+  zona de IDMZ é SL-3. A análise de risco define, não a escolha
+  política.
+</TechnicalCallout>
+
+## O que mudou em compliance B2B
+
+Empresas multinacionais — especialmente nos setores de alimentos,
+agronegócio e químico — passaram a exigir aderência a IEC 62443 em
+contratos de fornecimento e em auditorias de cadeia de suprimentos.
+Algumas seguradoras também já fazem perguntas específicas sobre
+maturidade de cibersegurança OT.
+
+Isso significa que falhar em IEC 62443 deixa de ser apenas um risco
+operacional — vira **risco contratual** e **risco de prêmio de seguro**.
+
+## O que perguntar ao seu integrador
+
+Como gerente, você não precisa virar especialista em norma. Mas precisa
+saber o que perguntar:
+
+1. **"Que SL você está propondo para cada zona da minha planta?"**
+2. **"Qual é a análise de risco que justifica esse SL?"**
+3. **"Como vamos demonstrar conformidade em uma auditoria?"**
+4. **"Que documentação fica comigo no fim do projeto?"**
+5. **"Qual o plano de manutenção de patches e atualizações?"**
+
+Se o fornecedor responde com vendor pitch ou desconversa, você está
+falando com a pessoa errada.
+
+## Investimento que se paga
+
+Cibersegurança OT não é gasto sem retorno. Estudos da indústria mostram
+que:
+
+- Incidentes de cibersegurança em plantas industriais têm custo médio
+  varias ordens de grandeza maiores do que o custo de implantar
+  controles adequados
+- Plantas com programas estruturados de cibersegurança OT têm
+  disponibilidade operacional sustentavelmente maior
+- Auditorias passam mais rápido (e mais barato) quando o framework
+  está implementado
+
+A conta fecha — só que ela aparece no longo prazo, e em prevenção, não
+em receita.
+
+---
+
+Sua planta tem uma análise de risco OT documentada? Se a resposta for
+não ou *"não sei"*, [vale uma conversa estruturada](/contato?assunto=redes-cyber).

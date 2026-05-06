@@ -1,0 +1,81 @@
+---
+title: "Projeto Moinho — modernização de controle e supervisão"
+summary: "Modernização de sistema de controle e supervisão em planta moageira, com atualização de SCADA, padronização de telas e governança de alarmes."
+pubDate: 2022-10-18
+sector: "Agronegócio · Moagem"
+tech:
+  - "FactoryTalk View SE"
+  - "ControlLogix"
+  - "ISA-18.2"
+  - "EtherNet/IP"
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+## Contexto
+
+Planta moageira em operação contínua, com sistema de supervisão legado
+acumulando dívidas técnicas: telas inconsistentes entre áreas, alarmes
+sem governança, dificuldade de manutenção por engenheiros novos no
+sistema e ausência de documentação atualizada.
+
+A direção da planta queria modernizar a supervisão sem comprometer a
+disponibilidade — uma janela de parada estendida não era opção dentro
+da safra.
+
+## Abordagem
+
+Aplicamos o método Integra em cinco fases:
+
+1. **Arquitetura.** Diagnóstico do ambiente FactoryTalk existente, mapeamento
+   de tags, levantamento de divergências entre P&IDs e a configuração real
+   dos controladores.
+2. **Engenharia.** Padronização do estilo de telas, implementação de
+   governança de alarmes alinhada à ISA-18.2 e padronização da estrutura de
+   áreas/equipamentos.
+3. **Implantação.** Cutover por área, com rollback testado em cada etapa.
+   Integração com instrumentação existente preservada.
+4. **Validação.** Testes funcionais documentados, validação de matriz
+   causa-efeito e ajuste de PIDs em malhas críticas.
+5. **Suporte.** Acompanhamento operacional pós-startup com presença em
+   campo durante o regime inicial.
+
+<TechnicalCallout variant="note" title="Sem parada total">
+  A modernização foi conduzida com a planta em operação, em janelas curtas
+  fora dos picos de produção. Cada cutover por área foi precedido de
+  rollback validado em ambiente espelho.
+</TechnicalCallout>
+
+## Tecnologias aplicadas
+
+- **FactoryTalk View SE** para supervisão distribuída
+- **ControlLogix** para os controladores principais
+- **EtherNet/IP** como rede de controle
+- **ISA-18.2** como referência para governança de alarmes
+- Estação de engenharia padronizada com versionamento via FactoryTalk
+  AssetCentre
+
+## Entregáveis
+
+- Documento de arquitetura SCADA atualizado
+- Style guide de telas com padrão visual e de interação
+- Governança de alarmes com filosofia documentada
+- Plano de testes (FAT/SAT) executado e arquivado
+- Treinamento operacional para o time da planta
+- Documentação as-built e roteiro de evolução
+
+## Resultado
+
+Após o startup, a planta passou a operar com supervisão padronizada,
+alarmes priorizados e documentação técnica completa. A manutenção do
+sistema deixou de depender de conhecimento informal — qualquer
+engenheiro de automação pode entrar e operar com base na documentação
+entregue.
+
+A relação se manteve no tempo: a Integra continua presente para
+evoluções, ajustes e adaptações conforme a planta cresce.
+
+---
+
+> Quer um case similar para a sua operação? [Conversar com especialista](/contato?assunto=case-similar).

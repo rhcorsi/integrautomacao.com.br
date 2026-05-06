@@ -1,0 +1,36 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  /** Number badge in the corner — for ordered lists */
+  index?: number;
+}
+
+const { icon, title, description, index } = Astro.props;
+---
+
+<article
+  class="group relative h-full rounded-lg border border-integra-gray-200 bg-integra-white p-7 hover:border-integra-gray-900 transition-colors"
+>
+  {index !== undefined && (
+    <span
+      class="absolute -top-3 -right-3 inline-flex size-7 items-center justify-center rounded-full border border-integra-gray-200 bg-integra-white text-xs font-mono font-semibold text-integra-gray-500"
+    >
+      {String(index).padStart(2, "0")}
+    </span>
+  )}
+  <div
+    class="inline-flex size-12 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white mb-5 group-hover:bg-integra-red transition-colors"
+  >
+    <Icon name={icon} class="size-6" aria-hidden="true" />
+  </div>
+  <h3 class="text-xl font-semibold text-integra-gray-900 mb-2">
+    {title}
+  </h3>
+  <p class="text-sm leading-relaxed text-integra-gray-700">
+    {description}
+  </p>
+</article>

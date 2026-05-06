@@ -1,0 +1,112 @@
+---
+title: "CPwE: por que sua planta precisa de uma rede converged"
+description: "Converged Plantwide Ethernet é a arquitetura de referência conjunta da Rockwell, Cisco e Panduit para redes industriais. Entenda por que ela importa, o que resolve e como aplicar sem parar a planta."
+pubDate: 2026-04-22
+tags: ["Redes", "CPwE", "Cibersegurança"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+## O problema das redes flat
+
+Plantas industriais que cresceram organicamente costumam ter uma rede
+flat: tudo conectado em uma mesma camada L2, com pouca segmentação,
+ACLs frouxas e sem segregação clara entre controle, supervisão e
+informação. O sintoma típico é:
+
+- Tráfego broadcast atravessando toda a planta
+- Engenheiro consegue acessar PLC do escritório da fábrica
+- Atualização de Windows derruba uma linha de produção
+- Auditoria de seguro/compliance gera lista de não-conformidades
+
+CPwE — Converged Plantwide Ethernet — é a arquitetura de referência
+desenvolvida em conjunto pela Rockwell, Cisco e Panduit para resolver
+isso de forma estrutural, alinhada ao modelo Purdue e às práticas da
+norma IEC 62443.
+
+## As camadas, do chão de fábrica ao escritório
+
+CPwE organiza a rede em zonas e camadas bem definidas:
+
+- **Cell/Area Zone** — controle local: PLCs, IEDs, instrumentação,
+  redundância de anel (DLR/PRP)
+- **Industrial Zone** — supervisão, historiação, MES, gestão de ativos
+- **IDMZ (Industrial DMZ)** — zona desmilitarizada que isola o ambiente
+  industrial do corporativo
+- **Enterprise Zone** — TI corporativa, ERP, e-mail, internet
+
+Entre cada camada existem regras explícitas de quem pode falar com
+quem, em qual porta, com qual protocolo. Sem isso, defense in depth
+não passa de slogan.
+
+<TechnicalCallout variant="ot" title="Por que IDMZ é inegociável">
+  O IDMZ é a única região onde o ambiente industrial e o corporativo se
+  encontram. Ele é a porta de saída de dados (Historian → ERP) e a porta
+  de entrada controlada (manutenção remota, atualizações). Sem IDMZ,
+  qualquer compromisso de segurança no corporativo vira risco
+  operacional na planta.
+</TechnicalCallout>
+
+## DLR, PRP e a redundância que você pode pagar
+
+Redundância de rede industrial vem em sabores:
+
+- **STP/RSTP** — barato, mas convergência lenta. Não é redundância
+  industrial real, é redundância de TI.
+- **DLR (Device Level Ring)** — redundância em anel L2, convergência em
+  ms. Suportado nativamente em hardware Stratix e por dispositivos
+  EtherNet/IP modernos. Boa relação custo-benefício para rings de
+  controle.
+- **PRP (Parallel Redundancy Protocol)** — duas redes paralelas
+  independentes. Failover é instantâneo (zero pacote perdido) porque
+  os dois caminhos estão sempre ativos. Mais cara, mas indispensável
+  em aplicações onde uma janela de convergência de 10ms é inaceitável
+  (subestações, processos contínuos críticos).
+
+A escolha não é "qual é melhor", é **qual cabe no risco operacional**
+do trecho específico da rede.
+
+## Cibersegurança vem desde o desenho
+
+Aplicar IEC 62443 sobre uma rede já construída é caro e doloroso.
+Aplicar desde o início, em cima de uma arquitetura CPwE, é parte do
+projeto:
+
+- Segmentação por VLAN com ACLs específicas por zona
+- Port security em switches industriais (MAC sticky, BPDU guard)
+- Storm control para evitar loops
+- Autenticação centralizada via RADIUS/TACACS+ para acesso
+  administrativo aos switches
+- Logs centralizados em um SIEM/syslog para detecção de anomalias
+
+<TechnicalCallout variant="note" title="Boa prática: começar pelo diagnóstico">
+  Antes de redesenhar uma rede em produção, faça port mirror em alguns
+  pontos críticos por 1-2 semanas para entender o tráfego real. Você
+  vai descobrir coisas que ninguém documentou — e isso vai poupar
+  surpresas no cutover.
+</TechnicalCallout>
+
+## Como migrar uma planta legada
+
+Migração de rede em planta em produção pode ser feita por fases:
+
+1. **Diagnóstico documentado.** Mapear topologia atual, tráfego real,
+   dispositivos por VLAN, regras de firewall existentes.
+2. **Arquitetura alvo.** Desenhar CPwE adaptado à planta, definir
+   zonas, separar Cell/Area por área de processo.
+3. **Plano de cutover por área.** Cada área é migrada em janela
+   curta, com plano de rollback testado em laboratório/ambiente
+   espelho.
+4. **Validação.** Cada área cutover é monitorada por 1-2 semanas antes
+   da próxima, para capturar problemas que só aparecem em produção.
+5. **Hardening progressivo.** Depois do cutover físico, aplicar
+   port-security, ACLs e logs centralizados de forma incremental.
+
+Não é projeto de fim de semana. É projeto de meses, mas que se paga
+em anos de operação estável e auditorias que passam sem fricção.
+
+---
+
+Tem uma rede industrial que precisa de uma análise estruturada?
+[Solicite um diagnóstico técnico](/contato?assunto=redes-cyber).

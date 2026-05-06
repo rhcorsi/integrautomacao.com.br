@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block legacy WP surface (also redirected via _redirects, but explicit is good)
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /xmlrpc.php
+
+Sitemap: https://integrautomacao.com.br/sitemap-index.xml

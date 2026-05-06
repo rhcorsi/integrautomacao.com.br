@@ -1,0 +1,50 @@
+---
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  title?: string;
+  items: FaqItem[];
+}
+
+const { title = "Perguntas frequentes", items } = Astro.props;
+---
+
+<section class="my-12">
+  <h3 class="text-xl font-semibold text-integra-gray-900 mb-6">
+    {title}
+  </h3>
+  <div class="divide-y divide-integra-gray-200 border-y border-integra-gray-200">
+    {
+      items.map(({ q, a }) => (
+        <details class="group py-5">
+          <summary
+            class="flex items-start justify-between gap-4 cursor-pointer list-none font-medium text-integra-gray-900 hover:text-integra-red"
+          >
+            <span>{q}</span>
+            <span
+              class="shrink-0 text-integra-gray-400 group-open:rotate-45 transition-transform"
+              aria-hidden="true"
+            >
+              <svg
+                class="size-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+          </summary>
+          <div
+            class="mt-3 text-sm leading-relaxed text-integra-gray-700 max-w-3xl"
+            set:html={a}
+          />
+        </details>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,126 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { COMPANY } from "@/utils/site";
+
+const lastUpdated = "5 de maio de 2026";
+---
+
+<BaseLayout
+  title="Uso de Cookies"
+  description="Política de uso de cookies do site da Integra Automação Industrial. Que cookies usamos, para que e como gerenciá-los."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-narrow py-16 lg:py-20">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Uso de Cookies
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Uso de Cookies
+      </h1>
+      <p class="mt-4 text-sm font-mono text-integra-gray-500">
+        Última atualização: {lastUpdated}
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-narrow py-12 lg:py-16">
+      <div class="prose prose-lg max-w-none prose-headings:text-integra-gray-900 prose-a:text-integra-red hover:prose-a:underline prose-strong:text-integra-gray-900">
+        <h2>O que são cookies</h2>
+        <p>
+          Cookies são pequenos arquivos de texto que sites podem
+          armazenar no seu navegador para lembrar informações entre
+          visitas. Eles podem ser usados para coisas legítimas
+          (lembrar idioma de preferência, manter sessão de login) e
+          para coisas problemáticas (rastreamento entre sites,
+          publicidade direcionada).
+        </p>
+
+        <h2>Nossa política em uma frase</h2>
+        <p>
+          <strong>
+            Este site não usa cookies de rastreamento, publicidade,
+            redes sociais ou análise comportamental.
+          </strong>
+        </p>
+
+        <h2>Cookies que podem aparecer no site</h2>
+
+        <h3>1. Cloudflare Turnstile (proteção anti-bot)</h3>
+        <p>
+          Quando você acessa nossa página de
+          <a href="/contato">contato</a>, o widget Turnstile da
+          Cloudflare carrega para verificar que você é humano antes de
+          permitir o envio do formulário. Esse mecanismo pode usar
+          cookies essenciais de funcionamento.
+        </p>
+        <ul>
+          <li>
+            <strong>Finalidade:</strong> proteção do formulário contra
+            envio automatizado por bots
+          </li>
+          <li>
+            <strong>Duração:</strong> sessão (apaga ao fechar o
+            navegador)
+          </li>
+          <li>
+            <strong>Pode ser desativado?</strong> Não — é cookie
+            essencial. Sem ele o formulário não funciona.
+          </li>
+        </ul>
+
+        <h3>2. Cloudflare Web Analytics</h3>
+        <p>
+          Usamos o Cloudflare Web Analytics para entender o volume de
+          visitas e o desempenho do site. Diferente do Google
+          Analytics, ele
+          <strong>não usa cookies</strong> e
+          <strong>não rastreia visitantes individualmente</strong>:
+          coleta apenas métricas agregadas e anônimas.
+        </p>
+
+        <h3>3. Cookies de terceiros — não usamos</h3>
+        <p>
+          Não embarcamos pixels do Facebook, Google Ads, Meta Pixel,
+          LinkedIn Insight Tag, TikTok Pixel, Hotjar, Microsoft Clarity
+          ou similares. Se você acessar este site a partir de uma rede
+          social, o link pode trazer parâmetros de campanha
+          (<code>utm_*</code>), mas nós descartamos essas informações
+          no servidor — elas não são armazenadas.
+        </p>
+
+        <h2>Como gerenciar cookies no seu navegador</h2>
+        <p>
+          Como não usamos cookies de rastreamento, não há painel de
+          consentimento neste site. Se ainda assim você quiser
+          gerenciar cookies em geral, todos os navegadores modernos
+          permitem isso nas configurações de privacidade:
+        </p>
+        <ul>
+          <li>
+            <strong>Chrome / Edge:</strong> Configurações → Privacidade
+            e segurança → Cookies de terceiros
+          </li>
+          <li>
+            <strong>Firefox:</strong> Configurações → Privacidade e
+            Segurança → Cookies e dados de sites
+          </li>
+          <li>
+            <strong>Safari:</strong> Preferências → Privacidade
+          </li>
+        </ul>
+
+        <h2>Mais informações</h2>
+        <p>
+          Para detalhes completos sobre como tratamos seus dados
+          pessoais, consulte nossa
+          <a href="/politica-privacidade">Política de Privacidade</a>.
+        </p>
+        <p>
+          Dúvidas ou solicitações sobre privacidade:
+          <a href={`mailto:${COMPANY.emailPrivacy}`}>{COMPANY.emailPrivacy}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

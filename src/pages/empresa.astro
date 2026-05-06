@@ -1,0 +1,209 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import ValueCard from "@/components/ValueCard.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const valores = [
+  {
+    icon: "lucide:medal",
+    title: "Excelência Técnica",
+    description: "Nada improvisado. Cada entrega é executada com rigor de engenharia.",
+  },
+  {
+    icon: "lucide:list-checks",
+    title: "Padronização e Método",
+    description:
+      "Acreditamos que organização e documentação são tão importantes quanto o código que roda no controlador.",
+  },
+  {
+    icon: "lucide:scale",
+    title: "Integridade e Transparência",
+    description:
+      "Jogamos limpo com o cliente sobre prazos, escopo, riscos e limitações.",
+  },
+  {
+    icon: "lucide:handshake",
+    title: "Responsabilidade com o Cliente",
+    description:
+      "A Integra não abandona o cliente após o start-up. A parceria continua pela vida útil do sistema.",
+  },
+  {
+    icon: "lucide:trending-up",
+    title: "Evolução Contínua",
+    description:
+      "Fome por aprendizado e atualização constante nas tecnologias e normas que regem nosso campo.",
+  },
+];
+
+const timeline = [
+  {
+    year: 1996,
+    title: "Início da carreira de Joldmar Oliveira",
+    description:
+      "Joldmar inicia sua atuação em automação industrial em uma usina de açúcar e etanol.",
+  },
+  {
+    year: 2006,
+    title: "Início da carreira de Rafhael Corsi",
+    description:
+      "Rafhael começa em automação na Conapi, desenvolvendo sólida experiência no setor.",
+  },
+  {
+    year: 2016,
+    title: "Fundação da Integra Automação Industrial",
+    description:
+      "Joldmar e Rafhael fundam a empresa com o objetivo de oferecer soluções estruturadas em automação para diversos setores.",
+  },
+  {
+    year: 2018,
+    title: "Especialização em Rockwell Automation",
+    description:
+      "Consolidação como integradora especialista, primeiros projetos de maior complexidade na plataforma Rockwell.",
+  },
+  {
+    year: 2022,
+    title: "Integradora Bronze Rockwell",
+    description:
+      "Conquista do título Bronze no programa Partner Network da Rockwell Automation.",
+  },
+  {
+    year: 2023,
+    title: "Integradora Silver Rockwell",
+    description:
+      "Promoção para o nível Silver — uma das mais prestigiosas certificações no segmento de integração de sistemas industriais.",
+  },
+  {
+    year: 2024,
+    title: "Expansão da equipe e dos setores atendidos",
+    description:
+      "Diversificação de setores e aumento da capacidade de atendimento simultâneo a múltiplos projetos.",
+  },
+  {
+    year: 2026,
+    title: "Sistematização da marca",
+    description:
+      "Reformulação completa da identidade institucional para refletir a maturidade técnica e o posicionamento de Engenharia com Integridade.",
+  },
+];
+---
+
+<BaseLayout
+  title="Empresa"
+  description="A Integra é uma empresa brasileira de engenharia e integração de sistemas industriais, fundada em 2016 em Maringá-PR, com foco em arquiteturas robustas, padronização e governança técnica."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Sobre a Integra
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Engenharia que entra em planta crítica e fica.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        A Integra Automação Industrial é uma empresa de engenharia e integração
+        tecnológica para o setor industrial, fundada em 2016 no interior do
+        Paraná. Atuamos como parceiros estratégicos de longo prazo,
+        desenvolvendo arquiteturas robustas, seguras e documentadas que elevam
+        o nível tecnológico das indústrias e garantem eficiência,
+        confiabilidade e governança de processos.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <p
+            class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3"
+          >
+            Propósito
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 mb-4">
+            Por que a Integra existe
+          </h2>
+          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+            Elevar o padrão tecnológico, a segurança e a governança das
+            indústrias através de soluções de automação robustas e confiáveis,
+            construindo relações de confiança com clientes e parceiros baseadas
+            em honestidade, ética e compromisso.
+          </p>
+        </div>
+        <div>
+          <p
+            class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3"
+          >
+            Visão
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 mb-4">
+            Onde queremos chegar
+          </h2>
+          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+            Ser reconhecida como referência em engenharia de sistemas
+            industriais e integração tecnológica no Brasil — sinônimo de
+            governança técnica, segurança operacional e parceria estratégica
+            de longo prazo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Valores inegociáveis"
+        title="Cinco regras de conduta que não mudam com o mercado"
+        description="Nossos valores não são flexibilizados por pressão comercial. São extraídos diretamente da cultura dos fundadores e validados em cada projeto."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {valores.map((v, i) => (
+          <ValueCard
+            icon={v.icon}
+            title={v.title}
+            description={v.description}
+            index={i + 1}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="História"
+        title="Uma trajetória de respeito e excelência"
+        description="Mais de 20 anos de experiência acumulada pelos fundadores, dez anos de Integra. A linha do tempo mostra como chegamos até aqui."
+        accent={true}
+      />
+      <ol class="relative border-l-2 border-integra-gray-200 ml-2 space-y-10">
+        {timeline.map((item) => (
+          <li class="pl-8 relative">
+            <span
+              class="absolute -left-[9px] top-1 size-4 rounded-full bg-integra-red ring-4 ring-integra-gray-50"
+              aria-hidden="true"
+            />
+            <div class="font-mono text-sm font-semibold text-integra-red mb-1">
+              {item.year}
+            </div>
+            <h3 class="text-lg font-semibold text-integra-gray-900 mb-1">
+              {item.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700 max-w-2xl">
+              {item.description}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <CtaBlock
+    variant="dark"
+    title="Quer entender como aplicamos isso na sua planta?"
+    description="Apresentamos arquitetura, método e referências antes de qualquer proposta. Conversa técnica direta, sem jargão desnecessário."
+  />
+</BaseLayout>

@@ -1,0 +1,139 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import { Icon } from "astro-icon/components";
+
+const sectors = [
+  {
+    icon: "lucide:wheat",
+    name: "Açúcar e Etanol",
+    description:
+      "Setor onde os fundadores começaram suas carreiras. Conhecemos as particularidades de safra, paradas planejadas, intertravamentos NFPA e operação 24/7 de caldeira, moenda e fermentação.",
+    pains: ["Janela de safra estreita", "Paradas têm custo altíssimo", "Sistemas heterogêneos legados"],
+  },
+  {
+    icon: "lucide:droplet",
+    name: "Etanol de Milho",
+    description:
+      "Plantas mais recentes, com tecnologia moderna e exigências de eficiência energética e rastreabilidade desde o projeto.",
+    pains: ["Eficiência energética", "Rastreabilidade de receitas", "Modernização de controle de processo"],
+  },
+  {
+    icon: "lucide:tractor",
+    name: "Agronegócio e Armazenagem de Grãos",
+    description:
+      "Silos, terminais, secadores. Sistemas com sazonalidade crítica e janelas de operação estreitas.",
+    pains: ["Sazonalidade", "Confiabilidade em pico de safra", "Integração de múltiplos fornecedores"],
+  },
+  {
+    icon: "lucide:flask-conical",
+    name: "Química e Fertilizantes",
+    description:
+      "Operações 24/7 com alta complexidade de processo, requisitos rigorosos de segurança e compliance.",
+    pains: ["Cibersegurança OT crítica", "Sistemas redundantes", "Conformidade regulatória"],
+  },
+  {
+    icon: "lucide:utensils",
+    name: "Alimentos e Bebidas",
+    description:
+      "Processos contínuos com exigências de segurança alimentar, rastreabilidade e integração de sistemas heterogêneos.",
+    pains: ["Paradas de linha", "Rastreabilidade", "Integração de sistemas"],
+  },
+  {
+    icon: "lucide:beef",
+    name: "Frigoríficos",
+    description:
+      "Linhas com alta variabilidade, controle de receita por lote e exigências de rastreabilidade do animal ao produto final.",
+    pains: ["Rastreabilidade", "Controle de receita por lote", "Auditoria de processo"],
+  },
+  {
+    icon: "lucide:scale",
+    name: "Fábricas de Ração",
+    description:
+      "Processos de dosagem e pesagem críticos, controle de receita preciso, automação de mistura.",
+    pains: ["Precisão de dosagem", "Receitas e batelada", "Automação de mistura"],
+  },
+  {
+    icon: "lucide:trees",
+    name: "Papel e Celulose",
+    description:
+      "Processos contínuos de alta criticidade. Caldeiras, digestores, máquinas de papel.",
+    pains: ["Continuidade operacional", "Controle multivariável", "Eficiência energética"],
+  },
+  {
+    icon: "lucide:droplets",
+    name: "Saneamento e Tratamento de Efluentes",
+    description:
+      "Operação crítica de infraestrutura pública. Confiabilidade, monitoramento remoto, SCADA distribuído.",
+    pains: ["SCADA distribuído", "Monitoramento remoto", "Confiabilidade 24/7"],
+  },
+];
+---
+
+<BaseLayout
+  title="Setores"
+  description="Atuamos em setores industriais críticos: açúcar e etanol, agronegócio, alimentos e bebidas, química, frigoríficos, fábricas de ração, papel e celulose, saneamento."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Setores
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Setores onde já entregamos.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        A Integra atua estritamente B2B, com foco em indústrias de médio e
+        grande porte que operam processos críticos e contínuos. A escolha
+        dos setores reflete onde nossa equipe acumula experiência real — não
+        listas de marketing.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Onde entregamos"
+        title="Setores prioritários"
+        description="Em cada setor reconhecemos dores específicas, normas aplicáveis e padrões de operação."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {sectors.map((s) => (
+          <article
+            class="rounded-lg border border-integra-gray-200 bg-integra-white p-6 flex flex-col gap-4"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white"
+              >
+                <Icon name={s.icon} class="size-5" aria-hidden="true" />
+              </div>
+              <h3 class="text-base font-semibold text-integra-gray-900">
+                {s.name}
+              </h3>
+            </div>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {s.description}
+            </p>
+            <ul class="mt-auto pt-3 border-t border-integra-gray-100 space-y-1.5">
+              {s.pains.map((p) => (
+                <li class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 flex items-start gap-2">
+                  <span class="text-integra-red mt-0.5" aria-hidden="true">·</span>
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Seu setor não está listado?"
+    description="Atuamos em outras indústrias quando o desafio técnico se encaixa em nossa expertise (PlantPAx, FactoryTalk, redes industriais, IEC 62443). Conversamos para avaliar."
+  />
+</BaseLayout>

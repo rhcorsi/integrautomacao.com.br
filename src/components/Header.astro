@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets";
+import logoColorido from "@/assets/logos/Colorido.png";
+import { NAV } from "@/utils/site";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-integra-gray-200 bg-integra-white/95 backdrop-blur supports-[backdrop-filter]:bg-integra-white/85"
+>
+  <div class="container-default flex h-16 items-center gap-6 lg:h-20">
+    <a
+      href="/"
+      class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
+      aria-label="Integra — página inicial"
+    >
+      <Image
+        src={logoColorido}
+        alt="Integra Automação Industrial"
+        class="h-8 w-auto lg:h-10"
+        widths={[160, 240, 320]}
+        sizes="(min-width: 1024px) 200px, 160px"
+        loading="eager"
+        decoding="async"
+      />
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-1 ml-auto" aria-label="Principal">
+      {NAV.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={[
+            "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+            isActive(href)
+              ? "text-integra-red"
+              : "text-integra-gray-700 hover:text-integra-gray-900 hover:bg-integra-gray-100",
+          ]}
+          aria-current={isActive(href) ? "page" : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <a
+      href="/contato"
+      class="hidden lg:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
+    >
+      Falar com especialista
+      <span aria-hidden="true">→</span>
+    </a>
+
+    <button
+      type="button"
+      class="lg:hidden ml-auto p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      data-menu-toggle
+    >
+      <svg
+        class="block h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M4 6h16M4 12h16M4 18h16"
+          data-icon-open
+        ></path>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+          class="hidden"
+          data-icon-close
+        ></path>
+      </svg>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-nav"
+    class="lg:hidden hidden border-t border-integra-gray-200 bg-integra-white"
+    aria-label="Principal (mobile)"
+  >
+    <div class="container-default py-4 grid gap-1">
+      {NAV.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={[
+            "px-3 py-2.5 text-base font-medium rounded-md transition-colors",
+            isActive(href)
+              ? "text-integra-red bg-integra-red/5"
+              : "text-integra-gray-700 hover:bg-integra-gray-100",
+          ]}
+          aria-current={isActive(href) ? "page" : undefined}
+        >
+          {label}
+        </a>
+      ))}
+      <a
+        href="/contato"
+        class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 text-base font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md"
+      >
+        Falar com especialista
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.getElementById("mobile-nav");
+  const iconOpen = document.querySelector<SVGElement>("[data-icon-open]");
+  const iconClose = document.querySelector<SVGElement>("[data-icon-close]");
+
+  if (toggle && menu && iconOpen && iconClose) {
+    toggle.addEventListener("click", () => {
+      const open = menu.classList.toggle("hidden") === false;
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      iconOpen.classList.toggle("hidden", open);
+      iconClose.classList.toggle("hidden", !open);
+    });
+  }
+</script>

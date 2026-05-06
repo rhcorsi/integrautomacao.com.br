@@ -1,0 +1,89 @@
+---
+title: "PlantPAx: o que muda na arquitetura DCS moderna"
+description: "Por que PlantPAx é tratado como DCS e não como SCADA glorificado, e como sua arquitetura de objetos de processo, redes industriais e segurança redefine o que se espera de um sistema de controle plant-wide."
+pubDate: 2026-05-05
+tags: ["PlantPAx", "DCS", "Arquitetura"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+## DCS, SCADA, ou os dois?
+
+A primeira pergunta que aparece em projetos de modernização é: *"PlantPAx é
+SCADA ou DCS?"* A resposta correta — e que muda a forma como o projeto é
+estruturado — é **DCS**. Mais que isso: é um DCS construído sobre uma base
+de tecnologia de automação discreta (Logix), o que dá flexibilidade de
+escala e arquitetura que sistemas DCS legados raramente oferecem.
+
+A consequência prática é que PlantPAx não é um pacote de telas com
+controlador lógico genérico atrás. É uma **arquitetura de referência
+inteira**, com:
+
+- Biblioteca de objetos de processo padronizada (PlantPAx Library)
+- Diretrizes de arquitetura (PSRM — PlantPAx System Reference Manual)
+- Padrões de redes (CPwE)
+- Governança de cibersegurança (alinhada a IEC 62443)
+- Estrutura de servidores (HMI, Data, Application, Information) com
+  redundância opcional por camada
+
+Quando alguém te oferece "PlantPAx" sem mencionar a PSRM nem a biblioteca
+de objetos, está vendendo outra coisa.
+
+## Por que a biblioteca de objetos importa tanto
+
+A `PlantPAx Library of Process Objects` é o que separa um projeto sério
+de um cluster de telas individuais. Cada elemento do processo (motor,
+válvula, transmissor, malha PID, intertravamento) é instanciado a partir
+de um objeto da biblioteca, com:
+
+- Lógica de controle padronizada
+- Faceplate visual padronizado
+- Estados, alarmes e modos consistentes entre todos os equipamentos do
+  mesmo tipo
+- Rastreamento de saúde do dispositivo
+- Integração com FactoryTalk Historian / PI System via tags estruturadas
+
+<TechnicalCallout variant="note" title="Padronização não é opção">
+  Em uma planta com 800 motores, 1.200 válvulas e 2.500 instrumentos,
+  ter cada objeto programado de forma diferente é um custo escondido
+  enorme — manutenção, treinamento, evolução, debugging. A biblioteca
+  resolve isso de forma estrutural.
+</TechnicalCallout>
+
+## O que muda na PlantPAx 5.x
+
+A versão 5.x trouxe avanços relevantes em três áreas:
+
+**Redes e Cibersegurança.** Implementações de switches Stratix com
+arquiteturas alinhadas ao CPwE ficaram mais simples de configurar.
+Integração OPC UA tornou-se primeira classe, e a saúde da rede passou a
+ser parte do dashboard de operação, não um item secundário.
+
+**Análises habilitadas.** Dashboards de alarmes/eventos vinculados a KPIs
+operacionais, dashboards de saúde de dispositivos e integração de
+múltiplas fontes em uma visão empresarial unificada.
+
+**Processo e Energia integrados.** Objetos para dispositivos de proteção
+(SEL, ABB, Rockwell), comunicação IEC 61850 / EtherNet/IP, estratégias
+de gerenciamento de energia integradas ao mesmo ambiente de controle de
+processo.
+
+## Quando faz sentido migrar
+
+Plantas operando em PlantPAx 3.5 ou 4.1 nem sempre precisam migrar para
+5.x imediatamente. A decisão deve considerar:
+
+- Idade dos controladores ControlLogix em uso
+- Suporte de hardware (algumas séries antigas saem de catálogo)
+- Pressão regulatória sobre cibersegurança
+- Plano de modernização de outras camadas (rede, virtualização, HMI)
+
+Um diagnóstico técnico honesto vale mais que uma migração apressada. Em
+alguns casos a recomendação será modernizar a rede e a governança de
+alarmes primeiro, com o ControlLogix existente — e fazer a migração
+PlantPAx 5.x em uma janela posterior, com hardware adequado.
+
+---
+
+Tem um projeto PlantPAx em pauta? [Conversamos antes da proposta](/contato?assunto=plantpax).

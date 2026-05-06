@@ -1,0 +1,114 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Stage {
+  title: string;
+  description: string;
+  icon: string;
+  deliverables?: string[];
+}
+
+interface Props {
+  title?: string;
+  intro?: string;
+  stages?: Stage[];
+}
+
+const {
+  title = "Método Integra",
+  intro = "Cada projeto segue cinco fases bem definidas. Cada fase tem entregáveis concretos — nunca é abstrato, nunca é improvisado.",
+  stages = [
+    {
+      title: "Arquitetura",
+      description:
+        "Diagnóstico técnico, definição de padrões, dimensionamento e arquitetura de referência.",
+      icon: "lucide:layout-dashboard",
+      deliverables: ["Documento de arquitetura", "Padrões de projeto", "Risk register"],
+    },
+    {
+      title: "Engenharia",
+      description:
+        "Engenharia detalhada de software, redes e segurança, alinhada às normas e práticas do fabricante.",
+      icon: "lucide:cpu",
+      deliverables: ["Lógicas de controle", "Telas SCADA", "Plano de testes"],
+    },
+    {
+      title: "Implantação",
+      description:
+        "Comissionamento em campo, integração com instrumentação e supervisão.",
+      icon: "lucide:wrench",
+      deliverables: ["Comissionamento documentado", "Validação de comunicações"],
+    },
+    {
+      title: "Validação",
+      description:
+        "FAT, SAT, sintonia de malhas, validação de matriz causa-efeito e proteções.",
+      icon: "lucide:check-check",
+      deliverables: ["Relatório FAT/SAT", "Data book", "As-built"],
+    },
+    {
+      title: "Suporte",
+      description:
+        "Acompanhamento operacional pós-startup, suporte técnico e evoluções planejadas.",
+      icon: "lucide:life-buoy",
+      deliverables: ["Plano de suporte", "Roteiro de evolução"],
+    },
+  ],
+} = Astro.props;
+---
+
+<section class="border-b border-integra-gray-200 bg-integra-white">
+  <div class="container-default py-20">
+    <div class="max-w-3xl mb-12">
+      <p
+        class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3"
+      >
+        Como trabalhamos
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+        {title}
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+        {intro}
+      </p>
+    </div>
+
+    <ol class="grid gap-px bg-integra-gray-200 rounded-lg overflow-hidden lg:grid-cols-5">
+      {
+        stages.map((stage, i) => (
+          <li class="bg-integra-white p-6 lg:p-7 flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-xs font-semibold text-integra-red">
+                0{i + 1}
+              </span>
+              <span class="h-px flex-1 bg-integra-gray-200" />
+              <Icon
+                name={stage.icon}
+                class="size-5 text-integra-gray-500"
+                aria-hidden="true"
+              />
+            </div>
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {stage.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {stage.description}
+            </p>
+            {stage.deliverables && stage.deliverables.length > 0 && (
+              <ul class="mt-auto pt-4 space-y-1.5 text-xs text-integra-gray-500 border-t border-integra-gray-100">
+                {stage.deliverables.map((d) => (
+                  <li class="flex items-start gap-2">
+                    <span class="text-integra-red mt-0.5" aria-hidden="true">
+                      ›
+                    </span>
+                    <span>{d}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

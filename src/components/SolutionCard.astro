@@ -1,0 +1,51 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  icon: string;
+  tags?: string[];
+}
+
+const { href, title, summary, icon, tags = [] } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group flex flex-col h-full p-7 rounded-lg border border-integra-gray-200 bg-integra-white hover:border-integra-gray-900 transition-colors"
+>
+  <div class="flex items-start justify-between gap-3 mb-5">
+    <div
+      class="inline-flex size-11 items-center justify-center rounded-md bg-integra-gray-100 text-integra-gray-900 group-hover:bg-integra-gray-900 group-hover:text-integra-white transition-colors"
+    >
+      <Icon name={icon} class="size-5" aria-hidden="true" />
+    </div>
+    <span
+      class="text-integra-gray-300 group-hover:text-integra-red transition-colors"
+      aria-hidden="true"
+    >
+      <svg
+        class="size-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8M17 7v9" />
+      </svg>
+    </span>
+  </div>
+  <h3 class="text-lg font-semibold text-integra-gray-900 mb-2">{title}</h3>
+  <p class="text-sm leading-relaxed text-integra-gray-700 mb-4">{summary}</p>
+  {tags.length > 0 && (
+    <ul class="mt-auto flex flex-wrap gap-2 pt-4 border-t border-integra-gray-100">
+      {tags.map((tag) => (
+        <li class="text-[11px] font-mono uppercase tracking-wider text-integra-gray-500 px-2 py-1 bg-integra-gray-50 rounded-sm">
+          {tag}
+        </li>
+      ))}
+    </ul>
+  )}
+</a>

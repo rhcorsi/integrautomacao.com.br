@@ -1,0 +1,129 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import SolutionCard from "@/components/SolutionCard.astro";
+import LifecycleRail from "@/components/LifecycleRail.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const mvpSolutions = [
+  {
+    href: "/solucoes/plantpax",
+    title: "PlantPAx",
+    summary:
+      "DCS moderno da Rockwell Automation. Arquitetura escalável, biblioteca de objetos de processo, integração plant-wide.",
+    icon: "lucide:layers-3",
+    tags: ["DCS", "ControlLogix", "PlantPAx 5.x", "FactoryTalk"],
+  },
+  {
+    href: "/solucoes/factorytalk",
+    title: "FactoryTalk Suite",
+    summary:
+      "View SE, Optix, Batch, Historian, AssetCentre, ThinManager — supervisão, gestão de ativos e dados industriais integrados.",
+    icon: "lucide:gauge",
+    tags: ["View SE", "Optix", "Batch", "Historian", "ThinManager"],
+  },
+  {
+    href: "/solucoes/redes-iec-62443",
+    title: "Redes Industriais e IEC 62443",
+    summary:
+      "Topologia, segmentação, switches Stratix/Cisco, OPC UA. Cibersegurança OT do projeto à operação.",
+    icon: "lucide:shield-check",
+    tags: ["CPwE", "IEC 62443", "Stratix", "OPC UA", "NIST SP 800-82"],
+  },
+];
+
+const upcomingSolutions = [
+  {
+    title: "Data Centers Industriais (IDC)",
+    summary:
+      "Virtualização, redundância, alta disponibilidade para aplicações industriais críticas.",
+    icon: "lucide:server",
+  },
+  {
+    title: "PI System / AVEVA",
+    summary:
+      "Tags, AF Templates, integração com PlantPAx, monitoramento via PlantESP.",
+    icon: "lucide:database",
+  },
+  {
+    title: "Migração PLC5 / SLC500 → ControlLogix",
+    summary:
+      "Modernização de controladores legados sem comprometer a operação.",
+    icon: "lucide:replace",
+  },
+];
+---
+
+<BaseLayout
+  title="Soluções"
+  description="Soluções de engenharia e integração industrial: PlantPAx, FactoryTalk Suite, redes industriais e cibersegurança OT, virtualização, PI System e migração de controladores legados."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Soluções Integra
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Tecnologias que entendemos por dentro.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Não atuamos como revenda nem como consultoria genérica. Cada solução é
+        entregue com arquitetura, padronização, documentação e suporte
+        contínuo — pelos mesmos engenheiros que projetaram o sistema.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Disponíveis hoje"
+        title="Áreas com profundidade comprovada"
+        description="Cada solução tem página dedicada com problemas que resolve, método de implementação, entregáveis e normas aplicadas."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {mvpSolutions.map((sol) => <SolutionCard {...sol} />)}
+      </div>
+    </div>
+  </section>
+
+  <LifecycleRail
+    title="Como aplicamos cada solução"
+    intro="Toda solução passa pelas mesmas cinco fases. Nenhuma etapa é pulada — nenhuma documentação é deixada para depois."
+  />
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Em construção"
+        title="Outras áreas que executamos hoje"
+        description="Páginas dedicadas serão publicadas conforme o conteúdo for amadurecendo. Para projetos atuais, fale conosco diretamente."
+      />
+      <div class="grid gap-6 md:grid-cols-3">
+        {upcomingSolutions.map(({ title, summary }) => (
+          <article
+            class="p-6 rounded-lg border border-dashed border-integra-gray-300 bg-integra-white"
+          >
+            <div
+              class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-100 text-integra-gray-700 mb-4"
+            >
+              <span class="text-xs font-mono uppercase tracking-widest">SOON</span>
+            </div>
+            <h3 class="text-lg font-semibold text-integra-gray-900 mb-2">
+              {title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {summary}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Tem um caso técnico para conversar?"
+    description="Independentemente da solução, começamos conversando sobre o problema, a planta e os riscos. A arquitetura vem depois."
+  />
+</BaseLayout>

@@ -1,0 +1,195 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { COMPANY } from "@/utils/site";
+
+const lastUpdated = "5 de maio de 2026";
+---
+
+<BaseLayout
+  title="Política de Privacidade"
+  description="Política de Privacidade da Integra Automação Industrial. Como coletamos, usamos e protegemos seus dados pessoais conforme a LGPD."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-narrow py-16 lg:py-20">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Política de Privacidade
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Política de Privacidade
+      </h1>
+      <p class="mt-4 text-sm font-mono text-integra-gray-500">
+        Última atualização: {lastUpdated}
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-narrow py-12 lg:py-16">
+      <div class="prose prose-lg max-w-none prose-headings:text-integra-gray-900 prose-a:text-integra-red hover:prose-a:underline prose-strong:text-integra-gray-900">
+        <h2>1. Quem somos</h2>
+        <p>
+          A <strong>{COMPANY.legalName}</strong>, inscrita no CNPJ
+          {COMPANY.taxId}, com sede em {COMPANY.address.street},
+          {COMPANY.address.city} – {COMPANY.address.state}, CEP {COMPANY.address.postalCode},
+          opera o site <a href="https://integrautomacao.com.br">www.integrautomacao.com.br</a>
+          e é responsável pelo tratamento dos dados pessoais coletados por
+          ele.
+        </p>
+
+        <h2>2. Que dados coletamos</h2>
+        <h3>2.1 Dados que você fornece voluntariamente</h3>
+        <p>
+          Quando você preenche o formulário de contato em
+          <a href="/contato">/contato</a>, coletamos:
+        </p>
+        <ul>
+          <li>Nome completo</li>
+          <li>E-mail corporativo</li>
+          <li>Telefone (opcional)</li>
+          <li>Empresa (opcional)</li>
+          <li>Conteúdo da mensagem que você nos enviou</li>
+        </ul>
+
+        <h3>2.2 Dados técnicos coletados automaticamente</h3>
+        <p>
+          Para garantir a segurança do site e prevenir abuso, coletamos
+          temporariamente:
+        </p>
+        <ul>
+          <li>
+            Endereço IP da requisição (apenas no momento do envio do
+            formulário, para verificação de Turnstile / proteção
+            anti-bot)
+          </li>
+          <li>
+            User agent (informação do seu navegador, para diagnóstico
+            técnico)
+          </li>
+          <li>
+            Métricas agregadas e anonimizadas de visitação (via
+            Cloudflare Web Analytics — sem cookies, sem rastreamento
+            entre sites)
+          </li>
+        </ul>
+
+        <h2>3. Por que tratamos seus dados</h2>
+        <p>
+          Tratamos os dados que você nos envia com as seguintes
+          finalidades, baseadas nas hipóteses legais previstas no
+          art. 7º da LGPD:
+        </p>
+        <ul>
+          <li>
+            <strong>Responder à sua solicitação de contato</strong>
+            (execução de procedimentos preliminares relacionados a
+            contrato — art. 7º, V).
+          </li>
+          <li>
+            <strong>Prevenir fraude e segurança do site</strong>
+            (legítimo interesse — art. 7º, IX).
+          </li>
+          <li>
+            <strong>Cumprir obrigações legais e regulatórias</strong>,
+            quando aplicável (art. 7º, II).
+          </li>
+        </ul>
+
+        <h2>4. Por quanto tempo guardamos os dados</h2>
+        <p>
+          Mensagens de contato são mantidas pelo prazo necessário ao
+          atendimento da solicitação e, posteriormente, até 5 (cinco)
+          anos para fins de histórico comercial e cumprimento de
+          obrigações legais. Após esse período, os dados são
+          anonimizados ou excluídos.
+        </p>
+
+        <h2>5. Com quem compartilhamos</h2>
+        <p>
+          Não vendemos, alugamos ou compartilhamos seus dados pessoais
+          com terceiros para fins de marketing. Compartilhamos
+          estritamente o necessário com:
+        </p>
+        <ul>
+          <li>
+            <strong>Provedores de infraestrutura</strong> (Cloudflare
+            Pages para hospedagem do site, Resend para envio de
+            e-mails transacionais, Microsoft 365 para correio eletrônico
+            corporativo).
+          </li>
+          <li>
+            <strong>Autoridades competentes</strong>, quando exigido
+            por lei ou ordem judicial.
+          </li>
+        </ul>
+
+        <h2>6. Cookies</h2>
+        <p>
+          Este site não utiliza cookies de rastreamento ou publicidade.
+          Cookies eventualmente utilizados são exclusivamente
+          essenciais para o funcionamento de funcionalidades
+          específicas (proteção anti-bot do formulário de contato,
+          por exemplo). Para detalhes, consulte
+          <a href="/uso-de-cookies">Uso de Cookies</a>.
+        </p>
+
+        <h2>7. Seus direitos como titular dos dados</h2>
+        <p>
+          A LGPD garante a você os seguintes direitos sobre seus dados
+          pessoais:
+        </p>
+        <ul>
+          <li>Confirmação da existência de tratamento</li>
+          <li>Acesso aos dados</li>
+          <li>Correção de dados incompletos, inexatos ou desatualizados</li>
+          <li>
+            Anonimização, bloqueio ou eliminação de dados desnecessários
+            ou tratados em desconformidade com a LGPD
+          </li>
+          <li>Portabilidade dos dados</li>
+          <li>
+            Eliminação dos dados pessoais tratados com seu consentimento
+          </li>
+          <li>
+            Informação sobre as entidades públicas e privadas com as
+            quais compartilhamos seus dados
+          </li>
+          <li>
+            Revogação do consentimento, quando aplicável
+          </li>
+        </ul>
+
+        <h2>8. Como exercer seus direitos</h2>
+        <p>
+          Para exercer qualquer dos direitos acima, escreva para
+          <a href={`mailto:${COMPANY.emailPrivacy}`}>{COMPANY.emailPrivacy}</a>.
+          Responderemos em até 15 dias úteis.
+        </p>
+
+        <h2>9. Segurança</h2>
+        <p>
+          Adotamos medidas técnicas e organizacionais para proteger
+          seus dados, incluindo: TLS 1.2+ em todas as comunicações,
+          armazenamento em provedores com certificações de segurança
+          internacionais, controle de acesso por credenciais nominais,
+          e princípios de privacidade desde a concepção (privacy by
+          design) na arquitetura do site.
+        </p>
+
+        <h2>10. Alterações nesta política</h2>
+        <p>
+          Esta política pode ser atualizada periodicamente. A data da
+          última atualização sempre constará no topo do documento.
+          Mudanças materiais serão comunicadas em destaque na home do
+          site.
+        </p>
+
+        <h2>11. Contato do encarregado pelos dados pessoais</h2>
+        <p>
+          Para tratativas relacionadas à proteção de dados pessoais,
+          entre em contato pelo e-mail
+          <a href={`mailto:${COMPANY.emailPrivacy}`}>{COMPANY.emailPrivacy}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+interface Standard {
+  code: string;
+  description: string;
+}
+
+interface Props {
+  title?: string;
+  standards?: Standard[];
+}
+
+const {
+  title = "Normas e referências aplicadas",
+  standards = [
+    { code: "ISA-95", description: "Integração empresa-controle" },
+    { code: "ISA-88", description: "Controle de batelada" },
+    { code: "ISA/IEC 62443", description: "Cibersegurança industrial" },
+    { code: "NIST SP 800-82", description: "Segurança de OT" },
+    { code: "CPwE", description: "Converged Plantwide Ethernet" },
+    { code: "OPC UA", description: "Comunicação industrial" },
+  ],
+} = Astro.props;
+---
+
+<section class="my-10">
+  <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-5">
+    {title}
+  </h3>
+  <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      standards.map(({ code, description }) => (
+        <li class="flex items-center gap-3 px-4 py-3 rounded-md border border-integra-gray-200 bg-integra-white">
+          <code
+            class="font-mono text-xs font-semibold text-integra-gray-900 px-2 py-1 bg-integra-gray-100 rounded-sm"
+          >
+            {code}
+          </code>
+          <span class="text-sm text-integra-gray-700">{description}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>

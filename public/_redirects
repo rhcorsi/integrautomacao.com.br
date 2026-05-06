@@ -1,0 +1,37 @@
+# Path-based 301 redirects from the old WordPress site.
+# Query-string redirects (?p=N, ?page_id=N, ?post_type=…) are handled
+# by the Cloudflare Worker `legacy-redirects` because CF Pages `_redirects`
+# does not match against the query string.
+
+# WP home variants
+/home-2                /                                    301
+/home-2/               /                                    301
+
+# WP taxonomies → blog
+/category/*            /blog                                301
+/tag/*                 /blog                                301
+/author/*              /blog                                301
+
+# WP archives by date → blog
+/20*/*                 /blog                                301
+
+# Enfold portfolio (we now use /cases)
+/portfolio-item/*      /cases                               301
+/portfolio/*           /cases                               301
+
+# WP feeds → RSS
+/feed                  /rss.xml                             301
+/feed/                 /rss.xml                             301
+/comments/feed         /rss.xml                             301
+/comments/feed/        /rss.xml                             301
+
+# WP admin / login surface — never expose to the public
+/wp-admin              /                                    301
+/wp-admin/*            /                                    301
+/wp-login.php          /                                    301
+/wp-login.php*         /                                    301
+/xmlrpc.php            /                                    301
+/wp-includes/*         /                                    301
+/wp-content/uploads/*  /                                    301
+/wp-json                /                                   301
+/wp-json/*             /                                    301

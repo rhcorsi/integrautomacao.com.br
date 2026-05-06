@@ -1,0 +1,121 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const programs = [
+  {
+    title: "Rockwell Automation Partner Network",
+    summary:
+      "Programa oficial da Rockwell para integradores qualificados. Acesso a treinamentos, suporte técnico de produto e canais de coordenação técnica direta.",
+    items: [
+      "System Integrator",
+      "PlantPAx DCS Partner",
+      "Disciplinas: Control · Visualization · Process · Power",
+    ],
+    note: "Status atual e nível verificáveis no Rockwell PartnerLocator.",
+  },
+  {
+    title: "Cisco Networking Academy",
+    summary:
+      "Capacitação reconhecida em redes, infraestrutura e segurança de redes industriais. Aplicada nos projetos de CPwE e cibersegurança OT.",
+    items: [
+      "Industrial Networking Essentials",
+      "Industrial IoT and Control Systems in Manufacturing",
+      "CCNA Routing & Switching (membros da equipe)",
+    ],
+  },
+  {
+    title: "Siemens — SIMATIC PCS 7",
+    summary:
+      "Capacitação Siemens em PCS 7 versão 9, com certificação de Industrial Networks Certification (CPIN-LEVEL).",
+    items: ["SIMATIC PCS 7 V9", "Industrial Networks Certification (CPIN)"],
+  },
+  {
+    title: "ISA — International Society of Automation",
+    summary:
+      "Participação ativa na ISA, sociedade internacional de automação que mantém os padrões ISA-95, ISA-88, ISA-101, ISA-18.2 e ISA/IEC 62443.",
+    items: ["ISA Senior Member", "Standards Committee — participação"],
+  },
+];
+---
+
+<BaseLayout
+  title="Certificações"
+  description="Certificações e capacitações oficiais da Integra: Rockwell Automation Partner Network, Cisco Networking Academy, Siemens PCS 7, ISA Senior Member."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Certificações
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        Credibilidade verificável.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Nossas certificações são públicas e podem ser verificadas
+        diretamente nos programas oficiais dos fabricantes. Capacitação
+        contínua é parte do nosso valor inegociável de Evolução Contínua.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Programas oficiais"
+        title="Onde investimos formação"
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {programs.map((p) => (
+          <article
+            class="rounded-lg border border-integra-gray-200 bg-integra-white p-7"
+          >
+            <h3 class="text-xl font-semibold text-integra-gray-900 mb-3">
+              {p.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700 mb-5">
+              {p.summary}
+            </p>
+            <ul class="space-y-2 border-t border-integra-gray-100 pt-4">
+              {p.items.map((item) => (
+                <li class="flex items-start gap-2 text-sm text-integra-gray-900">
+                  <span class="text-integra-red mt-1" aria-hidden="true">›</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            {p.note && (
+              <p class="mt-4 text-xs italic text-integra-gray-500">
+                {p.note}
+              </p>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-default py-20 max-w-4xl">
+      <TechnicalCallout variant="note" title="Política de transparência">
+        <p>
+          Listamos apenas certificações que estão atualmente ativas e
+          verificáveis em fontes oficiais (Rockwell PartnerLocator, ISA,
+          Cisco, Siemens). Não usamos selos como decoração — cada um
+          aparece com escopo, nível e data de validação correta. Se
+          encontrar inconsistência, fale conosco.
+        </p>
+      </TechnicalCallout>
+    </div>
+  </section>
+
+  <CtaBlock
+    variant="dark"
+    title="Quer validar uma certificação específica?"
+    description="Encaminhamos comprovantes oficiais e contato direto com o fabricante quando necessário durante o processo de qualificação."
+    primaryCta={{ href: "/contato?assunto=certificacoes", label: "Solicitar comprovação" }}
+  />
+</BaseLayout>

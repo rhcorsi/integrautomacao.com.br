@@ -1,0 +1,39 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: "left" | "center";
+  /** When true, eyebrow color is red instead of gray */
+  accent?: boolean;
+}
+
+const { eyebrow, title, description, align = "left", accent = false } =
+  Astro.props;
+---
+
+<header
+  class:list={[
+    "max-w-3xl mb-12",
+    align === "center" && "mx-auto text-center",
+  ]}
+>
+  {eyebrow && (
+    <p
+      class:list={[
+        "text-xs font-mono uppercase tracking-widest mb-3",
+        accent ? "text-integra-red" : "text-integra-gray-500",
+      ]}
+    >
+      {eyebrow}
+    </p>
+  )}
+  <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+    {title}
+  </h2>
+  {description && (
+    <p class="mt-4 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+      {description}
+    </p>
+  )}
+</header>

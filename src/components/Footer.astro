@@ -1,0 +1,114 @@
+---
+import { Image } from "astro:assets";
+import logoBranco from "@/assets/logos/Branco.png";
+import { SITE, COMPANY, NAV } from "@/utils/site";
+
+const year = new Date().getFullYear();
+const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
+const phoneCommercial = COMPANY.phones[0];
+---
+
+<footer class="bg-integra-gray-950 text-integra-gray-300">
+  <div class="container-default py-16 lg:py-20 grid gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-4 space-y-6">
+      <Image
+        src={logoBranco}
+        alt={SITE.name}
+        class="h-12 w-auto"
+        widths={[200, 320]}
+        sizes="200px"
+        loading="lazy"
+        decoding="async"
+      />
+      <p class="text-sm leading-relaxed text-integra-gray-400 max-w-sm">
+        Engenharia e integração de sistemas industriais para plantas críticas.
+        Arquitetura, padronização, segurança operacional e governança técnica
+        de longo prazo.
+      </p>
+      <div class="flex flex-wrap gap-3 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
+        <span>Maringá-PR</span>
+        <span aria-hidden="true">·</span>
+        <span>Atuação nacional</span>
+      </div>
+    </div>
+
+    <nav class="lg:col-span-3 grid gap-3 content-start" aria-label="Navegação do rodapé">
+      <h2 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
+        Navegação
+      </h2>
+      {NAV.map(({ href, label }) => (
+        <a
+          href={href}
+          class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="lg:col-span-3 grid gap-3 content-start">
+      <h2 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
+        Contato
+      </h2>
+      <a
+        href={`mailto:${COMPANY.email}`}
+        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit break-all"
+      >
+        {COMPANY.email}
+      </a>
+      <a
+        href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`}
+        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+      >
+        {phoneCommercial.display}
+      </a>
+      <a
+        href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
+        rel="noopener noreferrer"
+        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit inline-flex items-center gap-2"
+      >
+        WhatsApp: {phoneWhatsApp.display}
+      </a>
+      <address class="not-italic text-sm text-integra-gray-300 leading-relaxed mt-2">
+        {COMPANY.address.street}<br />
+        {COMPANY.address.city} – {COMPANY.address.state}<br />
+        CEP {COMPANY.address.postalCode}
+      </address>
+    </div>
+
+    <div class="lg:col-span-2 grid gap-3 content-start">
+      <h2 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
+        Institucional
+      </h2>
+      <a
+        href="/politica-privacidade"
+        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+        >Política de privacidade</a
+      >
+      <a
+        href="/uso-de-cookies"
+        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+        >Uso de cookies</a
+      >
+      <a
+        href={COMPANY.social.linkedin}
+        rel="noopener noreferrer"
+        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+        >LinkedIn</a
+      >
+    </div>
+  </div>
+
+  <div class="border-t border-integra-gray-800">
+    <div
+      class="container-default py-6 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between text-xs text-integra-gray-500"
+    >
+      <p>
+        © {year} {COMPANY.legalName} · CNPJ {COMPANY.taxId}
+      </p>
+      <p class="font-mono uppercase tracking-wider">
+        {SITE.tagline}
+      </p>
+    </div>
+  </div>
+</footer>

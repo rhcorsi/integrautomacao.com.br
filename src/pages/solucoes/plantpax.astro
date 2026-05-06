@@ -1,0 +1,168 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const problems = [
+  {
+    title: "Sistemas legados sem padronização",
+    description:
+      "Plantas com múltiplas gerações de software, telas inconsistentes e dificuldade de manutenção por engenheiros diferentes do que implantou.",
+  },
+  {
+    title: "Risco de parada por falhas sistêmicas",
+    description:
+      "Arquiteturas mal dimensionadas, redundância parcial e ausência de objetos de processo padronizados aumentam a superfície de falha.",
+  },
+  {
+    title: "Falta de visibilidade plant-wide",
+    description:
+      "Dados isolados em ilhas, sem contexto, sem AF Templates e sem integração com sistemas de informação corporativos.",
+  },
+  {
+    title: "Cibersegurança como afterthought",
+    description:
+      "Redes flat, autenticação compartilhada e ausência de governança alinhada à IEC 62443 expõem a operação a riscos crescentes.",
+  },
+];
+
+const deliverables = [
+  "Documento de arquitetura PlantPAx alinhado ao System Reference Manual",
+  "Configuração de controladores ControlLogix (incluindo série P) e CompactLogix",
+  "Implementação da PlantPAx Library of Process Objects",
+  "Telas de supervisão com governança de alarmes (ISA-18.2)",
+  "Configuração de servidores virtualizados e domínio de aplicações",
+  "Integração OPC UA e mapeamento de tags em AF Templates",
+  "Plano de testes (FAT/SAT), data book e as-built completos",
+  "Treinamento operacional e de manutenção dos times do cliente",
+];
+
+const faq = [
+  {
+    q: "Vale a pena migrar de FactoryTalk View SE legado para PlantPAx?",
+    a: "Depende do escopo de modernização e do horizonte de uso da planta. Avaliamos ROI, risco operacional e compatibilidade de hardware antes de recomendar uma estratégia — em alguns casos a migração faseada é melhor que o cutover total.",
+  },
+  {
+    q: "PlantPAx 5.x exige troca completa do hardware?",
+    a: "Não necessariamente. ControlLogix 5580 da série P é o ideal para PlantPAx 5.x, mas é possível operar com hardware existente desde que se respeitem os requisitos de firmware e de carga. O dimensionamento é parte do diagnóstico.",
+  },
+  {
+    q: "Como vocês integram PlantPAx com PI System / AVEVA?",
+    a: "Via OPC UA ou interface direta, com AF Templates pré-construídos para os objetos de processo. A integração é parte do projeto de engenharia, não um adendo posterior.",
+  },
+  {
+    q: "Vocês trabalham com PlantPAx 3.x e 4.x ou só com 5.x?",
+    a: "Atendemos todas as versões da plataforma, incluindo manutenção evolutiva em PlantPAx 3.5, 4.1 e 5.0. Cada versão tem particularidades de arquitetura que respeitamos.",
+  },
+];
+---
+
+<BaseLayout
+  title="PlantPAx — Sistema de Controle Distribuído"
+  description="Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Solução · DCS Moderno
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+        PlantPAx
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        O PlantPAx é o sistema de controle distribuído moderno da Rockwell
+        Automation. Integra controle de processo, energia, informação e
+        segurança em uma única infraestrutura plant-wide. Nossa equipe atua
+        em todas as versões da plataforma, com profundidade técnica
+        comprovada em PlantPAx 3.x, 4.x e 5.x.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-20">
+      <SectionHeader
+        eyebrow="Quando faz sentido"
+        title="Problemas que esta solução resolve"
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {problems.map((p, i) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-7">
+            <div class="flex items-start gap-4">
+              <span
+                class="font-mono text-xs font-semibold text-integra-red mt-1"
+              >
+                0{i + 1}
+              </span>
+              <div>
+                <h3 class="text-lg font-semibold text-integra-gray-900 mb-2">
+                  {p.title}
+                </h3>
+                <p class="text-sm leading-relaxed text-integra-gray-700">
+                  {p.description}
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-default py-20 max-w-4xl">
+      <SectionHeader
+        eyebrow="Como atuamos"
+        title="Da arquitetura ao data book"
+        description="Cada projeto PlantPAx segue o método Integra completo. Nada improvisado, nada deixado para depois."
+        accent={true}
+      />
+      <div class="prose prose-lg max-w-none">
+        <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          Antes de qualquer linha de código, fazemos diagnóstico técnico da
+          planta, levantamento de premissas e desenho de arquitetura de
+          referência alinhada ao PlantPAx System Reference Manual e às
+          práticas Rockwell. A engenharia detalhada vem depois, com revisão
+          por pares e validação cruzada antes de subir em ambiente de
+          produção.
+        </p>
+        <TechnicalCallout variant="note" title="Padrão de engenharia">
+          <p>
+            Todos os controladores são programados com a PlantPAx Library of
+            Process Objects, alarmes seguem governança ISA-18.2 e o data
+            book final inclui memorial técnico, narrativas de controle,
+            plano de testes executado e as-built revisado.
+          </p>
+        </TechnicalCallout>
+      </div>
+
+      <DeliverableList items={deliverables} twoColumn={true} />
+
+      <StandardsBadges
+        title="Normas e referências aplicadas neste tipo de projeto"
+        standards={[
+          { code: "ISA-95", description: "Integração empresa-controle" },
+          { code: "ISA-88", description: "Controle de batelada" },
+          { code: "ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança industrial" },
+          { code: "PSRM", description: "PlantPAx System Reference Manual" },
+          { code: "OPC UA", description: "Comunicação industrial" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Tem um projeto PlantPAx para conversar?"
+    description="Apresentamos arquitetura de referência, lista de entregáveis e cronograma com base no escopo da planta — antes de qualquer proposta comercial."
+    primaryCta={{ href: "/contato?assunto=plantpax", label: "Falar com especialista" }}
+    secondaryCta={{ href: "/solucoes/factorytalk", label: "Ver FactoryTalk Suite" }}
+  />
+</BaseLayout>

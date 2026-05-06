@@ -1,0 +1,256 @@
+---
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const isDev = import.meta.env.DEV;
+---
+
+<form
+  id="contact-form"
+  method="POST"
+  action="/api/contact"
+  class="grid gap-5"
+  novalidate
+>
+  <div class="grid gap-2">
+    <label for="cf-name" class="text-sm font-medium text-integra-gray-900">
+      Nome completo <span class="text-integra-red" aria-hidden="true">*</span>
+    </label>
+    <input
+      id="cf-name"
+      name="name"
+      type="text"
+      required
+      autocomplete="name"
+      minlength="2"
+      maxlength="120"
+      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+    />
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div class="grid gap-2">
+      <label for="cf-email" class="text-sm font-medium text-integra-gray-900">
+        E-mail corporativo <span class="text-integra-red" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="cf-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        maxlength="180"
+        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      />
+    </div>
+    <div class="grid gap-2">
+      <label for="cf-phone" class="text-sm font-medium text-integra-gray-900">
+        Telefone
+      </label>
+      <input
+        id="cf-phone"
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        maxlength="40"
+        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      />
+    </div>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div class="grid gap-2">
+      <label for="cf-company" class="text-sm font-medium text-integra-gray-900">
+        Empresa
+      </label>
+      <input
+        id="cf-company"
+        name="company"
+        type="text"
+        autocomplete="organization"
+        maxlength="120"
+        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      />
+    </div>
+    <div class="grid gap-2">
+      <label for="cf-subject" class="text-sm font-medium text-integra-gray-900">
+        Assunto
+      </label>
+      <select
+        id="cf-subject"
+        name="subject"
+        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      >
+        <option value="geral">Conversa técnica geral</option>
+        <option value="plantpax">PlantPAx</option>
+        <option value="factorytalk">FactoryTalk</option>
+        <option value="redes-cyber">Redes Industriais / IEC 62443</option>
+        <option value="diagnostico">Diagnóstico de planta</option>
+        <option value="parceria">Parceria / fornecedor</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid gap-2">
+    <label for="cf-message" class="text-sm font-medium text-integra-gray-900">
+      Como podemos ajudar? <span class="text-integra-red" aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="cf-message"
+      name="message"
+      required
+      rows="5"
+      minlength="20"
+      maxlength="4000"
+      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900 resize-y"
+    ></textarea>
+  </div>
+
+  <!-- LGPD opt-in -->
+  <label class="flex items-start gap-3 text-sm text-integra-gray-700">
+    <input
+      type="checkbox"
+      name="lgpd"
+      required
+      value="1"
+      class="mt-1 size-4 rounded border-integra-gray-300 text-integra-red focus:ring-integra-red"
+    />
+    <span>
+      Concordo com o tratamento dos meus dados conforme a
+      <a href="/politica-privacidade" class="text-integra-red hover:underline">
+        Política de Privacidade
+      </a> da Integra. <span class="text-integra-red" aria-hidden="true">*</span>
+    </span>
+  </label>
+
+  <!-- Honeypot — bots fill this; humans don't see it -->
+  <div aria-hidden="true" class="hidden">
+    <label>
+      Não preencha:
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+
+  <!-- Cloudflare Turnstile -->
+  {turnstileSiteKey ? (
+    <div
+      class="cf-turnstile"
+      data-sitekey={turnstileSiteKey}
+      data-theme="light"
+      data-action="contact-form"
+    />
+  ) : isDev ? (
+    <p class="text-xs font-mono uppercase tracking-wider text-integra-red">
+      [DEV] PUBLIC_TURNSTILE_SITE_KEY ausente — formulário não envia em produção
+    </p>
+  ) : null}
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
+    <p
+      id="cf-status"
+      role="status"
+      aria-live="polite"
+      class="text-sm text-integra-gray-700 min-h-[1.25rem]"
+    ></p>
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+    >
+      Enviar mensagem
+      <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</form>
+
+<script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const status = document.getElementById("cf-status") as HTMLElement | null;
+  if (!form || !status) {
+    // not on this page
+  } else {
+    const submitBtn = form.querySelector<HTMLButtonElement>("button[type=submit]");
+
+    const setStatus = (
+      message: string,
+      tone: "info" | "success" | "error" = "info",
+    ) => {
+      status.textContent = message;
+      status.classList.remove("text-integra-red", "text-emerald-700");
+      if (tone === "error") status.classList.add("text-integra-red");
+      if (tone === "success") status.classList.add("text-emerald-700");
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const formData = new FormData(form);
+
+      // Honeypot — silently drop if filled
+      if (formData.get("website")) {
+        setStatus("Mensagem enviada.", "success");
+        form.reset();
+        return;
+      }
+
+      // Cloudflare injects cf-turnstile-response into the form on success
+      const turnstileToken = formData.get("cf-turnstile-response");
+      if (!turnstileToken) {
+        setStatus(
+          "Aguarde a verificação de segurança e tente novamente.",
+          "error",
+        );
+        return;
+      }
+
+      submitBtn?.setAttribute("disabled", "true");
+      setStatus("Enviando...", "info");
+
+      try {
+        const payload: Record<string, string> = {};
+        for (const [k, v] of formData.entries()) {
+          if (typeof v === "string") payload[k] = v;
+        }
+
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          setStatus(
+            "Mensagem recebida. Retornamos em até 1 dia útil.",
+            "success",
+          );
+          form.reset();
+          // Reset turnstile widget
+          const ts = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
+          if (ts) ts.reset();
+        } else {
+          const data = (await res.json().catch(() => ({}))) as { message?: string };
+          setStatus(
+            data.message ??
+              "Não foi possível enviar agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
+            "error",
+          );
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(
+          "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
+          "error",
+        );
+      } finally {
+        submitBtn?.removeAttribute("disabled");
+      }
+    });
+  }
+</script>

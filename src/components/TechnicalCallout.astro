@@ -1,0 +1,53 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  variant?: "note" | "warning" | "ot";
+  title?: string;
+}
+
+const { variant = "note", title } = Astro.props;
+
+const variantStyles = {
+  note: {
+    border: "border-integra-gray-300",
+    bg: "bg-integra-gray-50",
+    icon: "lucide:info",
+    iconColor: "text-integra-gray-700",
+    label: title ?? "Nota técnica",
+  },
+  warning: {
+    border: "border-integra-red/30",
+    bg: "bg-integra-red/5",
+    icon: "lucide:triangle-alert",
+    iconColor: "text-integra-red",
+    label: title ?? "Atenção",
+  },
+  ot: {
+    border: "border-integra-ot/30",
+    bg: "bg-integra-ot/5",
+    icon: "lucide:shield-check",
+    iconColor: "text-integra-ot",
+    label: title ?? "Cibersegurança OT",
+  },
+};
+
+const v = variantStyles[variant];
+---
+
+<aside
+  class:list={["my-6 rounded-md border-l-2 p-5", v.border, v.bg]}
+  role="note"
+>
+  <div class="flex items-start gap-3">
+    <Icon name={v.icon} class={`size-5 mt-0.5 shrink-0 ${v.iconColor}`} aria-hidden="true" />
+    <div class="flex-1">
+      <p class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
+        {v.label}
+      </p>
+      <div class="text-sm leading-relaxed text-integra-gray-900 prose-callout">
+        <slot />
+      </div>
+    </div>
+  </div>
+</aside>
