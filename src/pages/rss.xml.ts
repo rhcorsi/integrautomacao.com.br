@@ -13,6 +13,7 @@ export async function GET(context: APIContext) {
     description:
       "Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443 e governança de engenharia industrial.",
     site: context.site!,
+    stylesheet: "/rss.xsl",
     items: posts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
