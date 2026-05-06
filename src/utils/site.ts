@@ -5,9 +5,9 @@
 export const SITE = {
   name: "Integra Automação Industrial",
   shortName: "Integra",
-  tagline: "Engenharia em Automação Industrial",
+  tagline: "Tecnologia e Engenharia de Sistemas Industriais",
   url: "https://integrautomacao.com",
-  defaultTitle: "Integra — Engenharia em Automação Industrial",
+  defaultTitle: "Integra Automação Industrial | Tecnologia e Engenharia de Sistemas Industriais",
   defaultDescription:
     "Engenharia e integração de sistemas industriais para plantas críticas: arquitetura, padronização, segurança operacional e governança técnica de longo prazo.",
   locale: "pt-BR",
