@@ -7,6 +7,7 @@
 @theme {
   /* Brand colors — Integra */
   --color-integra-red: #e30613;
+  --color-integra-red-300: #ff5a63;
   --color-integra-red-700: #b40510;
   --color-integra-red-800: #8a040c;
 
@@ -15,7 +16,8 @@
   --color-integra-gray-900: #1a1a1a;
   --color-integra-gray-800: #2c2c2c;
   --color-integra-gray-700: #4a4a4a;
-  --color-integra-gray-500: #7a7a7a;
+  --color-integra-gray-600: #5f5f5f;
+  --color-integra-gray-500: #666666;
   --color-integra-gray-400: #a8a8a8;
   --color-integra-gray-300: #c9c9c9;
   --color-integra-gray-200: #e4e4e4;
@@ -59,7 +61,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: var(--color-integra-gray-900);
+    color: inherit;
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: 0;

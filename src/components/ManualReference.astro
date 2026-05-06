@@ -24,7 +24,8 @@ const {
   loading = "lazy",
 } = Astro.props;
 
-const dark = theme === "dark" || theme === "ot";
+const dark = theme === "dark";
+const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red";
 ---
 
 <figure
@@ -39,7 +40,7 @@ const dark = theme === "dark" || theme === "ot";
     <p
       class:list={[
         "mb-2 font-mono text-[11px] uppercase tracking-widest",
-        theme === "ot" ? "text-sky-200" : "text-integra-red",
+        dark ? "text-integra-red-300" : eyebrowColor,
       ]}
     >
       {eyebrow}

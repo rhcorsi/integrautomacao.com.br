@@ -45,7 +45,7 @@ const variantStyles = {
   },
   dark: {
     section: "bg-integra-gray-950 text-integra-white",
-    eyebrow: "text-integra-red",
+    eyebrow: "text-integra-red-300",
     title: "text-integra-white",
     desc: "text-integra-gray-300",
     bullet: "text-integra-gray-100",
@@ -107,7 +107,7 @@ const v = variantStyles[variant];
                 <li class:list={["flex items-start gap-3 text-sm lg:text-base", v.bullet]}>
                   <Icon
                     name="lucide:check"
-                    class={`size-5 shrink-0 mt-0.5 ${variant === "light" ? "text-integra-red" : "text-integra-red"}`}
+                    class={`size-5 shrink-0 mt-0.5 ${variant === "light" ? "text-integra-red" : "text-integra-red-300"}`}
                     aria-hidden="true"
                   />
                   <span set:html={b} />
