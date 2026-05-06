@@ -5,6 +5,7 @@ import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 
 const products = [
   {
@@ -44,6 +45,24 @@ const deliverables = [
   "Documentação operacional, treinamento e roadmap de evolução",
 ];
 
+const architecturePatterns = [
+  {
+    title: "Local / Network Station",
+    description:
+      "Aplicações menores podem operar com estação local ou em rede, desde que a arquitetura de segurança, backup e manutenção esteja clara.",
+  },
+  {
+    title: "Distributed",
+    description:
+      "Ambientes críticos pedem distribuição de HMI, Data Server, Directory, redundância e estações de operação por área.",
+  },
+  {
+    title: "Operação + auditoria",
+    description:
+      "View/Optix, Historian, AssetCentre e ThinManager precisam compartilhar identidade, política de acesso e trilha de mudanças.",
+  },
+];
+
 const faq = [
   {
     q: "Vocês mantêm sistemas FactoryTalk View SE antigos ou só implantam novos?",
@@ -65,19 +84,22 @@ const faq = [
   description="Engenharia, implementação e suporte da suíte FactoryTalk: View SE, Optix, Batch, Historian, AssetCentre e ThinManager. Padronização e governança técnica."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
-        Solução · Supervisão e Informação
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        FactoryTalk Suite
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Trabalhamos com toda a suíte FactoryTalk para entregar supervisão,
-        gestão de bateladas, historiação, gestão de ativos e thin clients
-        industriais — integrados de ponta a ponta com governança de alarmes,
-        padronização de telas e auditoria de mudanças.
-      </p>
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          Solução · Supervisão e Informação
+        </p>
+        <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+          FactoryTalk Suite
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+          Trabalhamos com toda a suíte FactoryTalk para entregar supervisão,
+          gestão de bateladas, historiação, gestão de ativos e thin clients
+          industriais — integrados de ponta a ponta com governança de alarmes,
+          padronização de telas e auditoria de mudanças.
+        </p>
+      </div>
+      <ArchitectureVisual variant="factorytalk" />
     </div>
   </section>
 
@@ -113,6 +135,27 @@ const faq = [
       />
 
       <DeliverableList items={deliverables} twoColumn={true} />
+
+      <div class="my-14">
+        <SectionHeader
+          eyebrow="Arquitetura de supervisão"
+          title="Não é só escolher produtos FactoryTalk"
+          description="A diferença está no desenho de aplicação: onde ficam os servidores, como as áreas são distribuídas, quem autentica, onde os dados são retidos e como as mudanças são auditadas."
+          accent={true}
+        />
+        <div class="grid gap-4 md:grid-cols-3">
+          {architecturePatterns.map((item) => (
+            <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-5">
+              <h3 class="text-base font-semibold text-integra-gray-900">
+                {item.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+                {item.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
 
       <StandardsBadges
         standards={[

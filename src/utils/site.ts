@@ -6,7 +6,7 @@ export const SITE = {
   name: "Integra Automação Industrial",
   shortName: "Integra",
   tagline: "Engenharia em Automação Industrial",
-  url: "https://integrautomacao.com.br",
+  url: "https://integrautomacao.com",
   defaultTitle: "Integra — Engenharia em Automação Industrial",
   defaultDescription:
     "Engenharia e integração de sistemas industriais para plantas críticas: arquitetura, padronização, segurança operacional e governança técnica de longo prazo.",
@@ -117,11 +117,11 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         ],
       },
       {
-        title: "Em construção",
+        title: "Dados & Evolução",
         links: [
-          { href: "/solucoes#em-construcao", label: "PI System / AVEVA" },
-          { href: "/solucoes#em-construcao", label: "Data Centers Industriais" },
-          { href: "/solucoes#em-construcao", label: "Migração PLC5 / SLC500" },
+          { href: "/solucoes/pi-system", label: "PI System / AVEVA" },
+          { href: "/solucoes/data-centers", label: "Data Centers Industriais" },
+          { href: "/solucoes/migracao-plc", label: "Migração PLC5 / SLC500" },
         ],
       },
     ],

@@ -6,6 +6,7 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 
 const layers = [
   {
@@ -27,6 +28,24 @@ const layers = [
     title: "Camada de Segurança",
     description:
       "Firewalls industriais, controle de acesso, monitoramento de eventos OT, segmentação Purdue.",
+  },
+];
+
+const controls = [
+  {
+    title: "Zonas e conduítes",
+    description:
+      "Cada área crítica recebe fronteiras lógicas, regras de comunicação e critérios de acesso alinhados ao risco operacional.",
+  },
+  {
+    title: "IDMZ industrial",
+    description:
+      "A integração com TI, nuvem, historian corporativo e acesso remoto passa por uma zona intermediária, nunca por caminho direto.",
+  },
+  {
+    title: "Alta disponibilidade",
+    description:
+      "DLR, PRP, redundância de uplinks e desenho de anel entram quando o custo de indisponibilidade justifica a complexidade.",
   },
 ];
 
@@ -66,19 +85,22 @@ const faq = [
   description="Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-ot mb-3">
-        Solução · Redes & Cibersegurança OT
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Redes Industriais e <span class="text-integra-ot">IEC 62443</span>
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Projetamos e implementamos redes industriais robustas, segmentadas e
-        seguras — alinhadas ao modelo CPwE (Converged Plantwide Ethernet) e
-        ao framework de cibersegurança IEC 62443. Defense in depth do
-        chão de fábrica até a integração corporativa.
-      </p>
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-ot mb-3">
+          Solução · Redes & Cibersegurança OT
+        </p>
+        <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+          Redes Industriais e <span class="text-integra-ot">IEC 62443</span>
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+          Projetamos e implementamos redes industriais robustas, segmentadas e
+          seguras — alinhadas ao modelo CPwE (Converged Plantwide Ethernet) e
+          ao framework de cibersegurança IEC 62443. Defense in depth do
+          chão de fábrica até a integração corporativa.
+        </p>
+      </div>
+      <ArchitectureVisual variant="ot" theme="ot" />
     </div>
   </section>
 
@@ -132,6 +154,19 @@ const faq = [
           comissionamento.
         </p>
       </TechnicalCallout>
+
+      <div class="my-12 grid gap-4 md:grid-cols-3">
+        {controls.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-5">
+            <h3 class="text-base font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
 
       <DeliverableList items={deliverables} twoColumn={true} />
 

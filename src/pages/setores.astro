@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 import { Icon } from "astro-icon/components";
 
 const sectors = [
@@ -69,6 +70,13 @@ const sectors = [
     pains: ["SCADA distribuído", "Monitoramento remoto", "Confiabilidade 24/7"],
   },
 ];
+
+const decisionMatrix = [
+  ["Safra / operação 24/7", "arquitetura redundante, janela de cutover e plano de rollback"],
+  ["Rastreabilidade", "tags contextualizadas, historian, batelada e trilha de auditoria"],
+  ["Segurança de processo", "intertravamentos, alarmes, teste funcional e documentação"],
+  ["TI/OT e auditoria", "segmentação, IDMZ, IEC 62443 e gestão de acesso"],
+];
 ---
 
 <BaseLayout
@@ -76,19 +84,22 @@ const sectors = [
   description="Atuamos em setores industriais críticos: açúcar e etanol, agronegócio, alimentos e bebidas, química, frigoríficos, fábricas de ração, papel e celulose, saneamento."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
-        Setores
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Setores onde já entregamos.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        A Integra atua estritamente B2B, com foco em indústrias de médio e
-        grande porte que operam processos críticos e contínuos. A escolha
-        dos setores reflete onde nossa equipe acumula experiência real — não
-        listas de marketing.
-      </p>
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          Setores
+        </p>
+        <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+          Setores onde já entregamos.
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+          A Integra atua estritamente B2B, com foco em indústrias de médio e
+          grande porte que operam processos críticos e contínuos. A escolha
+          dos setores reflete onde nossa equipe acumula experiência real — não
+          listas de marketing.
+        </p>
+      </div>
+      <ArchitectureVisual variant="industrial" />
     </div>
   </section>
 
@@ -126,6 +137,30 @@ const sectors = [
                 </li>
               ))}
             </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Critérios técnicos"
+        title="O que muda de setor para setor"
+        description="A tecnologia pode ser parecida, mas o risco operacional não é. Por isso cada conversa começa pelo processo, pela janela de parada e pelos requisitos de auditoria."
+        accent={true}
+      />
+      <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2">
+        {decisionMatrix.map(([risk, response]) => (
+          <article class="bg-integra-gray-50 p-6">
+            <p class="mb-2 font-mono text-[11px] uppercase tracking-widest text-integra-red">
+              Risco típico
+            </p>
+            <h3 class="text-lg font-semibold text-integra-gray-900">{risk}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              Resposta Integra: {response}.
+            </p>
           </article>
         ))}
       </div>

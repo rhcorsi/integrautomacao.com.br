@@ -5,7 +5,7 @@ import icon from "astro-icon";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://integrautomacao.com.br",
+  site: "https://integrautomacao.com",
   output: "static",
   trailingSlash: "ignore",
   prefetch: {

@@ -30,26 +30,29 @@ const mvpSolutions = [
     icon: "lucide:shield-check",
     tags: ["CPwE", "IEC 62443", "Stratix", "OPC UA", "NIST SP 800-82"],
   },
-];
-
-const upcomingSolutions = [
   {
+    href: "/solucoes/data-centers",
     title: "Data Centers Industriais (IDC)",
     summary:
       "Virtualização, redundância, alta disponibilidade para aplicações industriais críticas.",
     icon: "lucide:server",
+    tags: ["VMware", "Redundância", "Backup", "ThinManager"],
   },
   {
+    href: "/solucoes/pi-system",
     title: "PI System / AVEVA",
     summary:
-      "Tags, AF Templates, integração com PlantPAx, monitoramento via PlantESP.",
+      "Tags, AF Templates, historian, contexto de ativos e integração com PlantPAx/FactoryTalk.",
     icon: "lucide:database",
+    tags: ["PI", "AVEVA", "AF Templates", "OPC UA"],
   },
   {
+    href: "/solucoes/migracao-plc",
     title: "Migração PLC5 / SLC500 → ControlLogix",
     summary:
       "Modernização de controladores legados sem comprometer a operação.",
     icon: "lucide:replace",
+    tags: ["PLC5", "SLC500", "ControlLogix", "Cutover"],
   },
 ];
 ---
@@ -79,7 +82,7 @@ const upcomingSolutions = [
       <SectionHeader
         eyebrow="Disponíveis hoje"
         title="Áreas com profundidade comprovada"
-        description="Cada solução tem página dedicada com problemas que resolve, método de implementação, entregáveis e normas aplicadas."
+        description="Cada solução tem página dedicada com problemas que resolve, método de implementação, entregáveis, normas e decisões de arquitetura."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -92,35 +95,6 @@ const upcomingSolutions = [
     title="Como aplicamos cada solução"
     intro="Toda solução passa pelas mesmas cinco fases. Nenhuma etapa é pulada — nenhuma documentação é deixada para depois."
   />
-
-  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid py-20">
-      <SectionHeader
-        eyebrow="Em construção"
-        title="Outras áreas que executamos hoje"
-        description="Páginas dedicadas serão publicadas conforme o conteúdo for amadurecendo. Para projetos atuais, fale conosco diretamente."
-      />
-      <div class="grid gap-6 md:grid-cols-3">
-        {upcomingSolutions.map(({ title, summary }) => (
-          <article
-            class="p-6 rounded-lg border border-dashed border-integra-gray-300 bg-integra-white"
-          >
-            <div
-              class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-100 text-integra-gray-700 mb-4"
-            >
-              <span class="text-xs font-mono uppercase tracking-widest">SOON</span>
-            </div>
-            <h3 class="text-lg font-semibold text-integra-gray-900 mb-2">
-              {title}
-            </h3>
-            <p class="text-sm leading-relaxed text-integra-gray-700">
-              {summary}
-            </p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
 
   <CtaBlock
     title="Tem um caso técnico para conversar?"

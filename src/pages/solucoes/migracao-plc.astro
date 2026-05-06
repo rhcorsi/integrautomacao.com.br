@@ -1,0 +1,144 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+
+const risks = [
+  {
+    title: "Obsolescência de hardware",
+    description:
+      "PLC5, SLC500, cartões remotos e redes antigas ficam cada vez mais difíceis de manter, comprar e diagnosticar.",
+  },
+  {
+    title: "Conhecimento informal",
+    description:
+      "Lógica antiga costuma depender de quem implantou ou manteve o sistema por anos, sem documentação suficiente para troca segura.",
+  },
+  {
+    title: "Parada mal planejada",
+    description:
+      "Migração sem simulação, FAT e rollback transforma modernização em risco operacional concentrado em uma janela curta.",
+  },
+];
+
+const deliverables = [
+  "Inventário de hardware, I/O, redes, painéis e dependências de processo",
+  "Levantamento e documentação da lógica existente, intertravamentos e sequências",
+  "Estratégia de migração faseada com matriz de risco por área",
+  "Conversão e reengenharia de lógica para ControlLogix / CompactLogix",
+  "Adequação de tags, telas HMI/SCADA e governança de alarmes",
+  "Ambiente de teste, simulação, FAT e plano de rollback por etapa",
+  "Plano de cutover, SAT, acompanhamento de startup e estabilização",
+  "As-built, data book e treinamento de manutenção",
+];
+
+const faq = [
+  {
+    q: "É possível migrar PLC5/SLC500 sem parar a planta inteira?",
+    a: "Na maioria dos casos, sim, com estratégia por área, etapas de conversão, painéis intermediários, janelas menores e rollback validado. O diagnóstico define o melhor caminho.",
+  },
+  {
+    q: "A lógica antiga deve ser copiada exatamente?",
+    a: "Nem sempre. Copiar erro legado é desperdiçar a modernização. Preservamos o comportamento operacional necessário, mas reestruturamos onde há risco, dívida técnica ou falta de padronização.",
+  },
+  {
+    q: "Vocês migram também as telas e alarmes?",
+    a: "Sim. Migração de controlador sem revisar tags, telas, alarmes e documentação costuma deixar a operação com metade do problema resolvido.",
+  },
+];
+---
+
+<BaseLayout
+  title="Migração PLC5/SLC500 para ControlLogix"
+  description="Modernização de controladores PLC5 e SLC500 para ControlLogix/CompactLogix com inventário, simulação, cutover controlado e documentação."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red">
+          Solução · Modernização de Controladores
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Migração PLC5 / SLC500 → ControlLogix
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Modernizar controlador legado não é trocar CPU. É entender lógica,
+          campo, rede, operação, HMI, alarmes e riscos de parada. A Integra
+          conduz migrações faseadas para Logix com documentação, simulação,
+          rollback e suporte pós-startup.
+        </p>
+      </div>
+      <ArchitectureVisual variant="migration" />
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Por que modernizar"
+        title="Risco legado que aparece na pior hora"
+        description="A migração é uma decisão de continuidade operacional, não apenas de atualização tecnológica."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-3">
+        {risks.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Como atuamos"
+        title="Migração por risco, não por ansiedade"
+        description="O caminho correto depende da janela de parada, criticidade da área, quantidade de I/O, estado dos painéis e maturidade da documentação existente."
+        accent={true}
+      />
+
+      <TechnicalCallout variant="note" title="Rollback é parte do escopo">
+        <p>
+          Uma migração séria precisa saber como voltar caso algo saia do
+          planejado. O plano de rollback é definido antes do cutover e validado
+          junto com o FAT/SAT.
+        </p>
+      </TechnicalCallout>
+
+      <DeliverableList items={deliverables} twoColumn={true} />
+
+      <StandardsBadges
+        title="Tecnologias e práticas relacionadas"
+        standards={[
+          { code: "PLC5 / SLC500", description: "Inventário legado" },
+          { code: "ControlLogix", description: "Arquitetura alvo" },
+          { code: "CompactLogix", description: "Aplicações menores" },
+          { code: "EtherNet/IP", description: "Rede de controle" },
+          { code: "FAT / SAT", description: "Teste e aceite" },
+          { code: "ISA-18.2", description: "Governança de alarmes" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Tem controladores legados sustentando uma área crítica?"
+    description="Começamos com inventário técnico e matriz de risco. A migração só vem depois que a operação entende janela, impacto e plano de rollback."
+    primaryCta={{ href: "/contato?assunto=migracao-plc", label: "Avaliar migração" }}
+    secondaryCta={{ href: "/solucoes/redes-iec-62443", label: "Ver redes industriais" }}
+  />
+</BaseLayout>

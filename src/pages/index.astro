@@ -6,10 +6,6 @@ import CredentialStrip from "@/components/CredentialStrip.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
 import FeatureBlock from "@/components/FeatureBlock.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
-import heroImage from "@/assets/hero/banner-1.png";
-import factoryTalkImage from "@/assets/hero/banner-3-min.jpg";
-import iec62443Image from "@/assets/hero/banner-2-min.png";
-import plantpaxImage from "@/assets/hero/banner_site_institucional_2500x1500.jpg";
 import rockwellSilver from "@/assets/logos/rockwell-si-silver.png";
 
 const values = [
@@ -32,6 +28,29 @@ const values = [
       "Para o gerente de manutenção e o gerente de produção: a segurança de saber que o sistema é confiável, documentado e suportado por especialistas sérios.",
   },
 ];
+
+const evidence = [
+  {
+    label: "Arquitetura",
+    title: "Dimensionamento antes da programação",
+    text: "Cada projeto nasce com mapa de servidores, controladores, redes, estações, historian e responsabilidades de suporte.",
+  },
+  {
+    label: "Padrão",
+    title: "Objetos, telas e alarmes com governança",
+    text: "PlantPAx Library, padrões HMI, ISA-18.2 e nomenclatura de tags entram como premissas de engenharia, não como ajuste final.",
+  },
+  {
+    label: "Segurança",
+    title: "OT segmentado por zonas e conduítes",
+    text: "CPwE, Purdue, IDMZ, VLANs, ACLs, firewall industrial e práticas IEC 62443 para reduzir risco de parada e acesso indevido.",
+  },
+  {
+    label: "Handover",
+    title: "Entrega que a planta consegue manter",
+    text: "Data book, as-built, FAT/SAT, treinamento e critérios de aceite deixam o conhecimento explícito para operação e manutenção.",
+  },
+];
 ---
 
 <BaseLayout
@@ -45,8 +64,7 @@ const values = [
     description="A Integra não vende apenas programação ou telas de supervisão. Entregamos arquiteturas robustas, governança de engenharia e responsabilidade técnica de ponta a ponta — do projeto ao handover, do start-up ao suporte contínuo."
     primaryCta={{ href: "/contato", label: "Falar com especialista" }}
     secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
-    heroImage={heroImage}
-    heroAlt="Sistema de automação industrial em operação"
+    visual="hero"
   />
 
   <!-- Rockwell Silver System Integrator highlight -->
@@ -88,6 +106,42 @@ const values = [
   </section>
 
   <CredentialStrip />
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-16 lg:py-20">
+      <div class="grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-start">
+        <div>
+          <p class="mb-4 text-xs font-mono uppercase tracking-widest text-integra-red">
+            Dos manuais para a planta
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+            Conteúdo técnico visível, sem parecer brochure de fabricante.
+          </h2>
+          <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+            Os materiais públicos de Rockwell, Cisco e AVEVA são usados como
+            base de validação técnica. No site, eles viram linguagem própria:
+            diagramas limpos, entregáveis claros e explicações que conectam
+            arquitetura à responsabilidade operacional da Integra.
+          </p>
+        </div>
+        <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-2">
+          {evidence.map((item) => (
+            <article class="bg-integra-gray-50 p-6">
+              <p class="mb-3 font-mono text-[11px] uppercase tracking-widest text-integra-red">
+                {item.label}
+              </p>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {item.title}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+                {item.text}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="bg-integra-gray-950 text-integra-white">
     <div class="container-fluid py-20 lg:py-28">
@@ -157,8 +211,7 @@ const values = [
       "Servidores virtualizados com redundância opcional por camada",
       "Integração OPC UA + AF Templates para PI System / AVEVA",
     ]}
-    image={plantpaxImage}
-    imageAlt="Painel industrial com sistema de controle distribuído PlantPAx"
+    visual="plantpax"
     imagePosition="right"
     primaryCta={{ href: "/solucoes/plantpax", label: "Conhecer PlantPAx" }}
     secondaryCta={{ href: "/contato?assunto=plantpax", label: "Falar sobre projeto" }}
@@ -175,8 +228,7 @@ const values = [
       "<strong>Historian</strong> + <strong>AssetCentre</strong> com auditoria de mudanças",
       "<strong>ThinManager</strong> para gestão de thin clients industriais",
     ]}
-    image={factoryTalkImage}
-    imageAlt="Sala de controle industrial com supervisão FactoryTalk View SE"
+    visual="factorytalk"
     imagePosition="left"
     primaryCta={{ href: "/solucoes/factorytalk", label: "Conhecer FactoryTalk" }}
     variant="light"
@@ -192,8 +244,7 @@ const values = [
       "Anel DLR/PRP para alta disponibilidade",
       "Conformidade IEC 62443 SL-T por zona + NIST SP 800-82",
     ]}
-    image={iec62443Image}
-    imageAlt="Rack de switches industriais com fibra óptica em planta"
+    visual="ot"
     imagePosition="right"
     primaryCta={{ href: "/solucoes/redes-iec-62443", label: "Ver cibersegurança OT" }}
     secondaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar diagnóstico" }}

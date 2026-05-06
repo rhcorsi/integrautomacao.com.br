@@ -2,14 +2,16 @@
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
+import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 
 interface Props {
   eyebrow: string;
   title: string;
   description: string;
   bullets?: string[];
-  image: ImageMetadata;
-  imageAlt: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  visual?: "hero" | "plantpax" | "factorytalk" | "ot" | "data" | "migration" | "industrial";
   /** Side of the image. Alternate between blocks for visual rhythm. */
   imagePosition?: "left" | "right";
   primaryCta?: { href: string; label: string };
@@ -24,7 +26,8 @@ const {
   description,
   bullets = [],
   image,
-  imageAlt,
+  imageAlt = "",
+  visual,
   imagePosition = "right",
   primaryCta,
   secondaryCta,
@@ -151,17 +154,24 @@ const v = variantStyles[variant];
       <div
         class={`relative ${imagePosition === "left" ? "lg:order-1" : "lg:order-2"}`}
       >
-        <div class="relative rounded-lg overflow-hidden shadow-2xl">
-          <Image
-            src={image}
-            alt={imageAlt}
-            widths={[600, 1000, 1400]}
-            sizes="(min-width: 1024px) 600px, 100vw"
-            loading="lazy"
-            decoding="async"
-            class="w-full h-auto object-cover aspect-[4/3]"
+        {visual ? (
+          <ArchitectureVisual
+            variant={visual}
+            theme={variant === "ot" ? "ot" : variant === "dark" ? "dark" : "light"}
           />
-        </div>
+        ) : image ? (
+          <div class="relative overflow-hidden rounded-lg shadow-2xl">
+            <Image
+              src={image}
+              alt={imageAlt}
+              widths={[600, 1000, 1400]}
+              sizes="(min-width: 1024px) 600px, 100vw"
+              loading="lazy"
+              decoding="async"
+              class="w-full h-auto object-cover aspect-[4/3]"
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   </div>

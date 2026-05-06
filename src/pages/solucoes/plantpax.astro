@@ -6,6 +6,7 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 
 const problems = [
   {
@@ -41,6 +42,24 @@ const deliverables = [
   "Treinamento operacional e de manutenção dos times do cliente",
 ];
 
+const architectureNotes = [
+  {
+    title: "Tamanho da arquitetura",
+    description:
+      "Projetos pequenos, médios e grandes exigem decisões diferentes de PASS, OWS/EWS, redundância, virtualização e segregação de funções.",
+  },
+  {
+    title: "Biblioteca e compatibilidade",
+    description:
+      "A versão do PlantPAx, firmware Logix, biblioteca de objetos e versões FactoryTalk precisam ser tratados como conjunto, não item isolado.",
+  },
+  {
+    title: "Camada de informação",
+    description:
+      "Historian, AF Templates, OPC UA e relatórios precisam nascer no desenho do DCS para evitar retrabalho depois do startup.",
+  },
+];
+
 const faq = [
   {
     q: "Vale a pena migrar de FactoryTalk View SE legado para PlantPAx?",
@@ -66,20 +85,23 @@ const faq = [
   description="Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
-        Solução · DCS Moderno
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        PlantPAx
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        O PlantPAx é o sistema de controle distribuído moderno da Rockwell
-        Automation. Integra controle de processo, energia, informação e
-        segurança em uma única infraestrutura plant-wide. Nossa equipe atua
-        em todas as versões da plataforma, com profundidade técnica
-        comprovada em PlantPAx 3.x, 4.x e 5.x.
-      </p>
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          Solução · DCS Moderno
+        </p>
+        <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
+          PlantPAx
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+          O PlantPAx é o sistema de controle distribuído moderno da Rockwell
+          Automation. Integra controle de processo, energia, informação e
+          segurança em uma única infraestrutura plant-wide. Nossa equipe atua
+          em todas as versões da plataforma, com profundidade técnica
+          comprovada em PlantPAx 3.x, 4.x e 5.x.
+        </p>
+      </div>
+      <ArchitectureVisual variant="plantpax" />
     </div>
   </section>
 
@@ -142,6 +164,27 @@ const faq = [
       </div>
 
       <DeliverableList items={deliverables} twoColumn={true} />
+
+      <div class="my-14">
+        <SectionHeader
+          eyebrow="Referências públicas aplicadas"
+          title="O que os manuais viram dentro do projeto"
+          description="A arquitetura não é desenhada no olho. Usamos referências públicas do fabricante para validar versões, sizing, redundância, compatibilidade e premissas de lifecycle."
+          accent={true}
+        />
+        <div class="grid gap-4 md:grid-cols-3">
+          {architectureNotes.map((item) => (
+            <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-5">
+              <h3 class="text-base font-semibold text-integra-gray-900">
+                {item.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+                {item.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
 
       <StandardsBadges
         title="Normas e referências aplicadas neste tipo de projeto"
