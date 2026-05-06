@@ -2,11 +2,13 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import HeroIntegridade from "@/components/HeroIntegridade.astro";
 import CredentialStrip from "@/components/CredentialStrip.astro";
-import ValueCard from "@/components/ValueCard.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
-import SolutionCard from "@/components/SolutionCard.astro";
-import SectionHeader from "@/components/SectionHeader.astro";
+import FeatureBlock from "@/components/FeatureBlock.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import heroImage from "@/assets/hero/banner-1.png";
+import factoryTalkImage from "@/assets/hero/banner-3-min.jpg";
+import iec62443Image from "@/assets/hero/banner-2-min.png";
+import plantpaxImage from "@/assets/hero/banner_site_institucional_2500x1500.jpg";
 
 const values = [
   {
@@ -28,33 +30,6 @@ const values = [
       "Para o gerente de manutenção e o gerente de produção: a segurança de saber que o sistema é confiável, documentado e suportado por especialistas sérios.",
   },
 ];
-
-const solutions = [
-  {
-    href: "/solucoes/plantpax",
-    title: "PlantPAx",
-    summary:
-      "Sistema de controle distribuído moderno da Rockwell Automation. Arquitetura escalável, biblioteca de objetos de processo e integração plant-wide.",
-    icon: "lucide:layers-3",
-    tags: ["DCS", "ControlLogix", "FactoryTalk"],
-  },
-  {
-    href: "/solucoes/factorytalk",
-    title: "FactoryTalk Suite",
-    summary:
-      "Supervisão, batch, historiador, gestão de ativos e thin clients industriais — integrados de ponta a ponta com governança de alarmes e dados.",
-    icon: "lucide:gauge",
-    tags: ["View SE", "Optix", "Historian", "Batch"],
-  },
-  {
-    href: "/solucoes/redes-iec-62443",
-    title: "Redes Industriais e IEC 62443",
-    summary:
-      "Topologia, segmentação, switches Stratix/Cisco e arquiteturas alinhadas ao CPwE. Cibersegurança OT do projeto à operação.",
-    icon: "lucide:shield-check",
-    tags: ["CPwE", "IEC 62443", "Stratix"],
-  },
-];
 ---
 
 <BaseLayout
@@ -68,80 +43,149 @@ const solutions = [
     description="A Integra não vende apenas programação ou telas de supervisão. Entregamos arquiteturas robustas, governança de engenharia e responsabilidade técnica de ponta a ponta — do projeto ao handover, do start-up ao suporte contínuo."
     primaryCta={{ href: "/contato", label: "Falar com especialista" }}
     secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
+    heroImage={heroImage}
+    heroAlt="Sistema de automação industrial em operação"
   />
 
   <CredentialStrip />
 
-  <section class="border-b border-integra-gray-200">
-    <div class="container-default py-20 lg:py-24">
-      <SectionHeader
-        eyebrow="O que entregamos"
-        title="Três ativos intangíveis de alto valor"
-        description="Quando uma planta industrial madura contrata um integrador, não está comprando horas técnicas. Está comprando a certeza de que o sistema entregue vai funcionar com estabilidade por anos, com documentação clara e parceiro presente quando a planta precisar."
-        accent={true}
-      />
+  <section class="bg-integra-gray-950 text-integra-white">
+    <div class="container-wide py-20 lg:py-28">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
+          O que entregamos
+        </p>
+        <h2 class="text-4xl font-semibold sm:text-5xl">
+          Três ativos intangíveis de alto valor
+        </h2>
+        <p class="mt-6 text-base lg:text-lg text-integra-gray-300 leading-relaxed">
+          Quando uma planta industrial madura contrata um integrador, não está
+          comprando horas técnicas. Está comprando a certeza de que o sistema
+          entregue vai funcionar com estabilidade por anos, com documentação
+          clara e parceiro presente quando a planta precisar.
+        </p>
+      </div>
       <div class="grid gap-6 md:grid-cols-3">
         {values.map((value, i) => (
-          <ValueCard
-            icon={value.icon}
-            title={value.title}
-            description={value.description}
-            index={i + 1}
-          />
+          <article
+            class="relative h-full rounded-lg border border-integra-gray-800 bg-integra-gray-900 p-7 hover:border-integra-red transition-colors"
+          >
+            <span
+              class="absolute -top-3 -right-3 inline-flex size-7 items-center justify-center rounded-full border border-integra-gray-700 bg-integra-gray-950 text-xs font-mono font-semibold text-integra-gray-400"
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <div class="inline-flex size-12 items-center justify-center rounded-md bg-integra-red text-integra-white mb-5">
+              <svg
+                class="size-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                {i === 0 && (
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                )}
+                {i === 1 && (
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                )}
+                {i === 2 && (
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                )}
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-integra-white mb-3">
+              {value.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-300">
+              {value.description}
+            </p>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-default py-20 lg:py-24">
-      <SectionHeader
-        eyebrow="Soluções prioritárias"
-        title="Tecnologias que dominamos com profundidade"
-        description="Não atuamos como revenda nem como consultoria genérica. Nossa equipe é capacitada continuamente nas trilhas oficiais Rockwell Automation e nas normas internacionais aplicáveis."
-        accent={true}
-      />
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {solutions.map((sol) => <SolutionCard {...sol} />)}
-      </div>
-      <div class="mt-10">
-        <a
-          href="/solucoes"
-          class="inline-flex items-center gap-2 text-sm font-semibold text-integra-gray-900 hover:text-integra-red transition-colors"
-        >
-          Ver todas as soluções
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
+  <FeatureBlock
+    eyebrow="Plataforma · DCS Moderno"
+    title="PlantPAx: arquitetura plant-wide com biblioteca padronizada"
+    description="O sistema de controle distribuído moderno da Rockwell Automation. Atuamos em todas as versões da plataforma, com profundidade técnica em PlantPAx 3.x, 4.x e 5.x — sempre alinhados ao System Reference Manual."
+    bullets={[
+      "Biblioteca de objetos de processo (PlantPAx Library) padronizada",
+      "Controladores ControlLogix (incluindo série P) e CompactLogix",
+      "Servidores virtualizados com redundância opcional por camada",
+      "Integração OPC UA + AF Templates para PI System / AVEVA",
+    ]}
+    image={plantpaxImage}
+    imageAlt="Painel industrial com sistema de controle distribuído PlantPAx"
+    imagePosition="right"
+    primaryCta={{ href: "/solucoes/plantpax", label: "Conhecer PlantPAx" }}
+    secondaryCta={{ href: "/contato?assunto=plantpax", label: "Falar sobre projeto" }}
+    variant="light"
+  />
+
+  <FeatureBlock
+    eyebrow="Suíte · Supervisão e Informação"
+    title="FactoryTalk: do chão de fábrica ao dashboard executivo"
+    description="View SE, Optix, Batch, Historian, AssetCentre, ThinManager — integrados de ponta a ponta com governança de alarmes ISA-18.2, padronização de telas e auditoria de mudanças."
+    bullets={[
+      "<strong>FactoryTalk View SE</strong> e <strong>Optix</strong> para supervisão",
+      "<strong>Batch</strong> conforme ISA-88 com receitas padronizadas",
+      "<strong>Historian</strong> + <strong>AssetCentre</strong> com auditoria de mudanças",
+      "<strong>ThinManager</strong> para gestão de thin clients industriais",
+    ]}
+    image={factoryTalkImage}
+    imageAlt="Sala de controle industrial com supervisão FactoryTalk View SE"
+    imagePosition="left"
+    primaryCta={{ href: "/solucoes/factorytalk", label: "Conhecer FactoryTalk" }}
+    variant="light"
+  />
+
+  <FeatureBlock
+    eyebrow="Cibersegurança OT · IEC 62443"
+    title="Redes industriais que protegem a operação por design"
+    description="Topologia, segmentação, switches Stratix/Cisco e arquiteturas alinhadas ao CPwE. Cibersegurança OT do projeto à operação, com defense-in-depth e zonas de segurança IEC 62443."
+    bullets={[
+      "Arquitetura CPwE (Converged Plantwide Ethernet)",
+      "Segmentação Purdue + IDMZ entre IT e OT",
+      "Anel DLR/PRP para alta disponibilidade",
+      "Conformidade IEC 62443 SL-T por zona + NIST SP 800-82",
+    ]}
+    image={iec62443Image}
+    imageAlt="Rack de switches industriais com fibra óptica em planta"
+    imagePosition="right"
+    primaryCta={{ href: "/solucoes/redes-iec-62443", label: "Ver cibersegurança OT" }}
+    secondaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar diagnóstico" }}
+    variant="ot"
+  />
 
   <LifecycleRail />
 
-  <section class="border-b border-integra-gray-200 bg-integra-gray-950 text-integra-white">
-    <div class="container-default py-20 lg:py-24">
-      <div class="max-w-3xl">
-        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+  <section class="border-y border-integra-gray-200 bg-integra-white">
+    <div class="container-wide py-20 lg:py-28">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
           Manifesto
         </p>
-        <p class="text-2xl leading-relaxed text-integra-gray-100 sm:text-3xl">
-          Acreditamos que por trás de toda grande indústria existe uma fundação
-          invisível — feita de
-          <span class="text-integra-white">rigor</span>,
-          <span class="text-integra-white">disciplina</span> e pessoas que se
+        <p class="text-3xl leading-snug text-integra-gray-900 sm:text-4xl lg:text-5xl">
+          Acreditamos que por trás de toda grande indústria existe uma
+          fundação invisível — feita de
+          <span class="text-integra-red">rigor</span>,
+          <span class="text-integra-red">disciplina</span> e pessoas que se
           importam de verdade com o que constroem.
         </p>
-        <p class="mt-6 text-base leading-relaxed text-integra-gray-300 lg:text-lg max-w-2xl">
+        <p class="mt-8 text-base leading-relaxed text-integra-gray-700 lg:text-lg max-w-2xl">
           Não trabalhamos apenas para resolver. Trabalhamos para transformar.
           Para que cada operação seja mais segura, mais previsível e pronta
           para crescer.
         </p>
-        <p class="mt-6 font-mono text-xs uppercase tracking-widest text-integra-gray-500">
+        <p class="mt-8 font-mono text-xs uppercase tracking-widest text-integra-gray-500">
           Integra · Engenharia em Automação Industrial
         </p>
       </div>
     </div>
   </section>
 
-  <CtaBlock variant="light" />
+  <CtaBlock variant="dark" />
 </BaseLayout>

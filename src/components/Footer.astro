@@ -1,112 +1,195 @@
 ---
 import { Image } from "astro:assets";
 import logoBranco from "@/assets/logos/Branco.png";
-import { SITE, COMPANY, NAV } from "@/utils/site";
+import { SITE, COMPANY } from "@/utils/site";
 
 const year = new Date().getFullYear();
-const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
 const phoneCommercial = COMPANY.phones[0];
+const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
+
+const columns = [
+  {
+    title: "Empresa",
+    links: [
+      { href: "/empresa", label: "Sobre a Integra" },
+      { href: "/empresa#timeline", label: "História" },
+      { href: "/certificacoes", label: "Certificações" },
+      { href: "/contato", label: "Contato" },
+    ],
+  },
+  {
+    title: "Soluções",
+    links: [
+      { href: "/solucoes/plantpax", label: "PlantPAx" },
+      { href: "/solucoes/factorytalk", label: "FactoryTalk Suite" },
+      { href: "/solucoes/redes-iec-62443", label: "Redes & IEC 62443" },
+      { href: "/solucoes", label: "Todas as soluções" },
+    ],
+  },
+  {
+    title: "Setores",
+    links: [
+      { href: "/setores", label: "Açúcar e Etanol" },
+      { href: "/setores", label: "Agronegócio" },
+      { href: "/setores", label: "Alimentos e Bebidas" },
+      { href: "/setores", label: "Saneamento" },
+      { href: "/setores", label: "Ver todos" },
+    ],
+  },
+  {
+    title: "Conteúdo",
+    links: [
+      { href: "/cases", label: "Cases" },
+      { href: "/blog", label: "Blog técnico" },
+      { href: "/rss.xml", label: "RSS feed" },
+      { href: COMPANY.social.linkedin, label: "LinkedIn", external: true },
+    ],
+  },
+];
+
+const legalLinks = [
+  { href: "/politica-privacidade", label: "Política de privacidade" },
+  { href: "/uso-de-cookies", label: "Uso de cookies" },
+];
 ---
 
 <footer class="bg-integra-gray-950 text-integra-gray-300">
-  <div class="container-default py-16 lg:py-20 grid gap-12 lg:grid-cols-12">
-    <div class="lg:col-span-4 space-y-6">
-      <Image
-        src={logoBranco}
-        alt={SITE.name}
-        class="h-12 w-auto"
-        widths={[200, 320]}
-        sizes="200px"
-        loading="lazy"
-        decoding="async"
-      />
-      <p class="text-sm leading-relaxed text-integra-gray-400 max-w-sm">
-        Engenharia e integração de sistemas industriais para plantas críticas.
-        Arquitetura, padronização, segurança operacional e governança técnica
-        de longo prazo.
-      </p>
-      <div class="flex flex-wrap gap-3 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
-        <span>Maringá-PR</span>
-        <span aria-hidden="true">·</span>
-        <span>Atuação nacional</span>
-      </div>
-    </div>
-
-    <nav class="lg:col-span-3 grid gap-3 content-start" aria-label="Navegação do rodapé">
-      <h2 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
-        Navegação
-      </h2>
-      {NAV.map(({ href, label }) => (
-        <a
-          href={href}
-          class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+  <!-- Top: brand block + 4 navigation columns -->
+  <div class="container-wide py-16 lg:py-20">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4 space-y-6">
+        <Image
+          src={logoBranco}
+          alt={SITE.name}
+          class="h-14 w-auto"
+          widths={[240, 360]}
+          sizes="240px"
+          loading="lazy"
+          decoding="async"
+        />
+        <p class="text-sm leading-relaxed text-integra-gray-400 max-w-sm">
+          Engenharia e integração de sistemas industriais para plantas
+          críticas. Arquitetura, padronização, segurança operacional e
+          governança técnica de longo prazo.
+        </p>
+        <div
+          class="flex flex-wrap gap-x-3 gap-y-2 text-xs font-mono uppercase tracking-wider text-integra-gray-500 pt-2"
         >
-          {label}
-        </a>
-      ))}
-    </nav>
+          <span>Maringá-PR</span>
+          <span aria-hidden="true">·</span>
+          <span>Atuação nacional</span>
+        </div>
+        <div class="flex items-center gap-4 pt-2">
+          <a
+            href={COMPANY.social.linkedin}
+            rel="noopener noreferrer"
+            class="inline-flex size-10 items-center justify-center rounded-md border border-integra-gray-800 hover:border-integra-white hover:bg-integra-gray-900 transition-colors"
+            aria-label="LinkedIn"
+          >
+            <svg
+              class="size-4 text-integra-gray-300"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
 
-    <div class="lg:col-span-3 grid gap-3 content-start">
-      <h2 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
-        Contato
-      </h2>
-      <a
-        href={`mailto:${COMPANY.email}`}
-        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit break-all"
-      >
-        {COMPANY.email}
-      </a>
-      <a
-        href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`}
-        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
-      >
-        {phoneCommercial.display}
-      </a>
-      <a
-        href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
-        rel="noopener noreferrer"
-        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit inline-flex items-center gap-2"
-      >
-        WhatsApp: {phoneWhatsApp.display}
-      </a>
-      <address class="not-italic text-sm text-integra-gray-300 leading-relaxed mt-2">
-        {COMPANY.address.street}<br />
-        {COMPANY.address.city} – {COMPANY.address.state}<br />
-        CEP {COMPANY.address.postalCode}
-      </address>
-    </div>
-
-    <div class="lg:col-span-2 grid gap-3 content-start">
-      <h2 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
-        Institucional
-      </h2>
-      <a
-        href="/politica-privacidade"
-        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
-        >Política de privacidade</a
-      >
-      <a
-        href="/uso-de-cookies"
-        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
-        >Uso de cookies</a
-      >
-      <a
-        href={COMPANY.social.linkedin}
-        rel="noopener noreferrer"
-        class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
-        >LinkedIn</a
-      >
+      <div class="lg:col-span-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        {columns.map((col) => (
+          <nav class="grid gap-3 content-start" aria-label={col.title}>
+            <h2
+              class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1"
+            >
+              {col.title}
+            </h2>
+            {col.links.map((link) => (
+              <a
+                href={link.href}
+                {...(("external" in link && link.external) && { rel: "noopener noreferrer" })}
+                class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        ))}
+      </div>
     </div>
   </div>
 
+  <!-- Mid: contact strip -->
+  <div class="border-t border-integra-gray-800/50">
+    <div class="container-wide py-10">
+      <div class="grid gap-8 md:grid-cols-3">
+        <div>
+          <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
+            Contato comercial
+          </h3>
+          <a
+            href={`mailto:${COMPANY.email}`}
+            class="text-base font-medium text-integra-white hover:text-integra-red transition-colors block break-all"
+          >
+            {COMPANY.email}
+          </a>
+          <a
+            href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`}
+            class="mt-1 text-sm text-integra-gray-300 hover:text-integra-white transition-colors block"
+          >
+            {phoneCommercial.display}
+          </a>
+        </div>
+        <div>
+          <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
+            WhatsApp / Direto
+          </h3>
+          <a
+            href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
+            rel="noopener noreferrer"
+            class="text-base font-medium text-integra-white hover:text-integra-red transition-colors block"
+          >
+            {phoneWhatsApp.display}
+          </a>
+          <p class="mt-1 text-xs font-mono text-integra-gray-500">
+            Resposta em até 1 dia útil
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
+            Endereço
+          </h3>
+          <address class="not-italic text-sm text-integra-gray-300 leading-relaxed">
+            {COMPANY.address.street}<br />
+            {COMPANY.address.city} – {COMPANY.address.state} · CEP {COMPANY.address.postalCode}
+          </address>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: copyright + legal links -->
   <div class="border-t border-integra-gray-800">
     <div
-      class="container-default py-6 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between text-xs text-integra-gray-500"
+      class="container-wide py-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between text-xs text-integra-gray-500"
     >
       <p>
         © {year} {COMPANY.legalName} · CNPJ {COMPANY.taxId}
       </p>
-      <p class="font-mono uppercase tracking-wider">
+      <div class="flex flex-wrap gap-x-5 gap-y-2">
+        {legalLinks.map((link) => (
+          <a
+            href={link.href}
+            class="hover:text-integra-white transition-colors"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+      <p class="font-mono uppercase tracking-wider text-integra-gray-500">
         {SITE.tagline}
       </p>
     </div>

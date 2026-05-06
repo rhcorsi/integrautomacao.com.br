@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 interface Props {
   eyebrow?: string;
   title: string;
@@ -6,6 +9,8 @@ interface Props {
   description: string;
   primaryCta?: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
+  heroImage?: ImageMetadata;
+  heroAlt?: string;
 }
 
 const {
@@ -15,6 +20,8 @@ const {
   description,
   primaryCta = { href: "/contato", label: "Falar com especialista" },
   secondaryCta = { href: "/solucoes", label: "Ver soluções" },
+  heroImage,
+  heroAlt = "",
 } = Astro.props;
 ---
 
@@ -24,51 +31,81 @@ const {
   <div
     class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
     aria-hidden="true"
-    style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 48px 48px;"
+    style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 64px 64px;"
   >
   </div>
   <div
-    class="pointer-events-none absolute -top-32 -right-32 -z-10 h-96 w-96 rounded-full bg-integra-red/5 blur-3xl"
+    class="pointer-events-none absolute -top-40 -right-40 -z-10 h-[40rem] w-[40rem] rounded-full bg-integra-red/5 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute -bottom-40 -left-40 -z-10 h-[30rem] w-[30rem] rounded-full bg-integra-gray-900/5 blur-3xl"
     aria-hidden="true"
   >
   </div>
 
-  <div class="container-default py-20 lg:py-28">
-    <div class="max-w-4xl">
-      <p
-        class="inline-flex items-center gap-2 rounded-full border border-integra-gray-200 bg-integra-gray-50 px-3 py-1 text-xs font-mono uppercase tracking-widest text-integra-gray-700 mb-6"
-      >
-        <span class="size-1.5 rounded-full bg-integra-red"></span>
-        {eyebrow}
-      </p>
-      <h1
-        class="text-4xl font-semibold tracking-tight text-integra-gray-900 sm:text-5xl lg:text-6xl"
-      >
-        {title}{" "}
-        {highlight && (
-          <span class="text-integra-red">{highlight}</span>
-        )}
-      </h1>
-      <p
-        class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-2xl lg:text-xl"
-      >
-        {description}
-      </p>
-      <div class="mt-10 flex flex-wrap gap-4">
-        <a
-          href={primaryCta.href}
-          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-gray-900 hover:bg-integra-black rounded-md transition-colors"
+  <div class="container-wide py-20 lg:py-28">
+    <div
+      class="grid gap-12 items-center lg:grid-cols-[1.1fr_1fr] lg:gap-16"
+    >
+      <div>
+        <p
+          class="inline-flex items-center gap-2 rounded-full border border-integra-gray-200 bg-integra-gray-50 px-4 py-1.5 text-xs font-mono uppercase tracking-widest text-integra-gray-700 mb-8"
         >
-          {primaryCta.label}
-          <span aria-hidden="true">→</span>
-        </a>
-        <a
-          href={secondaryCta.href}
-          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 bg-integra-white border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+          <span class="size-1.5 rounded-full bg-integra-red"></span>
+          {eyebrow}
+        </p>
+        <h1
+          class="text-5xl font-semibold tracking-tight text-integra-gray-900 sm:text-6xl lg:text-7xl"
         >
-          {secondaryCta.label}
-        </a>
+          {title}{" "}
+          {highlight && (
+            <span class="text-integra-red">{highlight}</span>
+          )}
+        </h1>
+        <p
+          class="mt-8 text-lg leading-relaxed text-integra-gray-700 max-w-xl lg:text-xl"
+        >
+          {description}
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a
+            href={primaryCta.href}
+            class="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-integra-white bg-integra-gray-900 hover:bg-integra-black rounded-md transition-colors"
+          >
+            {primaryCta.label}
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href={secondaryCta.href}
+            class="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-integra-gray-900 bg-integra-white border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+          >
+            {secondaryCta.label}
+          </a>
+        </div>
       </div>
+
+      {heroImage && (
+        <div class="relative">
+          <div
+            class="absolute -inset-4 -z-10 rounded-2xl bg-gradient-to-br from-integra-red/10 via-transparent to-integra-gray-900/10 blur-2xl"
+            aria-hidden="true"
+          />
+          <div class="relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-integra-gray-900/10">
+            <Image
+              src={heroImage}
+              alt={heroAlt}
+              widths={[600, 1000, 1500]}
+              sizes="(min-width: 1024px) 600px, 100vw"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="w-full h-auto object-cover aspect-[4/3]"
+            />
+          </div>
+        </div>
+      )}
     </div>
   </div>
 </section>

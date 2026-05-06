@@ -1,0 +1,168 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  bullets?: string[];
+  image: ImageMetadata;
+  imageAlt: string;
+  /** Side of the image. Alternate between blocks for visual rhythm. */
+  imagePosition?: "left" | "right";
+  primaryCta?: { href: string; label: string };
+  secondaryCta?: { href: string; label: string };
+  /** Use dark background for cybersecurity/OT-themed blocks */
+  variant?: "light" | "dark" | "ot";
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  bullets = [],
+  image,
+  imageAlt,
+  imagePosition = "right",
+  primaryCta,
+  secondaryCta,
+  variant = "light",
+} = Astro.props;
+
+const variantStyles = {
+  light: {
+    section: "bg-integra-white",
+    eyebrow: "text-integra-red",
+    title: "text-integra-gray-900",
+    desc: "text-integra-gray-700",
+    bullet: "text-integra-gray-900",
+    primaryBtn:
+      "text-integra-white bg-integra-gray-900 hover:bg-integra-black",
+    secondaryBtn:
+      "text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900",
+  },
+  dark: {
+    section: "bg-integra-gray-950 text-integra-white",
+    eyebrow: "text-integra-red",
+    title: "text-integra-white",
+    desc: "text-integra-gray-300",
+    bullet: "text-integra-gray-100",
+    primaryBtn: "text-integra-white bg-integra-red hover:bg-integra-red-700",
+    secondaryBtn:
+      "text-integra-white border border-integra-gray-700 hover:border-integra-white",
+  },
+  ot: {
+    section: "bg-integra-ot text-integra-white",
+    eyebrow: "text-integra-white/80",
+    title: "text-integra-white",
+    desc: "text-integra-white/85",
+    bullet: "text-integra-white",
+    primaryBtn:
+      "text-integra-ot bg-integra-white hover:bg-integra-gray-100",
+    secondaryBtn:
+      "text-integra-white border border-integra-white/30 hover:border-integra-white",
+  },
+};
+
+const v = variantStyles[variant];
+---
+
+<section class={`relative overflow-hidden ${v.section}`}>
+  <div class="container-wide py-20 lg:py-28">
+    <div
+      class:list={[
+        "grid gap-12 items-center lg:gap-16",
+        "lg:grid-cols-2",
+      ]}
+    >
+      <div class={imagePosition === "left" ? "lg:order-2" : "lg:order-1"}>
+        <p
+          class:list={[
+            "text-xs font-mono uppercase tracking-widest mb-4",
+            v.eyebrow,
+          ]}
+        >
+          {eyebrow}
+        </p>
+        <h2
+          class:list={["text-4xl font-semibold sm:text-5xl mb-6", v.title]}
+        >
+          {title}
+        </h2>
+        <p
+          class:list={[
+            "text-base leading-relaxed lg:text-lg max-w-xl mb-8",
+            v.desc,
+          ]}
+        >
+          {description}
+        </p>
+
+        {
+          bullets.length > 0 && (
+            <ul class="space-y-3 mb-8">
+              {bullets.map((b) => (
+                <li class:list={["flex items-start gap-3 text-sm lg:text-base", v.bullet]}>
+                  <Icon
+                    name="lucide:check"
+                    class={`size-5 shrink-0 mt-0.5 ${variant === "light" ? "text-integra-red" : "text-integra-red"}`}
+                    aria-hidden="true"
+                  />
+                  <span set:html={b} />
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        {
+          (primaryCta || secondaryCta) && (
+            <div class="flex flex-wrap gap-3">
+              {primaryCta && (
+                <a
+                  href={primaryCta.href}
+                  class:list={[
+                    "inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-md transition-colors",
+                    v.primaryBtn,
+                  ]}
+                >
+                  {primaryCta.label}
+                  <span aria-hidden="true">→</span>
+                </a>
+              )}
+              {secondaryCta && (
+                <a
+                  href={secondaryCta.href}
+                  class:list={[
+                    "inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-md transition-colors",
+                    v.secondaryBtn,
+                  ]}
+                >
+                  {secondaryCta.label}
+                </a>
+              )}
+            </div>
+          )
+        }
+      </div>
+
+      <div
+        class={`relative ${imagePosition === "left" ? "lg:order-1" : "lg:order-2"}`}
+      >
+        <div class="relative rounded-lg overflow-hidden shadow-2xl">
+          <Image
+            src={image}
+            alt={imageAlt}
+            widths={[600, 1000, 1400]}
+            sizes="(min-width: 1024px) 600px, 100vw"
+            loading="lazy"
+            decoding="async"
+            class="w-full h-auto object-cover aspect-[4/3]"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
