@@ -7,7 +7,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
-import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
+import controllogixPrpNonConverged from "@/assets/manuals/controllogix-prp-non-converged.jpg";
 
 const pillars = [
   {
@@ -82,11 +82,11 @@ const faq = [
         </p>
       </div>
       <ManualReference
-        image={securityReference}
-        alt="Arquitetura FactoryTalk Security com servidores e clientes"
-        title="Servidores industriais, identidade e aplicações críticas"
-        source="Rockwell Automation - FactoryTalk Security System Design"
-        caption="Referência visual pública para contextualizar serviços FactoryTalk, clientes, diretório e dependências de infraestrutura OT."
+        image={controllogixPrpNonConverged}
+        alt="Arquitetura PRP não-convergente com VMware ESXi e controladores redundantes"
+        title="Industrial Data Center: virtualização e redundância PRP"
+        source="Rockwell Automation - ControlLogix High Availability Reference Architectures"
+        caption="Referência pública mostrando como VMware ESXi se conecta com controladores redundantes via Parallel Redundancy Protocol — base de um IDC industrial."
         loading="eager"
       />
     </div>

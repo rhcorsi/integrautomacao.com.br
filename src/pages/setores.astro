@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import ManualReference from "@/components/ManualReference.astro";
-import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
+import cpwePlantwideZoning from "@/assets/manuals/cpwe-plantwide-zoning-levels.jpg";
 import { Icon } from "astro-icon/components";
 
 const sectors = [
@@ -101,11 +101,11 @@ const decisionMatrix = [
         </p>
       </div>
       <ManualReference
-        image={plantpaxReference}
-        alt="Arquitetura PlantPAx usada como referência para sistemas industriais"
-        title="Arquitetura de processo aplicada a setores críticos"
-        source="Rockwell Automation - PlantPAx System Release 5.40 Reference Manual"
-        caption="Referência visual pública para contextualizar como controle, supervisão, redes e dados se conectam em indústrias de processo."
+        image={cpwePlantwideZoning}
+        alt="Plant-wide zoning em níveis 0–5 com Cell/Area, Site Operations e Data Center"
+        title="Cada setor traduz para zonas, células e níveis funcionais"
+        source="Cisco + Rockwell Automation - CPwE Deep Dive Architecture"
+        caption="Referência pública CPwE mostra que cada setor é antes de tudo um conjunto de zonas funcionais — base para padronizar projeto, segurança e suporte."
         loading="eager"
       />
     </div>

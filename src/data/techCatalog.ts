@@ -6,7 +6,6 @@ import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-sm
 import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
 import optixReference from "@/assets/manuals/factorytalk-optix-data-flow.jpg";
 import datamosaixReference from "@/assets/manuals/factorytalk-datamosaix-data-flow.jpg";
-import datamosaixCpweReference from "@/assets/manuals/factorytalk-datamosaix-cpwe-data.jpg";
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
@@ -18,6 +17,21 @@ import elipseE3Reference from "@/assets/manuals/elipse-e3-architecture.jpg";
 import schneiderControlReference from "@/assets/manuals/schneider-control-expert-topology.jpg";
 import schneiderMachineReference from "@/assets/manuals/schneider-machine-expert-engineering.jpg";
 import schneiderScadaReference from "@/assets/manuals/schneider-machine-scada-expert.jpg";
+
+// New: dedicated diagrams sourced from Cisco/Rockwell CVDs and reference manuals
+// to replace forced reuses (the same image appearing in 5–7 unrelated pages).
+import cpweOtVsItComparison from "@/assets/manuals/cpwe-ot-vs-it-comparison.jpg";
+import cpwePlantwideZoning from "@/assets/manuals/cpwe-plantwide-zoning-levels.jpg";
+import adCaHierarchy from "@/assets/manuals/active-directory-ca-hierarchy.jpg";
+import cpweSecurityFramework from "@/assets/manuals/cpwe-industrial-security-framework.jpg";
+import industrialFirewalls from "@/assets/manuals/industrial-firewalls-deployment.jpg";
+import prpRedundancy from "@/assets/manuals/prp-redundancy-operation.jpg";
+import controllogixRedundancyDecision from "@/assets/manuals/controllogix-redundancy-decision.jpg";
+import controllogixPrpNonConverged from "@/assets/manuals/controllogix-prp-non-converged.jpg";
+import controllogixGuardlogix from "@/assets/manuals/controllogix-guardlogix-armor.jpg";
+import cpweDefenseInDepth from "@/assets/manuals/cpwe-defense-in-depth.jpg";
+import factorytalkAnalyticsLogixai from "@/assets/manuals/factorytalk-analytics-logixai.jpg";
+import simaticStep7Classic from "@/assets/manuals/simatic-step7-classic.jpg";
 
 export type TechGroup =
   | "Controle e DCS"
@@ -76,6 +90,18 @@ const elipseE3Source = "Elipse Software - Elipse E3";
 const schneiderControlSource = "Schneider Electric - EcoStruxure Control Expert";
 const schneiderMachineSource = "Schneider Electric - EcoStruxure Machine Expert";
 const schneiderScadaSource = "Schneider Electric - EcoStruxure Machine SCADA Expert";
+
+// Sources for the new dedicated diagrams
+const cpweDeepDiveSource = "Cisco + Rockwell Automation - CPwE Deep Dive Architecture";
+const identityMobilitySource = "Cisco + Rockwell Automation - Deploying Identity and Mobility Services within a Converged Plantwide Ethernet Architecture";
+const cipSecuritySource = "Cisco + Rockwell Automation - Deploying CIP Security within a Converged Plantwide Ethernet Architecture";
+const industrialFirewallsSource = "Cisco + Rockwell Automation - Deploying Industrial Firewalls within a Converged Plantwide Ethernet Architecture";
+const cloudConnectivitySource = "Cisco + Rockwell Automation - Cloud Connectivity to a Converged Plantwide Ethernet Architecture";
+const prpSource = "Rockwell Automation - Parallel Redundancy Protocol Reference Architectures";
+const controllogixHaSource = "Rockwell Automation - ControlLogix High Availability Reference Architectures";
+const controllogix5570Source = "Rockwell Automation - ControlLogix 5580 and ControlLogix 5570 Systems Selection Guide";
+const ftAnalyticsSource = "Rockwell Automation - FactoryTalk Analytics LogixAI Reference Architectures";
+const simaticStep7Source = "Siemens - SIMATIC Programmable Logic Controllers ST 70 Catalog";
 
 const plantpaxRelated = [
   { href: "/solucoes/plantpax", label: "Solução PlantPAx" },
@@ -240,12 +266,11 @@ export const techCatalog: TechPage[] = [
       "Controladores Logix para controle de processo, máquinas, utilidades e integração plant-wide com redes EtherNet/IP.",
     intro:
       "ControlLogix e CompactLogix sustentam desde skids e áreas menores até arquiteturas de processo distribuídas. A Integra trata o controlador como parte de uma arquitetura completa: I/O, rede, HMI, historian, segurança, testes e documentação.",
-    image: controllogixReference,
-    imageAlt: "Arquitetura de referência ControlLogix com rede DLR convergente",
-    imageTitle: "Controladores Logix dentro de uma rede industrial projetada",
-    imageSource: logixSource,
-    imageCaption:
-      "Referência visual pública com exemplo de arquitetura Logix e DLR. Ajuda a explicar disponibilidade e desenho de rede, não como diagrama final de projeto.",
+    image: controllogixGuardlogix,
+    imageAlt: "Configuração ControlLogix 5580 com PowerFlex, PanelView, GuardLogix e Armor ControlLogix",
+    imageTitle: "Família Logix em arquitetura de exemplo, com I/O, drives e safety",
+    imageSource: controllogix5570Source,
+    imageCaption: "Imagem do guia de seleção pública: famílias ControlLogix e CompactLogix em uma mesma referência de arquitetura.",
     theme: "ot",
     useCases: [
       "Controle de processo com malhas PID, intertravamentos, sequenciamento e diagnósticos.",
@@ -677,12 +702,11 @@ export const techCatalog: TechPage[] = [
       "Integração IIoT, conectividade multi-protocolo, modelos de ativos, mashups e exposição controlada de dados industriais.",
     intro:
       "ThingWorx e Kepware ajudam a conectar equipamentos, protocolos e aplicações de informação sem transformar a rede OT em uma coleção de atalhos. A Integra desenha conectividade, modelo de dados e segurança antes de publicar qualquer tela.",
-    image: optixReference,
-    imageAlt: "Fluxo de dados industrial em referência de arquitetura FactoryTalk Optix",
-    imageTitle: "Conectividade e visualização precisam de fronteira OT bem definida",
-    imageSource: optixSource,
-    imageCaption:
-      "Referência visual pública de arquitetura de dados e visualização para explicar o fluxo entre camada industrial e aplicações modernas.",
+    image: factorytalkAnalyticsLogixai,
+    imageAlt: "Fluxo de dados Industrial Computer com FactoryTalk Analytics LogixAI conectando OT, Edge e Cloud",
+    imageTitle: "Plataformas IIoT como ThingWorx vivem na fronteira OT-Edge-Cloud",
+    imageSource: ftAnalyticsSource,
+    imageCaption: "Print público de fluxo OT, Edge e Cloud: o mesmo padrão se aplica a ThingWorx, Kepware e equivalentes.",
     useCases: [
       "Coleta multi-protocolo com Kepware em equipamentos e sistemas heterogêneos.",
       "Modelagem de ativos, serviços e mashups no ThingWorx.",
@@ -785,12 +809,11 @@ export const techCatalog: TechPage[] = [
       "Gateways industriais, processamento local, buffer, coleta e publicação segura de dados entre OT, IDMZ e aplicações de informação.",
     intro:
       "Edge computing em planta industrial não é colocar um computador qualquer perto da máquina. É posicionar gateways, processamento, buffer e segurança no lugar certo, com critérios de disponibilidade e manutenção compatíveis com a operação.",
-    image: datamosaixCpweReference,
-    imageAlt: "Arquitetura DataMosaix em contexto CPwE com fluxos de dados",
-    imageTitle: "Edge como ponte controlada entre OT e dados corporativos",
-    imageSource: dataMosaixSource,
-    imageCaption:
-      "Referência visual pública com fluxos de dados em arquitetura industrial moderna para discutir zonas, gateways e governança.",
+    image: factorytalkAnalyticsLogixai,
+    imageAlt: "Industrial Computer Data Flow com FactoryTalk Analytics LogixAI - OT, Edge e Cloud",
+    imageTitle: "Edge computing industrial conectado a OT e Cloud",
+    imageSource: ftAnalyticsSource,
+    imageCaption: "Print público da arquitetura LogixAI ilustrando o papel do Edge entre OT e Cloud.",
     theme: "ot",
     useCases: [
       "Coleta local com buffer para evitar perda de dados em falhas de comunicação.",
@@ -840,12 +863,11 @@ export const techCatalog: TechPage[] = [
       "Infraestrutura para servidores HMI, historian, Batch, AssetCentre, domínio industrial, thin clients e aplicações críticas de automação.",
     intro:
       "O data center industrial sustenta a operação 24/7. Ele precisa respeitar restrições de versão, licenciamento, latência, backup, recuperação e janelas de manutenção de OT. A Integra projeta essa infraestrutura como parte da engenharia de automação.",
-    image: securityReference,
-    imageAlt: "Arquitetura FactoryTalk Security com servidores e clientes",
-    imageTitle: "Infraestrutura OT precisa de identidade, servidores e governança",
-    imageSource: securitySource,
-    imageCaption:
-      "Referência visual pública para explicar dependências entre servidores, clientes, diretório e aplicações FactoryTalk em ambientes industriais.",
+    image: controllogixPrpNonConverged,
+    imageAlt: "Arquitetura PRP não-convergente com VMware ESXi e racks de controle redundantes",
+    imageTitle: "Arquitetura redundante com virtualização e PRP — referência de Industrial Data Center",
+    imageSource: controllogixHaSource,
+    imageCaption: "Print público mostrando como um Industrial Data Center se conecta com a planta sob arquitetura redundante.",
     useCases: [
       "Consolidação de servidores FactoryTalk, historian, AssetCentre e engenharia.",
       "Ambientes com alta disponibilidade, backup, restore e dependências críticas.",
@@ -894,12 +916,11 @@ export const techCatalog: TechPage[] = [
       "Ambientes virtualizados para aplicações industriais críticas usando VMware, Hyper-V ou Nutanix AHV quando aplicável.",
     intro:
       "Virtualizar OT traz flexibilidade, snapshots, recuperação e melhor uso de hardware. Mas também cria dependências novas: storage, host, rede, licenças, compatibilidade de software industrial e disciplina de mudança.",
-    image: securityReference,
-    imageAlt: "Arquitetura FactoryTalk Security com servidores e clientes",
-    imageTitle: "Virtualização OT precisa respeitar aplicações industriais",
-    imageSource: securitySource,
-    imageCaption:
-      "A referência visual mostra a importância dos serviços centrais. Em ambiente virtual, essas dependências ficam ainda mais críticas.",
+    image: controllogixPrpNonConverged,
+    imageAlt: "Arquitetura virtualizada com VMware ESXi atendendo controladores PRP",
+    imageTitle: "Hypervisor industrial conectado à camada de controle por rede redundante",
+    imageSource: controllogixHaSource,
+    imageCaption: "Referência pública de virtualização OT integrada a redes industriais com PRP.",
     useCases: [
       "Virtualização de servidores HMI, Data Server, Historian, Batch, AssetCentre e engenharia.",
       "Alta disponibilidade com hosts, storage e redes redundantes.",
@@ -948,12 +969,11 @@ export const techCatalog: TechPage[] = [
       "Migração controlada de máquinas virtuais industriais, com compatibilidade, backup, rollback, janela mínima e validação funcional.",
     intro:
       "Migrar VMs de OT sem entender dependências pode derrubar HMI, historian, licenças ou comunicação com controladores. A Integra conduz a migração com inventário, validação, backup, janela planejada e teste funcional pós-mudança.",
-    image: securityReference,
-    imageAlt: "Referência de sistema FactoryTalk com clientes e servidores",
-    imageTitle: "Migração de VMs precisa preservar serviços industriais",
-    imageSource: securitySource,
-    imageCaption:
-      "A referência visual reforça que aplicações industriais dependem de serviços centrais, diretórios e clientes que precisam ser preservados na migração.",
+    image: controllogixRedundancyDecision,
+    imageAlt: "Decisão de redundância: REP, OLR ou PRP em função de fault tolerance e tempo de recuperação",
+    imageTitle: "Migração de VMs requer revisar redundância e fault tolerance",
+    imageSource: controllogixHaSource,
+    imageCaption: "Antes de migrar VMs, revisamos os critérios de fault tolerance e tempo de recuperação que justificam o desenho.",
     useCases: [
       "Troca de host, storage, cluster ou plataforma de virtualização.",
       "Atualização de sistema operacional compatível com aplicações industriais.",
@@ -1002,12 +1022,11 @@ export const techCatalog: TechPage[] = [
       "Domínio industrial, grupos, políticas, controladores de domínio, autenticação e segregação de identidade para ambientes de automação.",
     intro:
       "Ambientes industriais críticos precisam de identidade governada. Active Directory em OT deve ser desenhado com grupos, políticas, redundância e separação adequada da TI corporativa, sempre respeitando operação e manutenção.",
-    image: securityReference,
-    imageAlt: "Arquitetura FactoryTalk Security com domínio e clientes",
-    imageTitle: "Identidade industrial como base de segurança e auditoria",
-    imageSource: securitySource,
-    imageCaption:
-      "Referência visual pública FactoryTalk Security para mostrar relação entre identidade, clientes, servidores e políticas de acesso.",
+    image: adCaHierarchy,
+    imageAlt: "Modelos de implementação de hierarquia de Certificate Authority (CA) em Active Directory para OT",
+    imageTitle: "Hierarquia de CA e modelos PKI para Active Directory em ambientes industriais",
+    imageSource: identityMobilitySource,
+    imageCaption: "Print público da CVD Cisco/Rockwell que mostra modelos de PKI para Active Directory dimensionados ao porte da planta.",
     useCases: [
       "Autenticação centralizada para FactoryTalk, ThinManager, servidores e estações.",
       "Segregação entre usuários de operação, manutenção, engenharia e suporte.",
@@ -1056,12 +1075,11 @@ export const techCatalog: TechPage[] = [
       "Política de backup, restore testado e recuperação de VMs, projetos PLC, telas, receitas, bancos históricos e configurações de rede.",
     intro:
       "Backup que nunca foi restaurado é esperança, não estratégia. A Integra estrutura backup e recuperação de OT considerando VMs, projetos de automação, receitas, historian, switches, servidores e documentação.",
-    image: securityReference,
-    imageAlt: "Arquitetura FactoryTalk Security com serviços industriais",
-    imageTitle: "Recuperação depende de saber o que sustenta a planta",
-    imageSource: securitySource,
-    imageCaption:
-      "A referência mostra a quantidade de serviços interdependentes em automação. Backup precisa cobrir o conjunto, não apenas arquivos soltos.",
+    image: controllogixRedundancyDecision,
+    imageAlt: "Árvore de decisão entre REP, OLR e PRP em função de fault tolerance e recovery time",
+    imageTitle: "Backup e DR começam pela definição de fault tolerance e RTO",
+    imageSource: controllogixHaSource,
+    imageCaption: "Antes de definir backup e DR, alinhamos fault tolerance, RTO e topologia da rede.",
     useCases: [
       "Ambientes sem restore testado ou com backups manuais dispersos.",
       "Proteção de projetos PLC/HMI, receitas, VMs, bancos e configs de rede.",
@@ -1221,12 +1239,11 @@ export const techCatalog: TechPage[] = [
       "Integração com EtherNet/IP, OPC UA, Modbus TCP/RTU, IEC 61850, Foundation Fieldbus, Profibus PA e HART.",
     intro:
       "Protocolo não é detalhe de comunicação. Ele define latência, diagnóstico, segurança, manutenção e qualidade de dado. A Integra avalia cada interface com critério de engenharia para evitar pontes frágeis e integrações sem dono.",
-    image: controllogixReference,
-    imageAlt: "Arquitetura ControlLogix com rede industrial convergente",
-    imageTitle: "Protocolos precisam de topologia e responsabilidade técnica",
-    imageSource: logixSource,
-    imageCaption:
-      "Referência visual pública de arquitetura Logix com rede industrial para contextualizar dispositivos, comunicação e disponibilidade.",
+    image: prpRedundancy,
+    imageAlt: "Operação do Parallel Redundancy Protocol (PRP) - duas LANs independentes",
+    imageTitle: "PRP como referência de protocolo industrial determinístico e redundante",
+    imageSource: prpSource,
+    imageCaption: "Print público da Reference Architecture PRP - protocolos industriais não são apenas EtherNet/IP; envolvem redundância determinística.",
     theme: "ot",
     useCases: [
       "Integração de controladores, I/O remoto, inversores, IEDs, analisadores e sistemas de terceiros.",
@@ -1333,12 +1350,11 @@ export const techCatalog: TechPage[] = [
       "Endurecimento de servidores FactoryTalk, estações de engenharia, HMIs, switches industriais e serviços OT sem comprometer operação.",
     intro:
       "Hardening em OT precisa ser cuidadoso. Desligar serviço errado ou aplicar política corporativa sem validação pode parar supervisão, licenças ou comunicação. A Integra aplica endurecimento com homologação, rollback e documentação.",
-    image: securityReference,
-    imageAlt: "Arquitetura FactoryTalk Security",
-    imageTitle: "Hardening precisa respeitar serviços industriais",
-    imageSource: securitySource,
-    imageCaption:
-      "Referência visual pública FactoryTalk Security para mostrar dependências entre servidores, diretórios, clientes e permissões.",
+    image: cpweSecurityFramework,
+    imageAlt: "CPwE Industrial Security Framework — defesa em profundidade plant-wide",
+    imageTitle: "Hardening como parte de uma estratégia de defesa em camadas",
+    imageSource: cipSecuritySource,
+    imageCaption: "Print público do framework CPwE de cibersegurança industrial: hardening compõe múltiplas camadas, não é evento isolado.",
     theme: "ot",
     useCases: [
       "Servidores e estações com serviços desnecessários, contas compartilhadas ou permissões excessivas.",
@@ -1388,12 +1404,11 @@ export const techCatalog: TechPage[] = [
       "Gestão de atualizações em servidores, estações, aplicações industriais e infraestrutura OT com validação, janela e documentação.",
     intro:
       "Atualizar OT não é clicar em update. Patches precisam ser avaliados por criticidade, compatibilidade, janela de manutenção, backup, teste e rollback. A Integra cria processo para reduzir risco sem congelar a planta no passado.",
-    image: securityReference,
-    imageAlt: "Arquitetura de referência FactoryTalk Security",
-    imageTitle: "Atualizações em OT dependem de compatibilidade e janela",
-    imageSource: securitySource,
-    imageCaption:
-      "A referência ajuda a lembrar que uma atualização pode afetar múltiplos serviços industriais interdependentes.",
+    image: cpweDefenseInDepth,
+    imageAlt: "Defesa em profundidade no CPwE com hardening de SO, patch e monitoramento",
+    imageTitle: "Patch management dentro do programa de defesa em profundidade",
+    imageSource: cloudConnectivitySource,
+    imageCaption: "Print público da arquitetura CPwE de defesa em camadas: patching é parte de um programa estruturado de cibersegurança.",
     theme: "ot",
     useCases: [
       "Servidores Windows industriais com atualizações atrasadas.",
@@ -1443,12 +1458,11 @@ export const techCatalog: TechPage[] = [
       "Análise de tráfego, loops, broadcast storms, saúde de rede, devices, uplinks, DLR e comportamento de comunicação em OT.",
     intro:
       "Muita instabilidade de automação parece problema de PLC ou HMI, mas nasce na rede. A Integra analisa tráfego, topologia, configuração e eventos para encontrar causa técnica sem trocar equipamento às cegas.",
-    image: cpweReference,
-    imageAlt: "Arquitetura CPwE para integração OT e IT",
-    imageTitle: "Diagnóstico de rede começa por arquitetura e tráfego real",
-    imageSource: cpweSource,
-    imageCaption:
-      "Referência visual pública CPwE para discutir camadas, tráfego e fronteiras entre ambientes industriais e corporativos.",
+    image: cpwePlantwideZoning,
+    imageAlt: "Plant-wide zoning com Cell/Area Zones, Site Operations e Data Center",
+    imageTitle: "Monitoramento exige clareza sobre zonas e níveis funcionais",
+    imageSource: cpweDeepDiveSource,
+    imageCaption: "A linha de base de monitoramento começa por reconhecer as zonas funcionais da planta - nível 0 a 5.",
     theme: "ot",
     useCases: [
       "Quedas intermitentes de HMI, PLC, I/O remoto, inversores ou historian.",
@@ -1498,12 +1512,11 @@ export const techCatalog: TechPage[] = [
       "Suporte técnico para PLCs, SCADA, redes, servidores, historian, aplicações FactoryTalk e infraestrutura OT crítica.",
     intro:
       "Manutenção OT precisa ir além de apagar incêndio. A Integra combina atendimento corretivo, rotina preventiva, documentação e análise de causa para reduzir reincidência e dependência de conhecimento informal.",
-    image: viewSeReference,
-    imageAlt: "Arquitetura FactoryTalk View SE usada como referência de sistemas industriais",
-    imageTitle: "Manutenção precisa entender a arquitetura inteira",
-    imageSource: viewSeSource,
-    imageCaption:
-      "A referência mostra que falhas de operação podem envolver servidores, clientes, controladores, dados e rede. O suporte precisa enxergar o conjunto.",
+    image: industrialFirewalls,
+    imageAlt: "Plant-wide industrial firewalls deployment - pontos de manutenção e proteção",
+    imageTitle: "Manutenção em ambiente segmentado por firewalls industriais",
+    imageSource: industrialFirewallsSource,
+    imageCaption: "Print público da CVD Cisco/Rockwell ilustrando pontos onde a manutenção precisa atravessar firewalls industriais.",
     useCases: [
       "Falhas recorrentes em PLC, HMI, historian, rede, servidor ou comunicação.",
       "Sistemas críticos sem rotina de backup, atualização e validação.",
@@ -1552,12 +1565,11 @@ export const techCatalog: TechPage[] = [
       "Atendimento remoto e em campo para sistemas industriais, com acesso seguro, registro técnico, diagnóstico e escalonamento.",
     intro:
       "Suporte remoto em OT precisa de segurança, rastreabilidade e limites. A Integra atua com diagnóstico estruturado, acesso autorizado e, quando necessário, presença em campo para validar comunicação, painel, rede e processo.",
-    image: cpweReference,
-    imageAlt: "Arquitetura CPwE usada para explicar acesso controlado em OT",
-    imageTitle: "Suporte remoto precisa passar por arquitetura segura",
-    imageSource: cpweSource,
-    imageCaption:
-      "Referência visual pública CPwE para explicar por que acesso remoto deve respeitar zonas, IDMZ e regras de comunicação.",
+    image: adCaHierarchy,
+    imageAlt: "Acesso baseado em identidade: hierarquia de CA e PKI em ambiente industrial",
+    imageTitle: "Suporte remoto exige identidade forte e auditoria",
+    imageSource: identityMobilitySource,
+    imageCaption: "Print público da CVD de Identity and Mobility - suporte remoto seguro depende de identidade auditada.",
     theme: "ot",
     useCases: [
       "Apoio rápido a falhas em PLC, HMI, servidores ou comunicação.",
@@ -1607,12 +1619,11 @@ export const techCatalog: TechPage[] = [
       "Avaliação técnica de arquitetura, documentação, segurança, redes, aplicações, backup, governança e maturidade de automação.",
     intro:
       "Auditoria técnica ajuda a enxergar o que está funcionando por sorte, por conhecimento informal ou por arquitetura realmente robusta. A Integra entrega diagnóstico objetivo, riscos priorizados e plano de ação aplicável.",
-    image: cpweReference,
-    imageAlt: "Arquitetura CPwE usada como referência de auditoria OT",
-    imageTitle: "Auditoria compara a realidade da planta com arquitetura desejada",
-    imageSource: cpweSource,
-    imageCaption:
-      "Referências públicas como CPwE, IEC 62443 e NIST ajudam a organizar uma leitura técnica sem depender de opinião solta.",
+    image: cpweOtVsItComparison,
+    imageAlt: "Comparação Industrial OT vs Enterprise IT — tráfego, performance e segurança",
+    imageTitle: "Auditar OT exige critérios diferentes dos critérios de TI corporativo",
+    imageSource: cpweDeepDiveSource,
+    imageCaption: "Tabela pública Cisco/Rockwell que mostra por que critérios OT exigem auditoria com escopo diferente da TI.",
     theme: "ot",
     useCases: [
       "Preparação para modernização, expansão, auditoria corporativa ou seguro.",
@@ -1716,12 +1727,11 @@ export const techCatalog: TechPage[] = [
       "Data books, as-built, diagramas, descrições funcionais, manuais, padrões, treinamento e transferência real de conhecimento.",
     intro:
       "Projeto sem handover vira dependência. A Integra trata documentação e treinamento como parte da entrega técnica: o sistema precisa operar, ser mantido e evoluir sem depender exclusivamente de quem implantou.",
-    image: plantpaxReference,
-    imageAlt: "Arquitetura PlantPAx usada como referência de documentação técnica",
-    imageTitle: "Documentação conecta arquitetura, operação e manutenção",
-    imageSource: plantpaxSource,
-    imageCaption:
-      "A arquitetura de referência ajuda a ilustrar o tipo de sistema que precisa de documentação coerente: controladores, servidores, rede, HMI e dados.",
+    image: cpwePlantwideZoning,
+    imageAlt: "Plant-wide zoning em níveis 0-5: Cell/Area, Site Operations e Data Center",
+    imageTitle: "Documentar handover exige enxergar a planta em zonas e níveis",
+    imageSource: cpweDeepDiveSource,
+    imageCaption: "A documentação que entregamos respeita a estrutura de zonas e níveis da planta para que qualquer engenheiro entenda o sistema.",
     useCases: [
       "Projetos novos que precisam nascer com data book e as-built.",
       "Sistemas antigos sem diagramas, comentários, matriz funcional ou backup confiável.",
@@ -1941,12 +1951,11 @@ export const techCatalog: TechPage[] = [
       "Manutenção, diagnóstico e evolução de sistemas Siemens legados com STEP 7 Classic, S7-300, S7-400 e arquiteturas anteriores.",
     intro:
       "Muitas plantas ainda rodam em SIMATIC Manager, STEP 7 Classic, S7-300, S7-400 e redes industriais antigas. A Integra trata esses sistemas como ativos críticos: antes de mexer, entende backup, comunicação, símbolos, blocos, intertravamentos e impacto de parada.",
-    image: siemensTiaReference,
-    imageAlt: "Referência Siemens de engenharia SIMATIC",
-    imageTitle: "Legado Siemens exige leitura cuidadosa de versão e arquitetura",
-    imageSource: siemensTiaSource,
-    imageCaption:
-      "Material Siemens usado como referência institucional. Em sistemas STEP 7 Classic, a abordagem prioriza backup, compatibilidade e redução de risco antes de qualquer alteração.",
+    image: simaticStep7Classic,
+    imageAlt: "SIMATIC Programmable Logic Controllers ST 70 - engenheiro em painéis com tablet",
+    imageTitle: "STEP 7 Classic continua presente em base instalada",
+    imageSource: simaticStep7Source,
+    imageCaption: "Imagem pública do catálogo Siemens ST 70: STEP 7 Classic ainda atende grande parte da base instalada.",
     useCases: [
       "Diagnóstico e manutenção de PLCs S7-300 e S7-400.",
       "Correções em lógicas legadas com blocos, símbolos e comentários incompletos.",
