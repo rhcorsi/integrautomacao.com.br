@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 
 interface Props {
   eyebrow: string;
@@ -11,7 +10,6 @@ interface Props {
   bullets?: string[];
   image?: ImageMetadata;
   imageAlt?: string;
-  visual?: "hero" | "plantpax" | "factorytalk" | "ot" | "data" | "migration" | "industrial";
   /** Side of the image. Alternate between blocks for visual rhythm. */
   imagePosition?: "left" | "right";
   primaryCta?: { href: string; label: string };
@@ -27,7 +25,6 @@ const {
   bullets = [],
   image,
   imageAlt = "",
-  visual,
   imagePosition = "right",
   primaryCta,
   secondaryCta,
@@ -154,12 +151,7 @@ const v = variantStyles[variant];
       <div
         class={`relative ${imagePosition === "left" ? "lg:order-1" : "lg:order-2"}`}
       >
-        {visual ? (
-          <ArchitectureVisual
-            variant={visual}
-            theme={variant === "ot" ? "ot" : variant === "dark" ? "dark" : "light"}
-          />
-        ) : image ? (
+        {image ? (
           <div class="relative overflow-hidden rounded-lg shadow-2xl">
             <Image
               src={image}

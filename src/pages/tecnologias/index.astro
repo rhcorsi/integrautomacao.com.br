@@ -1,0 +1,161 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import { GROUP_ORDER, getTechByGroup, techCatalog } from "@/data/techCatalog";
+
+const totals = [
+  { label: "Softwares e plataformas", value: techCatalog.filter((item) => item.type === "Software").length },
+  { label: "Tecnologias industriais", value: techCatalog.filter((item) => item.type === "Tecnologia").length },
+  { label: "Serviços de engenharia", value: techCatalog.filter((item) => item.type === "Serviço").length },
+];
+---
+
+<BaseLayout
+  title="Tecnologias e Serviços"
+  description="Catálogo técnico da Integra com páginas dedicadas para softwares, tecnologias e serviços de automação industrial: PlantPAx, FactoryTalk, ControlLogix, IEC 62443, CPwE, virtualização OT, dados industriais e suporte."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 lg:py-24">
+      <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red">
+        Catálogo técnico Integra
+      </p>
+      <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+        <div>
+          <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+            Cada software, tecnologia e serviço com contexto de engenharia.
+          </h1>
+          <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+            Esta seção organiza o conhecimento técnico da Integra por tema:
+            controle, supervisão, dados, infraestrutura, redes, cibersegurança
+            OT e sustentação. As páginas usam prints de manuais públicos dos
+            fabricantes como referência visual e explicam onde cada tecnologia
+            entra, quais riscos reduz e quais entregáveis o cliente recebe.
+          </p>
+        </div>
+
+        <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-3">
+          {totals.map((item) => (
+            <div class="bg-integra-gray-50 p-6">
+              <p class="font-mono text-3xl font-semibold text-integra-gray-900">
+                {item.value}
+              </p>
+              <p class="mt-2 text-sm leading-relaxed text-integra-gray-600">
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Como usar"
+        title="Soluções no alto nível, páginas técnicas em profundidade"
+        description="As páginas de soluções explicam a arquitetura e o valor executivo. Este catálogo aprofunda cada software, tecnologia e serviço para apoiar conversas técnicas, propostas, auditorias e planejamento de evolução."
+        accent={true}
+      />
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+            01 · Tecnologia
+          </p>
+          <h2 class="text-xl font-semibold text-integra-gray-900">
+            Entender o papel técnico
+          </h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            O que resolve, em qual camada da planta entra, quais premissas
+            precisam ser definidas e quais referências técnicas sustentam a
+            decisão.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+            02 · Engenharia
+          </p>
+          <h2 class="text-xl font-semibold text-integra-gray-900">
+            Ver como a Integra atua
+          </h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Diagnóstico, arquitetura, configuração, testes, documentação e
+            handover aparecem como método, não como promessa genérica.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+            03 · Entrega
+          </p>
+          <h2 class="text-xl font-semibold text-integra-gray-900">
+            Saber o que será recebido
+          </h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Cada página lista entregáveis concretos: diagramas, matrizes,
+            padrões, backups, testes, evidências e documentação de sustentação.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {GROUP_ORDER.map((group) => {
+    const items = getTechByGroup(group);
+    return (
+      <section class="border-b border-integra-gray-200 bg-integra-white">
+        <div class="container-fluid py-20">
+          <SectionHeader eyebrow="Catálogo" title={group} accent={true} />
+          <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {items.map((item) => (
+              <a
+                href={`/tecnologias/${item.slug}/`}
+                class="group flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-6 transition-colors hover:border-integra-gray-900"
+              >
+                <div class="mb-5 flex items-start justify-between gap-4">
+                  <span
+                    class:list={[
+                      "rounded-sm px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider",
+                      item.group === "Redes e Cibersegurança OT"
+                        ? "bg-sky-50 text-integra-ot"
+                        : "bg-integra-red/10 text-integra-red",
+                    ]}
+                  >
+                    {item.type}
+                  </span>
+                  <span
+                    class="text-integra-gray-300 transition-colors group-hover:text-integra-red"
+                    aria-hidden="true"
+                  >
+                    ↗
+                  </span>
+                </div>
+                <h3 class="text-xl font-semibold text-integra-gray-900">
+                  {item.shortTitle}
+                </h3>
+                <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+                  {item.description}
+                </p>
+                <ul class="mt-auto flex flex-wrap gap-2 pt-5">
+                  {item.standards.slice(0, 3).map((standard) => (
+                    <li class="rounded-sm bg-integra-gray-50 px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-integra-gray-500">
+                      {standard.code}
+                    </li>
+                  ))}
+                </ul>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <CtaBlock
+    title="Quer transformar esse catálogo em escopo técnico?"
+    description="A próxima conversa pode partir da tecnologia, do problema da planta ou da arquitetura existente. A Integra organiza isso em diagnóstico, roadmap e entregáveis claros."
+    primaryCta={{ href: "/contato?assunto=catalogo-tecnico", label: "Conversar com especialista" }}
+    secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
+  />
+</BaseLayout>

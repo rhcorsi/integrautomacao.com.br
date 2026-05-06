@@ -7,7 +7,8 @@ draft: false
 ---
 
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 
 ## O problema das redes flat
 
@@ -41,11 +42,13 @@ Entre cada camada existem regras explícitas de quem pode falar com
 quem, em qual porta, com qual protocolo. Sem isso, defense in depth
 não passa de slogan.
 
-<ArchitectureVisual
-  variant="ot"
+<ManualReference
+  image={cpweReference}
+  alt="Arquitetura CPwE com integração OT e IT"
   theme="ot"
   title="CPwE na prática: zonas industriais sem caminho direto para TI"
-  caption="Diagrama autoral inspirado no modelo Purdue/CPwE para mostrar onde a Integra define fronteiras, conduítes e responsabilidades."
+  source="Cisco + Rockwell Automation - CPwE Design and Implementation Guides"
+  caption="Print de manual público CPwE para mostrar onde a Integra define fronteiras, conduítes e responsabilidades."
 />
 
 <TechnicalCallout variant="ot" title="Por que IDMZ é inegociável">

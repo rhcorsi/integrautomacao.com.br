@@ -7,7 +7,8 @@ draft: false
 ---
 
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 
 ## Quem precisa entender IEC 62443
 
@@ -39,11 +40,13 @@ Para um gerente de operações, o foco prático está em **62443-2-1**
 (programa de cibersegurança industrial) e **62443-3-3** (requisitos de
 sistema por nível de segurança).
 
-<ArchitectureVisual
-  variant="ot"
+<ManualReference
+  image={cpweReference}
+  alt="Arquitetura CPwE com zonas industriais e integração OT/IT"
   theme="ot"
   title="IEC 62443 como governança de risco operacional"
-  caption="A norma fica mais útil quando cada zona tem risco, owner, conduítes e nível de segurança alvo definidos."
+  source="Cisco + Rockwell Automation - CPwE Design and Implementation Guides"
+  caption="Print de manual público usado para contextualizar zonas, conduítes, risco, owners e níveis de segurança alvo."
 />
 
 ## Security Levels (SL) — o que escolher

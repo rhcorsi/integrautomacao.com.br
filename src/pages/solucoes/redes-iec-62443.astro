@@ -6,7 +6,9 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
+import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 
 const layers = [
   {
@@ -57,6 +59,9 @@ const deliverables = [
   "Integração OPC UA com camada de supervisão e informação",
   "Roteiro de cibersegurança alinhado à IEC 62443 SL-T por zona",
   "Programa de gestão de patches e atualizações (FactoryTalk AssetCentre)",
+  "Diagnóstico de tráfego, loops, broadcast storms, latência e saúde de switches",
+  "Hardening de servidores, estações de engenharia, HMIs e switches industriais",
+  "Plano de monitoramento OT e resposta a incidentes com evidências operacionais",
   "Documentação de rede, plano de resposta a incidentes e treinamento OT",
 ];
 
@@ -100,7 +105,15 @@ const faq = [
           chão de fábrica até a integração corporativa.
         </p>
       </div>
-      <ArchitectureVisual variant="ot" theme="ot" />
+      <ManualReference
+        image={cpweReference}
+        alt="Arquitetura CPwE com integração OT e IT"
+        title="CPwE como referência para segmentação OT/IT"
+        source="Cisco + Rockwell Automation - CPwE Design and Implementation Guides"
+        caption="Print de manual público usado para explicar zonas, IDMZ, integração OT/IT e defesa em profundidade em redes industriais."
+        theme="ot"
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -169,6 +182,35 @@ const faq = [
       </div>
 
       <DeliverableList items={deliverables} twoColumn={true} />
+
+      <div class="my-14 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+        <ManualReference
+          image={controllogixReference}
+          alt="Arquitetura ControlLogix com DLR convergente"
+          title="DLR, topologia e disponibilidade em rede industrial"
+          source="Rockwell Automation - ControlLogix High Availability Reference Architectures"
+          caption="Print de manual público para contextualizar topologias de alta disponibilidade, DLR e integração de controladores em redes industriais."
+          theme="ot"
+        />
+        <div>
+          <h3 class="text-2xl font-semibold text-integra-gray-900">
+            Rede industrial não é cabeamento: é arquitetura operacional
+          </h3>
+          <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+            A proposta técnica da Integra inclui EtherNet/IP, OPC UA, Modbus
+            TCP/RTU, IEC 61850, Foundation Fieldbus, Profibus PA e HART quando
+            o processo exige. O desenho define onde cada protocolo entra,
+            quais dados cruza, qual zona protege e como a manutenção
+            diagnostica falhas sem depender de tentativa e erro.
+          </p>
+          <a
+            href="/tecnologias/ethernet-ip-cpwe"
+            class="mt-6 inline-flex rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white hover:bg-integra-red-700"
+          >
+            Ver tecnologias de redes e OT
+          </a>
+        </div>
+      </div>
 
       <StandardsBadges
         title="Frameworks e referências aplicadas"

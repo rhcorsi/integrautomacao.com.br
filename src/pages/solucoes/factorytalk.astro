@@ -5,7 +5,9 @@ import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
+import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
 
 const products = [
   {
@@ -32,6 +34,10 @@ const products = [
     name: "ThinManager",
     role: "Gestão centralizada de thin clients industriais — segurança, mobilidade e disponibilidade.",
   },
+  {
+    name: "FactoryTalk Edge Gateway / DataMosaix",
+    role: "Publicação e contextualização de dados industriais para camadas IIoT e analytics.",
+  },
 ];
 
 const deliverables = [
@@ -42,6 +48,9 @@ const deliverables = [
   "Integração com Historian e AF Templates do PI System / AVEVA",
   "Receitas e fases padronizadas (ISA-88) em FactoryTalk Batch",
   "Política de acesso por perfil e autenticação centralizada",
+  "Gestão centralizada de terminais com ThinManager e publicação de aplicações",
+  "Historiador, contextualização de tags e integração com camada de dados",
+  "Backup, versionamento e auditoria com FactoryTalk AssetCentre",
   "Documentação operacional, treinamento e roadmap de evolução",
 ];
 
@@ -99,7 +108,14 @@ const faq = [
           padronização de telas e auditoria de mudanças.
         </p>
       </div>
-      <ArchitectureVisual variant="factorytalk" />
+      <ManualReference
+        image={viewSeReference}
+        alt="Arquitetura distribuída FactoryTalk View SE"
+        title="Arquitetura distribuída FactoryTalk View SE"
+        source="Rockwell Automation - FactoryTalk View SE Reference Architectures"
+        caption="Print de manual público usado como referência visual para explicar HMI Server, Data Server, clientes, diretório e serviços FactoryTalk."
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -154,6 +170,34 @@ const faq = [
               </p>
             </article>
           ))}
+        </div>
+      </div>
+
+      <div class="my-14 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+        <ManualReference
+          image={historianReference}
+          alt="Diagrama lógico de arquitetura FactoryTalk Historian"
+          title="Historian como camada de dados da suíte"
+          source="Rockwell Automation - FactoryTalk Historian SE Reference Architectures"
+          caption="Print de manual público para contextualizar coleta, retenção e uso de dados históricos em arquitetura FactoryTalk."
+        />
+        <div>
+          <h3 class="text-2xl font-semibold text-integra-gray-900">
+            FactoryTalk não termina na tela
+          </h3>
+          <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+            A suíte também cobre dados, ativos, terminais, bateladas e
+            auditoria. Por isso a Integra trata FactoryTalk como ecossistema:
+            View SE/Optix para operação, Batch para receitas, Historian para
+            séries temporais, AssetCentre para gestão de mudanças, ThinManager
+            para terminais e Edge/DataMosaix para evolução de dados.
+          </p>
+          <a
+            href="/tecnologias/factorytalk-view-se"
+            class="mt-6 inline-flex rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white hover:bg-integra-red-700"
+          >
+            Ver páginas técnicas FactoryTalk
+          </a>
         </div>
       </div>
 

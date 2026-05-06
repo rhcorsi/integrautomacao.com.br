@@ -61,6 +61,7 @@ export const COMPANY = {
 export const NAV = [
   { href: "/empresa", label: "Empresa" },
   { href: "/solucoes", label: "Soluções" },
+  { href: "/tecnologias", label: "Tecnologias" },
   { href: "/setores", label: "Setores" },
   { href: "/certificacoes", label: "Certificações" },
   { href: "/cases", label: "Cases" },
@@ -131,6 +132,49 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       description:
         "Cada solução passa pelas mesmas cinco fases. Documentação completa, padronização e governança em cada entrega.",
       cta: { href: "/solucoes#metodo-integra", label: "Ver método Integra" },
+    },
+  },
+
+  "/tecnologias": {
+    intro: {
+      title: "Ver catálogo técnico completo",
+      href: "/tecnologias",
+    },
+    columns: [
+      {
+        title: "Controle & DCS",
+        links: [
+          { href: "/tecnologias/plantpax-5x", label: "PlantPAx 5.x" },
+          { href: "/tecnologias/plantpax-library", label: "PlantPAx Library" },
+          { href: "/tecnologias/controllogix-compactlogix", label: "ControlLogix / CompactLogix" },
+          { href: "/tecnologias/pid-intertravamentos-sequenciamento", label: "PID e sequenciamento" },
+        ],
+      },
+      {
+        title: "FactoryTalk & Dados",
+        links: [
+          { href: "/tecnologias/factorytalk-view-se", label: "FactoryTalk View SE" },
+          { href: "/tecnologias/factorytalk-batch", label: "FactoryTalk Batch" },
+          { href: "/tecnologias/factorytalk-historian", label: "FactoryTalk Historian" },
+          { href: "/tecnologias/factorytalk-datamosaix", label: "DataMosaix" },
+        ],
+      },
+      {
+        title: "OT, Redes & Serviços",
+        links: [
+          { href: "/tecnologias/ethernet-ip-cpwe", label: "EtherNet/IP e CPwE" },
+          { href: "/tecnologias/iec-62443-nist-ot", label: "IEC 62443 / NIST OT" },
+          { href: "/tecnologias/data-centers-industriais", label: "Data Centers OT" },
+          { href: "/tecnologias/backup-recuperacao-desastres", label: "Backup e DR OT" },
+        ],
+      },
+    ],
+    promo: {
+      eyebrow: "Novo conteúdo",
+      title: "Uma página para cada software, tecnologia e serviço",
+      description:
+        "O catálogo técnico aprofunda entregáveis, normas, prints de manuais públicos e critérios de aplicação por tema.",
+      cta: { href: "/tecnologias", label: "Abrir catálogo" },
     },
   },
 

@@ -5,8 +5,13 @@ import HeroIntegridade from "@/components/HeroIntegridade.astro";
 import CredentialStrip from "@/components/CredentialStrip.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
 import FeatureBlock from "@/components/FeatureBlock.astro";
+import ManualReference from "@/components/ManualReference.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import rockwellSilver from "@/assets/logos/rockwell-si-silver.png";
+import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
+import factorytalkReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
+import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
+import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
 
 const values = [
   {
@@ -46,6 +51,16 @@ const evidence = [
     text: "CPwE, Purdue, IDMZ, VLANs, ACLs, firewall industrial e práticas IEC 62443 para reduzir risco de parada e acesso indevido.",
   },
   {
+    label: "Dados & IIoT",
+    title: "Historian, borda e contexto operacional",
+    text: "FactoryTalk Historian, ThingWorx, Kepware, DataMosaix e gateways industriais entram quando a planta precisa transformar dados em decisão.",
+  },
+  {
+    label: "Batch",
+    title: "Receitas, fases e rastreabilidade",
+    text: "FactoryTalk Batch, ISA-88, PhaseManager, logs de execução e integração MES/ERP sustentam repetibilidade e rastreabilidade de processos em batelada.",
+  },
+  {
     label: "Handover",
     title: "Entrega que a planta consegue manter",
     text: "Data book, as-built, FAT/SAT, treinamento e critérios de aceite deixam o conhecimento explícito para operação e manutenção.",
@@ -64,7 +79,8 @@ const evidence = [
     description="A Integra não vende apenas programação ou telas de supervisão. Entregamos arquiteturas robustas, governança de engenharia e responsabilidade técnica de ponta a ponta — do projeto ao handover, do start-up ao suporte contínuo."
     primaryCta={{ href: "/contato", label: "Falar com especialista" }}
     secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
-    visual="hero"
+    heroImage={plantpaxReference}
+    heroAlt="Print de manual público PlantPAx com arquitetura de referência para sistema DCS"
   />
 
   <!-- Rockwell Silver System Integrator highlight -->
@@ -124,7 +140,7 @@ const evidence = [
             arquitetura à responsabilidade operacional da Integra.
           </p>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-2">
+        <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-2 lg:grid-cols-3">
           {evidence.map((item) => (
             <article class="bg-integra-gray-50 p-6">
               <p class="mb-3 font-mono text-[11px] uppercase tracking-widest text-integra-red">
@@ -139,6 +155,49 @@ const evidence = [
             </article>
           ))}
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-16 lg:py-20">
+      <div class="mb-10 max-w-3xl">
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red">
+          Prints reais dos manuais
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Referências visuais públicas conectadas ao que entregamos.
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          Em vez de ilustrações genéricas, o site passa a mostrar prints de
+          arquiteturas, fluxos e diagramas públicos dos fabricantes — sempre
+          com contexto técnico e sem expor propostas, clientes ou informações
+          comerciais.
+        </p>
+      </div>
+      <div class="grid gap-6 lg:grid-cols-3">
+        <ManualReference
+          image={plantpaxReference}
+          alt="Print de arquitetura média PlantPAx com PASS, servidores, estações e controladores"
+          title="PlantPAx Reference Architecture"
+          source="Rockwell Automation · PlantPAx 5.40 Reference Architectures"
+          caption="Usado como referência visual para explicar sizing de PASS, servidores, estações de operação, historian e controladores."
+        />
+        <ManualReference
+          image={factorytalkReference}
+          alt="Print de arquitetura FactoryTalk View SE distribuída"
+          title="FactoryTalk View SE distribuído"
+          source="Rockwell Automation · FactoryTalk View SE Reference Architectures"
+          caption="Ajuda a demonstrar como supervisão, servidores HMI, data servers e clientes devem ser organizados por arquitetura."
+        />
+        <ManualReference
+          image={cpweReference}
+          alt="Print de arquitetura CPwE mostrando ponte entre OT e IT"
+          title="CPwE e segmentação OT/IT"
+          source="Cisco + Rockwell Automation · CPwE Deep Dive"
+          caption="Referência visual para falar de Purdue, IDMZ, zonas industriais, infraestrutura gerenciada e defense-in-depth."
+          theme="ot"
+        />
       </div>
     </div>
   </section>
@@ -211,7 +270,8 @@ const evidence = [
       "Servidores virtualizados com redundância opcional por camada",
       "Integração OPC UA + AF Templates para PI System / AVEVA",
     ]}
-    visual="plantpax"
+    image={plantpaxReference}
+    imageAlt="Print do manual PlantPAx 5.40 Reference Architectures mostrando arquitetura média com PASS e estações"
     imagePosition="right"
     primaryCta={{ href: "/solucoes/plantpax", label: "Conhecer PlantPAx" }}
     secondaryCta={{ href: "/contato?assunto=plantpax", label: "Falar sobre projeto" }}
@@ -228,7 +288,8 @@ const evidence = [
       "<strong>Historian</strong> + <strong>AssetCentre</strong> com auditoria de mudanças",
       "<strong>ThinManager</strong> para gestão de thin clients industriais",
     ]}
-    visual="factorytalk"
+    image={factorytalkReference}
+    imageAlt="Print do manual FactoryTalk View SE Reference Architectures mostrando arquitetura distribuída"
     imagePosition="left"
     primaryCta={{ href: "/solucoes/factorytalk", label: "Conhecer FactoryTalk" }}
     variant="light"
@@ -244,7 +305,8 @@ const evidence = [
       "Anel DLR/PRP para alta disponibilidade",
       "Conformidade IEC 62443 SL-T por zona + NIST SP 800-82",
     ]}
-    visual="ot"
+    image={cpweReference}
+    imageAlt="Print do manual CPwE mostrando arquitetura de integração OT e IT"
     imagePosition="right"
     primaryCta={{ href: "/solucoes/redes-iec-62443", label: "Ver cibersegurança OT" }}
     secondaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar diagnóstico" }}
@@ -252,6 +314,39 @@ const evidence = [
   />
 
   <LifecycleRail />
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-10 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red">
+          Dados e melhoria contínua
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Historian, borda, IIoT e rastreabilidade como parte da arquitetura.
+        </h2>
+        <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          A proposta técnica mais recente reforça um ponto importante: a
+          Integra não atua só no controle. O escopo cobre FactoryTalk
+          Historian, ThingWorx, Kepware, FactoryTalk Edge Gateway,
+          DataMosaix, Batch, MES/ERP, backup, virtualização e governança OT.
+        </p>
+        <a
+          href="/solucoes/pi-system"
+          class="mt-7 inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
+        >
+          Ver dados industriais
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ManualReference
+        image={historianReference}
+        alt="Print de diagrama lógico FactoryTalk Historian com fontes de dados, coleta, servidor e apresentação"
+        title="FactoryTalk Historian Logical Diagram"
+        source="Rockwell Automation · FactoryTalk Historian Reference Architectures"
+        caption="Referência visual para conectar coleta, armazenamento, apresentação, clientes e fontes de dados industriais."
+      />
+    </div>
+  </section>
 
   <section class="border-y border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-28">

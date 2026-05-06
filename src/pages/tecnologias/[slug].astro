@@ -1,0 +1,217 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import { getRelatedTech, techCatalog, type TechPage } from "@/data/techCatalog";
+
+export function getStaticPaths() {
+  return techCatalog.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+interface Props {
+  item: TechPage;
+}
+
+const { item } = Astro.props;
+const related = getRelatedTech(item.relatedTech);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": item.type === "Serviço" ? "Service" : "TechArticle",
+  name: item.title,
+  headline: item.title,
+  description: item.description,
+  provider: {
+    "@type": "Organization",
+    name: "Integra Automação Industrial",
+    url: "https://integrautomacao.com",
+  },
+  areaServed: "Brasil",
+  inLanguage: "pt-BR",
+};
+---
+
+<BaseLayout
+  title={item.title}
+  description={item.description}
+  canonical={`/tecnologias/${item.slug}/`}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p
+          class:list={[
+            "mb-3 text-xs font-mono uppercase tracking-widest",
+            item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red",
+          ]}
+        >
+          {item.type} · {item.group}
+        </p>
+        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          {item.title}
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          {item.description}
+        </p>
+        <p class="mt-5 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+          {item.intro}
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          {item.relatedSolutions.map((solution) => (
+            <a
+              href={solution.href}
+              class="inline-flex items-center rounded-md border border-integra-gray-300 px-4 py-2 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+            >
+              {solution.label}
+            </a>
+          ))}
+          <a
+            href="/contato"
+            class="inline-flex items-center rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-integra-red-700"
+          >
+            Conversar sobre este tema
+          </a>
+        </div>
+      </div>
+
+      <ManualReference
+        image={item.image}
+        alt={item.imageAlt}
+        title={item.imageTitle}
+        source={item.imageSource}
+        caption={item.imageCaption}
+        theme={item.theme ?? "light"}
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Onde entra"
+        title="Quando faz sentido considerar"
+        description="A decisão técnica depende do processo, da arquitetura existente e do risco operacional. Estes são os cenários mais comuns em que o tema aparece."
+        accent={true}
+      />
+      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {item.useCases.map((useCase, index) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <p
+              class:list={[
+                "mb-4 font-mono text-xs font-semibold",
+                item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red",
+              ]}
+            >
+              0{index + 1}
+            </p>
+            <p class="text-sm leading-relaxed text-integra-gray-800">{useCase}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        <SectionHeader
+          eyebrow="Método Integra"
+          title="Como transformamos tecnologia em entrega mantível"
+          description="A tecnologia é só uma parte. O que sustenta a planta é a combinação de diagnóstico, arquitetura, configuração, teste e documentação."
+          accent={true}
+        />
+      </div>
+      <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200">
+        {item.howIntegraActs.map((step) => (
+          <div class="bg-integra-white p-5">
+            <p class="text-sm leading-relaxed text-integra-gray-800">{step}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-5xl py-20">
+      <DeliverableList
+        title="Entregáveis típicos"
+        items={item.deliverables}
+        twoColumn={true}
+      />
+
+      <StandardsBadges
+        title="Softwares, normas e referências"
+        standards={item.standards}
+      />
+
+      <FAQAccordion title="Perguntas de engenharia" items={item.faq} />
+    </div>
+  </section>
+
+  {(related.length > 0 || item.relatedSolutions.length > 0) && (
+    <section class="border-b border-integra-gray-200 bg-integra-white">
+      <div class="container-fluid py-20">
+        <SectionHeader
+          eyebrow="Relacionados"
+          title="Continue pelo contexto certo"
+          description="Algumas tecnologias se explicam melhor quando vistas junto da arquitetura, da rede, do dado e do serviço de sustentação."
+          accent={true}
+        />
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {item.relatedSolutions.map((solution) => (
+            <a
+              href={solution.href}
+              class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
+            >
+              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+                Solução
+              </p>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {solution.label}
+              </h3>
+              <p class="mt-3 text-sm text-integra-gray-600">
+                Ver a página executiva relacionada a este tema.
+              </p>
+            </a>
+          ))}
+          {related.map((relatedItem) => (
+            <a
+              href={`/tecnologias/${relatedItem.slug}/`}
+              class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
+            >
+              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+                {relatedItem.type}
+              </p>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {relatedItem.shortTitle}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-integra-gray-600">
+                {relatedItem.description}
+              </p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBlock
+    title={`Quer avaliar ${item.shortTitle} na sua planta?`}
+    description="Começamos pelo contexto real: arquitetura existente, risco operacional, janelas de parada, equipe de manutenção e entregáveis necessários para sustentar o sistema."
+    primaryCta={{ href: `/contato?assunto=${item.slug}`, label: "Falar com especialista" }}
+    secondaryCta={{ href: "/tecnologias", label: "Voltar ao catálogo técnico" }}
+  />
+</BaseLayout>

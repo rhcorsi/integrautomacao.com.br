@@ -12,7 +12,8 @@ draft: false
 ---
 
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
 
 ## Contexto
 
@@ -25,10 +26,12 @@ A direção da planta queria modernizar a supervisão sem comprometer a
 disponibilidade — uma janela de parada estendida não era opção dentro
 da safra.
 
-<ArchitectureVisual
-  variant="factorytalk"
+<ManualReference
+  image={viewSeReference}
+  alt="Arquitetura FactoryTalk View SE distribuída"
   title="Modernização de supervisão com governança de telas, alarmes e auditoria"
-  caption="Visual autoral usado para representar a abordagem do case sem expor arquitetura específica, cliente ou informações confidenciais."
+  source="Rockwell Automation - FactoryTalk View SE Reference Architectures"
+  caption="Print de manual público usado para representar a abordagem do case sem expor arquitetura específica, cliente ou informações confidenciais."
 />
 
 ## Abordagem

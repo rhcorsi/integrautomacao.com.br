@@ -1,7 +1,6 @@
 ﻿---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
 
 interface Props {
   eyebrow?: string;
@@ -12,7 +11,6 @@ interface Props {
   secondaryCta?: { href: string; label: string };
   heroImage?: ImageMetadata;
   heroAlt?: string;
-  visual?: "hero" | "plantpax" | "factorytalk" | "ot" | "data" | "migration" | "industrial";
 }
 
 const {
@@ -24,7 +22,6 @@ const {
   secondaryCta = { href: "/solucoes", label: "Ver soluções" },
   heroImage,
   heroAlt = "",
-  visual,
 } = Astro.props;
 ---
 
@@ -84,24 +81,20 @@ const {
         </div>
       </div>
 
-      {(heroImage || visual) && (
+      {heroImage && (
         <div class="relative">
-          {visual ? (
-            <ArchitectureVisual variant={visual} />
-          ) : (
-            <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10">
-              <Image
-                src={heroImage!}
-                alt={heroAlt}
-                widths={[600, 1000, 1500]}
-                sizes="(min-width: 1024px) 600px, 100vw"
-                loading="eager"
-                fetchpriority="high"
-                decoding="async"
-                class="w-full h-auto object-cover aspect-[4/3]"
-              />
-            </div>
-          )}
+          <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10">
+            <Image
+              src={heroImage}
+              alt={heroAlt}
+              widths={[600, 1000, 1500]}
+              sizes="(min-width: 1024px) 600px, 100vw"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="w-full h-auto object-cover aspect-[4/3]"
+            />
+          </div>
         </div>
       )}
     </div>

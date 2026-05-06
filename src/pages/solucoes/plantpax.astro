@@ -6,7 +6,9 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
+import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 
 const problems = [
   {
@@ -34,10 +36,13 @@ const problems = [
 const deliverables = [
   "Documento de arquitetura PlantPAx alinhado ao System Reference Manual",
   "Configuração de controladores ControlLogix (incluindo série P) e CompactLogix",
+  "Programação de controle regulatório PID, intertravamentos, sequenciamento e diagnóstico embarcado",
   "Implementação da PlantPAx Library of Process Objects",
   "Telas de supervisão com governança de alarmes (ISA-18.2)",
+  "Dashboards de alarmes, eventos, KPIs operacionais e saúde de rede",
   "Configuração de servidores virtualizados e domínio de aplicações",
   "Integração OPC UA e mapeamento de tags em AF Templates",
+  "Integração de processo e energia com dispositivos industriais e IEDs",
   "Plano de testes (FAT/SAT), data book e as-built completos",
   "Treinamento operacional e de manutenção dos times do cliente",
 ];
@@ -101,7 +106,14 @@ const faq = [
           comprovada em PlantPAx 3.x, 4.x e 5.x.
         </p>
       </div>
-      <ArchitectureVisual variant="plantpax" />
+      <ManualReference
+        image={plantpaxReference}
+        alt="Print do manual PlantPAx 5.40 Reference Architectures mostrando arquitetura média com PASS, OWS, EWS, historian e controladores"
+        title="Arquitetura média PlantPAx"
+        source="Rockwell Automation · PlantPAx 5.40 Reference Architectures"
+        caption="Print real de manual público usado para explicar sizing de servidores, clientes OWS/EWS, historian e controladores em uma arquitetura DCS."
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -183,6 +195,15 @@ const faq = [
               </p>
             </article>
           ))}
+        </div>
+        <div class="mt-8">
+          <ManualReference
+            image={controllogixReference}
+            alt="Print de manual ControlLogix High Availability mostrando topologia DLR converged"
+            title="Alta disponibilidade e topologias DLR"
+            source="Rockwell Automation · ControlLogix High Availability Reference Architectures"
+            caption="A escolha entre DLR, PRP, redundância e convergência de rede depende do risco operacional e da criticidade da área."
+          />
         </div>
       </div>
 

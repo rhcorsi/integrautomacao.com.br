@@ -6,7 +6,8 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 
 const risks = [
   {
@@ -73,7 +74,15 @@ const faq = [
           rollback e suporte pós-startup.
         </p>
       </div>
-      <ArchitectureVisual variant="migration" />
+      <ManualReference
+        image={controllogixReference}
+        alt="Arquitetura ControlLogix com DLR convergente"
+        title="ControlLogix como arquitetura alvo de modernização"
+        source="Rockwell Automation - ControlLogix High Availability Reference Architectures"
+        caption="Print de manual público usado para contextualizar a arquitetura Logix, redes industriais e disponibilidade em migrações de controladores legados."
+        theme="ot"
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -118,6 +127,25 @@ const faq = [
       </TechnicalCallout>
 
       <DeliverableList items={deliverables} twoColumn={true} />
+
+      <div class="my-10 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <h3 class="text-xl font-semibold text-integra-gray-900">
+          A migração inclui controle, HMI, rede e sustentação
+        </h3>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          A proposta técnica da Integra trata modernização como ciclo completo:
+          ControlLogix/CompactLogix, EtherNet/IP, padrões de lógica, malhas PID,
+          intertravamentos, sequências, telas FactoryTalk, alarmes, backup,
+          FAT/SAT, cutover e handover. Trocar CPU é só uma parte pequena do
+          risco.
+        </p>
+        <a
+          href="/tecnologias/migracao-plc5-slc500"
+          class="mt-5 inline-flex rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white hover:bg-integra-red-700"
+        >
+          Ver página técnica de migração
+        </a>
+      </div>
 
       <StandardsBadges
         title="Tecnologias e práticas relacionadas"

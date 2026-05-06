@@ -6,7 +6,9 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
+import datamosaixReference from "@/assets/manuals/factorytalk-datamosaix-data-flow.jpg";
 
 const layers = [
   {
@@ -36,6 +38,7 @@ const deliverables = [
   "Padronização de nomenclatura, unidades, escala e qualidade de tags",
   "AF Templates por tipo de ativo, equipamento e área de processo",
   "Integração com PlantPAx, FactoryTalk Historian, OPC UA e bancos legados",
+  "Integração com FactoryTalk Edge Gateway, ThingWorx, Kepware ou DataMosaix quando aplicável",
   "Cálculos de desempenho, eventos e indicadores operacionais documentados",
   "Estratégia de retenção, compressão, exceção e disponibilidade de dados",
   "Painéis técnicos para operação, manutenção e gestão de energia",
@@ -78,7 +81,14 @@ const faq = [
           planta tenha informação confiável, contextualizada e mantível.
         </p>
       </div>
-      <ArchitectureVisual variant="data" />
+      <ManualReference
+        image={historianReference}
+        alt="Diagrama lógico de arquitetura FactoryTalk Historian"
+        title="Historian como infraestrutura de dados industriais"
+        source="Rockwell Automation - FactoryTalk Historian SE Reference Architectures"
+        caption="Print de manual público usado para explicar coleta, retenção e consulta de dados industriais antes de dashboards e analytics."
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -126,6 +136,33 @@ const faq = [
       </TechnicalCallout>
 
       <DeliverableList items={deliverables} twoColumn={true} />
+
+      <div class="my-14 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+        <ManualReference
+          image={datamosaixReference}
+          alt="Fluxo de dados em arquitetura FactoryTalk DataMosaix"
+          title="DataMosaix, edge e contexto de dados"
+          source="Rockwell Automation - FactoryTalk DataMosaix Reference Architectures"
+          caption="Print de manual público para mostrar como dados industriais podem ser contextualizados e publicados para camadas analíticas sem expor controle crítico."
+        />
+        <div>
+          <h3 class="text-2xl font-semibold text-integra-gray-900">
+            Dados industriais não terminam no historian
+          </h3>
+          <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+            A camada de dados pode envolver FactoryTalk Historian, PI/AVEVA,
+            ThingWorx, Kepware, FactoryTalk Edge Gateway e DataMosaix. A
+            decisão depende de fonte, qualidade, contexto, segurança, retenção
+            e uso operacional. A Integra organiza essa evolução por etapas.
+          </p>
+          <a
+            href="/tecnologias/factorytalk-historian"
+            class="mt-6 inline-flex rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white hover:bg-integra-red-700"
+          >
+            Ver páginas técnicas de dados
+          </a>
+        </div>
+      </div>
 
       <StandardsBadges
         title="Tecnologias e referências aplicadas"

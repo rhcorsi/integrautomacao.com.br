@@ -2,7 +2,8 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
 import { Icon } from "astro-icon/components";
 
 const sectors = [
@@ -99,7 +100,14 @@ const decisionMatrix = [
           listas de marketing.
         </p>
       </div>
-      <ArchitectureVisual variant="industrial" />
+      <ManualReference
+        image={plantpaxReference}
+        alt="Arquitetura PlantPAx usada como referência para sistemas industriais"
+        title="Arquitetura de processo aplicada a setores críticos"
+        source="Rockwell Automation - PlantPAx System Release 5.40 Reference Manual"
+        caption="Print de manual público usado para contextualizar como controle, supervisão, redes e dados se conectam em indústrias de processo."
+        loading="eager"
+      />
     </div>
   </section>
 

@@ -133,7 +133,7 @@ const allMegas: Record<string, MegaMenu> = {
         />
       </a>
 
-      <nav class="hidden lg:flex items-center gap-1 ml-auto" aria-label="Principal">
+      <nav class="hidden min-[1440px]:flex items-center gap-1 ml-auto" aria-label="Principal">
         {NAV.map(({ href, label }) => {
           const mega = allMegas[href];
           if (!mega) {
@@ -269,7 +269,7 @@ const allMegas: Record<string, MegaMenu> = {
 
       <a
         href="/contato"
-        class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
+        class="hidden min-[1440px]:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
       >
         Falar com especialista
         <span aria-hidden="true">→</span>
@@ -277,7 +277,7 @@ const allMegas: Record<string, MegaMenu> = {
 
       <button
         type="button"
-        class="lg:hidden ml-auto p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
+        class="min-[1440px]:hidden ml-auto p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
         aria-label="Abrir menu"
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -312,7 +312,7 @@ const allMegas: Record<string, MegaMenu> = {
   <!-- Mobile nav -->
   <nav
     id="mobile-nav"
-    class="lg:hidden hidden border-t border-integra-gray-200 bg-integra-white"
+    class="min-[1440px]:hidden hidden border-t border-integra-gray-200 bg-integra-white"
     aria-label="Principal (mobile)"
   >
     <div class="container-default py-4 grid gap-1">

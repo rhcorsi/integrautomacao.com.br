@@ -1,0 +1,77 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  eyebrow?: string;
+  title: string;
+  source: string;
+  caption: string;
+  theme?: "light" | "dark" | "ot";
+  loading?: "lazy" | "eager";
+}
+
+const {
+  image,
+  alt,
+  eyebrow = "Referência técnica pública",
+  title,
+  source,
+  caption,
+  theme = "light",
+  loading = "lazy",
+} = Astro.props;
+
+const dark = theme === "dark" || theme === "ot";
+---
+
+<figure
+  class:list={[
+    "overflow-hidden rounded-lg border shadow-xl",
+    dark
+      ? "border-white/10 bg-integra-gray-950 text-integra-white"
+      : "border-integra-gray-200 bg-integra-white text-integra-gray-900",
+  ]}
+>
+  <div class={dark ? "bg-integra-gray-950 p-4" : "bg-integra-gray-50 p-4"}>
+    <p
+      class:list={[
+        "mb-2 font-mono text-[11px] uppercase tracking-widest",
+        theme === "ot" ? "text-sky-200" : "text-integra-red",
+      ]}
+    >
+      {eyebrow}
+    </p>
+    <h3 class:list={["text-base font-semibold leading-snug", dark ? "text-white" : "text-integra-gray-900"]}>
+      {title}
+    </h3>
+  </div>
+
+  <div class={dark ? "bg-white" : "bg-integra-white"}>
+    <Image
+      src={image}
+      alt={alt}
+      widths={[640, 960, 1400, 1800]}
+      sizes="(min-width: 1024px) 640px, 100vw"
+      loading={loading}
+      decoding="async"
+      class="h-auto w-full"
+    />
+  </div>
+
+  <figcaption
+    class:list={[
+      "space-y-2 border-t p-4 text-xs leading-relaxed",
+      dark
+        ? "border-white/10 text-white/65"
+        : "border-integra-gray-200 text-integra-gray-600",
+    ]}
+  >
+    <p>{caption}</p>
+    <p class="font-mono uppercase tracking-wider opacity-75">
+      Fonte: {source}
+    </p>
+  </figcaption>
+</figure>

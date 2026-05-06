@@ -6,7 +6,8 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
-import ArchitectureVisual from "@/components/ArchitectureVisual.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
 
 const pillars = [
   {
@@ -37,6 +38,8 @@ const deliverables = [
   "Dimensionamento de CPU, memória, I/O de disco e crescimento futuro",
   "Projeto de VLANs, firewall, acesso remoto e integração com IDMZ",
   "Plano de backup, restore, snapshots e recuperação de desastres",
+  "Migração de VMs industriais com compatibilidade, backup, rollback e validação funcional",
+  "Active Directory industrial, grupos, políticas e segregação de identidade OT",
   "Procedimentos de atualização, patching e janela de manutenção",
   "Documentação de credenciais, licenças, owners e contratos de suporte",
   "Validação de disponibilidade e handover para manutenção",
@@ -78,7 +81,14 @@ const faq = [
           redundância, backup, recuperação e governança de ciclo de vida.
         </p>
       </div>
-      <ArchitectureVisual variant="industrial" />
+      <ManualReference
+        image={securityReference}
+        alt="Arquitetura FactoryTalk Security com servidores e clientes"
+        title="Servidores industriais, identidade e aplicações críticas"
+        source="Rockwell Automation - FactoryTalk Security System Design"
+        caption="Print de manual público usado para contextualizar serviços FactoryTalk, clientes, diretório e dependências de infraestrutura OT."
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -123,6 +133,26 @@ const faq = [
       </TechnicalCallout>
 
       <DeliverableList items={deliverables} twoColumn={true} />
+
+      <div class="my-10 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <h3 class="text-xl font-semibold text-integra-gray-900">
+          O IDC também cobre migração, identidade e recuperação
+        </h3>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Nos projetos mais completos, a Integra inclui migração de VMs,
+          compatibilidade com aplicações FactoryTalk, Active Directory
+          industrial, políticas de grupo, backup de projetos PLC/HMI,
+          configurações de rede, receitas de batelada, bancos históricos e
+          testes reais de restore. Infraestrutura OT só é confiável quando a
+          recuperação é validada antes da emergência.
+        </p>
+        <a
+          href="/tecnologias/data-centers-industriais"
+          class="mt-5 inline-flex rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white hover:bg-integra-red-700"
+        >
+          Ver tecnologias de infraestrutura OT
+        </a>
+      </div>
 
       <StandardsBadges
         title="Referências e tecnologias relacionadas"
