@@ -174,6 +174,14 @@ build.
 > **Escolha apenas uma das opções.** Misturar Opção A (auto-build do CF
 > com base no Git) com Opção B (deploy via Actions) gera deploys
 > duplicados e disputa de CDN cache.
+>
+> Por padrão neste repositório a **Opção A está ativa** (CF Pages
+> conectado ao GitHub fazendo build automático). O workflow
+> `deploy.yml` está com triggers `push`/`pull_request` comentados e
+> roda apenas via `workflow_dispatch` (Actions → Deploy → Run workflow)
+> como fallback manual. Para trocar para Opção B, descomente os
+> triggers nesse workflow e desconecte a integração direta no painel
+> da Cloudflare.
 
 ### Worker `legacy-redirects`
 

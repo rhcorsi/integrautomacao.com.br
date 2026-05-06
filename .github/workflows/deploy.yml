@@ -1,11 +1,33 @@
-name: Deploy to Cloudflare Pages
+# Manual deploy fallback to Cloudflare Pages.
+#
+# Production deploys are handled by the Cloudflare Pages → GitHub direct
+# integration (Opção A in README.md), which already runs `npm run build`
+# automatically on every push to main and creates preview deploys for PRs.
+# Running this workflow on the same triggers would deploy twice and fight
+# the CDN cache.
+#
+# This workflow stays here as a manual fallback (workflow_dispatch) for
+# situations where the direct integration is unavailable or you want to
+# override an in-flight deploy.
+#
+# To activate full CI deploys instead of the direct integration:
+# 1. Disconnect the GitHub integration in Cloudflare Pages settings.
+# 2. Uncomment the `push`/`pull_request` triggers below.
+# 3. Configure the secrets listed in README.md → Opção B.
+
+name: Deploy to Cloudflare Pages (manual fallback)
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy as on Cloudflare Pages"
+        required: false
+        default: main
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -37,10 +59,6 @@ jobs:
       - name: Build site
         run: npm run build
         env:
-          # Public env var made available at build time so the Turnstile
-          # widget renders in production. Server-only secrets (TURNSTILE_SECRET_KEY,
-          # RESEND_API_KEY, CONTACT_EMAIL_*) are configured in the
-          # Cloudflare Pages project itself, not here.
           PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }}
 
       - name: Deploy to Cloudflare Pages
@@ -49,7 +67,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=integrautomacao --branch=${{ github.head_ref || github.ref_name }}
+          command: pages deploy dist --project-name=integrautomacao-com --branch=${{ inputs.branch || github.head_ref || github.ref_name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment preview URL on PR
