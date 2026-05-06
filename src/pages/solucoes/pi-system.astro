@@ -58,6 +58,26 @@ const faq = [
     q: "Dashboard resolve falta de governança de dados?",
     a: "Não. Dashboard bonito em cima de dado ruim só acelera decisão errada. Primeiro tratamos coleta, qualidade, contexto e responsabilidade técnica; visualização vem depois.",
   },
+  {
+    q: "PI System ou FactoryTalk Historian?",
+    a: "Para volume massivo, AF Templates ricos e analytics avançado, PI System (AVEVA) é superior. Para planta com ecossistema 100% Rockwell e volume médio, Historian SE basta. Critério: volume de tags, quantos sites, quem opera, integração com ERP/MES.",
+  },
+  {
+    q: "PI to PI replication é seguro pela IDMZ?",
+    a: "Sim, é o padrão. PI servidor industrial replica para PI servidor corporativo na IDMZ usando port único, autenticação certificate-based, sem caminho direto enterprise→industrial. Modelo recomendado pela própria OSIsoft/AVEVA.",
+  },
+  {
+    q: "Posso conectar Power BI direto ao PI?",
+    a: "Sim, via PI Web API ou ODBC. Em planta multi-departamento, comum: planeamento usa Power BI, processo usa PI Vision, manutenção usa AssetWise. Mesma fonte, ferramentas diferentes.",
+  },
+  {
+    q: "Quanto custa licença PI System?",
+    a: "Modelo AVEVA por contagem de pontos (PIPoints), conexão de cliente e módulos. Para planta média (50.000 pontos), licença anual fica em centenas de milhares de reais. Cotação direta via canal AVEVA varia conforme volume e contrato.",
+  },
+  {
+    q: "Vale migrar de Historian para PI System?",
+    a: "Vale quando volume cresce além de 250.000 tags ou há múltiplos sites a unificar, ou quando AF Templates avançados são exigência. Para planta única e volume médio, manter Historian é mais econômico.",
+  },
 ];
 ---
 

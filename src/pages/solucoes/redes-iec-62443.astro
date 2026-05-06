@@ -83,6 +83,30 @@ const faq = [
     q: "Como CPwE se relaciona com IEC 62443?",
     a: "CPwE (Converged Plantwide Ethernet) é a arquitetura de referência conjunta da Rockwell e da Cisco para implementar exatamente os princípios de IEC 62443 em redes industriais — segmentação, defense-in-depth e zonas de segurança. Aplicamos os dois em conjunto.",
   },
+  {
+    q: "Por onde começar uma jornada IEC 62443 numa planta legada?",
+    a: "Pelo diagnóstico: inventário de ativos, fluxos de comunicação, zonas implícitas e gaps contra SL-T desejado. Sem mapa, qualquer ação vira achismo. O diagnóstico vira roadmap progressivo de 12-24 meses.",
+  },
+  {
+    q: "Quanto tempo leva implementar IDMZ numa planta existente?",
+    a: "Para planta média (sem IDMZ atual), projeto + implementação + cutover ficam entre 4 e 9 meses. Inclui análise de tráfego, desenho, aquisição de firewalls/servidores, migração de serviços (PI-to-PI, RD Gateway, AD industrial) e validação.",
+  },
+  {
+    q: "Posso ter rede industrial sem IDMZ se a planta for isolada?",
+    a: "Por enquanto talvez, mas a tendência é exigência regulatória + integração com TI corporativa que torna isolamento total inviável. Plantas que se conectam ao ERP, à manutenção predictiva ou à matriz precisam de IDMZ — não há atalho seguro.",
+  },
+  {
+    q: "Qual a diferença entre IEC 62443 SL-2 e SL-3?",
+    a: "SL-2 protege contra ataques deliberados com recursos modestos (script kiddies, malware comum). SL-3 protege contra ataques sofisticados com habilidades específicas em ICS (engenharia social, recursos médios). SL-3 exige controles bem mais profundos — segmentação rigorosa, monitoramento ativo, MFA obrigatório.",
+  },
+  {
+    q: "Patch management em OT atrasa a planta?",
+    a: "Atrasa quando improvisado. Bem feito (homologação em ambiente espelho, janela planejada, plano de rollback), o patch management entra na rotina sem impactar produção. O risco é o oposto — não patchar e ser comprometido por CVE conhecido.",
+  },
+  {
+    q: "Vocês fazem teste de penetração em rede OT?",
+    a: "Não fazemos pentest invasivo em planta de processo — risco operacional inaceitável. Trabalhamos com red team-as-a-service em parceiros especializados, sempre em ambiente espelho ou em janela controlada com plano de recuperação aprovado.",
+  },
 ];
 ---
 

@@ -58,6 +58,26 @@ const faq = [
     q: "Backup de VM substitui backup de aplicação?",
     a: "Não. Snapshot e backup de VM ajudam na recuperação, mas não substituem exportações, projetos, versões, licenças e procedimentos próprios de cada aplicação industrial.",
   },
+  {
+    q: "Posso usar servidor TI corporativo como servidor industrial?",
+    a: "Tecnicamente sim, mas a política de mudança, janela de patch e SLA de TI raramente atendem requisitos OT. Em IDC industrial, os servidores são dedicados, com governança alinhada à parada de processo, não ao calendário de TI.",
+  },
+  {
+    q: "Qual capacidade de storage IDC industrial precisa?",
+    a: "Depende do volume de dados. Historian de 50.000 tags consome tipicamente 50-200 GB/mês. Para planta com 5 anos de retenção, 50-100 TB é faixa realista. Acrescentar replicação síncrona ou backup multiplica o consumo.",
+  },
+  {
+    q: "Energia redundante é obrigatória em IDC industrial?",
+    a: "Para plantas críticas, sim — UPS dimensionada para 30-60 min de autonomia + grupo gerador de socorro. Sem isso, queda de energia parcial vira parada total de operação. Em planta com janela de manutenção tolerante, UPS curta basta.",
+  },
+  {
+    q: "Quanto tempo leva implantar um IDC industrial pequeno?",
+    a: "Do diagnóstico ao startup, 3-6 meses. Inclui projeto, especificação, aquisição de hardware (8-12 semanas de lead time), montagem, instalação de hipervisor, migração de aplicações, validação e handover.",
+  },
+  {
+    q: "IDC industrial precisa de sala segura ou cabe em sala técnica?",
+    a: "Idealmente sala segura com controle de acesso, climatização redundante, detecção de incêndio (com agente apropriado para eletrônica) e monitoramento. Em planta menor, sala técnica reforçada serve, desde que respeite controle ambiental e física mínimas.",
+  },
 ];
 ---
 

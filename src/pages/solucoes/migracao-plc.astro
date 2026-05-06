@@ -51,6 +51,30 @@ const faq = [
     q: "Vocês migram também as telas e alarmes?",
     a: "Sim. Migração de controlador sem revisar tags, telas, alarmes e documentação costuma deixar a operação com metade do problema resolvido.",
   },
+  {
+    q: "Por que migrar PLC-5/SLC500 agora?",
+    a: "Linha foi descontinuada em 2017 (PLC-5) e 2018 (SLC500). Spare é cada vez mais caro e raro. Aguardar mais transforma migração planejada em emergência. Plantas que migraram entre 2018-2024 economizaram vs as que esperaram.",
+  },
+  {
+    q: "Qual hardware substituto: ControlLogix ou CompactLogix?",
+    a: "Depende do tamanho original. PLC-5 grande tipicamente vai para ControlLogix 5580. SLC500 pequeno vai para CompactLogix 5380. Critério: contagem de I/O, requisitos de comunicação, integração futura com PlantPAx ou FactoryTalk.",
+  },
+  {
+    q: "Posso reaproveitar I/O cards antigos?",
+    a: "Geralmente não — ControlLogix usa backplane diferente. Algumas conversões via 1492 wiring system permitem reaproveitar a fiação de campo, reduzindo retrabalho elétrico significativamente.",
+  },
+  {
+    q: "Quanto tempo de planta parada para migração?",
+    a: "Em planta com áreas independentes, fasamos por área com 4-12h por cutover. Em planta de processo contínuo, janela única (24-72h) com plano detalhado. Sempre com ambiente espelho de homologação para validar antes.",
+  },
+  {
+    q: "Migração quebra rastreabilidade histórica do PLC?",
+    a: "Não, porque rastreabilidade vive no Historian/MES, não no PLC. Configuramos novos PLCs para enviar mesmas tags ao mesmo Historian. Continuidade de série temporal sem ruptura.",
+  },
+  {
+    q: "E se o PLC tiver lógica proprietária complexa não documentada?",
+    a: "Etapa preliminar inclui engenharia reversa: descrição funcional a partir do código + entrevistas com operação + observação de comportamento. Esse documento vira referência para a nova lógica em ControlLogix, com rastreabilidade de cada bloco.",
+  },
 ];
 ---
 
