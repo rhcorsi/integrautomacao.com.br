@@ -6,6 +6,10 @@
 # IMPORTANT: static rules must come BEFORE splat (*) rules, or wrangler
 # warns about reduced performance.
 
+# Internal slug rename (May 2026): split PID/intertravamentos/sequenciamento
+/tecnologias/pid-intertravamentos-sequenciamento  /tecnologias/intertravamentos-sequencias  301
+/tecnologias/pid-intertravamentos-sequenciamento/ /tecnologias/intertravamentos-sequencias  301
+
 # WP exact paths
 /home-2                /                                    301
 /home-2/               /                                    301

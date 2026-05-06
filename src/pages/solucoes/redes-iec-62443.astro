@@ -69,7 +69,7 @@ const deliverables = [
 const faq = [
   {
     q: "IEC 62443 é obrigatória no Brasil?",
-    a: "Não há lei brasileira específica obrigando IEC 62443 ainda, mas ela é referência internacional e cada vez mais exigida por seguradoras, auditorias corporativas e clientes finais (especialmente em alimentos, agronegócio e farmacêutica). É o padrão que recomendamos para projetos novos.",
+    a: "Não há lei brasileira específica obrigando IEC 62443. Ela é referência internacional adotada como base de cibersegurança industrial, citada em auditorias corporativas e em requisitos de clientes finais em diversos setores. É o padrão técnico que recomendamos para projetos novos.",
   },
   {
     q: "Como vocês fazem segmentação sem parar a planta?",
@@ -85,15 +85,15 @@ const faq = [
   },
   {
     q: "Por onde começar uma jornada IEC 62443 numa planta legada?",
-    a: "Pelo diagnóstico: inventário de ativos, fluxos de comunicação, zonas implícitas e gaps contra SL-T desejado. Sem mapa, qualquer ação vira achismo. O diagnóstico vira roadmap progressivo de 12-24 meses.",
+    a: "Pelo diagnóstico: inventário de ativos, fluxos de comunicação, zonas implícitas e gaps contra SL-T desejado. Sem mapa, qualquer ação vira achismo. O diagnóstico orienta um roadmap progressivo, fasado por área crítica conforme prioridade de risco.",
   },
   {
     q: "Quanto tempo leva implementar IDMZ numa planta existente?",
-    a: "Para planta média (sem IDMZ atual), projeto + implementação + cutover ficam entre 4 e 9 meses. Inclui análise de tráfego, desenho, aquisição de firewalls/servidores, migração de serviços (PI-to-PI, RD Gateway, AD industrial) e validação.",
+    a: "Inclui análise de tráfego, desenho, aquisição de firewalls e servidores, migração de serviços replicados (PI-to-PI, RD Gateway, AD industrial, WSUS) e validação. O cronograma específico depende do escopo, das integrações existentes e das janelas operacionais disponíveis.",
   },
   {
     q: "Posso ter rede industrial sem IDMZ se a planta for isolada?",
-    a: "Por enquanto talvez, mas a tendência é exigência regulatória + integração com TI corporativa que torna isolamento total inviável. Plantas que se conectam ao ERP, à manutenção predictiva ou à matriz precisam de IDMZ — não há atalho seguro.",
+    a: "Em planta totalmente isolada, é tecnicamente possível. Mas a maioria das plantas precisa integrar dados com TI corporativa (ERP, manutenção predictiva, dashboards executivos), e nesses casos a IDMZ é o controle estrutural recomendado pela CPwE e pela IEC 62443. Não há atalho seguro.",
   },
   {
     q: "Qual a diferença entre IEC 62443 SL-2 e SL-3?",

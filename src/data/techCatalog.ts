@@ -8,7 +8,6 @@ import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
 import siemensTiaReference from "@/assets/manuals/siemens-tia-portal-engineering.jpg";
-import siemensWinccReference from "@/assets/manuals/siemens-wincc-unified-engineering.jpg";
 import siemensStartdriveReference from "@/assets/manuals/siemens-startdrive-tia-portal.jpg";
 import elipseE3Reference from "@/assets/manuals/elipse-e3-architecture.jpg";
 import schneiderControlReference from "@/assets/manuals/schneider-control-expert-topology.jpg";
@@ -37,7 +36,6 @@ import simaticStep7Classic from "@/assets/manuals/simatic-step7-classic.jpg";
 import plantpaxSystemEstimator from "@/assets/manuals/plantpax-system-estimator.jpg";
 import idmzUntrustedTrusted from "@/assets/manuals/idmz-untrusted-trusted-zones.jpg";
 import optixDesignDeployment from "@/assets/manuals/factorytalk-optix-design-deployment.jpg";
-import telitSinglePointAccess from "@/assets/manuals/telit-iot-portal-single-point-access.jpg";
 // V3 library images (May 2026): premium diagrams promoted from _library/
 import plantpaxPasscAnnotated from "@/assets/manuals/plantpax-passc-annotated-1k-io.jpg";
 import guardlogix5580 from "@/assets/manuals/guardlogix-5580-safety-controller.jpg";
@@ -48,6 +46,8 @@ import ftAnalyticsLogixaiPurdueClean from "@/assets/manuals/factorytalk-analytic
 import controllogixPrpDetail from "@/assets/manuals/controllogix-prp-non-converged-detail.jpg";
 import cpweIiotOtitBridging from "@/assets/manuals/cpwe-iiot-otit-bridging.jpg";
 import cpweDefenseInDepthConcentric from "@/assets/manuals/cpwe-defense-in-depth-concentric.jpg";
+import devicewiseEletronorArchitecture from "@/assets/manuals/devicewise-eletronor-architecture.jpg";
+import siemensNetworkLayer2 from "@/assets/manuals/siemens-network-layer2-architecture.jpg";
 
 
 export type TechGroup =
@@ -98,7 +98,6 @@ const cpweSource = "Cisco + Rockwell Automation - CPwE Design and Implementation
 const logixSource = "Rockwell Automation - ControlLogix High Availability Reference Architectures";
 const securitySource = "Rockwell Automation - FactoryTalk Security System Design";
 const siemensTiaSource = "Siemens - Totally Integrated Automation Portal";
-const siemensWinccSource = "Siemens - SIMATIC WinCC Unified Engineering";
 const siemensStartdriveSource = "Siemens - SINAMICS Startdrive / TIA Portal";
 const elipseE3Source = "Elipse Software - Elipse E3";
 const schneiderControlSource = "Schneider Electric - EcoStruxure Control Expert";
@@ -121,7 +120,8 @@ const simaticStep7Source = "Siemens - SIMATIC Programmable Logic Controllers ST 
 const plantpaxSg001Source = "Rockwell Automation - PlantPAx System Release 5.50 (PROCES-SG001W-EN-P)";
 const idmzFirepowerSource = "Cisco + Rockwell Automation - Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)";
 const ftOptixRefSource = "Rockwell Automation - FactoryTalk Optix Reference Architectures";
-const telitIoTPortalSource = "Telit Cinterion - IoT Portal Overview (2018)";
+const telitEletronorSource = "Telit Cinterion + Eletronor - Eletroday (apresentação institucional)";
+const siemensNetworkRefSource = "Siemens AG - Network Reference Architecture for Discrete Manufacturing (Article 109802750)";
 // V3 library sources
 const plantpax540RefSource = "Rockwell Automation - PlantPAx 5.40 Reference Architectures";
 const controllogix5580BrochureSource = "Rockwell Automation - ControlLogix 5580 Controller Brochure";
@@ -230,11 +230,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença entre PlantPAx 4.x e 5.x na prática?",
-        a: "PlantPAx 5.x trouxe nova arquitetura de servidores (PASS modernizado), suporte ao ControlLogix 5580 série P, biblioteca de objetos de processo atualizada e melhor integração com FactoryTalk View SE moderno. A migração não é apenas update de versão — é mudança de paradigma de engenharia.",
+        a: "PlantPAx 5.x exige controladores da série P (CompactLogix 5380P ou ControlLogix 5580P), tem nova arquitetura de servidores (PASS modernizado), biblioteca de objetos de processo atualizada e integração mais consistente com FactoryTalk View SE moderno. A migração de 4.x para 5.x não é apenas update de versão — envolve troca de hardware de controle e revisão da engenharia.",
       },
       {
-        q: "Quanto tempo leva um projeto PlantPAx do diagnóstico ao startup?",
-        a: "Depende do escopo. Para uma área média (até 1.000 pontos de I/O), do diagnóstico ao startup costuma ficar entre 4 e 9 meses. Plantas grandes ou multi-área são fasadas em 12 a 18 meses, com cutover por área.",
+        q: "O que define o cronograma de um projeto PlantPAx?",
+        a: "Tamanho da arquitetura (PASS-C, PASS-S ou PASS-RD), contagem de I/O, número de áreas, integrações (Historian, Batch, MES) e janelas de parada disponíveis. O cronograma específico é construído após o diagnóstico, com fases de engenharia, FAT, comissionamento e SAT por área.",
       },
       {
         q: "PlantPAx funciona em planta híbrida (processo + discreto)?",
@@ -315,7 +315,7 @@ export const techCatalog: TechPage[] = [
       },
     ],
     relatedSolutions: plantpaxRelated,
-    relatedTech: ["plantpax-5x", "pid-intertravamentos-sequenciamento", "factorytalk-view-se"],
+    relatedTech: ["plantpax-5x", "controle-regulatorio-pid", "intertravamentos-sequencias", "factorytalk-view-se"],
   },
   {
     slug: "controllogix-compactlogix",
@@ -370,7 +370,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quando devo escolher CompactLogix em vez de ControlLogix?",
-        a: "CompactLogix entra em máquinas, skids, áreas de até ~1.000 pontos e quando o painel é menor. ControlLogix é a escolha quando há alta densidade de I/O, redundância de controlador, integração com PlantPAx ou requisitos de SIL/safety integrado.",
+        a: "CompactLogix entra em máquinas, skids e áreas menores, com painel mais compacto. ControlLogix é a escolha em alta densidade de I/O, redundância de controlador, integração com PlantPAx ou requisitos de safety integrado (GuardLogix). A linha exata é definida no diagnóstico.",
       },
       {
         q: "ControlLogix 5580 substitui o 5570 sem retrabalho?",
@@ -389,76 +389,136 @@ export const techCatalog: TechPage[] = [
       { href: "/solucoes/migracao-plc", label: "Migração PLC5/SLC500" },
       { href: "/solucoes/plantpax", label: "PlantPAx" },
     ],
-    relatedTech: ["migracao-plc5-slc500", "ethernet-ip-cpwe", "pid-intertravamentos-sequenciamento"],
+    relatedTech: ["migracao-plc5-slc500", "ethernet-ip-cpwe", "intertravamentos-sequencias"],
   },
   {
-    slug: "pid-intertravamentos-sequenciamento",
+    slug: "controle-regulatorio-pid",
     group: "Controle e DCS",
     type: "Serviço",
-    title: "PID, intertravamentos e sequenciamento",
-    shortTitle: "PID e sequências",
+    title: "Controle regulatório (PID e malhas)",
+    shortTitle: "Controle regulatório",
     description:
-      "Engenharia de malhas, permissivos, intertravamentos, sequências operacionais e diagnósticos embarcados em controladores industriais.",
+      "Engenharia de malhas de controle contínuo: PID, cascata, split-range, feed-forward e diagnósticos para operação estável e mantível.",
     intro:
-      "Boa automação aparece nos detalhes: malhas estáveis, intertravamentos compreensíveis, sequências recuperáveis e diagnósticos que ajudam manutenção. Esse serviço organiza a lógica de controle para operar com segurança e ser mantida depois do startup.",
-    image: guardlogix5580,
-    imageAlt: "GuardLogix 5580 Safety Controller integra controle e safety num só controlador certificado SIL 3 / PLe Cat 4",
-    imageTitle: "GuardLogix 5580: controle e safety integrados",
-    imageSource: controllogix5580BrochureSource,
-    imageCaption: "Print público do GuardLogix 5580: para intertravamentos críticos com classificação SIL/PLe, o controlador safety integrado evita arquitetura híbrida com PLC + sistema dedicado.",
+      "Malha PID estável é resultado de engenharia, não de tentativa em campo. A Integra organiza o controle regulatório com critério de sintonia, documentação de parâmetros e diagnósticos que permitem manutenção sustentável depois do startup.",
+    image: plantpaxPasscAnnotated,
+    imageAlt: "Reference Architecture PASS-C Small com malhas de controle e supervisão integradas",
+    imageTitle: "Controle regulatório como camada da arquitetura",
+    imageSource: plantpax540RefSource,
+    imageCaption:
+      "Print público da Reference Architecture: o controle regulatório vive nos controladores PASS, com a biblioteca PlantPAx fornecendo blocos de processo padronizados para malhas estáveis.",
     useCases: [
       "Malhas PID instáveis, sem documentação ou com sintonia herdada.",
-      "Sequências com passos informais, reinício difícil ou falhas mal diagnosticadas.",
-      "Intertravamentos espalhados pela lógica e pouco claros para manutenção.",
-      "Startups e expansões que precisam de teste funcional rigoroso.",
+      "Processos contínuos (vapor, vazão, pressão, temperatura) que precisam de controle robusto.",
+      "Migração de instrumentação analógica para malhas digitais com a PlantPAx Library.",
+      "Cascata, split-range e compensação em malhas multivariáveis.",
     ],
     howIntegraActs: [
-      "Mapeia estados, permissivos, intertravamentos, comandos, falhas e ações esperadas.",
-      "Organiza sequências por passo, condição de avanço, timeout, falha e recuperação.",
-      "Configura diagnósticos para operação e manutenção entenderem a causa do bloqueio.",
-      "Documenta critérios de teste e comportamento esperado antes do comissionamento.",
+      "Mapeia comportamento atual da malha, atuadores, sensores e limites operacionais.",
+      "Define modos (manual / auto / cascata / override), set-point, ramping e proteções.",
+      "Aplica critério de sintonia documentado e registra parâmetros como evidência.",
+      "Configura diagnósticos para operação e manutenção entenderem comportamento e desvios.",
     ],
     deliverables: [
-      "Matriz de permissivos e intertravamentos.",
-      "Descrição funcional de sequências e estados.",
-      "Critérios de sintonia e parâmetros relevantes de malhas PID.",
-      "Lista de alarmes, mensagens e diagnósticos de operação.",
-      "Plano de teste funcional com evidências de validação.",
+      "Descritivo funcional de cada malha com lógica de modos e proteções.",
+      "Parâmetros de sintonia documentados e justificados.",
+      "Faceplate padronizada com a biblioteca PlantPAx.",
+      "Plano de teste funcional com critérios de aceite.",
+      "Backup de configuração e procedimento de revisão de sintonia.",
     ],
     standards: [
-      { code: "PID", description: "Controle regulatório" },
-      { code: "ISA-88", description: "Estados e fases" },
+      { code: "PID", description: "Controle regulatório clássico" },
+      { code: "ISA-5.1", description: "Simbologia e nomenclatura de instrumentos" },
+      { code: "PlantPAx Library", description: "Blocos de processo padronizados" },
+      { code: "FAT/SAT", description: "Validação funcional" },
+    ],
+    faq: [
+      {
+        q: "Vocês fazem sintonia fina em campo?",
+        a: "Sim, quando há condição operacional segura e critério acordado com a operação. A sintonia precisa respeitar processo, atuadores, sensores e limites definidos — não é experimentação cega em planta rodando.",
+      },
+      {
+        q: "Como vocês validam ajuste de PID antes de subir em produção?",
+        a: "Quando possível, em ambiente de teste com modelo simplificado de processo ou em planta com modo manual instrumentado. Usamos ferramentas de tuning Rockwell (Autotune, PIDe) e registramos parâmetros como evidência de aceite.",
+      },
+      {
+        q: "PID em ladder ainda faz sentido em planta moderna?",
+        a: "Para malhas simples e legado, sim. Em planta nova ou modernização, blocos PIDe/Routine via PlantPAx Library oferecem governança, faceplate padronizada e rastreabilidade — preferível ao PID embutido em rotina ladder não documentada.",
+      },
+      {
+        q: "Quando vale a pena usar cascata ou split-range?",
+        a: "Cascata quando há variável intermediária mais rápida que estabiliza a primária (ex.: vazão de vapor para temperatura). Split-range quando o atuador final é dividido em estágios (ex.: válvula de aquecimento e válvula de resfriamento). A escolha vem da análise do processo, não do gosto do programador.",
+      },
+    ],
+    relatedSolutions: plantpaxRelated,
+    relatedTech: ["plantpax-library", "controllogix-compactlogix", "intertravamentos-sequencias"],
+  },
+  {
+    slug: "intertravamentos-sequencias",
+    group: "Controle e DCS",
+    type: "Serviço",
+    title: "Intertravamentos e lógica sequencial",
+    shortTitle: "Intertravamentos e sequências",
+    description:
+      "Engenharia de permissivos, intertravamentos operacionais, lógica sequencial e estados ISA-88 para automação previsível e auditável.",
+    intro:
+      "Intertravamentos compreensíveis e sequências recuperáveis são a diferença entre planta que opera com confiança e planta que depende de quem está em campo. A Integra estrutura essa camada com matriz causa-efeito, descritivos funcionais e diagnósticos de bloqueio claros.",
+    image: guardlogix5580,
+    imageAlt: "GuardLogix 5580 Safety Controller para integração de controle e safety em um mesmo controlador",
+    imageTitle: "GuardLogix 5580 quando o intertravamento exige classificação SIL/PLe",
+    imageSource: controllogix5580BrochureSource,
+    imageCaption:
+      "Print público do GuardLogix 5580: intertravamentos operacionais rodam em ControlLogix; quando há classificação SIL/PLe e SIF dedicada, o controlador safety integrado evita arquitetura híbrida.",
+    useCases: [
+      "Permissivos e intertravamentos espalhados pela lógica, sem documentação central.",
+      "Sequências de partida/parada de equipamento com passos informais e reinício difícil.",
+      "Receitas e batelada que precisam de modelagem ISA-88 (estados, fases, equipamento).",
+      "Áreas com classificação de safety (SIL/PLe) que precisam de controlador dedicado.",
+    ],
+    howIntegraActs: [
+      "Mapeia permissivos, intertravamentos e estados de cada equipamento ou área.",
+      "Organiza sequências por passo, condição de avanço, timeout, falha e recuperação.",
+      "Separa explicitamente intertravamento operacional de SIF (safety) quando aplicável.",
+      "Configura diagnósticos para operação e manutenção entenderem a causa do bloqueio.",
+    ],
+    deliverables: [
+      "Matriz causa-efeito de permissivos e intertravamentos.",
+      "Descritivo funcional de sequências e estados (modelado em ISA-88 quando aplicável).",
+      "Lista de alarmes, mensagens e diagnósticos de operação.",
+      "Plano de teste funcional com evidências de validação.",
+      "Quando há SIF, separação documental e arquitetural entre BPCS e SIS.",
+    ],
+    standards: [
+      { code: "ISA-88", description: "Modelagem de batelada e estados" },
       { code: "ISA-18.2", description: "Alarmes acionáveis" },
+      { code: "IEC 61511", description: "Safety SIS / SIF" },
+      { code: "ISA-84", description: "Safety Instrumented Functions" },
       { code: "FAT/SAT", description: "Validação funcional" },
     ],
     faq: [
       {
         q: "Por que documentar intertravamentos?",
-        a: "Porque o intertravamento que ninguém entende vira risco de produção. A documentação reduz dependência de memória individual e acelera diagnóstico.",
-      },
-      {
-        q: "Vocês fazem sintonia fina em campo?",
-        a: "Sim, quando há condição operacional e critério de segurança. A sintonia precisa respeitar processo, atuadores, sensores e limites definidos pela operação.",
+        a: "Porque o intertravamento que ninguém entende vira risco de produção. Matriz causa-efeito documentada reduz dependência de memória individual, acelera diagnóstico e protege a planta de mudanças mal feitas.",
       },
       {
         q: "Quem documenta os intertravamentos do processo?",
-        a: "A engenharia da Integra documenta a matriz causa-efeito, descritivos funcionais e narrativas de operação. O cliente valida com sua equipe de processo — sem essa validação, intertravamento vira armadilha futura.",
+        a: "A engenharia da Integra documenta a matriz causa-efeito, descritivos funcionais e narrativas de operação. O cliente valida com sua equipe de processo — sem essa validação, o intertravamento vira armadilha futura.",
       },
       {
-        q: "Qual a diferença entre intertravamento e safety SIL?",
-        a: "Intertravamento é proteção operacional rotineira (impedir partida sem condição). Safety SIL é proteção SIF (Safety Instrumented Function) com classificação IEC 61511, controlador dedicado e ciclo de teste validado. Os dois convivem, com escopos distintos.",
-      },
-      {
-        q: "Como vocês validam ajuste de PID antes de subir em produção?",
-        a: "Em ambiente de teste com modelo de processo simplificado ou em planta com modo manual instrumentado. Usamos ferramentas de tuning Rockwell (Autotune, PIDe) e registramos parâmetros como evidência de aceite — sem ajuste cego em campo.",
+        q: "Qual a diferença entre intertravamento operacional e safety SIL?",
+        a: "Intertravamento operacional é proteção rotineira (impedir partida sem condição, parar equipamento em falha esperada). Safety SIL é Safety Instrumented Function classificada por IEC 61511, com controlador safety dedicado, ciclo de teste e validação por terceira parte. Os dois convivem na planta, com escopos e arquiteturas distintas.",
       },
       {
         q: "Sequenciamento de batelada cabe em ControlLogix puro ou exige FactoryTalk Batch?",
-        a: "Cabe em ControlLogix com SFC/lógica estruturada para batelada simples. Para receitas múltiplas, equipamento compartilhado, registro de batch e rastreabilidade ISA-88, FactoryTalk Batch agrega muito valor.",
+        a: "Cabe em ControlLogix com SFC/lógica estruturada para batelada simples e dedicada. Para receitas múltiplas, equipamento compartilhado, registro de batch e rastreabilidade ISA-88 completa, FactoryTalk Batch agrega valor estruturado.",
+      },
+      {
+        q: "Posso ter BPCS e SIS no mesmo controlador?",
+        a: "Tecnicamente sim em controladores com tasks separadas (GuardLogix integra controle e safety SIL3 com tasks isoladas e validadas). A decisão depende de análise de risco, classificação SIL alvo e exigências regulatórias do setor — não é apenas questão de hardware.",
       },
     ],
     relatedSolutions: plantpaxRelated,
-    relatedTech: ["plantpax-library", "controllogix-compactlogix", "factorytalk-view-se"],
+    relatedTech: ["controle-regulatorio-pid", "controllogix-compactlogix", "factorytalk-batch"],
   },
   {
     slug: "factorytalk-view-se",
@@ -660,7 +720,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto tempo leva implantar Batch numa planta nova?",
-        a: "Para uma unidade fabril com 5-10 receitas e equipamento dedicado, normalmente 4-8 meses do desenho ao cutover. Plantas com receitas dinâmicas e equipamento compartilhado exigem mais tempo de modelagem ISA-88 e testes funcionais.",
+        a: "Depende do número de receitas, do compartilhamento de equipamento e do nível de rastreabilidade exigido. Plantas com receitas dinâmicas e equipamento compartilhado exigem mais modelagem ISA-88. O cronograma específico vem após o diagnóstico.",
       },
       {
         q: "Batch substitui o ERP no controle de receita?",
@@ -860,11 +920,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "FactoryTalk Historian é o mesmo que PI System?",
-        a: "Não. Historian SE é construído sobre tecnologia OSIsoft PI antiga, mas evoluiu separadamente. PI System / AVEVA é mais robusto para tags massivas, AF Templates e analytics avançado. Para planta padrão Rockwell, Historian SE costuma bastar.",
+        a: "Não. Historian SE é construído sobre tecnologia OSIsoft PI antiga, mas evoluiu separadamente. PI System / AVEVA tem foco em volume massivo de tags, AF Templates ricos e analytics multi-site. Para planta padrão Rockwell, Historian SE atende a maior parte dos cenários — a escolha depende do escopo.",
       },
       {
         q: "Quantas tags Historian SE suporta?",
-        a: "Up to ~250.000 tags por servidor com hardware dimensionado. Acima disso, escalamos com Historian Site/Plant Tier ou migramos para PI System.",
+        a: "A capacidade depende do hardware, da cadência de coleta e da arquitetura (servidor único, Site Tier ou Plant Tier). Volumes muito grandes ou ambientes multi-site frequentemente justificam migração para PI System / AVEVA. A matriz oficial Rockwell é referência para sizing.",
       },
       {
         q: "Posso ler Historian de fora da planta com segurança?",
@@ -872,7 +932,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto disco Historian consome por mês?",
-        a: "Depende da política de compressão e cadência. Para 50.000 tags com cadência média (1Hz e dead-band), espera-se 50-200 GB/mês. Compressão swinging-door reduz drasticamente sem perda de fidelidade.",
+        a: "Depende da quantidade de tags, da cadência de coleta, da política de compressão (swinging-door reduz volume sem perda significativa de fidelidade) e da retenção desejada. O dimensionamento é parte do projeto.",
       },
     ],
     relatedSolutions: dataRelated,
@@ -1149,8 +1209,8 @@ export const techCatalog: TechPage[] = [
         a: "Sim, com sizing correto. VMware ESXi ou Hyper-V suportam aplicações FactoryTalk com performance equivalente a hardware bare-metal, desde que CPU, memória e I/O de disco sejam dimensionados conforme guia Rockwell.",
       },
       {
-        q: "Quanto custa montar um IDC industrial pequeno?",
-        a: "Para planta média (5-10 VMs, redundância básica), o investimento em infra fica entre R$200 mil e R$600 mil — hosts, storage, rede, licenças, projeto e startup. Valor exato depende de escopo, redundância desejada e fornecedor.",
+        q: "Como dimensionar um IDC industrial pequeno?",
+        a: "O dimensionamento começa pela contagem de aplicações OT, requisitos de RTO/RPO, redundância desejada e crescimento previsto. Cada projeto recebe proposta específica após o diagnóstico — não publicamos faixas de investimento.",
       },
     ],
     relatedSolutions: infraRelated,
@@ -1280,7 +1340,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto tempo leva migrar 20 VMs industriais?",
-        a: "Tipicamente 2-4 semanas: 1 semana de levantamento, 1-2 semanas de migração em janelas planejadas (host por host), 1 semana de validação e estabilização. Depende muito do tamanho de disco e redundância.",
+        a: "O cronograma depende do número de VMs, do tamanho dos discos, da redundância exigida e das janelas de manutenção disponíveis. Toda migração inclui levantamento, migração faseada (host por host), validação e estabilização.",
       },
       {
         q: "V2V (virtual to virtual) ou P2V (physical to virtual)?",
@@ -1711,7 +1771,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto tempo leva certificar maturidade IEC 62443?",
-        a: "Não há certificação plant-wide simples — ela vem por componente (62443-4-1, 62443-4-2 para produto) ou por sistema integrado (62443-3-3 SL-x). Para implementar maturidade prática, planeje 12-24 meses de roadmap progressivo.",
+        a: "Não há certificação plant-wide única — ela vem por componente (62443-4-1, 62443-4-2 para produto) ou por sistema integrado (62443-3-3 SL-x). Implementar maturidade prática é um roadmap progressivo, fasado por área crítica e em ciclos planejados de revisão.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -1843,7 +1903,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual frequência de patching ideal para OT?",
-        a: "Mensal para planta com janela de manutenção mensal; trimestral em planta de processo contínuo; emergencial para CVE crítico (exploit público em produto exposto). Mais rápido que isso, retrabalho. Mais lento, exposição inaceitável.",
+        a: "A frequência ideal depende da janela de manutenção da planta, do nível de risco e da política interna. Patches críticos (CVE com exploit público em produto exposto) entram em ciclo emergencial. O equilíbrio entre risco e impacto operacional é definido por área.",
       },
       {
         q: "Como saber se meu PLC tem firmware vulnerável?",
@@ -1920,8 +1980,8 @@ export const techCatalog: TechPage[] = [
         a: "Tap é preferido para análise contínua — passivo, sem perda, sem impacto na rede. SPAN serve para diagnóstico pontual, mas com risco de perder pacote sob carga. Para monitoramento permanente, sempre tap.",
       },
       {
-        q: "Quanto custa implementar monitoramento OT?",
-        a: "Para planta média, projeto + ferramenta (Claroty, Nozomi, Dragos) + tap fica entre R$300 mil e R$1.5 milhão no primeiro ano. Custo recorrente ~30% disso. ROI vem de detecção de incidente, MTTR menor e evidência de auditoria.",
+        q: "O que entra no projeto de monitoramento OT?",
+        a: "Diagnóstico de tráfego, definição de pontos de coleta (taps), escolha da plataforma de detecção (Claroty, Nozomi, Dragos ou equivalente), integração com SIEM corporativo, runbooks de resposta e treinamento. O dimensionamento e custo são apresentados em proposta específica após o diagnóstico.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -2052,7 +2112,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto tempo de resposta para suporte presencial?",
-        a: "Depende do contrato. Para planta com SLA premium, 4-12h em horário comercial. Para emergência fora de horário, costumamos ter equipe sob plantão; do contrário, próximo dia útil. Distância (Maringá-PR) influencia.",
+        a: "Depende do contrato. SLAs específicos (tempo de resposta, plantão fora de horário, atendimento presencial) são definidos por escrito caso a caso. A localização da Integra (Maringá-PR) influencia o tempo de deslocamento para atendimento presencial.",
       },
       {
         q: "Posso ter suporte 24/7?",
@@ -2126,7 +2186,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto tempo dura uma auditoria de cibersegurança OT?",
-        a: "Para planta média, gap analysis leva 2-4 semanas (entrevistas + inventário + análise documental). Auditoria completa formal pode levar 6-12 semanas. Remediação subsequente leva meses.",
+        a: "Gap analysis envolve entrevistas, inventário e análise documental. Auditoria formal completa, com escopo amplo, demanda mais tempo. Remediação subsequente é projeto à parte, fasado por prioridade de risco.",
       },
       {
         q: "Auditoria gera plano de ação ou só relatório?",
@@ -2200,11 +2260,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Vale otimizar SCADA legado ou substituir?",
-        a: "Análise de TCO de 5 anos: custo de otimizar + manter vs custo de substituir + migrar. Se otimização compra 2-3 anos a baixo custo enquanto substituição é planejada, vale. Se otimização custa metade da substituição, substitua.",
+        a: "Análise de TCO comparando custo de otimizar + manter vs custo de substituir + migrar. A decisão depende do horizonte da planta, da disponibilidade de spare e da viabilidade operacional do legado. O critério é financeiro e operacional, não emocional.",
       },
     ],
     relatedSolutions: serviceRelated,
-    relatedTech: ["factorytalk-historian", "pid-intertravamentos-sequenciamento", "factorytalk-batch"],
+    relatedTech: ["factorytalk-historian", "intertravamentos-sequencias", "factorytalk-batch"],
   },
   {
     slug: "documentacao-handover-treinamento",
@@ -2265,7 +2325,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto dura um treinamento de operação?",
-        a: "Para SCADA padrão, 2-4 horas por turma. Para PlantPAx complexo com receitas Batch, 1-2 dias com prática em ambiente espelho. Sempre com material entregável (apresentação, vídeo, manual de bolso).",
+        a: "A duração depende da complexidade da aplicação e do perfil dos usuários. Treinamentos podem ser de poucas horas a vários dias, sempre com prática em ambiente espelho e material entregável (apresentação, manual e procedimentos de operação).",
       },
       {
         q: "Documentação fica em PDF ou em sistema vivo?",
@@ -2336,19 +2396,19 @@ export const techCatalog: TechPage[] = [
         a: "ControlLogix tem ferramenta de tradução automática (Translation Tool), mas a saída é lógica funcional, não otimizada. Migração séria reescreve a lógica para padrão moderno, mantendo descritivos funcionais como referência.",
       },
       {
-        q: "Quanto custa migração de PLC-5 para ControlLogix?",
-        a: "Depende do tamanho. Para CPU única com ~500 I/O, projeto típico fica entre R$200 mil e R$500 mil (engenharia, hardware indicado, comissionamento). Plantas maiores escalonam, mas o custo unitário cai.",
+        q: "O que define o esforço de uma migração PLC-5/SLC500?",
+        a: "Tamanho do programa, contagem de I/O, complexidade da lógica (intertravamentos, sequenciamento, controle regulatório), reaproveitamento da fiação de campo (1492 wiring system) e requisitos de cibersegurança e integração futura. O cliente recebe escopo, cronograma e proposta específica após o diagnóstico.",
       },
       {
         q: "Migração exige parada de planta?",
-        a: "Em planta de processo contínuo, sim — janela única de cutover (24-72h) com plano detalhado. Em planta com áreas independentes, fasamos por área para reduzir impacto. Sempre com ambiente espelho testado antes.",
+        a: "Em planta de processo contínuo, normalmente exige janela única de cutover com plano detalhado. Em planta com áreas independentes, fasamos por área para reduzir impacto operacional. Toda migração passa por ambiente espelho de homologação antes do cutover.",
       },
     ],
     relatedSolutions: [
       { href: "/solucoes/migracao-plc", label: "Solução Migração PLC" },
       { href: "/solucoes/redes-iec-62443", label: "Redes Industriais" },
     ],
-    relatedTech: ["controllogix-compactlogix", "pid-intertravamentos-sequenciamento", "factorytalk-view-se"],
+    relatedTech: ["controllogix-compactlogix", "controle-regulatorio-pid", "factorytalk-view-se"],
   },
   {
     slug: "tc-devicewise",
@@ -2360,12 +2420,12 @@ export const techCatalog: TechPage[] = [
       "Plataforma IIoT da Telit Cinterion para conectar ativos industriais, executar lógica no edge e integrar dados OT com sistemas de negócio.",
     intro:
       "TC deviceWISE entra quando a planta precisa transformar dados industriais em integração real: PLCs, sensores, gateways, bancos, APIs, MQTT, dashboards e sistemas corporativos trabalhando com rastreabilidade. A Integra aplica a plataforma como integradora de sistemas, conectando OT e TI sem tratar IoT como painel bonito.",
-    image: telitSinglePointAccess,
-    imageAlt: "Telit IoT Portal — slide com Connect/Manage/Integrate, Any Thing to Any App, Pay-as-you-grow e No Upfront Investment",
-    imageTitle: "TC deviceWISE: ponto único de acesso aos serviços IoT da Telit",
-    imageSource: telitIoTPortalSource,
+    image: devicewiseEletronorArchitecture,
+    imageAlt: "Plataforma IIoT deviceWISE — dispositivos de produção, deviceWISE VIEW, dashboards em nuvem (Azure, GCP, AWS) e integração com sistemas empresariais (SAP, Oracle, MES, ERP)",
+    imageTitle: "Arquitetura deviceWISE: do chão de fábrica aos sistemas empresariais",
+    imageSource: telitEletronorSource,
     imageCaption:
-      "Print público do material institucional Telit Cinterion: a plataforma reúne conectividade, gestão e integração IIoT com modelo pay-as-you-grow — base de retrofit incremental sem reescrever automação.",
+      "Print público da apresentação Telit Cinterion + Eletronor (Eletroday): deviceWISE conecta dispositivos de produção a dashboards e sistemas empresariais, com integração nativa para nuvem e bancos de dados corporativos.",
     useCases: [
       "Coleta de dados de PLCs, sensores, equipamentos e sistemas multi-vendor.",
       "Gateway industrial para enviar dados a bancos, APIs, MQTT, sistemas corporativos ou nuvem.",
@@ -2487,8 +2547,8 @@ export const techCatalog: TechPage[] = [
         a: "Indiretamente. TIA Portal salva projeto em formato proprietário; Git rastreia, mas diff/merge não funcionam bem. Para versionamento real, exporta blocos para SCL ou usa TIA Portal Multiuser Engineering.",
       },
       {
-        q: "Quanto custa licença TIA Portal por engenheiro?",
-        a: "Modelo por engenheiro/instalação ou floating. Para STEP 7 Professional + WinCC Professional + Startdrive, licença anual fica em milhares de reais. Cotação direto na Siemens varia conforme volume.",
+        q: "Como funciona o licenciamento TIA Portal?",
+        a: "Modelo Siemens por engenheiro/instalação ou floating, com módulos contratados separadamente (STEP 7 Professional, WinCC Professional, Startdrive). A cotação é feita pela própria Siemens ou por canal autorizado, conforme volume e perfil de uso.",
       },
     ],
     relatedSolutions: multiVendorRelated,
@@ -2559,7 +2619,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Migrar de STEP 7 Classic para TIA Portal é caro?",
-        a: "Não a licença em si — o caro é retrabalho de engenharia. Para CPU média com 5.000 linhas STL, estimamos 200-400 horas de migração + teste + handover. Faseamos por área crítica.",
+        a: "O custo concentra-se em retrabalho de engenharia, não em licença. O esforço varia conforme volume de lógica STL/LAD, complexidade dos blocos, descritivos disponíveis e exigências de teste. Faseamos por área crítica.",
       },
     ],
     relatedSolutions: multiVendorRelated,
@@ -2575,12 +2635,12 @@ export const techCatalog: TechPage[] = [
       "Sistemas Siemens de supervisão, operação e processo, incluindo WinCC clássico, WinCC 7.x, WinCC Unified e bases PCS 7 quando aplicável.",
     intro:
       "WinCC e PCS 7 aparecem em plantas que precisam operar processo, telas, alarmes, históricos e diagnósticos dentro do ecossistema Siemens. A Integra atende manutenção, evolução e integração desses ambientes, deixando claro que a atuação é técnica e não um selo formal de integrador Siemens.",
-    image: siemensWinccReference,
-    imageAlt: "Material Siemens sobre SIMATIC WinCC Unified Engineering",
-    imageTitle: "WinCC organiza operação, telas, alarmes e engenharia de supervisão",
-    imageSource: siemensWinccSource,
+    image: siemensNetworkLayer2,
+    imageAlt: "Arquitetura de rede Siemens em camadas para manufatura — WinCC e PCS 7 vivem na camada de supervisão sobre a infraestrutura industrial",
+    imageTitle: "Onde WinCC e PCS 7 operam na arquitetura Siemens em camadas",
+    imageSource: siemensNetworkRefSource,
     imageCaption:
-      "Referência visual pública Siemens. Projetos com WinCC clássico, WinCC 7.x, Unified ou PCS 7 são avaliados conforme versão, licenças, arquitetura e ciclo de vida.",
+      "Print público da Network Reference Architecture for Discrete Manufacturing (Siemens AG, Article 109802750): WinCC e PCS 7 ocupam a camada de supervisão sobre o controle SIMATIC. Projetos são avaliados conforme versão, licenças, arquitetura e ciclo de vida.",
     useCases: [
       "Manutenção e evolução de supervisórios Siemens existentes.",
       "Padronização de telas, alarmes, históricos, usuários e diagnósticos.",
@@ -2630,7 +2690,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto demora um upgrade de PCS 7?",
-        a: "Para planta média, upgrade de versão major (V8 → V9) é projeto de 6-12 meses incluindo homologação, treinamento e cutover. Versões minor (V9.0 → V9.1) ficam mais rápidas.",
+        a: "Upgrade de versão major (ex.: V8 → V9) é projeto de engenharia, com homologação, treinamento e cutover planejados. Versões minor (ex.: V9.0 → V9.1) costumam ser mais rápidas. O cronograma específico depende do escopo da planta e das integrações existentes.",
       },
     ],
     relatedSolutions: multiVendorRelated,
@@ -2768,8 +2828,8 @@ export const techCatalog: TechPage[] = [
         a: "Sim, via drivers nativos (RSLinx, S7) ou OPC. Em planta multi-vendor, E3 entra como camada de supervisão neutra que padroniza visualização sobre PLCs heterogêneos.",
       },
       {
-        q: "Quanto custa licença Elipse E3?",
-        a: "Modelo por servidor/cliente, em reais. Custo competitivo para SCADA corporativo brasileiro. Cotação direta com Elipse varia conforme número de tags e clientes.",
+        q: "Como funciona o licenciamento Elipse E3?",
+        a: "Modelo por servidor e cliente, dimensionado por número de tags e quantidade de clientes simultâneos. A cotação é feita diretamente com a Elipse Software ou via canal autorizado.",
       },
       {
         q: "Quem dá suporte ao Elipse E3 em São Paulo?",

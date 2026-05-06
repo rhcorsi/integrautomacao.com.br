@@ -73,8 +73,8 @@ const faq = [
     a: "Depende do escopo de modernização e do horizonte de uso da planta. Avaliamos ROI, risco operacional e compatibilidade de hardware antes de recomendar uma estratégia — em alguns casos a migração faseada é melhor que o cutover total.",
   },
   {
-    q: "PlantPAx 5.x exige troca completa do hardware?",
-    a: "Não necessariamente. ControlLogix 5580 da série P é o ideal para PlantPAx 5.x, mas é possível operar com hardware existente desde que se respeitem os requisitos de firmware e de carga. O dimensionamento é parte do diagnóstico.",
+    q: "PlantPAx 5.x exige hardware específico?",
+    a: "Sim. PlantPAx 5.x roda em CompactLogix 5380 série P (Process) ou ControlLogix 5580 série P (Process) — não há suporte oficial para versões anteriores nessa arquitetura. A migração de plantas com hardware fora dessa linha exige troca de controlador como pré-requisito do projeto.",
   },
   {
     q: "Como vocês integram PlantPAx com PI System / AVEVA?",
@@ -101,8 +101,8 @@ const faq = [
     a: "Sim, via OPC UA com AF Templates pré-mapeados aos objetos de processo PlantPAx. A integração transforma tags Logix em estrutura contextualizada para analytics e dashboards corporativos. É um dos caminhos mais comuns em planta integrada.",
   },
   {
-    q: "Quanto custa um projeto PlantPAx típico?",
-    a: "Para uma área média (500-1.500 I/O, 1 PASS, 2-4 controladores), o investimento típico de engenharia + licenças + comissionamento fica entre R$1 milhão e R$3 milhões. Plantas grandes ou multi-área evoluem proporcionalmente. Não publicamos faixas comerciais — o número exato depende de escopo e premissas.",
+    q: "O que define o esforço de um projeto PlantPAx?",
+    a: "Contagem de I/O, número de áreas, redundância desejada, integração com sistemas existentes (Historian, MES, ERP), exigências de cibersegurança e janelas de parada disponíveis. Cada projeto recebe escopo, cronograma e proposta específica após o diagnóstico — não publicamos faixas de investimento.",
   },
 ];
 ---

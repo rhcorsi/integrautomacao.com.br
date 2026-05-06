@@ -64,7 +64,7 @@ const faq = [
   },
   {
     q: "Qual capacidade de storage IDC industrial precisa?",
-    a: "Depende do volume de dados. Historian de 50.000 tags consome tipicamente 50-200 GB/mês. Para planta com 5 anos de retenção, 50-100 TB é faixa realista. Acrescentar replicação síncrona ou backup multiplica o consumo.",
+    a: "Depende do volume de tags, cadência de coleta, política de compressão e retenção desejada. Acrescentar replicação síncrona ou backup multiplica o consumo. O sizing exato é parte do projeto, baseado nos requisitos da planta.",
   },
   {
     q: "Energia redundante é obrigatória em IDC industrial?",
@@ -72,7 +72,7 @@ const faq = [
   },
   {
     q: "Quanto tempo leva implantar um IDC industrial pequeno?",
-    a: "Do diagnóstico ao startup, 3-6 meses. Inclui projeto, especificação, aquisição de hardware (8-12 semanas de lead time), montagem, instalação de hipervisor, migração de aplicações, validação e handover.",
+    a: "Inclui projeto, especificação, aquisição de hardware (com lead time variável conforme fornecedor e configuração), montagem, instalação de hipervisor, migração de aplicações, validação e handover. O cronograma específico depende do escopo e da disponibilidade de janelas operacionais.",
   },
   {
     q: "IDC industrial precisa de sala segura ou cabe em sala técnica?",
