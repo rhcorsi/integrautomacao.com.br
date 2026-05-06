@@ -93,6 +93,20 @@ async function verifyTurnstile(
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+  if (!env.TURNSTILE_SECRET_KEY) {
+    return json(
+      { ok: false, message: "Configuração de segurança indisponível." },
+      503,
+    );
+  }
+
+  if (!env.RESEND_API_KEY || !env.CONTACT_EMAIL_TO || !env.CONTACT_EMAIL_FROM) {
+    return json(
+      { ok: false, message: "Configuração de envio indisponível." },
+      503,
+    );
+  }
+
   // Reject non-JSON content types early
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {

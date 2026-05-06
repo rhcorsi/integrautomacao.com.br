@@ -186,10 +186,10 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       },
     ],
     promo: {
-      eyebrow: "Novo conteúdo",
+      eyebrow: "Catálogo técnico",
       title: "Uma página para cada software, tecnologia e serviço",
       description:
-        "O catálogo técnico aprofunda entregáveis, normas, prints de manuais públicos e critérios de aplicação por tema.",
+        "O catálogo técnico aprofunda entregáveis, normas, referências visuais públicas e critérios de aplicação por tema.",
       cta: { href: "/tecnologias", label: "Abrir catálogo" },
     },
   },

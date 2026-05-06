@@ -1,12 +1,15 @@
 ---
+import { COMPANY } from "@/utils/site";
+
 const turnstileSiteKey =
-  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.TURNSTILE_SITE_KEY ?? "";
-const isDev = import.meta.env.DEV;
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const hasTurnstile = turnstileSiteKey.length > 0;
 ---
 
 <form
   id="contact-form"
   data-contact-form
+  data-turnstile-ready={hasTurnstile ? "true" : "false"}
   method="POST"
   action="/api/contact"
   class="grid gap-5"
@@ -117,7 +120,10 @@ const isDev = import.meta.env.DEV;
     />
     <span>
       Concordo com o tratamento dos meus dados conforme a
-      <a href="/politica-privacidade" class="text-integra-red hover:underline">
+      <a
+        href="/politica-privacidade"
+        class="font-semibold text-integra-red underline underline-offset-2 hover:text-integra-red-700"
+      >
         Política de Privacidade
       </a> da Integra. <span class="text-integra-red" aria-hidden="true">*</span>
     </span>
@@ -132,18 +138,36 @@ const isDev = import.meta.env.DEV;
   </div>
 
   <!-- Cloudflare Turnstile -->
-  {turnstileSiteKey ? (
+  {hasTurnstile ? (
     <div
       class="cf-turnstile"
       data-sitekey={turnstileSiteKey}
       data-theme="light"
       data-action="contact-form"
     />
-  ) : isDev ? (
-    <p class="text-xs font-mono uppercase tracking-wider text-integra-red">
-      [DEV] PUBLIC_TURNSTILE_SITE_KEY ausente — formulário não envia em produção
-    </p>
-  ) : null}
+  ) : (
+    <div
+      role="alert"
+      class="rounded-md border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
+    >
+      <p class="font-semibold text-integra-gray-900">
+        Formulário temporariamente indisponível.
+      </p>
+      <p class="mt-1">
+        A verificação de segurança não foi carregada. Escreva para
+        <a
+          href={`mailto:${COMPANY.email}`}
+          class="font-semibold text-integra-red underline underline-offset-2 hover:text-integra-red-700"
+        >
+          {COMPANY.email}
+        </a>
+        ou ligue para {COMPANY.phones[0].display}.
+      </p>
+      <p class="mt-2 font-mono text-[11px] uppercase tracking-wider text-integra-red">
+        Configuração ausente: PUBLIC_TURNSTILE_SITE_KEY.
+      </p>
+    </div>
+  )}
 
   <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
     <p
@@ -154,6 +178,7 @@ const isDev = import.meta.env.DEV;
     ></p>
     <button
       type="submit"
+      disabled={!hasTurnstile}
       class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
     >
       Enviar mensagem
@@ -162,10 +187,12 @@ const isDev = import.meta.env.DEV;
   </div>
 </form>
 
-<script
-  is:inline
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-  async
-  defer></script>
+{hasTurnstile && (
+  <script
+    is:inline
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer></script>
+)}
 
 <script is:inline type="module" src="/scripts/contact-form.js"></script>

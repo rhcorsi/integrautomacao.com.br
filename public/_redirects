@@ -13,6 +13,7 @@
 /wp-login.php          /                                    301
 /xmlrpc.php            /                                    301
 /wp-json               /                                    301
+/sitemap.xml           /sitemap-index.xml                   301
 /feed                  /rss.xml                             301
 /feed/                 /rss.xml                             301
 /comments/feed         /rss.xml                             301

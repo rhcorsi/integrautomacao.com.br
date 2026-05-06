@@ -50,7 +50,10 @@ const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red";
     </h3>
   </div>
 
-  <div class={dark ? "bg-white" : "bg-integra-white"}>
+  <div class:list={[
+    "flex aspect-[16/9] items-center justify-center",
+    dark ? "bg-white" : "bg-integra-white",
+  ]}>
     <Image
       src={image}
       alt={alt}
@@ -58,7 +61,7 @@ const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red";
       sizes="(min-width: 1024px) 640px, 100vw"
       loading={loading}
       decoding="async"
-      class="h-auto max-h-[34rem] w-full object-contain"
+      class="h-full w-full object-contain"
     />
   </div>
 

@@ -149,6 +149,8 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    ```
 
    Marque os três últimos como **Encrypted** para não vazarem nos logs.
+   `PUBLIC_TURNSTILE_SITE_KEY` precisa existir no ambiente de build; se faltar,
+   o formulário aparece como indisponível e não cai mais em `mailto:` automático.
 
 5. Em **Custom domains**, adicione `integrautomacao.com.br` e `www.integrautomacao.com.br`
    *— apenas depois do cutover de DNS planejado para a Cloudflare.*

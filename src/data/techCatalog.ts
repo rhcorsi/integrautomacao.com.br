@@ -135,7 +135,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Arquitetura PlantPAx como referência de engenharia",
     imageSource: plantpaxSource,
     imageCaption:
-      "Print de manual público usado como referência visual para explicar camadas PlantPAx. A arquitetura final de cada cliente é definida por diagnóstico e validação técnica.",
+      "Referência visual pública para explicar camadas PlantPAx. A arquitetura final de cada cliente é definida por diagnóstico e validação técnica.",
     useCases: [
       "Implantação ou modernização de DCS para processo contínuo, batelada ou operações híbridas.",
       "Padronização de controle, supervisão e alarmes em plantas com múltiplas áreas.",
@@ -191,7 +191,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Objetos de processo conectam controle, HMI e diagnóstico",
     imageSource: plantpaxSource,
     imageCaption:
-      "A biblioteca é aplicada dentro de uma arquitetura PlantPAx maior. O print mostra como os objetos se relacionam com controladores, servidores e supervisão.",
+      "Referência visual pública para contextualizar como objetos PlantPAx se relacionam com controladores, servidores e supervisão.",
     useCases: [
       "Padronização de válvulas, motores, inversores, malhas PID, equipamentos e fases.",
       "Redução de inconsistência entre telas, alarmes e lógica de controle.",
@@ -245,7 +245,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Controladores Logix dentro de uma rede industrial projetada",
     imageSource: logixSource,
     imageCaption:
-      "Print de manual público com exemplo de arquitetura Logix e DLR. Usado para explicar disponibilidade e desenho de rede, não como diagrama final de projeto.",
+      "Referência visual pública com exemplo de arquitetura Logix e DLR. Ajuda a explicar disponibilidade e desenho de rede, não como diagrama final de projeto.",
     theme: "ot",
     useCases: [
       "Controle de processo com malhas PID, intertravamentos, sequenciamento e diagnósticos.",
@@ -358,7 +358,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Arquitetura distribuída FactoryTalk View SE",
     imageSource: viewSeSource,
     imageCaption:
-      "Print de manual público com arquitetura distribuída. Usado para explicar HMI Server, Data Server, clientes e serviços FactoryTalk.",
+      "Referência visual pública com arquitetura distribuída para explicar HMI Server, Data Server, clientes e serviços FactoryTalk.",
     useCases: [
       "Supervisão de áreas críticas com múltiplas estações de operação.",
       "Modernização de telas legadas sem governança visual.",
@@ -412,12 +412,12 @@ export const techCatalog: TechPage[] = [
     imageTitle: "FactoryTalk Optix como camada moderna de visualização",
     imageSource: optixSource,
     imageCaption:
-      "Print de manual público com fluxo de dados e componentes Optix. A aplicação final depende do risco operacional e do padrão de acesso definido para a planta.",
+      "Referência visual pública com fluxo de dados e componentes Optix. A aplicação final depende do risco operacional e do padrão de acesso definido para a planta.",
     useCases: [
       "Dashboards operacionais e telas web para áreas específicas.",
       "Aplicações com integração de dados, web clients e visualização contextual.",
       "Complemento a View SE em projetos com interface moderna e acesso controlado.",
-      "Projetos que precisam separar operação crítica de visualização gerencial.",
+      "Separar operação crítica de visualização gerencial.",
     ],
     howIntegraActs: [
       "Define fronteira entre SCADA crítico, visualização web e dados corporativos.",
@@ -466,7 +466,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "FactoryTalk Batch, PhaseManager e interação de operador",
     imageSource: batchSource,
     imageCaption:
-      "Print de manual público sobre interação entre FactoryTalk Batch, PhaseManager e HMI. A Integra aplica o conceito com sanitização de escopo e documentação própria do projeto.",
+      "Referência visual pública sobre interação entre FactoryTalk Batch, PhaseManager e HMI. A Integra aplica o conceito com sanitização de escopo e documentação própria do projeto.",
     useCases: [
       "Processos por receita, campanha, fase, unidade e operação repetitiva.",
       "Necessidade de rastreabilidade de execução e diagnóstico de ciclo.",
@@ -520,7 +520,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Thin clients fazem sentido quando a arquitetura de supervisão é bem definida",
     imageSource: viewSeSource,
     imageCaption:
-      "O print de arquitetura FactoryTalk View SE ajuda a contextualizar onde clientes industriais, servidores e sessões se conectam.",
+      "Referência visual pública para contextualizar onde clientes industriais, servidores e sessões FactoryTalk View SE se conectam.",
     useCases: [
       "Substituição de PCs industriais por thin clients gerenciados.",
       "Operação por perfil, localização, linha, sala ou credencial.",
@@ -568,13 +568,13 @@ export const techCatalog: TechPage[] = [
     description:
       "Gestão de ativos de automação, versionamento de projetos, auditoria de alterações, backup programado e controle de acesso técnico.",
     intro:
-      "FactoryTalk AssetCentre ajuda a transformar manutenção de automação em processo controlado. Projetos, versões, alterações, backups e acessos deixam de depender de pastas soltas e memória individual.",
+      "FactoryTalk AssetCentre ajuda a transformar manutenção OT em processo controlado. Projetos, versões, alterações, backups e acessos deixam de depender de pastas soltas e memória individual.",
     image: securityReference,
     imageAlt: "Arquitetura FactoryTalk Security com diretório e clientes",
     imageTitle: "Gestão de ativos depende de identidade e auditoria",
     imageSource: securitySource,
     imageCaption:
-      "Print público de referência FactoryTalk Security. AssetCentre se apoia em identidade, permissões e trilhas de mudança para governança de ativos.",
+      "Referência visual pública FactoryTalk Security. AssetCentre se apoia em identidade, permissões e trilhas de mudança para governança de ativos.",
     useCases: [
       "Backup automático de projetos PLC, HMI e dispositivos compatíveis.",
       "Auditoria de quem alterou, quando alterou e onde alterou.",
@@ -622,13 +622,13 @@ export const techCatalog: TechPage[] = [
     description:
       "Historiador industrial para coleta, compressão, retenção e consulta de dados de processo com integração ao ecossistema FactoryTalk.",
     intro:
-      "Historian é infraestrutura de dados. Sem tag list bem definida, compressão correta, qualidade de dado e owner técnico, a planta acumula pontos, mas não ganha inteligência. A Integra estrutura historian para operação, manutenção e evolução analítica.",
+      "Historian é infraestrutura de dados. Sem tag list bem definida, compressão correta, qualidade de dado e responsável técnico, a planta acumula pontos, mas não ganha inteligência. A Integra estrutura historian para operação, manutenção e evolução analítica.",
     image: historianReference,
     imageAlt: "Diagrama lógico de arquitetura FactoryTalk Historian",
     imageTitle: "Historian como camada confiável de dados industriais",
     imageSource: historianSource,
     imageCaption:
-      "Print de manual público com arquitetura lógica Historian. O desenho final depende de volume de tags, criticidade, retenção e integrações.",
+      "Referência visual pública com arquitetura lógica Historian. O desenho final depende de volume de tags, criticidade, retenção e integrações.",
     useCases: [
       "Coleta de tags de processo, utilidades, alarmes, energia e equipamentos.",
       "Retenção histórica para diagnóstico, qualidade, produção e melhoria contínua.",
@@ -682,7 +682,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Conectividade e visualização precisam de fronteira OT bem definida",
     imageSource: optixSource,
     imageCaption:
-      "Print público de arquitetura de dados e visualização. Usado para explicar o fluxo entre camada industrial e aplicações modernas.",
+      "Referência visual pública de arquitetura de dados e visualização para explicar o fluxo entre camada industrial e aplicações modernas.",
     useCases: [
       "Coleta multi-protocolo com Kepware em equipamentos e sistemas heterogêneos.",
       "Modelagem de ativos, serviços e mashups no ThingWorx.",
@@ -736,7 +736,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "DataMosaix como camada de contexto e governança de dados",
     imageSource: dataMosaixSource,
     imageCaption:
-      "Print de manual público com fluxo DataMosaix. O uso no site é conceitual e não representa arquitetura de cliente.",
+      "Referência visual pública com fluxo DataMosaix. O uso no site é conceitual e não representa arquitetura de cliente.",
     useCases: [
       "Contextualização de dados de historian, SCADA, produção e ativos.",
       "Governança de dados industriais para analytics, energia, manutenção e qualidade.",
@@ -790,7 +790,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Edge como ponte controlada entre OT e dados corporativos",
     imageSource: dataMosaixSource,
     imageCaption:
-      "Print público mostrando fluxos de dados em arquitetura industrial moderna. A Integra usa esse tipo de referência para discutir zonas, gateways e governança.",
+      "Referência visual pública com fluxos de dados em arquitetura industrial moderna para discutir zonas, gateways e governança.",
     theme: "ot",
     useCases: [
       "Coleta local com buffer para evitar perda de dados em falhas de comunicação.",
@@ -845,7 +845,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Infraestrutura OT precisa de identidade, servidores e governança",
     imageSource: securitySource,
     imageCaption:
-      "Print público usado para explicar dependências entre servidores, clientes, diretório e aplicações FactoryTalk em ambientes industriais.",
+      "Referência visual pública para explicar dependências entre servidores, clientes, diretório e aplicações FactoryTalk em ambientes industriais.",
     useCases: [
       "Consolidação de servidores FactoryTalk, historian, AssetCentre e engenharia.",
       "Ambientes com alta disponibilidade, backup, restore e dependências críticas.",
@@ -1007,7 +1007,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Identidade industrial como base de segurança e auditoria",
     imageSource: securitySource,
     imageCaption:
-      "Print público de referência FactoryTalk Security. O desenho ajuda a mostrar relação entre identidade, clientes, servidores e políticas de acesso.",
+      "Referência visual pública FactoryTalk Security para mostrar relação entre identidade, clientes, servidores e políticas de acesso.",
     useCases: [
       "Autenticação centralizada para FactoryTalk, ThinManager, servidores e estações.",
       "Segregação entre usuários de operação, manutenção, engenharia e suporte.",
@@ -1115,7 +1115,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "FactoryTalk Security como camada de autorização industrial",
     imageSource: securitySource,
     imageCaption:
-      "Print de manual público que mostra componentes típicos de segurança FactoryTalk. Usado para explicar autenticação e autorização em contexto industrial.",
+      "Referência visual pública com componentes típicos de segurança FactoryTalk para explicar autenticação e autorização em contexto industrial.",
     useCases: [
       "Separação de permissões entre operação, manutenção, engenharia e administradores.",
       "Rastreabilidade de ações e alterações em sistemas FactoryTalk.",
@@ -1169,7 +1169,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "CPwE como referência para rede industrial convergente",
     imageSource: cpweSource,
     imageCaption:
-      "Print de manual público CPwE. Usado para explicar camadas, zonas, IDMZ e integração controlada entre OT e IT.",
+      "Referência visual pública CPwE para explicar camadas, zonas, IDMZ e integração controlada entre OT e IT.",
     theme: "ot",
     useCases: [
       "Redes flat com broadcast, loops, baixa visibilidade e risco de parada.",
@@ -1226,7 +1226,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Protocolos precisam de topologia e responsabilidade técnica",
     imageSource: logixSource,
     imageCaption:
-      "Print público de arquitetura Logix com rede industrial. Usado para contextualizar dispositivos, comunicação e disponibilidade.",
+      "Referência visual pública de arquitetura Logix com rede industrial para contextualizar dispositivos, comunicação e disponibilidade.",
     theme: "ot",
     useCases: [
       "Integração de controladores, I/O remoto, inversores, IEDs, analisadores e sistemas de terceiros.",
@@ -1283,7 +1283,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Zonas, conduítes e integração OT/IT com referência CPwE",
     imageSource: cpweSource,
     imageCaption:
-      "Print público CPwE usado para explicar segmentação e defesa em profundidade aplicada a ambientes industriais.",
+      "Referência visual pública CPwE para explicar segmentação e defesa em profundidade aplicada a ambientes industriais.",
     theme: "ot",
     useCases: [
       "Plantas com rede flat e acesso remoto pouco controlado.",
@@ -1338,7 +1338,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Hardening precisa respeitar serviços industriais",
     imageSource: securitySource,
     imageCaption:
-      "Print público FactoryTalk Security usado para mostrar dependências entre servidores, diretórios, clientes e permissões.",
+      "Referência visual pública FactoryTalk Security para mostrar dependências entre servidores, diretórios, clientes e permissões.",
     theme: "ot",
     useCases: [
       "Servidores e estações com serviços desnecessários, contas compartilhadas ou permissões excessivas.",
@@ -1437,7 +1437,7 @@ export const techCatalog: TechPage[] = [
     slug: "monitoramento-redes-industriais",
     group: "Redes e Cibersegurança OT",
     type: "Serviço",
-    title: "Monitoramento e Diagnóstico de Redes Industriais",
+    title: "Diagnóstico de Redes Industriais",
     shortTitle: "Diagnóstico de Rede",
     description:
       "Análise de tráfego, loops, broadcast storms, saúde de rede, devices, uplinks, DLR e comportamento de comunicação em OT.",
@@ -1448,7 +1448,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Diagnóstico de rede começa por arquitetura e tráfego real",
     imageSource: cpweSource,
     imageCaption:
-      "Print público CPwE usado para discutir camadas, tráfego e fronteiras entre ambientes industriais e corporativos.",
+      "Referência visual pública CPwE para discutir camadas, tráfego e fronteiras entre ambientes industriais e corporativos.",
     theme: "ot",
     useCases: [
       "Quedas intermitentes de HMI, PLC, I/O remoto, inversores ou historian.",
@@ -1493,11 +1493,11 @@ export const techCatalog: TechPage[] = [
     group: "Serviços de Engenharia",
     type: "Serviço",
     title: "Manutenção Corretiva e Preventiva em Automação",
-    shortTitle: "Manutenção de Automação",
+    shortTitle: "Manutenção OT",
     description:
       "Suporte técnico para PLCs, SCADA, redes, servidores, historian, aplicações FactoryTalk e infraestrutura OT crítica.",
     intro:
-      "Manutenção de automação precisa ir além de apagar incêndio. A Integra combina atendimento corretivo, rotina preventiva, documentação e análise de causa para reduzir reincidência e dependência de conhecimento informal.",
+      "Manutenção OT precisa ir além de apagar incêndio. A Integra combina atendimento corretivo, rotina preventiva, documentação e análise de causa para reduzir reincidência e dependência de conhecimento informal.",
     image: viewSeReference,
     imageAlt: "Arquitetura FactoryTalk View SE usada como referência de sistemas industriais",
     imageTitle: "Manutenção precisa entender a arquitetura inteira",
@@ -1557,7 +1557,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Suporte remoto precisa passar por arquitetura segura",
     imageSource: cpweSource,
     imageCaption:
-      "Print público CPwE usado para explicar por que acesso remoto deve respeitar zonas, IDMZ e regras de comunicação.",
+      "Referência visual pública CPwE para explicar por que acesso remoto deve respeitar zonas, IDMZ e regras de comunicação.",
     theme: "ot",
     useCases: [
       "Apoio rápido a falhas em PLC, HMI, servidores ou comunicação.",
@@ -1667,7 +1667,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Performance depende de dados confiáveis e arquitetura estável",
     imageSource: historianSource,
     imageCaption:
-      "Print público Historian usado para contextualizar análise de dados, tendências e eventos como base de melhoria operacional.",
+      "Referência visual pública Historian para contextualizar análise de dados, tendências e eventos como base de melhoria operacional.",
     useCases: [
       "Malhas oscilando, ciclos longos, paradas recorrentes ou baixa visibilidade de causa.",
       "SCADA lento, historian pesado, servidores saturados ou rede instável.",
@@ -1775,7 +1775,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Modernização para Logix precisa de arquitetura e cutover controlado",
     imageSource: logixSource,
     imageCaption:
-      "Print de manual público com referência Logix. Usado para contextualizar redes, controladores e disponibilidade em modernizações.",
+      "Referência visual pública com referência Logix para contextualizar redes, controladores e disponibilidade em modernizações.",
     theme: "ot",
     useCases: [
       "PLC5, SLC500 ou redes antigas sustentando áreas críticas.",
@@ -1834,7 +1834,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "deviceWISE organiza conectividade, gestão e integração IIoT",
     imageSource: devicewiseSource,
     imageCaption:
-      "Print de material público Telit Cinterion usado para explicar a lógica da plataforma: conectar dispositivos, gerenciar dados e integrar sistemas de negócio.",
+      "Referência visual pública Telit Cinterion para explicar a lógica da plataforma: conectar dispositivos, gerenciar dados e integrar sistemas de negócio.",
     useCases: [
       "Coleta de dados de PLCs, sensores, equipamentos e sistemas multi-vendor.",
       "Gateway industrial para enviar dados a bancos, APIs, MQTT, sistemas corporativos ou nuvem.",
@@ -1890,7 +1890,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "TIA Portal como ambiente integrado de engenharia Siemens",
     imageSource: siemensTiaSource,
     imageCaption:
-      "Print de material público Siemens usado como referência visual. A Integra trabalha com ferramentas Siemens como tecnologia atendida, sem afirmar programa formal de integrador Siemens.",
+      "Referência visual pública Siemens. A Integra trabalha com ferramentas Siemens como tecnologia atendida, sem afirmar programa formal de integrador Siemens.",
     useCases: [
       "Programação e manutenção de PLCs SIMATIC S7-1200 e S7-1500.",
       "Expansão de sistemas existentes com IHMs, redes PROFINET e bibliotecas de projeto.",
@@ -2002,7 +2002,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "WinCC organiza operação, telas, alarmes e engenharia de supervisão",
     imageSource: siemensWinccSource,
     imageCaption:
-      "Print público Siemens usado como referência visual. Projetos com WinCC clássico, WinCC 7.x, Unified ou PCS 7 são avaliados conforme versão, licenças, arquitetura e ciclo de vida.",
+      "Referência visual pública Siemens. Projetos com WinCC clássico, WinCC 7.x, Unified ou PCS 7 são avaliados conforme versão, licenças, arquitetura e ciclo de vida.",
     useCases: [
       "Manutenção e evolução de supervisórios Siemens existentes.",
       "Padronização de telas, alarmes, históricos, usuários e diagnósticos.",
@@ -2057,7 +2057,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Redes, drives e engenharia Siemens precisam caminhar juntos",
     imageSource: siemensStartdriveSource,
     imageCaption:
-      "Print público Siemens usado para contextualizar o comissionamento de drives no TIA Portal e a importância de rede industrial estável.",
+      "Referência visual pública Siemens para contextualizar o comissionamento de drives no TIA Portal e a importância de rede industrial estável.",
     theme: "ot",
     useCases: [
       "Diagnóstico de falhas de comunicação PROFINET ou Industrial Ethernet.",
@@ -2113,7 +2113,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Elipse E3 como camada supervisória multi-vendor",
     imageSource: elipseE3Source,
     imageCaption:
-      "Print de material público Elipse usado para explicar arquitetura de servidores, viewers, dispositivos e camadas de acesso.",
+      "Referência visual pública Elipse para explicar arquitetura de servidores, viewers, dispositivos e camadas de acesso.",
     useCases: [
       "Desenvolvimento de supervisórios para plantas com PLCs de diferentes fabricantes.",
       "Modernização de telas, alarmes, históricos, usuários e relatórios.",
@@ -2168,7 +2168,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Control Expert organiza engenharia de PLCs Modicon",
     imageSource: schneiderControlSource,
     imageCaption:
-      "Print público Schneider Electric usado como referência visual para PLCs, estações de engenharia, rede e diagnóstico no ecossistema EcoStruxure.",
+      "Referência visual pública Schneider Electric para PLCs, estações de engenharia, rede e diagnóstico no ecossistema EcoStruxure.",
     useCases: [
       "Manutenção e evolução de PLCs Modicon em Control Expert ou Unity Pro.",
       "Diagnóstico de comunicação, I/O, lógica, alarmes e integração com supervisório.",
@@ -2223,7 +2223,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Machine Expert para automação de máquinas e células",
     imageSource: schneiderMachineSource,
     imageCaption:
-      "Print público Schneider Electric usado para contextualizar engenharia de máquinas, controladores menores, dispositivos e interface operacional.",
+      "Referência visual pública Schneider Electric para contextualizar engenharia de máquinas, controladores menores, dispositivos e interface operacional.",
     useCases: [
       "Programação e ajustes em PLCs Schneider de máquinas e equipamentos.",
       "Manutenção de aplicações Machine Expert ou SoMachine.",
@@ -2267,7 +2267,7 @@ export const techCatalog: TechPage[] = [
     slug: "schneider-machine-scada-expert",
     group: "Supervisão e Operação",
     type: "Software",
-    title: "Schneider EcoStruxure Machine SCADA Expert",
+    title: "Schneider Machine SCADA Expert",
     shortTitle: "Schneider Machine SCADA",
     description:
       "Supervisão, telas, alarmes e comunicação para sistemas Schneider em Machine SCADA Expert e aplicações de operação de máquina.",
@@ -2278,7 +2278,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Machine SCADA Expert para operação e supervisão de máquinas",
     imageSource: schneiderScadaSource,
     imageCaption:
-      "Print público Schneider Electric usado como referência visual de ambiente SCADA/HMI. A aplicação final depende do hardware, versão e arquitetura existente.",
+      "Referência visual pública Schneider Electric de ambiente SCADA/HMI. A aplicação final depende do hardware, versão e arquitetura existente.",
     useCases: [
       "Manutenção de supervisórios Machine SCADA Expert existentes.",
       "Criação ou revisão de telas, alarmes, usuários, tags e relatórios.",
