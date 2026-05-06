@@ -9,6 +9,7 @@ import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
+import idmzUntrustedTrusted from "@/assets/manuals/idmz-untrusted-trusted-zones.jpg";
 
 const layers = [
   {
@@ -142,6 +143,40 @@ const faq = [
           </li>
         ))}
       </ol>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <ManualReference
+        image={idmzUntrustedTrusted}
+        alt="Figura IDMZ High Level Concepts mostrando zona Untrusted (Enterprise) e Trusted (Industrial) separadas por firewall com regra No Direct IACS Traffic"
+        title="A IDMZ é a fronteira inegociável entre Untrusted e Trusted"
+        source="Cisco + Rockwell Automation · Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)"
+        caption="Print público do guia ENET-TD013A-EN-P: nenhum tráfego IACS atravessa direto. A IDMZ replica serviços, registra, inspeciona e desconecta — é o controle estrutural exigido pelo CPwE e pela IEC 62443."
+        theme="ot"
+      />
+      <div>
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-ot mb-3">
+          IDMZ · zona-pivô do CPwE
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Sem IDMZ, não existe IEC 62443 aplicada
+        </h2>
+        <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          A IDMZ é o ponto onde a segurança de processo deixa de ser teoria.
+          Servidores replicados, gateways de transferência, RD Gateway,
+          historian em PI-to-PI e WSUS vivem na IDMZ — nunca direto na
+          camada de controle. É essa fronteira que permite manter a planta
+          conectada à TI corporativa sem expor o IACS.
+        </p>
+        <ul class="mt-6 grid gap-2 text-sm text-integra-gray-700">
+          <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Firewalls redundantes em modo high-availability, com regras documentadas e revisadas por mudança.</span></li>
+          <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Serviços replicados (Historian, AD, WSUS, Antivírus) em vez de acesso direto enterprise→industrial.</span></li>
+          <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Acesso remoto sempre via Remote Desktop Gateway com MFA, jump host registrado e gravação de sessão.</span></li>
+          <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Pontos de desconexão (Disconnect) explícitos para isolar a planta em incidente de cibersegurança.</span></li>
+        </ul>
+      </div>
     </div>
   </section>
 

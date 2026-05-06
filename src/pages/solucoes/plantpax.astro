@@ -9,6 +9,8 @@ import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
 import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
+import plantpaxPasscSmall from "@/assets/manuals/plantpax-passc-small-1k-io.jpg";
+import plantpaxRedundantPrp from "@/assets/manuals/plantpax-redundant-prp-topology.jpg";
 
 const problems = [
   {
@@ -195,6 +197,22 @@ const faq = [
               </p>
             </article>
           ))}
+        </div>
+        <div class="mt-8 grid gap-8 lg:grid-cols-2">
+          <ManualReference
+            image={plantpaxPasscSmall}
+            alt="Reference Architecture - Small PASS-C com até 10 clientes, 5 controladores e até 5000 tags Historian"
+            title="Entry-tier: PASS-C consolidado para plantas até 1k I/O"
+            source="Rockwell Automation · PlantPAx 5.20 Reference Architectures"
+            caption="Print público da arquitetura Small: PASS-C reúne HMI, Data, Alarms e Batch em um único servidor consolidado — útil para projetos abaixo de 2.000 pontos de I/O."
+          />
+          <ManualReference
+            image={plantpaxRedundantPrp}
+            alt="Topologia PRP redundante com até 10 controladores em arquitetura PlantPAx"
+            title="Mid/Large com redundância PRP: tolerância a falha de rede"
+            source="Rockwell Automation · PlantPAx System Release 5.50 (PROCES-SG001W-EN-P)"
+            caption="Print público da Reference Architecture: até 10 controladores com portas em grupos PRP alimentando LAN A e LAN B, mais a camada completa de servidores OWS, EWS e info repository."
+          />
         </div>
         <div class="mt-8">
           <ManualReference

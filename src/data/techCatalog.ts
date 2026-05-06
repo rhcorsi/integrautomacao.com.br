@@ -4,12 +4,10 @@ import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.j
 import batchReference from "@/assets/manuals/factorytalk-batch-operator-prompt.jpg";
 import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
 import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
-import optixReference from "@/assets/manuals/factorytalk-optix-data-flow.jpg";
 import datamosaixReference from "@/assets/manuals/factorytalk-datamosaix-data-flow.jpg";
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
-import devicewiseReference from "@/assets/manuals/telit-devicewise-platform-introduction.jpg";
 import siemensTiaReference from "@/assets/manuals/siemens-tia-portal-engineering.jpg";
 import siemensWinccReference from "@/assets/manuals/siemens-wincc-unified-engineering.jpg";
 import siemensStartdriveReference from "@/assets/manuals/siemens-startdrive-tia-portal.jpg";
@@ -32,6 +30,16 @@ import controllogixGuardlogix from "@/assets/manuals/controllogix-guardlogix-arm
 import cpweDefenseInDepth from "@/assets/manuals/cpwe-defense-in-depth.jpg";
 import factorytalkAnalyticsLogixai from "@/assets/manuals/factorytalk-analytics-logixai.jpg";
 import simaticStep7Classic from "@/assets/manuals/simatic-step7-classic.jpg";
+
+// V2 library (May 2026): premium diagrams curated from public CVDs and product pages.
+// Other library entries (logix-direct-dlr-non-converged, factorytalk-optix-data-flow-detail,
+// aveva-rcl-foods-sugar-case, aveva-production-dashboard, siemens-network-layer2-architecture,
+// plantpax-redundant-prp-topology, plantpax-passc-small-1k-io) live in src/assets/manuals/
+// and are catalogued in _img_extraction/library_catalog.json for blog/case-study reuse.
+import plantpaxSystemEstimator from "@/assets/manuals/plantpax-system-estimator.jpg";
+import idmzUntrustedTrusted from "@/assets/manuals/idmz-untrusted-trusted-zones.jpg";
+import optixDesignDeployment from "@/assets/manuals/factorytalk-optix-design-deployment.jpg";
+import telitSinglePointAccess from "@/assets/manuals/telit-iot-portal-single-point-access.jpg";
 
 export type TechGroup =
   | "Controle e DCS"
@@ -77,12 +85,10 @@ const plantpaxSource = "Rockwell Automation - PlantPAx System Release 5.40 Refer
 const batchSource = "Rockwell Automation - PlantPAx Batch Design Considerations";
 const viewSeSource = "Rockwell Automation - FactoryTalk View SE Reference Architectures";
 const historianSource = "Rockwell Automation - FactoryTalk Historian SE Reference Architectures";
-const optixSource = "Rockwell Automation - FactoryTalk Optix Reference Architectures";
 const dataMosaixSource = "Rockwell Automation - FactoryTalk DataMosaix Reference Architectures";
 const cpweSource = "Cisco + Rockwell Automation - CPwE Design and Implementation Guides";
 const logixSource = "Rockwell Automation - ControlLogix High Availability Reference Architectures";
 const securitySource = "Rockwell Automation - FactoryTalk Security System Design";
-const devicewiseSource = "Telit Cinterion - deviceWISE IoT Platform Introduction";
 const siemensTiaSource = "Siemens - Totally Integrated Automation Portal";
 const siemensWinccSource = "Siemens - SIMATIC WinCC Unified Engineering";
 const siemensStartdriveSource = "Siemens - SINAMICS Startdrive / TIA Portal";
@@ -102,6 +108,13 @@ const controllogixHaSource = "Rockwell Automation - ControlLogix High Availabili
 const controllogix5570Source = "Rockwell Automation - ControlLogix 5580 and ControlLogix 5570 Systems Selection Guide";
 const ftAnalyticsSource = "Rockwell Automation - FactoryTalk Analytics LogixAI Reference Architectures";
 const simaticStep7Source = "Siemens - SIMATIC Programmable Logic Controllers ST 70 Catalog";
+
+// Sources for V2 library (only the ones currently wired into techCatalog entries).
+// Additional source strings for library_catalog.json entries are tracked there.
+const plantpaxSg001Source = "Rockwell Automation - PlantPAx System Release 5.50 (PROCES-SG001W-EN-P)";
+const idmzFirepowerSource = "Cisco + Rockwell Automation - Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)";
+const ftOptixRefSource = "Rockwell Automation - FactoryTalk Optix Reference Architectures";
+const telitIoTPortalSource = "Telit Cinterion - IoT Portal Overview (2018)";
 
 const plantpaxRelated = [
   { href: "/solucoes/plantpax", label: "Solução PlantPAx" },
@@ -156,12 +169,12 @@ export const techCatalog: TechPage[] = [
       "Arquitetura DCS moderna para controle plant-wide, com objetos de processo, servidores FactoryTalk e governança de ciclo de vida.",
     intro:
       "PlantPAx 5.x entra quando a planta precisa sair de automação por ilhas e operar com arquitetura de processo estruturada. O valor está na padronização: objetos, faceplates, alarmes, redes, servidores, historian e documentação falando a mesma língua técnica.",
-    image: plantpaxReference,
-    imageAlt: "Arquitetura de referência PlantPAx com PASS, servidores e controladores",
-    imageTitle: "Arquitetura PlantPAx como referência de engenharia",
-    imageSource: plantpaxSource,
+    image: plantpaxSystemEstimator,
+    imageAlt: "Tela do PlantPAx System Estimator no Integrated Architecture Builder com servidores, controladores, alarmes e I/O",
+    imageTitle: "PlantPAx System Estimator: dimensionar é decisão de engenharia",
+    imageSource: plantpaxSg001Source,
     imageCaption:
-      "Referência visual pública para explicar camadas PlantPAx. A arquitetura final de cada cliente é definida por diagnóstico e validação técnica.",
+      "Print público do System Estimator integrado ao IAB. Antes de propor topologia, validamos servidores, alarmes, controladores e I/O com a ferramenta oficial do fabricante.",
     useCases: [
       "Implantação ou modernização de DCS para processo contínuo, batelada ou operações híbridas.",
       "Padronização de controle, supervisão e alarmes em plantas com múltiplas áreas.",
@@ -432,12 +445,12 @@ export const techCatalog: TechPage[] = [
       "Plataforma moderna de visualização industrial, com arquitetura web, modelos de dados, interfaces flexíveis e integração com sistemas externos.",
     intro:
       "FactoryTalk Optix é útil quando o projeto pede visualização moderna, mobilidade controlada e integração mais aberta. A Integra avalia onde Optix faz sentido, como convive com View SE e quais limites de operação crítica precisam ser respeitados.",
-    image: optixReference,
-    imageAlt: "Fluxo de dados em arquitetura FactoryTalk Optix",
-    imageTitle: "FactoryTalk Optix como camada moderna de visualização",
-    imageSource: optixSource,
+    image: optixDesignDeployment,
+    imageAlt: "FactoryTalk Optix Studio Standard vs Pro com Runtime, Hub e Remote Access Infrastructure",
+    imageTitle: "Optix Studio Standard vs Pro: o desenho muda conforme o porte",
+    imageSource: ftOptixRefSource,
     imageCaption:
-      "Referência visual pública com fluxo de dados e componentes Optix. A aplicação final depende do risco operacional e do padrão de acesso definido para a planta.",
+      "Print público da Reference Architecture: Optix Standard atende projetos locais; Optix Pro habilita design em nuvem e deploy em frota via Remote Access. A escolha define infraestrutura, identidade e governança.",
     useCases: [
       "Dashboards operacionais e telas web para áreas específicas.",
       "Aplicações com integração de dados, web clients e visualização contextual.",
@@ -1295,12 +1308,12 @@ export const techCatalog: TechPage[] = [
       "Diagnóstico, zonas e conduítes, gap analysis, roadmap e controles de cibersegurança OT alinhados a referências internacionais.",
     intro:
       "Cibersegurança OT não começa por ferramenta. Começa por entender processo, risco, zonas, conduítes, ativos, dependências e impacto operacional. A Integra aplica IEC 62443 e NIST SP 800-82 como método de engenharia, não como checklist genérico.",
-    image: cpweReference,
-    imageAlt: "Arquitetura CPwE com camadas OT e IT",
-    imageTitle: "Zonas, conduítes e integração OT/IT com referência CPwE",
-    imageSource: cpweSource,
+    image: idmzUntrustedTrusted,
+    imageAlt: "IDMZ entre Enterprise (Untrusted) e Industrial (Trusted) Security Zones com regra No Direct IACS Traffic",
+    imageTitle: "Untrusted/Trusted: a fronteira que dá nome a IEC 62443 aplicada",
+    imageSource: idmzFirepowerSource,
     imageCaption:
-      "Referência visual pública CPwE para explicar segmentação e defesa em profundidade aplicada a ambientes industriais.",
+      "Print público do guia ENET-TD013A-EN-P (Cisco + Rockwell): a IDMZ replica serviços, registra logs, inspeciona e desconecta — é o controle estrutural exigido pelos zone/conduit da IEC 62443.",
     theme: "ot",
     useCases: [
       "Plantas com rede flat e acesso remoto pouco controlado.",
@@ -1839,12 +1852,12 @@ export const techCatalog: TechPage[] = [
       "Plataforma IIoT da Telit Cinterion para conectar ativos industriais, executar lógica no edge e integrar dados OT com sistemas de negócio.",
     intro:
       "TC deviceWISE entra quando a planta precisa transformar dados industriais em integração real: PLCs, sensores, gateways, bancos, APIs, MQTT, dashboards e sistemas corporativos trabalhando com rastreabilidade. A Integra aplica a plataforma como integradora de sistemas, conectando OT e TI sem tratar IoT como painel bonito.",
-    image: devicewiseReference,
-    imageAlt: "Diagrama da plataforma deviceWISE com camadas Connect, Manage e Integrate",
-    imageTitle: "deviceWISE organiza conectividade, gestão e integração IIoT",
-    imageSource: devicewiseSource,
+    image: telitSinglePointAccess,
+    imageAlt: "Telit IoT Portal — slide com Connect/Manage/Integrate, Any Thing to Any App, Pay-as-you-grow e No Upfront Investment",
+    imageTitle: "TC deviceWISE: ponto único de acesso aos serviços IoT da Telit",
+    imageSource: telitIoTPortalSource,
     imageCaption:
-      "Referência visual pública Telit Cinterion para explicar a lógica da plataforma: conectar dispositivos, gerenciar dados e integrar sistemas de negócio.",
+      "Print público do material institucional Telit Cinterion: a plataforma reúne conectividade, gestão e integração IIoT com modelo pay-as-you-grow — base de retrofit incremental sem reescrever automação.",
     useCases: [
       "Coleta de dados de PLCs, sensores, equipamentos e sistemas multi-vendor.",
       "Gateway industrial para enviar dados a bancos, APIs, MQTT, sistemas corporativos ou nuvem.",
