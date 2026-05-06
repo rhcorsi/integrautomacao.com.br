@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import logoColorido from "@/assets/logos/Colorido.png";
+import EmailLink from "@/components/EmailLink.astro";
 import { NAV, MEGA_MENUS, COMPANY, type MegaMenu } from "@/utils/site";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -108,7 +109,7 @@ const allMegas: Record<string, MegaMenu> = {
       <nav aria-label="Links secundários" class="flex items-center divide-x divide-integra-gray-300">
         <a href="/empresa#timeline" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">Sobre</a>
         <a href={COMPANY.social.linkedin} rel="noopener noreferrer" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">LinkedIn</a>
-        <a href={`mailto:${COMPANY.email}`} class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">{COMPANY.email}</a>
+        <EmailLink email={COMPANY.email} class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">{COMPANY.email}</EmailLink>
         <a href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`} class="pl-3 text-integra-gray-900 font-medium hover:text-integra-red transition-colors">{phoneCommercial.display}</a>
       </nav>
     </div>

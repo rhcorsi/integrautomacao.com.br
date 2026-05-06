@@ -1,7 +1,7 @@
 # Path-based 301 redirects from the old WordPress site.
-# Query-string redirects (?p=N, ?page_id=N, ?post_type=…) are handled
-# by the Cloudflare Worker `legacy-redirects` because CF Pages `_redirects`
-# does not match against the query string.
+# Query-string redirects (?p=N, ?page_id=N, ?post_type=...) are handled
+# by functions/_middleware.ts because CF Pages `_redirects` does not match
+# against the query string.
 #
 # IMPORTANT: static rules must come BEFORE splat (*) rules, or wrangler
 # warns about reduced performance.

@@ -1,0 +1,17 @@
+---
+interface Props {
+  email: string;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const { email, ariaLabel } = Astro.props;
+const className = Astro.props.class;
+const optionalAttrs = ariaLabel ? { "aria-label": ariaLabel } : {};
+---
+
+<!--email_off-->
+<a href={`mailto:${email}`} class={className} {...optionalAttrs}>
+  <slot />
+</a>
+<!--/email_off-->

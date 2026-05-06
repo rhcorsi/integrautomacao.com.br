@@ -1,6 +1,7 @@
 ﻿---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContactForm from "@/components/ContactForm.astro";
+import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
 const phoneCommercial = COMPANY.phones[0];
@@ -44,12 +45,12 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
           <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
             Email
           </h3>
-          <a
-            href={`mailto:${COMPANY.email}`}
+          <EmailLink
+            email={COMPANY.email}
             class="text-base font-medium text-integra-gray-900 hover:text-integra-red transition-colors break-all"
           >
             {COMPANY.email}
-          </a>
+          </EmailLink>
         </div>
 
         <div>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
 const lastUpdated = "5 de maio de 2026";
@@ -161,7 +162,7 @@ const lastUpdated = "5 de maio de 2026";
         <h2>8. Como exercer seus direitos</h2>
         <p>
           Para exercer qualquer dos direitos acima, escreva para
-          <a href={`mailto:${COMPANY.emailPrivacy}`}>{COMPANY.emailPrivacy}</a>.
+          <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
           Responderemos em até 15 dias úteis.
         </p>
 
@@ -187,7 +188,7 @@ const lastUpdated = "5 de maio de 2026";
         <p>
           Para tratativas relacionadas à proteção de dados pessoais,
           entre em contato pelo e-mail
-          <a href={`mailto:${COMPANY.emailPrivacy}`}>{COMPANY.emailPrivacy}</a>.
+          <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
         </p>
       </div>
     </div>

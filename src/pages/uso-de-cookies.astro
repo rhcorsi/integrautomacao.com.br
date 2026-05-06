@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
 const lastUpdated = "5 de maio de 2026";
@@ -118,7 +119,7 @@ const lastUpdated = "5 de maio de 2026";
         </p>
         <p>
           Dúvidas ou solicitações sobre privacidade:
-          <a href={`mailto:${COMPANY.emailPrivacy}`}>{COMPANY.emailPrivacy}</a>.
+          <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
         </p>
       </div>
     </div>

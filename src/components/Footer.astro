@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import logoColorido from "@/assets/logos/Colorido.png";
+import EmailLink from "@/components/EmailLink.astro";
 import { SITE, COMPANY } from "@/utils/site";
 
 const year = new Date().getFullYear();
@@ -97,10 +98,10 @@ const legalLinks = [
               />
             </svg>
           </a>
-          <a
-            href={`mailto:${COMPANY.email}`}
+          <EmailLink
+            email={COMPANY.email}
             class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red hover:bg-integra-gray-100 transition-colors"
-            aria-label="E-mail"
+            ariaLabel="E-mail"
           >
             <svg
               class="size-5"
@@ -116,7 +117,7 @@ const legalLinks = [
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-2 11H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2z"
               />
             </svg>
-          </a>
+          </EmailLink>
           <a
             href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
             rel="noopener noreferrer"
@@ -168,12 +169,12 @@ const legalLinks = [
           <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
             Contato comercial
           </h3>
-          <a
-            href={`mailto:${COMPANY.email}`}
+          <EmailLink
+            email={COMPANY.email}
             class="text-base font-medium text-integra-gray-900 hover:text-integra-red transition-colors block break-all"
           >
             {COMPANY.email}
-          </a>
+          </EmailLink>
           <a
             href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`}
             class="mt-1 text-sm text-integra-gray-700 hover:text-integra-red transition-colors block"
