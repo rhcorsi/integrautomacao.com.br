@@ -1,0 +1,52 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const popular = [
+  { href: "/solucoes/", label: "Soluções" },
+  { href: "/cases/", label: "Cases" },
+  { href: "/blog/", label: "Blog técnico" },
+  { href: "/contato/", label: "Falar com especialista" },
+];
+---
+
+<BaseLayout
+  title="Página não encontrada"
+  description="A página que você procura não existe ou foi movida. Veja os caminhos sugeridos abaixo."
+  noindex={true}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-narrow py-24 lg:py-32 text-center">
+      <p class="font-mono text-xs font-semibold uppercase tracking-widest text-integra-red mb-4">
+        Erro 404
+      </p>
+      <h1 class="text-5xl font-semibold text-integra-gray-900 sm:text-6xl">
+        Página não encontrada.
+      </h1>
+      <p class="mt-6 text-lg text-integra-gray-700 max-w-xl mx-auto leading-relaxed">
+        O endereço que você acessou não existe ou foi movido. Se chegou aqui
+        a partir de um link antigo do site WordPress, é provável que o
+        conteúdo tenha sido reorganizado.
+      </p>
+
+      <ul class="mt-12 grid gap-3 max-w-md mx-auto sm:grid-cols-2">
+        {popular.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class="inline-flex w-full items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-integra-gray-900 bg-integra-white border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+            >
+              {label}
+              <span aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p class="mt-10 text-sm text-integra-gray-500">
+        <a href="/" class="text-integra-red hover:underline">
+          Voltar para a página inicial
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
