@@ -67,3 +67,156 @@ export const NAV = [
   { href: "/certificacoes", label: "Certificações" },
   { href: "/contato", label: "Contato" },
 ] as const;
+
+/**
+ * Mega-menu structure for nav items that have sub-pages worth surfacing.
+ * Items not listed here are simple direct links. Each mega-menu has up to 4
+ * columns of links, plus an optional promotional card on the right.
+ */
+export interface MegaMenuColumn {
+  title: string;
+  links: { href: string; label: string; description?: string }[];
+}
+
+export interface MegaMenuPromo {
+  eyebrow: string;
+  title: string;
+  description: string;
+  cta: { href: string; label: string };
+  /** Optional image src (relative to public/) — falls back to colored block. */
+  imageSrc?: string;
+}
+
+export interface MegaMenu {
+  /** Optional intro text shown above the columns */
+  intro?: { title: string; href: string };
+  columns: MegaMenuColumn[];
+  promo?: MegaMenuPromo;
+  /** Optional footer row of quick-access links */
+  quickLinks?: { href: string; label: string }[];
+}
+
+export const MEGA_MENUS: Record<string, MegaMenu> = {
+  "/solucoes": {
+    intro: {
+      title: "Conheça todas as soluções",
+      href: "/solucoes",
+    },
+    columns: [
+      {
+        title: "Plataforma",
+        links: [
+          { href: "/solucoes/plantpax", label: "PlantPAx" },
+          { href: "/solucoes/factorytalk", label: "FactoryTalk Suite" },
+        ],
+      },
+      {
+        title: "Redes & Segurança",
+        links: [
+          { href: "/solucoes/redes-iec-62443", label: "Redes Industriais e IEC 62443" },
+        ],
+      },
+      {
+        title: "Em construção",
+        links: [
+          { href: "/solucoes#em-construcao", label: "PI System / AVEVA" },
+          { href: "/solucoes#em-construcao", label: "Data Centers Industriais" },
+          { href: "/solucoes#em-construcao", label: "Migração PLC5 / SLC500" },
+        ],
+      },
+    ],
+    promo: {
+      eyebrow: "Método Integra",
+      title: "Arquitetura → Engenharia → Implantação → Validação → Suporte",
+      description:
+        "Cada solução passa pelas mesmas cinco fases. Documentação completa, padronização e governança em cada entrega.",
+      cta: { href: "/solucoes#metodo-integra", label: "Ver método Integra" },
+    },
+  },
+
+  "/setores": {
+    columns: [
+      {
+        title: "Agronegócio",
+        links: [
+          { href: "/setores", label: "Açúcar e Etanol" },
+          { href: "/setores", label: "Etanol de Milho" },
+          { href: "/setores", label: "Armazenagem de Grãos" },
+        ],
+      },
+      {
+        title: "Alimentos",
+        links: [
+          { href: "/setores", label: "Alimentos e Bebidas" },
+          { href: "/setores", label: "Frigoríficos" },
+          { href: "/setores", label: "Fábricas de Ração" },
+        ],
+      },
+      {
+        title: "Indústria de Processo",
+        links: [
+          { href: "/setores", label: "Química e Fertilizantes" },
+          { href: "/setores", label: "Papel e Celulose" },
+          { href: "/setores", label: "Saneamento" },
+        ],
+      },
+    ],
+    promo: {
+      eyebrow: "Atuação nacional",
+      title: "Indústrias de médio e grande porte com processos críticos",
+      description:
+        "B2B com foco em plantas que operam 24/7 e exigem padronização, segurança e documentação para auditoria.",
+      cta: { href: "/setores", label: "Ver todos os setores" },
+    },
+  },
+
+  "/certificacoes": {
+    columns: [
+      {
+        title: "Parceria Técnica",
+        links: [
+          {
+            href: "/certificacoes/silver-system-integrator",
+            label: "Silver System Integrator",
+            description: "Rockwell Automation",
+          },
+          {
+            href: "/certificacoes#plantpax-dcs",
+            label: "PlantPAx DCS Partner",
+            description: "Rockwell Automation",
+          },
+        ],
+      },
+      {
+        title: "Capacitação",
+        links: [
+          {
+            href: "/certificacoes#cisco",
+            label: "Cisco Networking Academy",
+            description: "Industrial IoT",
+          },
+          {
+            href: "/certificacoes#siemens",
+            label: "Siemens PCS 7",
+            description: "CPIN-Level",
+          },
+          {
+            href: "/certificacoes#isa",
+            label: "ISA Senior Member",
+          },
+        ],
+      },
+    ],
+    promo: {
+      eyebrow: "Programa Silver",
+      title: "Rockwell Automation Partner Network",
+      description:
+        "Certificação que reconhece integradoras com alta qualidade técnica e comercial em automação industrial.",
+      cta: {
+        href: "/certificacoes/silver-system-integrator",
+        label: "Conhecer a parceria",
+      },
+      imageSrc: "/images/rockwell-si-silver.png",
+    },
+  },
+};

@@ -6,17 +6,38 @@ import TechnicalCallout from "@/components/TechnicalCallout.astro";
 
 const programs = [
   {
+    id: "rockwell",
     title: "Rockwell Automation Partner Network",
     summary:
       "Programa oficial da Rockwell para integradores qualificados. Acesso a treinamentos, suporte técnico de produto e canais de coordenação técnica direta.",
     items: [
-      "System Integrator",
-      "PlantPAx DCS Partner",
+      "Silver System Integrator",
+      "PlantPAx DCS Certified Partner",
       "Disciplinas: Control · Visualization · Process · Power",
     ],
     note: "Status atual e nível verificáveis no Rockwell PartnerLocator.",
+    cta: {
+      href: "/certificacoes/silver-system-integrator",
+      label: "Conhecer Silver System Integrator",
+    },
   },
   {
+    id: "plantpax-dcs",
+    title: "PlantPAx DCS Certified Partner",
+    summary:
+      "Certificação adicional reservada a integradoras com domínio completo da plataforma de controle distribuído moderna da Rockwell Automation.",
+    items: [
+      "Acesso direto à engenharia de produto PlantPAx",
+      "Atualização contínua nas versões 3.x, 4.x e 5.x",
+      "Participação em laboratórios oficiais",
+    ],
+    cta: {
+      href: "/solucoes/plantpax",
+      label: "Ver atuação em PlantPAx",
+    },
+  },
+  {
+    id: "cisco",
     title: "Cisco Networking Academy",
     summary:
       "Capacitação reconhecida em redes, infraestrutura e segurança de redes industriais. Aplicada nos projetos de CPwE e cibersegurança OT.",
@@ -27,12 +48,14 @@ const programs = [
     ],
   },
   {
+    id: "siemens",
     title: "Siemens — SIMATIC PCS 7",
     summary:
       "Capacitação Siemens em PCS 7 versão 9, com certificação de Industrial Networks Certification (CPIN-LEVEL).",
     items: ["SIMATIC PCS 7 V9", "Industrial Networks Certification (CPIN)"],
   },
   {
+    id: "isa",
     title: "ISA — International Society of Automation",
     summary:
       "Participação ativa na ISA, sociedade internacional de automação que mantém os padrões ISA-95, ISA-88, ISA-101, ISA-18.2 e ISA/IEC 62443.",
@@ -71,7 +94,8 @@ const programs = [
       <div class="grid gap-6 md:grid-cols-2">
         {programs.map((p) => (
           <article
-            class="rounded-lg border border-integra-gray-200 bg-integra-white p-7"
+            id={p.id}
+            class="rounded-lg border border-integra-gray-200 bg-integra-white p-7 scroll-mt-24"
           >
             <h3 class="text-xl font-semibold text-integra-gray-900 mb-3">
               {p.title}
@@ -91,6 +115,15 @@ const programs = [
               <p class="mt-4 text-xs italic text-integra-gray-500">
                 {p.note}
               </p>
+            )}
+            {p.cta && (
+              <a
+                href={p.cta.href}
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+              >
+                {p.cta.label}
+                <span aria-hidden="true">→</span>
+              </a>
             )}
           </article>
         ))}

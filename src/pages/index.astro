@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import HeroIntegridade from "@/components/HeroIntegridade.astro";
 import CredentialStrip from "@/components/CredentialStrip.astro";
@@ -9,6 +10,7 @@ import heroImage from "@/assets/hero/banner-1.png";
 import factoryTalkImage from "@/assets/hero/banner-3-min.jpg";
 import iec62443Image from "@/assets/hero/banner-2-min.png";
 import plantpaxImage from "@/assets/hero/banner_site_institucional_2500x1500.jpg";
+import rockwellSilver from "@/assets/logos/rockwell-si-silver.png";
 
 const values = [
   {
@@ -46,6 +48,44 @@ const values = [
     heroImage={heroImage}
     heroAlt="Sistema de automação industrial em operação"
   />
+
+  <!-- Rockwell Silver System Integrator highlight -->
+  <section class="border-y border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-wide py-12 lg:py-14">
+      <a
+        href="/certificacoes/silver-system-integrator"
+        class="group grid gap-8 items-center lg:grid-cols-[auto_1fr_auto]"
+      >
+        <div class="flex justify-center lg:justify-start">
+          <Image
+            src={rockwellSilver}
+            alt="Silver System Integrator — A Rockwell Automation Partner"
+            class="h-20 lg:h-24 w-auto"
+            widths={[200, 320, 480]}
+            sizes="(min-width: 1024px) 320px, 240px"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="text-center lg:text-left">
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+            Parceria Estratégica · Rockwell Automation
+          </p>
+          <h2 class="text-xl font-semibold text-integra-gray-900 lg:text-2xl">
+            Certificação Silver System Integrator + PlantPAx DCS Partner
+          </h2>
+          <p class="mt-2 text-sm leading-relaxed text-integra-gray-700 lg:text-base max-w-2xl">
+            Membro oficial do programa Rockwell Automation Partner Network
+            com disciplinas Control, Visualization, Process e Power.
+          </p>
+        </div>
+        <span class="hidden lg:inline-flex items-center gap-2 text-sm font-semibold text-integra-red group-hover:text-integra-red-700 transition-colors shrink-0">
+          Conhecer parceria
+          <span aria-hidden="true">→</span>
+        </span>
+      </a>
+    </div>
+  </section>
 
   <CredentialStrip />
 

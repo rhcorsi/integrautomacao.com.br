@@ -1,0 +1,237 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import rockwellSilver from "@/assets/logos/rockwell-si-silver.png";
+
+const disciplines = [
+  {
+    code: "Control",
+    title: "Controle",
+    description:
+      "Programação e configuração de controladores ControlLogix e CompactLogix, da arquitetura à integração com instrumentação de campo.",
+    icon: "control",
+  },
+  {
+    code: "Visualization",
+    title: "Visualização",
+    description:
+      "FactoryTalk View SE, Optix e ThinManager — supervisão padronizada com governança de alarmes ISA-18.2 e auditoria de mudanças.",
+    icon: "visualization",
+  },
+  {
+    code: "Process",
+    title: "Processo",
+    description:
+      "PlantPAx 3.x, 4.x e 5.x. Biblioteca de objetos de processo, redes industriais e arquiteturas plant-wide robustas.",
+    icon: "process",
+  },
+  {
+    code: "Power",
+    title: "Energia",
+    description:
+      "Low Voltage Drives e integração com dispositivos de proteção via IEC 61850 e EtherNet/IP para gerenciamento de energia.",
+    icon: "power",
+  },
+];
+
+const benefits = [
+  "Acesso direto à engenharia de produto da Rockwell Automation",
+  "Participação em laboratórios e treinamentos oficiais",
+  "Atualizações antecipadas de roadmap e firmware",
+  "Suporte técnico avançado para projetos complexos",
+  "Documentação técnica de referência (PSRM, CPwE) em primeira mão",
+];
+
+const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
+---
+
+<BaseLayout
+  title="Silver System Integrator — Rockwell Automation Partner"
+  description="A Integra é certificada Silver System Integrator pela Rockwell Automation, com disciplinas Control, Visualization, Process e Power. Conheça o que isso significa para projetos industriais."
+>
+  <!-- Hero with Rockwell Silver lockup -->
+  <section class="relative overflow-hidden border-b border-integra-gray-200 bg-integra-white">
+    <div class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]" aria-hidden="true" style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 64px 64px;"></div>
+    <div class="container-wide py-20 lg:py-28">
+      <div class="grid gap-12 items-center lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
+            Certificação · Rockwell Automation Partner Network
+          </p>
+          <h1 class="text-4xl font-semibold tracking-tight text-integra-gray-900 sm:text-5xl lg:text-6xl">
+            Silver System <span class="text-integra-red">Integrator</span>
+          </h1>
+          <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-2xl lg:text-xl">
+            A Integra é membro oficial do Programa Silver System Integrator
+            da Rockwell Automation — uma das mais prestigiosas certificações
+            no segmento de automação industrial. O programa exige comprovação
+            contínua de competência técnica, aderência a padrões de projeto e
+            compromisso com o ecossistema Rockwell.
+          </p>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              href={certPdfPath}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-gray-900 hover:bg-integra-black rounded-md transition-colors"
+            >
+              <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Baixar certificado oficial (PDF)
+            </a>
+            <a
+              href="/contato?assunto=plantpax"
+              class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+            >
+              Falar com especialista
+            </a>
+          </div>
+        </div>
+        <div class="flex justify-center lg:justify-end">
+          <div class="relative bg-integra-white rounded-xl border border-integra-gray-200 shadow-2xl p-10 max-w-md">
+            <Image
+              src={rockwellSilver}
+              alt="Silver System Integrator — A Rockwell Automation Partner"
+              class="w-full h-auto"
+              widths={[300, 500, 700]}
+              sizes="(min-width: 1024px) 400px, 80vw"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disciplines -->
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-wide py-20">
+      <SectionHeader
+        eyebrow="Disciplinas certificadas"
+        title="Quatro disciplinas que dominamos com profundidade"
+        description="A Rockwell Automation organiza o programa em disciplinas técnicas distintas. A Integra é certificada e mantém capacitação ativa em quatro delas."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {disciplines.map((d) => (
+          <article class="group h-full rounded-lg border border-integra-gray-200 bg-integra-white p-7 hover:border-integra-red transition-colors">
+            <code class="inline-block font-mono text-xs font-semibold text-integra-red px-2 py-1 bg-integra-red/5 rounded-sm mb-4">
+              {d.code}
+            </code>
+            <h3 class="text-lg font-semibold text-integra-gray-900 mb-3">
+              {d.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {d.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- What it means -->
+  <section class="border-b border-integra-gray-200">
+    <div class="container-wide py-20 max-w-4xl">
+      <SectionHeader
+        eyebrow="O que isso significa para você"
+        title="Não é selo decorativo. É acesso técnico real."
+        accent={true}
+      />
+      <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg max-w-3xl mb-8">
+        A obtenção da certificação Silver não é um marketing badge — é
+        resultado de avaliações técnicas, comerciais e de aderência a
+        padrões de projeto Rockwell. O programa exige comprovação continuada
+        de capacidade de entrega em projetos reais.
+      </p>
+
+      <h3 class="text-xl font-semibold text-integra-gray-900 mb-5 mt-10">
+        O que ganhamos como Silver
+      </h3>
+      <ul class="space-y-3 mb-10">
+        {benefits.map((item) => (
+          <li class="flex items-start gap-3 text-base text-integra-gray-900">
+            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-integra-white text-[11px]" aria-hidden="true">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+
+      <TechnicalCallout variant="note" title="Como você se beneficia">
+        <p>
+          Quando você contrata a Integra para um projeto Rockwell, está
+          contratando uma integradora com canal direto à fábrica. Em
+          situações críticas — uma decisão de arquitetura PlantPAx, uma
+          dúvida sobre firmware ControlLogix, uma compatibilidade de
+          versões FactoryTalk — temos canais oficiais de escalação que
+          empresas sem certificação não têm.
+        </p>
+      </TechnicalCallout>
+    </div>
+  </section>
+
+  <!-- PlantPAx DCS Partner mention -->
+  <section id="plantpax-dcs" class="border-b border-integra-gray-200 bg-integra-gray-950 text-integra-white">
+    <div class="container-wide py-20">
+      <div class="max-w-3xl">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
+          Certificação adicional
+        </p>
+        <h2 class="text-3xl font-semibold sm:text-4xl mb-6">
+          PlantPAx DCS Certified Partner
+        </h2>
+        <p class="text-base leading-relaxed text-integra-gray-300 lg:text-lg">
+          Além do Silver System Integrator, somos
+          <strong class="text-integra-white">PlantPAx DCS Certified Partner</strong> —
+          certificação reservada a um grupo restrito de integradoras
+          que demonstraram domínio completo da plataforma de controle
+          distribuído moderna da Rockwell Automation.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-integra-gray-300 lg:text-lg">
+          Essa certificação adicional dá acesso privilegiado a treinamentos
+          PlantPAx, suporte técnico direto com engenheiros de produto e
+          participação em laboratórios oficiais que mantêm nossa equipe
+          atualizada com as versões 3.x, 4.x e 5.x da plataforma.
+        </p>
+        <a
+          href="/solucoes/plantpax"
+          class="mt-8 inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
+        >
+          Conhecer nossa atuação em PlantPAx
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Standards -->
+  <section class="border-b border-integra-gray-200">
+    <div class="container-wide py-20 max-w-5xl">
+      <StandardsBadges
+        title="Normas e referências aplicadas em projetos Rockwell"
+        standards={[
+          { code: "PSRM", description: "PlantPAx System Reference Manual" },
+          { code: "CPwE", description: "Converged Plantwide Ethernet (Rockwell + Cisco + Panduit)" },
+          { code: "ISA-95", description: "Integração empresa-controle" },
+          { code: "ISA-88", description: "Controle de bateladas" },
+          { code: "ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança industrial" },
+        ]}
+      />
+    </div>
+  </section>
+
+  <CtaBlock
+    variant="dark"
+    title="Tem um projeto Rockwell para conversar?"
+    description="Apresentamos arquitetura, lista de entregáveis e cronograma com base no escopo da planta — antes de qualquer proposta comercial."
+    primaryCta={{ href: "/contato?assunto=plantpax", label: "Falar com especialista" }}
+    secondaryCta={{ href: "/certificacoes", label: "Ver outras certificações" }}
+  />
+</BaseLayout>

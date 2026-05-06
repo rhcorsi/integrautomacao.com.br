@@ -1,114 +1,289 @@
 ---
 import { Image } from "astro:assets";
 import logoColorido from "@/assets/logos/Colorido.png";
-import { NAV } from "@/utils/site";
+import { NAV, MEGA_MENUS, COMPANY } from "@/utils/site";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+
+const phoneCommercial = COMPANY.phones[0];
 ---
 
-<header
-  class="sticky top-0 z-40 border-b border-integra-gray-200 bg-integra-white/95 backdrop-blur supports-[backdrop-filter]:bg-integra-white/85"
->
-  <div class="container-wide flex h-20 items-center gap-8 lg:h-24">
-    <a
-      href="/"
-      class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
-      aria-label="Integra — página inicial"
-    >
-      <Image
-        src={logoColorido}
-        alt="Integra Automação Industrial"
-        class="h-10 w-auto lg:h-12"
-        widths={[200, 320, 480]}
-        sizes="(min-width: 1024px) 280px, 200px"
-        loading="eager"
-        decoding="async"
-      />
-    </a>
-
-    <nav class="hidden lg:flex items-center gap-1 ml-auto" aria-label="Principal">
-      {NAV.map(({ href, label }) => (
-        <a
-          href={href}
-          class:list={[
-            "px-3 py-2 text-sm font-medium rounded-md transition-colors",
-            isActive(href)
-              ? "text-integra-red"
-              : "text-integra-gray-700 hover:text-integra-gray-900 hover:bg-integra-gray-100",
-          ]}
-          aria-current={isActive(href) ? "page" : undefined}
-        >
-          {label}
-        </a>
-      ))}
-    </nav>
-
-    <a
-      href="/contato"
-      class="hidden lg:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
-    >
-      Falar com especialista
-      <span aria-hidden="true">→</span>
-    </a>
-
-    <button
-      type="button"
-      class="lg:hidden ml-auto p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
-      aria-label="Abrir menu"
-      aria-expanded="false"
-      aria-controls="mobile-nav"
-      data-menu-toggle
-    >
-      <svg
-        class="block h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M4 6h16M4 12h16M4 18h16"
-          data-icon-open
-        ></path>
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6 18L18 6M6 6l12 12"
-          class="hidden"
-          data-icon-close
-        ></path>
-      </svg>
-    </button>
+<header class="sticky top-0 z-50 bg-integra-white shadow-sm">
+  <!-- Top utility bar -->
+  <div class="hidden lg:block bg-integra-gray-50 border-b border-integra-gray-200">
+    <div class="container-wide flex h-9 items-center justify-between text-xs">
+      <div class="flex items-center gap-1.5 text-integra-gray-600">
+        <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span class="font-mono uppercase tracking-wider text-[11px]">Maringá-PR · Atuação nacional</span>
+      </div>
+      <nav aria-label="Links secundários" class="flex items-center divide-x divide-integra-gray-300">
+        <a href="/empresa#timeline" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">Sobre</a>
+        <a href={COMPANY.social.linkedin} rel="noopener noreferrer" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">LinkedIn</a>
+        <a href={`mailto:${COMPANY.email}`} class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">{COMPANY.email}</a>
+        <a href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`} class="pl-3 text-integra-gray-900 font-medium hover:text-integra-red transition-colors">{phoneCommercial.display}</a>
+      </nav>
+    </div>
   </div>
 
+  <!-- Main header bar -->
+  <div class="border-b border-integra-gray-200">
+    <div class="container-wide flex h-20 items-center gap-8 lg:h-24">
+      <a
+        href="/"
+        class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
+        aria-label="Integra — página inicial"
+      >
+        <Image
+          src={logoColorido}
+          alt="Integra Automação Industrial"
+          class="h-10 w-auto lg:h-12"
+          widths={[200, 320, 480]}
+          sizes="(min-width: 1024px) 280px, 200px"
+          loading="eager"
+          decoding="async"
+        />
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1 ml-auto" aria-label="Principal">
+        {NAV.map(({ href, label }) => {
+          const mega = MEGA_MENUS[href];
+          if (!mega) {
+            return (
+              <a
+                href={href}
+                class:list={[
+                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  isActive(href)
+                    ? "text-integra-red"
+                    : "text-integra-gray-700 hover:text-integra-gray-900",
+                ]}
+                aria-current={isActive(href) ? "page" : undefined}
+              >
+                {label}
+              </a>
+            );
+          }
+          // Item with mega-menu
+          return (
+            <div class="group/menu relative">
+              <a
+                href={href}
+                class:list={[
+                  "inline-flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  "group-hover/menu:text-integra-red group-focus-within/menu:text-integra-red",
+                  isActive(href)
+                    ? "text-integra-red"
+                    : "text-integra-gray-700 hover:text-integra-gray-900",
+                ]}
+                aria-current={isActive(href) ? "page" : undefined}
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {label}
+                <svg class="size-3.5 opacity-60 transition-transform group-hover/menu:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              {/* Bridge — invisible area to keep menu open while moving cursor */}
+              <div class="absolute left-0 right-0 top-full h-2 invisible group-hover/menu:visible group-focus-within/menu:visible" aria-hidden="true" />
+              <div
+                class:list={[
+                  "absolute left-1/2 top-full mt-2 -translate-x-1/2 w-screen max-w-6xl",
+                  "invisible opacity-0 -translate-y-1 transition-all duration-150",
+                  "group-hover/menu:visible group-hover/menu:opacity-100 group-hover/menu:translate-y-0",
+                  "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0",
+                ]}
+              >
+                <div class="rounded-lg border border-integra-gray-200 bg-integra-white shadow-2xl overflow-hidden">
+                  {mega.intro && (
+                    <a href={mega.intro.href} class="block px-8 py-3 bg-integra-gray-50 border-b border-integra-gray-200 text-sm font-semibold text-integra-gray-900 hover:text-integra-red transition-colors">
+                      {mega.intro.title} <span aria-hidden="true">→</span>
+                    </a>
+                  )}
+                  <div class="grid grid-cols-12 gap-8 p-8">
+                    <div class:list={[mega.promo ? "col-span-8" : "col-span-12", "grid grid-cols-3 gap-8"]}>
+                      {mega.columns.map((col) => (
+                        <div>
+                          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
+                            {col.title}
+                          </p>
+                          <ul class="space-y-3">
+                            {col.links.map((link) => (
+                              <li>
+                                <a
+                                  href={link.href}
+                                  class="group/link block hover:text-integra-red"
+                                >
+                                  <span class="text-sm font-medium text-integra-gray-900 group-hover/link:text-integra-red transition-colors">
+                                    {link.label}
+                                  </span>
+                                  {link.description && (
+                                    <span class="block text-xs text-integra-gray-500 mt-0.5">
+                                      {link.description}
+                                    </span>
+                                  )}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                    {mega.promo && (
+                      <aside class="col-span-4 border-l border-integra-gray-200 pl-8">
+                        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+                          {mega.promo.eyebrow}
+                        </p>
+                        {mega.promo.imageSrc && (
+                          <img
+                            src={mega.promo.imageSrc}
+                            alt=""
+                            class="h-12 w-auto mb-4"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        )}
+                        <h3 class="text-base font-semibold text-integra-gray-900 mb-2 leading-snug">
+                          {mega.promo.title}
+                        </h3>
+                        <p class="text-sm leading-relaxed text-integra-gray-700 mb-4">
+                          {mega.promo.description}
+                        </p>
+                        <a
+                          href={mega.promo.cta.href}
+                          class="inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+                        >
+                          {mega.promo.cta.label}
+                          <span aria-hidden="true">→</span>
+                        </a>
+                      </aside>
+                    )}
+                  </div>
+                  {mega.quickLinks && mega.quickLinks.length > 0 && (
+                    <div class="bg-integra-gray-50 border-t border-integra-gray-200 px-8 py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
+                      {mega.quickLinks.map((q) => (
+                        <a
+                          href={q.href}
+                          class="text-sm font-medium text-integra-gray-900 hover:text-integra-red transition-colors"
+                        >
+                          {q.label} <span aria-hidden="true">→</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </nav>
+
+      <a
+        href="/contato"
+        class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
+      >
+        Falar com especialista
+        <span aria-hidden="true">→</span>
+      </a>
+
+      <button
+        type="button"
+        class="lg:hidden ml-auto p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-toggle
+      >
+        <svg
+          class="block h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"
+            data-icon-open
+          ></path>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+            class="hidden"
+            data-icon-close
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav -->
   <nav
     id="mobile-nav"
     class="lg:hidden hidden border-t border-integra-gray-200 bg-integra-white"
     aria-label="Principal (mobile)"
   >
     <div class="container-default py-4 grid gap-1">
-      {NAV.map(({ href, label }) => (
-        <a
-          href={href}
-          class:list={[
-            "px-3 py-2.5 text-base font-medium rounded-md transition-colors",
-            isActive(href)
-              ? "text-integra-red bg-integra-red/5"
-              : "text-integra-gray-700 hover:bg-integra-gray-100",
-          ]}
-          aria-current={isActive(href) ? "page" : undefined}
-        >
-          {label}
-        </a>
-      ))}
+      {NAV.map(({ href, label }) => {
+        const mega = MEGA_MENUS[href];
+        if (!mega) {
+          return (
+            <a
+              href={href}
+              class:list={[
+                "px-3 py-2.5 text-base font-medium rounded-md transition-colors",
+                isActive(href)
+                  ? "text-integra-red bg-integra-red/5"
+                  : "text-integra-gray-700 hover:bg-integra-gray-100",
+              ]}
+              aria-current={isActive(href) ? "page" : undefined}
+            >
+              {label}
+            </a>
+          );
+        }
+        return (
+          <details class="group">
+            <summary class:list={[
+              "flex items-center justify-between px-3 py-2.5 text-base font-medium rounded-md cursor-pointer list-none",
+              isActive(href)
+                ? "text-integra-red bg-integra-red/5"
+                : "text-integra-gray-700 hover:bg-integra-gray-100",
+            ]}>
+              <span>{label}</span>
+              <svg class="size-4 opacity-60 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div class="pl-4 pb-2 space-y-3 mt-1">
+              <a href={href} class="block px-3 py-2 text-sm font-semibold text-integra-red">Ver tudo →</a>
+              {mega.columns.map((col) => (
+                <div>
+                  <p class="px-3 text-xs font-mono uppercase tracking-widest text-integra-gray-500 mt-2 mb-1">
+                    {col.title}
+                  </p>
+                  {col.links.map((link) => (
+                    <a href={link.href} class="block px-3 py-1.5 text-sm text-integra-gray-700 hover:text-integra-red">
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </details>
+        );
+      })}
       <a
         href="/contato"
-        class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 text-base font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md"
+        class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-3 text-base font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md"
       >
         Falar com especialista
       </a>
