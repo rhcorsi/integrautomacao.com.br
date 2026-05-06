@@ -1,4 +1,4 @@
----
+﻿---
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
@@ -56,7 +56,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
   <!-- Hero with Rockwell Silver lockup -->
   <section class="relative overflow-hidden border-b border-integra-gray-200 bg-integra-white">
     <div class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]" aria-hidden="true" style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 64px 64px;"></div>
-    <div class="container-wide py-20 lg:py-28">
+    <div class="container-fluid py-20 lg:py-28">
       <div class="grid gap-12 items-center lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div>
           <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
@@ -111,7 +111,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
 
   <!-- Disciplines -->
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-wide py-20">
+    <div class="container-fluid py-20">
       <SectionHeader
         eyebrow="Disciplinas certificadas"
         title="Quatro disciplinas que dominamos com profundidade"
@@ -138,7 +138,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
 
   <!-- What it means -->
   <section class="border-b border-integra-gray-200">
-    <div class="container-wide py-20 max-w-4xl">
+    <div class="container-fluid py-20 max-w-4xl">
       <SectionHeader
         eyebrow="O que isso significa para você"
         title="Não é selo decorativo. É acesso técnico real."
@@ -178,7 +178,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
 
   <!-- PlantPAx DCS Partner mention -->
   <section id="plantpax-dcs" class="border-b border-integra-gray-200 bg-integra-gray-950 text-integra-white">
-    <div class="container-wide py-20">
+    <div class="container-fluid py-20">
       <div class="max-w-3xl">
         <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
           Certificação adicional
@@ -212,7 +212,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
 
   <!-- Standards -->
   <section class="border-b border-integra-gray-200">
-    <div class="container-wide py-20 max-w-5xl">
+    <div class="container-fluid py-20 max-w-5xl">
       <StandardsBadges
         title="Normas e referências aplicadas em projetos Rockwell"
         standards={[

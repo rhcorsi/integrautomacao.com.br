@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContactForm from "@/components/ContactForm.astro";
 import { COMPANY } from "@/utils/site";
@@ -12,7 +12,7 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
   description="Fale com a Integra. Conversamos sobre arquitetura, método e referências antes de qualquer proposta. Maringá-PR, atuação nacional."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-default py-16 lg:py-20">
+    <div class="container-fluid py-16 lg:py-20">
       <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
         Contato
       </p>
@@ -27,7 +27,7 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
   </section>
 
   <section class="border-b border-integra-gray-200">
-    <div class="container-default py-16 lg:py-20 grid gap-12 lg:grid-cols-5">
+    <div class="container-fluid py-16 lg:py-20 grid gap-12 lg:grid-cols-5">
       <div class="lg:col-span-3 order-2 lg:order-1">
         <h2 class="text-2xl font-semibold text-integra-gray-900 mb-2">
           Envie uma mensagem

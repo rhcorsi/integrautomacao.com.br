@@ -1,4 +1,4 @@
----
+﻿---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
@@ -20,7 +20,7 @@ const dateFmt = (d: Date) =>
   description="Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443, migração de PLC e governança de engenharia industrial."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-default py-20 lg:py-24">
+    <div class="container-fluid py-20 lg:py-24">
       <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
         Blog técnico
       </p>
@@ -36,7 +36,7 @@ const dateFmt = (d: Date) =>
   </section>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-default py-20">
+    <div class="container-fluid py-20">
       {posts.length === 0 ? (
         <p class="text-base text-integra-gray-700 text-center py-12">
           Artigos sendo publicados em breve.

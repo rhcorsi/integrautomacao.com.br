@@ -53,7 +53,7 @@ export const COMPANY = {
   geo: { latitude: -23.4173, longitude: -51.9333 },
   founded: 2016,
   social: {
-    linkedin: "https://www.linkedin.com/company/integra-automacao-industrial",
+    linkedin: "https://www.linkedin.com/company/integrautomacao",
   },
 } as const;
 

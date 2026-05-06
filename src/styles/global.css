@@ -33,10 +33,11 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code",
     Consolas, monospace;
 
-  /* Container */
-  --container-narrow: 56rem;  /* 896px — text-heavy pages */
-  --container-default: 72rem; /* 1152px — standard pages */
-  --container-wide: 80rem;    /* 1280px — hero sections */
+  /* Container — ample sizes so layouts breathe on wide monitors. */
+  --container-narrow: 56rem;   /*  896px — text-heavy / prose */
+  --container-default: 80rem;  /* 1280px — standard pages */
+  --container-wide: 96rem;     /* 1536px — hero sections, dashboards */
+  --container-fluid: 120rem;   /* 1920px — full-bleed sections */
 }
 
 /* Base layer — minimal global styles, let Tailwind utilities do the rest */
@@ -114,10 +115,31 @@
   max-width: var(--container-default);
   margin-inline: auto;
   padding-inline: 1.5rem;
+  @media (min-width: 1024px) {
+    padding-inline: 2.5rem;
+  }
 }
 @utility container-wide {
   width: 100%;
   max-width: var(--container-wide);
   margin-inline: auto;
   padding-inline: 1.5rem;
+  @media (min-width: 1024px) {
+    padding-inline: 2.5rem;
+  }
+  @media (min-width: 1536px) {
+    padding-inline: 3rem;
+  }
+}
+@utility container-fluid {
+  width: 100%;
+  max-width: var(--container-fluid);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  @media (min-width: 1024px) {
+    padding-inline: 3rem;
+  }
+  @media (min-width: 1536px) {
+    padding-inline: 4rem;
+  }
 }
