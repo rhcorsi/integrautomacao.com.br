@@ -71,7 +71,7 @@ const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red";
     ]}
   >
     <p>{caption}</p>
-    <p class="font-mono uppercase tracking-wider opacity-75">
+    <p class:list={["font-mono uppercase tracking-wider", dark ? "text-white/80" : "text-integra-gray-700"]}>
       Fonte: {source}
     </p>
   </figcaption>
