@@ -27,6 +27,8 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "wrangler"
+        update-types: ["version-update:semver-major"]
     groups:
       astro:
         patterns:
@@ -60,6 +62,8 @@ updates:
     # review by hand. cloudflare/wrangler-action and actions/setup-node
     # are most likely to introduce breaking changes.
     ignore:
+      - dependency-name: "actions/checkout"
+        update-types: ["version-update:semver-major"]
       - dependency-name: "actions/setup-node"
         update-types: ["version-update:semver-major"]
       - dependency-name: "actions/github-script"
