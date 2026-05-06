@@ -7,6 +7,7 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { getRelatedTech, techCatalog, type TechPage } from "@/data/techCatalog";
+import { CSP_JSON_LD_NONCE } from "@/utils/site";
 
 export function getStaticPaths() {
   return techCatalog.map((item) => ({
@@ -44,7 +45,12 @@ const jsonLd = {
   canonical={`/tecnologias/${item.slug}/`}
 >
   <Fragment slot="head">
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script
+      is:inline
+      nonce={CSP_JSON_LD_NONCE}
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
   </Fragment>
 
   <section class="border-b border-integra-gray-200 bg-integra-white">
