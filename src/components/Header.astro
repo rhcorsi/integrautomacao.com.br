@@ -373,13 +373,13 @@ const allMegas: Record<string, MegaMenu> = {
     </div>
   </div>
 
-  <!-- Mobile nav -->
+  <!-- Mobile nav: absolutely positioned beneath the header bar, scrollable when content overflows. -->
   <nav
     id="mobile-nav"
-    class="min-[1440px]:hidden hidden border-t border-integra-gray-200 bg-integra-white"
+    class="min-[1440px]:hidden hidden absolute inset-x-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain border-t border-integra-gray-200 bg-integra-white shadow-lg"
     aria-label="Principal (mobile)"
   >
-    <div class="container-default py-4 grid gap-1">
+    <div class="container-default py-4 pb-8 grid gap-1">
       {NAV.map(({ href, label }) => {
         const mega = allMegas[href];
         if (!mega) {
