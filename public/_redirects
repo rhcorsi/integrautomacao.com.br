@@ -10,6 +10,11 @@
 /tecnologias/pid-intertravamentos-sequenciamento  /tecnologias/intertravamentos-sequencias  301
 /tecnologias/pid-intertravamentos-sequenciamento/ /tecnologias/intertravamentos-sequencias  301
 
+# Integra Ação umbrella brand: /integra-acao/eventos is an alias for /eventos
+/integra-acao/eventos    /eventos    301
+/integra-acao/eventos/   /eventos    301
+/integra-acao/eventos/*  /eventos/:splat   301
+
 # WP exact paths
 /home-2                /                                    301
 /home-2/               /                                    301

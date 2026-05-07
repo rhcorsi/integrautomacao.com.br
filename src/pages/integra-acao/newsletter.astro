@@ -1,0 +1,161 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import NewsletterForm from "@/components/NewsletterForm.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const temas = [
+  {
+    code: "01",
+    titulo: "PlantPAx 5.x — arquitetura DCS moderna",
+    desc: "Quando faz sentido migrar de View SE legado, requisito do controlador série P, biblioteca de objetos, sizing real de PASS-C, PASS-S e PASS-RD.",
+  },
+  {
+    code: "02",
+    titulo: "CPwE / IEC 62443 — redes industriais seguras",
+    desc: "Zonas e conduítes na prática, IDMZ implementada com firewalls redundantes, RD Gateway, PI-to-PI e o que separa SL-2 de SL-3 no campo.",
+  },
+  {
+    code: "03",
+    titulo: "Migração PLC-5 / SLC500 — modernização sem improviso",
+    desc: "Translation Tool vs reescrita de lógica, reaproveitamento de fiação 1492, janelas de cutover por área, plano de rollback e ambiente espelho.",
+  },
+  {
+    code: "04",
+    titulo: "FactoryTalk View SE — supervisão crítica",
+    desc: "Servidores Site Edition, redundância de Directory e HMI Server, governança de alarmes ISA-18.2, padrão de telas e estados de equipamento.",
+  },
+  {
+    code: "05",
+    titulo: "O papel do integrador — engenharia que sustenta a planta",
+    desc: "Por que método importa mais que ferramenta, como cobrar isso de quem entrega, e o que muda quando a documentação é tratada como entrega de engenharia.",
+  },
+];
+
+const faq = [
+  {
+    q: "Qual a periodicidade da newsletter?",
+    a: "Mensal. Uma edição com curadoria, sem encher caixa de entrada.",
+  },
+  {
+    q: "Vou receber e-mail comercial além da newsletter?",
+    a: "Não. A newsletter Integra Ação é o único e-mail que enviamos a partir desta inscrição. Sem ofertas, sem follow-up de vendas.",
+  },
+  {
+    q: "Posso cancelar a inscrição?",
+    a: "Sim. Cada e-mail traz um link de descadastro com um clique. Removemos o endereço da base imediatamente.",
+  },
+  {
+    q: "Vocês compartilham meu e-mail com terceiros?",
+    a: "Não. Mantemos a base privada e em conformidade com a LGPD. O endereço fica em ambiente Resend Audiences sob controle exclusivo da Integra.",
+  },
+  {
+    q: "É só para clientes da Integra?",
+    a: "Não. Engenheiros, técnicos, gestores industriais e estudantes são bem-vindos. Conteúdo é técnico e neutro de fornecedor sempre que possível.",
+  },
+];
+---
+
+<BaseLayout
+  title="Newsletter Integra Ação"
+  description="Inscreva-se na newsletter Integra Ação: uma edição mensal de conteúdo técnico sobre PlantPAx, redes industriais, IEC 62443, FactoryTalk e governança de engenharia."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 lg:py-24">
+      <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+            Integra Ação · Newsletter mensal
+          </p>
+          <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl mb-6">
+            Conteúdo técnico, uma edição por mês.
+          </h1>
+          <p class="text-lg leading-relaxed text-integra-gray-700 lg:text-xl mb-8">
+            Inscreva-se para receber a newsletter Integra Ação. Uma edição
+            mensal com curadoria sobre arquitetura industrial, redes,
+            cibersegurança OT e governança de engenharia. Sem promoção
+            comercial, sem ruído de marketing.
+          </p>
+          <ul class="space-y-3 text-sm text-integra-gray-700">
+            <li class="flex items-start gap-2">
+              <span class="text-integra-red mt-0.5">·</span>
+              Uma edição por mês — não enchemos caixa de entrada.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-integra-red mt-0.5">·</span>
+              Conteúdo técnico em português, com referências validadas.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-integra-red mt-0.5">·</span>
+              Cancelamento com um clique a qualquer momento.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-integra-red mt-0.5">·</span>
+              LGPD — base privada, nada compartilhado com terceiros.
+            </li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7 lg:p-8 shadow-sm">
+          <NewsletterForm />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Cinco eixos editoriais
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl max-w-3xl mb-12">
+        O que esperar nas primeiras edições.
+      </h2>
+      <ol class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2">
+        {temas.map((t) => (
+          <li class="bg-integra-white p-7 flex gap-4">
+            <span class="font-mono text-xs font-semibold text-integra-red mt-1">
+              {t.code}
+            </span>
+            <div>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {t.titulo}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+                {t.desc}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 max-w-3xl">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Perguntas frequentes
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-10">
+        O que costumam perguntar antes de inscrever.
+      </h2>
+      <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200">
+        {faq.map((f) => (
+          <article class="bg-integra-white p-6">
+            <h3 class="text-base font-semibold text-integra-gray-900 mb-2">
+              {f.q}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {f.a}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Prefere acompanhar pelo blog?"
+    description="O blog Integra Automação Industrial é o repositório técnico aberto. A newsletter Integra Ação é a curadoria mensal das publicações mais relevantes."
+    primaryCta={{ href: "/blog", label: "Ir para o blog" }}
+    secondaryCta={{ href: "/integra-acao/", label: "Voltar à Integra Ação" }}
+  />
+</BaseLayout>

@@ -1,0 +1,161 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const formato = [
+  {
+    icon: "duração",
+    label: "45–60 min",
+    desc: "Tempo justo para abrir um tema com profundidade, sem virar palestra de produto.",
+  },
+  {
+    icon: "frequência",
+    label: "Mensal",
+    desc: "Uma sessão por mês, divulgada com antecedência via newsletter Integra Ação.",
+  },
+  {
+    icon: "formato",
+    label: "Apresentação + Q&A",
+    desc: "Apresentação técnica seguida de perguntas abertas. Sem mediador comercial.",
+  },
+  {
+    icon: "gravação",
+    label: "Disponível depois",
+    desc: "Gravações ficam acessíveis para inscritos que não puderam estar ao vivo.",
+  },
+];
+
+const temasPropostos = [
+  "PlantPAx 5.x: o que muda no projeto quando o controlador série P entra como pré-requisito",
+  "IDMZ na prática: como traduzir CPwE em entregáveis de engenharia",
+  "Migração PLC-5 / SLC500: dos descritivos funcionais ao cutover por área",
+  "Governança de alarmes ISA-18.2: o que vira lixo na sala de controle e o que vira ação",
+  "FactoryTalk View SE: arquitetura distribuída, redundância e padrão de telas",
+];
+---
+
+<BaseLayout
+  title="Webinars Integra Ação"
+  description="Webinars técnicos da Integra Ação: sessões mensais de 45-60 minutos com casos reais, Q&A aberto e gravação disponível para inscritos."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 lg:py-24">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Integra Ação · Webinars técnicos
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl mb-6">
+        Conversas técnicas com casos reais e perguntas abertas.
+      </h1>
+      <p class="text-lg leading-relaxed text-integra-gray-700 lg:text-xl max-w-3xl">
+        Os webinars da Integra Ação são sessões ao vivo de 45 a 60 minutos
+        em que abrimos um tema técnico com profundidade, mostramos como
+        ele aparece em projeto real e respondemos perguntas em aberto.
+        A inscrição é feita pela newsletter — assim avisamos da próxima
+        sessão e enviamos a gravação depois.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Como funciona
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-12 max-w-3xl">
+        Formato direto, técnico e sem ruído comercial.
+      </h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {formato.map((f) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6 flex flex-col gap-3">
+            <p class="text-xs font-mono uppercase tracking-widest text-integra-red">
+              {f.icon}
+            </p>
+            <h3 class="text-2xl font-semibold text-integra-gray-900">
+              {f.label}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {f.desc}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <div class="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+            Próximos temas
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-6">
+            Cinco temas que estão na fila editorial.
+          </h2>
+          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg mb-6">
+            Esta lista não é fechada — é a base de onde sairão as primeiras
+            sessões. Se um tema específico for útil para a sua planta,
+            envie sugestão por e-mail ou no formulário do blog.
+          </p>
+          <a
+            href="/integra-acao/newsletter/"
+            class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
+          >
+            Inscrever-se para receber convite
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <ol class="grid gap-3">
+          {temasPropostos.map((t, i) => (
+            <li class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-5 flex gap-4">
+              <span class="font-mono text-xs font-semibold text-integra-red mt-0.5 min-w-[1.5rem]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p class="text-sm leading-relaxed text-integra-gray-900">
+                {t}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-950 text-integra-white">
+    <div class="container-fluid py-20 max-w-3xl">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-300 mb-3">
+        Próxima edição
+      </p>
+      <h2 class="text-3xl font-semibold sm:text-4xl mb-6">
+        Calendário sendo publicado.
+      </h2>
+      <p class="text-base leading-relaxed text-integra-gray-200 lg:text-lg mb-8">
+        Os primeiros webinars Integra Ação serão divulgados pela newsletter
+        e por aqui assim que a agenda for fechada. Inscreva-se na newsletter
+        para receber o convite com antecedência e a gravação depois.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href="/integra-acao/newsletter/"
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 bg-integra-white hover:bg-integra-gray-100 rounded-md transition-colors"
+        >
+          Inscrever-se na newsletter
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/eventos/"
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white border border-integra-gray-700 hover:border-integra-white rounded-md transition-colors"
+        >
+          Ver eventos presenciais
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Prefere conversar agora sobre um projeto?"
+    description="Webinars são para tema aberto e didático. Para uma conversa técnica sobre planta específica, fale direto com o time."
+    primaryCta={{ href: "/contato", label: "Falar com especialista" }}
+    secondaryCta={{ href: "/integra-acao/", label: "Voltar à Integra Ação" }}
+  />
+</BaseLayout>

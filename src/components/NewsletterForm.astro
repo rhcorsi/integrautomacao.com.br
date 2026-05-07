@@ -1,0 +1,168 @@
+---
+import { COMPANY } from "@/utils/site";
+
+const turnstileSiteKey =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const hasTurnstile = turnstileSiteKey.length > 0;
+---
+
+<form
+  id="newsletter-form"
+  data-newsletter-form
+  data-turnstile-ready={hasTurnstile ? "true" : "false"}
+  method="POST"
+  action="/api/newsletter"
+  class="grid gap-5"
+>
+  <div class="grid gap-2">
+    <label for="nl-name" class="text-sm font-medium text-integra-gray-900">
+      Nome <span class="text-integra-red" aria-hidden="true">*</span>
+    </label>
+    <input
+      id="nl-name"
+      name="name"
+      type="text"
+      required
+      autocomplete="name"
+      minlength="2"
+      maxlength="120"
+      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+    />
+  </div>
+
+  <div class="grid gap-2">
+    <label for="nl-email" class="text-sm font-medium text-integra-gray-900">
+      E-mail corporativo <span class="text-integra-red" aria-hidden="true">*</span>
+    </label>
+    <input
+      id="nl-email"
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      maxlength="180"
+      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+    />
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div class="grid gap-2">
+      <label for="nl-company" class="text-sm font-medium text-integra-gray-900">
+        Empresa
+      </label>
+      <input
+        id="nl-company"
+        name="company"
+        type="text"
+        autocomplete="organization"
+        maxlength="120"
+        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      />
+    </div>
+    <div class="grid gap-2">
+      <label for="nl-role" class="text-sm font-medium text-integra-gray-900">
+        Sua atuação
+      </label>
+      <select
+        id="nl-role"
+        name="role"
+        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      >
+        <option value="">Selecione…</option>
+        <option value="engenharia">Engenharia / Projetos</option>
+        <option value="manutencao">Manutenção</option>
+        <option value="operacao">Operação</option>
+        <option value="ti-ot">TI / OT</option>
+        <option value="gerencia">Gerência industrial</option>
+        <option value="diretoria">Diretoria</option>
+        <option value="integrador">Integrador / Fornecedor</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- LGPD opt-in -->
+  <label class="flex items-start gap-3 text-sm text-integra-gray-700">
+    <input
+      type="checkbox"
+      name="lgpd"
+      required
+      value="1"
+      class="mt-1 size-4 rounded border-integra-gray-300 text-integra-red focus:ring-integra-red"
+    />
+    <span>
+      Concordo em receber a newsletter Integra Ação e com o tratamento dos meus
+      dados conforme a
+      <a
+        href="/politica-privacidade"
+        class="font-semibold text-integra-red underline underline-offset-2 hover:text-integra-red-700"
+      >
+        Política de Privacidade
+      </a>. Posso cancelar a inscrição a qualquer momento. <span class="text-integra-red" aria-hidden="true">*</span>
+    </span>
+  </label>
+
+  <!-- Honeypot -->
+  <div aria-hidden="true" class="hidden">
+    <label>
+      Não preencha:
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+
+  <!-- Cloudflare Turnstile -->
+  {hasTurnstile ? (
+    <div
+      class="cf-turnstile"
+      data-sitekey={turnstileSiteKey}
+      data-theme="light"
+      data-action="newsletter-form"
+    />
+  ) : (
+    <div
+      role="alert"
+      class="rounded-md border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
+    >
+      <p class="font-semibold text-integra-gray-900">
+        Inscrição temporariamente indisponível.
+      </p>
+      <p class="mt-1">
+        A verificação de segurança não foi carregada. Escreva para
+        <a
+          href={`mailto:${COMPANY.email}?subject=Inscri%C3%A7%C3%A3o%20newsletter%20Integra%20A%C3%A7%C3%A3o`}
+          class="font-semibold text-integra-red underline underline-offset-2 hover:text-integra-red-700"
+        >
+          {COMPANY.email}
+        </a>
+        para inscrição manual.
+      </p>
+    </div>
+  )}
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
+    <p
+      id="nl-status"
+      role="status"
+      aria-live="polite"
+      class="text-sm text-integra-gray-700 min-h-[1.25rem]"
+    ></p>
+    <button
+      type="submit"
+      disabled={!hasTurnstile}
+      class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+    >
+      Inscrever-se
+      <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</form>
+
+{hasTurnstile && (
+  <script
+    is:inline
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer></script>
+)}
+
+<script is:inline type="module" src="/scripts/newsletter-form.js"></script>

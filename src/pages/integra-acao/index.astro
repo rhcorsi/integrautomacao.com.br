@@ -1,0 +1,248 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+
+const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+const formatos = [
+  {
+    icon: "lucide:mail",
+    eyebrow: "Newsletter mensal",
+    title: "Conteúdo escrito, direto na caixa de entrada",
+    description:
+      "Pílula técnica mensal com curadoria sobre arquitetura, redes industriais, cibersegurança OT e governança de engenharia. Sem listas de marketing, sem ruído.",
+    href: "/integra-acao/newsletter/",
+    cta: "Inscrever-se",
+  },
+  {
+    icon: "lucide:video",
+    eyebrow: "Webinars técnicos",
+    title: "Sessões ao vivo, gravadas e indexadas",
+    description:
+      "Conversas técnicas com casos reais, profundidade de engenharia e perguntas abertas. Gravações ficam disponíveis para quem não pôde assistir ao vivo.",
+    href: "/integra-acao/webinar/",
+    cta: "Ver webinars",
+  },
+  {
+    icon: "lucide:calendar-days",
+    eyebrow: "Eventos presenciais",
+    title: "Onde a equipe Integra está nesta semana",
+    description:
+      "Registro dos eventos, treinamentos e conferências em que a Integra esteve presente — e calendário do que vem pela frente.",
+    href: "/eventos/",
+    cta: "Ver eventos",
+  },
+];
+
+const temas = [
+  {
+    code: "01",
+    titulo: "PlantPAx 5.x — arquitetura DCS moderna",
+    sub: "Quando faz sentido migrar, o que muda no projeto, série P obrigatória",
+  },
+  {
+    code: "02",
+    titulo: "CPwE / IEC 62443 — redes industriais seguras",
+    sub: "Zonas, conduítes, IDMZ, defesa em profundidade na prática",
+  },
+  {
+    code: "03",
+    titulo: "Migração PLC-5 / SLC500 — modernização sem improviso",
+    sub: "Tradução automática vs reescrita, janelas de cutover, reaproveitamento de fiação",
+  },
+  {
+    code: "04",
+    titulo: "FactoryTalk View SE — supervisão crítica",
+    sub: "Servidores, redundância, governança de alarmes ISA-18.2, padrão de telas",
+  },
+  {
+    code: "05",
+    titulo: "O papel do integrador — engenharia que sustenta a planta",
+    sub: "Por que método importa mais que ferramenta, e como cobrar isso de quem entrega",
+  },
+];
+---
+
+<BaseLayout
+  title="Integra Ação"
+  description="Conteúdo técnico para quem projeta, opera e mantém sistemas industriais. Newsletter, webinars e eventos da Integra Automação Industrial sob a marca Integra Ação."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 lg:py-28">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
+        Marca de conteúdo · Integra Ação
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl lg:text-6xl max-w-4xl">
+        Conteúdo técnico para quem
+        <span class="text-integra-red">projeta, opera e mantém</span>
+        sistemas industriais.
+      </h1>
+      <p class="mt-8 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
+        Integra Ação é a marca guarda-chuva da Integra Automação Industrial
+        para conteúdo educativo. Aqui reunimos a newsletter mensal, os
+        webinars técnicos e o registro dos eventos em que a equipe atua.
+        O foco é o mesmo do nosso trabalho de engenharia: profundidade
+        técnica, sem ruído de marketing.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a
+          href="/integra-acao/newsletter/"
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
+        >
+          Inscrever-se na newsletter
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="#formatos"
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+        >
+          Ver formatos disponíveis
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="formatos" class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        Três formatos
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl max-w-3xl mb-12">
+        Mesmo conteúdo, formatos diferentes — você escolhe como receber.
+      </h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        {formatos.map((f) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-7 flex flex-col gap-4">
+            <div class="inline-flex size-12 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
+              <Icon name={f.icon} class="size-6" aria-hidden="true" />
+            </div>
+            <p class="text-xs font-mono uppercase tracking-widest text-integra-red">
+              {f.eyebrow}
+            </p>
+            <h3 class="text-lg font-semibold text-integra-gray-900 leading-snug">
+              {f.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {f.description}
+            </p>
+            <a
+              href={f.href}
+              class="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red hover:text-integra-red-700 pt-2"
+            >
+              {f.cta} <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <div class="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+            Linha editorial
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-6">
+            Cinco temas guiam a curadoria.
+          </h2>
+          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+            A escolha dos assuntos parte da prática de campo: o que perguntam
+            em diagnósticos, o que aparece em FAT/SAT, o que falta na
+            documentação que recebemos de outras integradoras. Cada
+            edição da newsletter, cada webinar e cada evento é amarrado a
+            um destes cinco eixos.
+          </p>
+        </div>
+        <ol class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200">
+          {temas.map((t) => (
+            <li class="bg-integra-white p-6 flex gap-4">
+              <span class="font-mono text-xs font-semibold text-integra-red mt-1">
+                {t.code}
+              </span>
+              <div>
+                <h3 class="text-base font-semibold text-integra-gray-900">
+                  {t.titulo}
+                </h3>
+                <p class="mt-1 text-sm text-integra-gray-700">{t.sub}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  {(recentPosts.length > 0 || recentEventos.length > 0) && (
+    <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+      <div class="container-fluid py-20">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          Recentes
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-12">
+          O que saiu por aqui ultimamente.
+        </h2>
+        <div class="grid gap-12 lg:grid-cols-2">
+          {recentPosts.length > 0 && (
+            <div>
+              <h3 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-4">
+                Artigos no blog
+              </h3>
+              <ul class="space-y-4">
+                {recentPosts.map((p) => (
+                  <li class="border-b border-integra-gray-200 pb-4 last:border-b-0">
+                    <a href={`/blog/${p.slug}/`} class="group">
+                      <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors">
+                        {p.data.title}
+                      </h4>
+                      <p class="mt-1 text-sm text-integra-gray-600">
+                        {p.data.tags.slice(0, 3).join(" · ")}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {recentEventos.length > 0 && (
+            <div>
+              <h3 class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-4">
+                Eventos recentes
+              </h3>
+              <ul class="space-y-4">
+                {recentEventos.map((e) => (
+                  <li class="border-b border-integra-gray-200 pb-4 last:border-b-0">
+                    <a href={`/eventos/${e.slug}/`} class="group">
+                      <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors">
+                        {e.data.title}
+                      </h4>
+                      <p class="mt-1 text-sm text-integra-gray-600">
+                        {e.data.dateLabel} · {e.data.location}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBlock
+    title="Quer receber a newsletter Integra Ação?"
+    description="Uma edição por mês, com curadoria técnica, sem promoção comercial. Você sai quando quiser e nunca compartilhamos seu e-mail."
+    primaryCta={{ href: "/integra-acao/newsletter/", label: "Inscrever-se na newsletter" }}
+    secondaryCta={{ href: "/blog", label: "Ver blog técnico" }}
+  />
+</BaseLayout>
