@@ -450,5 +450,11 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       },
       imageSrc: "/images/rockwell-si-silver.png",
     },
+    quickLinks: [
+      { href: "/solucoes", label: "Ver soluções" },
+      { href: "/tecnologias", label: "Catálogo técnico" },
+      { href: "/cases", label: "Cases publicados" },
+      { href: "/contato?assunto=certificacoes", label: "Solicitar comprovação" },
+    ],
   },
 };
