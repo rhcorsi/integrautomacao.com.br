@@ -152,15 +152,20 @@ const v = variantStyles[variant];
         class={`relative ${imagePosition === "left" ? "lg:order-1" : "lg:order-2"}`}
       >
         {image ? (
-          <div class="relative overflow-hidden rounded-lg shadow-2xl">
+          <div
+            class:list={[
+              "relative overflow-hidden rounded-lg shadow-2xl aspect-[16/9] flex items-center justify-center",
+              variant === "light" ? "bg-integra-white" : "bg-integra-white",
+            ]}
+          >
             <Image
               src={image}
               alt={imageAlt}
-              widths={[600, 1000, 1400]}
-              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[800, 1200, 1800, 2400]}
+              sizes="(min-width: 1024px) 800px, 100vw"
               loading="lazy"
               decoding="async"
-              class="w-full h-auto object-cover aspect-[4/3]"
+              class="w-full h-full object-contain"
             />
           </div>
         ) : null}
