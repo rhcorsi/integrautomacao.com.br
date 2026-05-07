@@ -31,12 +31,10 @@ import simaticStep7Classic from "@/assets/manuals/simatic-step7-classic.jpg";
 // aveva-rcl-foods-sugar-case, aveva-production-dashboard, siemens-network-layer2-architecture,
 // plantpax-redundant-prp-topology, plantpax-passc-small-1k-io) live in src/assets/manuals/
 // and are catalogued in _img_extraction/library_catalog.json for blog/case-study reuse.
-import plantpaxSystemEstimator from "@/assets/manuals/plantpax-system-estimator.jpg";
 import idmzUntrustedTrusted from "@/assets/manuals/idmz-untrusted-trusted-zones.jpg";
 import optixDesignDeployment from "@/assets/manuals/factorytalk-optix-design-deployment.jpg";
 // V3 library images (May 2026): premium diagrams promoted from _library/
 import plantpaxPasscAnnotated from "@/assets/manuals/plantpax-passc-annotated-1k-io.jpg";
-import guardlogix5580 from "@/assets/manuals/guardlogix-5580-safety-controller.jpg";
 import controllogixGuardlogixArmor from "@/assets/manuals/controllogix-guardlogix-armor-system-config.jpg";
 import factorytalkServicesPlatform from "@/assets/manuals/factorytalk-services-platform-functions.jpg";
 import factorytalkHistorianClientsV2 from "@/assets/manuals/factorytalk-historian-clients-collective.jpg";
@@ -49,7 +47,11 @@ import tiaSelectionTool from "@/assets/manuals/tia-selection-tool-portfolio.jpg"
 import siemensNetworkUserView from "@/assets/manuals/siemens-network-user-view.jpg";
 import plantpaxPasscSmall from "@/assets/manuals/plantpax-passc-small-1k-io.jpg";
 import logixDirectDlr from "@/assets/manuals/logix-direct-dlr-non-converged.jpg";
-import cpweOtitSimilaritiesDifferences from "@/assets/manuals/cpwe-otit-similarities-differences.jpg";
+// Round 5 (final architecture-only sweep): Logix SIS for safety, Mobile Remote Access, Medium PASS for plantpax-5x
+import logixSisSafetyArchitecture from "@/assets/manuals/logix-sis-safety-architecture.jpg";
+import mobileRemoteAccessArchitecture from "@/assets/manuals/mobile-remote-access-architecture.jpg";
+import plantpaxMediumPass from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
+
 
 import devicewiseEletronorArchitecture from "@/assets/manuals/devicewise-eletronor-architecture.jpg";
 import siemensNetworkLayer2 from "@/assets/manuals/siemens-network-layer2-architecture.jpg";
@@ -120,7 +122,6 @@ const simaticStep7Source = "Siemens - SIMATIC Programmable Logic Controllers ST 
 
 // Sources for V2 library (only the ones currently wired into techCatalog entries).
 // Additional source strings for library_catalog.json entries are tracked there.
-const plantpaxSg001Source = "Rockwell Automation - PlantPAx System Release 5.50 (PROCES-SG001W-EN-P)";
 const idmzFirepowerSource = "Cisco + Rockwell Automation - Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)";
 const ftOptixRefSource = "Rockwell Automation - FactoryTalk Optix Reference Architectures";
 const telitEletronorSource = "Telit Cinterion + Eletronor - Eletroday (apresentação institucional)";
@@ -129,11 +130,13 @@ const simaticSt70Source = "Siemens AG - SIMATIC ST 70 Catalog (2025)";
 const siemensNetworkUserViewSource = "Siemens AG - Network Reference Architecture for Discrete Manufacturing (Article 109802750, V2.0)";
 const plantpax520RefSource = "Rockwell Automation - PlantPAx 5.20 Reference Architectures";
 const logixRedundancyRefSource = "Rockwell Automation - Logix Redundancy Systems Reference Architectures";
-const cpweDeepDiveTableSource = "Cisco + Rockwell Automation - CPwE Deep Dive Architecture";
+const logixSisSource = "Rockwell Automation - Logix Redundancy Systems Reference Architectures (Logix SIS Topologies)";
+const cpweIdentityMobilitySource = "Cisco + Rockwell Automation - Deploying Identity and Mobility Services within a CPwE Architecture (ENET-TD008B-EN-P)";
+const plantpaxMediumPassSource = "Rockwell Automation - PlantPAx 5.40 Reference Architectures";
+
 
 // V3 library sources
 const plantpax540RefSource = "Rockwell Automation - PlantPAx 5.40 Reference Architectures";
-const controllogix5580BrochureSource = "Rockwell Automation - ControlLogix 5580 Controller Brochure";
 const controllogix5580SystemsSource = "Rockwell Automation - ControlLogix 5580 and ControlLogix 5570 Systems Selection Guide (1756-SG020-EN-P)";
 const ftServicesRefSource = "Rockwell Automation - FactoryTalk Services Platform Reference Architectures";
 const ftHistorianRefSource = "Rockwell Automation - FactoryTalk Historian Reference Architectures";
@@ -195,12 +198,11 @@ export const techCatalog: TechPage[] = [
       "Arquitetura DCS moderna para controle plant-wide, com objetos de processo, servidores FactoryTalk e governança de ciclo de vida.",
     intro:
       "PlantPAx 5.x entra quando a planta precisa sair de automação por ilhas e operar com arquitetura de processo estruturada. O valor está na padronização: objetos, faceplates, alarmes, redes, servidores, historian e documentação falando a mesma língua técnica.",
-    image: plantpaxSystemEstimator,
-    imageAlt: "Tela do PlantPAx System Estimator no Integrated Architecture Builder com servidores, controladores, alarmes e I/O",
-    imageTitle: "PlantPAx System Estimator: dimensionar é decisão de engenharia",
-    imageSource: plantpaxSg001Source,
-    imageCaption:
-      "Print público do System Estimator integrado ao IAB. Antes de propor topologia, validamos servidores, alarmes, controladores e I/O com a ferramenta oficial do fabricante.",
+    image: plantpaxMediumPass,
+    imageAlt: "Reference Architecture - Medium: PASS, 5,000 I/O, 30 OWS clients - PlantPAx 5.x",
+    imageTitle: "PlantPAx 5.x: arquitetura de referência Medium PASS",
+    imageSource: plantpaxMediumPassSource,
+    imageCaption: "Print público da Reference Architecture Medium PASS (PlantPAx 5.40): single PASS com 5.000 I/O e 30 OWS clients distribuídos por área de processo. Esta é a topologia DCS plant-wide moderna.",
     useCases: [
       "Implantação ou modernização de DCS para processo contínuo, batelada ou operações híbridas.",
       "Padronização de controle, supervisão e alarmes em plantas com múltiplas áreas.",
@@ -471,12 +473,11 @@ export const techCatalog: TechPage[] = [
       "Engenharia de permissivos, intertravamentos operacionais, lógica sequencial e estados ISA-88 para automação previsível e auditável.",
     intro:
       "Intertravamentos compreensíveis e sequências recuperáveis são a diferença entre planta que opera com confiança e planta que depende de quem está em campo. A Integra estrutura essa camada com matriz causa-efeito, descritivos funcionais e diagnósticos de bloqueio claros.",
-    image: guardlogix5580,
-    imageAlt: "GuardLogix 5580 Safety Controller para integração de controle e safety em um mesmo controlador",
-    imageTitle: "GuardLogix 5580 quando o intertravamento exige classificação SIL/PLe",
-    imageSource: controllogix5580BrochureSource,
-    imageCaption:
-      "Print público do GuardLogix 5580: intertravamentos operacionais rodam em ControlLogix; quando há classificação SIL/PLe e SIF dedicada, o controlador safety integrado evita arquitetura híbrida.",
+    image: logixSisSafetyArchitecture,
+    imageAlt: "Logix SIS topology - controladores redundantes, DLR1/DLR2, switches Stratix, módulos de safety, drives PowerFlex e MCC",
+    imageTitle: "Logix SIS: arquitetura de safety integrada ao controle",
+    imageSource: logixSisSource,
+    imageCaption: "Print público da Logix Redundancy Reference Architecture (Logix SIS Topologies): redundância plant-wide com controladores, anéis DLR, switches gerenciados, módulos safety, drives PowerFlex e IntelliCenter MCC. Intertravamentos críticos exigem essa fundação.",
     useCases: [
       "Permissivos e intertravamentos espalhados pela lógica, sem documentação central.",
       "Sequências de partida/parada de equipamento com passos informais e reinício difícil.",
@@ -2074,11 +2075,11 @@ export const techCatalog: TechPage[] = [
       "Atendimento remoto e em campo para sistemas industriais, com acesso seguro, registro técnico, diagnóstico e escalonamento.",
     intro:
       "Suporte remoto em OT precisa de segurança, rastreabilidade e limites. A Integra atua com diagnóstico estruturado, acesso autorizado e, quando necessário, presença em campo para validar comunicação, painel, rede e processo.",
-    image: cpweOtitSimilaritiesDifferences,
-    imageAlt: "Tabela CPwE — diferenças entre Industrial OT e Enterprise IT em rede, performance e SLA",
-    imageTitle: "Suporte remoto seguro respeita a fronteira OT vs IT",
-    imageSource: cpweDeepDiveTableSource,
-    imageCaption: "Print público do CPwE Deep Dive: suporte remoto que ignora as diferenças entre OT e IT (latência, redundância, mean time to recovery) vira porta de entrada de incidente. A engenharia de acesso remoto começa por reconhecer essas diferenças.",
+    image: mobileRemoteAccessArchitecture,
+    imageAlt: "Mobile Analytics Use Case - Plant Personnel - acesso remoto através de IDMZ, Reverse Web Proxy, Cisco ISE, FactoryTalk VantagePoint e FactoryTalk Cloud",
+    imageTitle: "Acesso remoto seguro: IDMZ, Reverse Web Proxy, identidade e cloud",
+    imageSource: cpweIdentityMobilitySource,
+    imageCaption: "Print público do CVD Identity and Mobility Services in CPwE (ENET-TD008B-EN-P, Figure 2-15): suporte remoto seguro atravessa IDMZ com Reverse Web Proxy, autenticação centralizada por Cisco ISE e FactoryTalk Cloud para analytics — sem acesso direto à zona industrial.",
     theme: "ot",
     useCases: [
       "Apoio rápido a falhas em PLC, HMI, servidores ou comunicação.",
