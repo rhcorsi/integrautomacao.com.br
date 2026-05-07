@@ -191,14 +191,14 @@ const allMegas: Record<string, MegaMenu> = {
                   "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0 group-focus-within/menu:pointer-events-auto",
                 ]}
               >
-                <div class="border-y border-integra-gray-200 bg-integra-white shadow-2xl max-h-[calc(100vh-9.25rem)] overflow-y-auto">
-                  <div class="bg-integra-gray-50 border-b border-integra-gray-200">
-                    <div class="container-wide">
-                      <a href={menuIntro.href} class="inline-flex items-center gap-1.5 py-3 text-sm font-semibold text-integra-gray-900 hover:text-integra-red transition-colors">
-                        {menuIntro.title} <span aria-hidden="true">→</span>
-                      </a>
-                    </div>
-                  </div>
+                <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl max-h-[calc(100vh-9.25rem)] overflow-y-auto">
+                  {/* "Ver tudo em X" CTA, top-right corner */}
+                  <a
+                    href={menuIntro.href}
+                    class="absolute top-4 right-6 lg:right-10 xl:right-12 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-widest text-integra-gray-900 hover:text-integra-white bg-integra-gray-50 hover:bg-integra-red border border-integra-gray-200 hover:border-integra-red rounded-full transition-colors"
+                  >
+                    {menuIntro.title} <span aria-hidden="true">→</span>
+                  </a>
                   <div class:list={[
                     "container-wide grid gap-8 py-8",
                     mega.promo ? "xl:grid-cols-[minmax(0,1fr)_22rem]" : "grid-cols-1",
