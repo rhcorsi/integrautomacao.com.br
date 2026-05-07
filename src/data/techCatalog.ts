@@ -7,8 +7,6 @@ import datamosaixReference from "@/assets/manuals/factorytalk-datamosaix-data-fl
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import securityReference from "@/assets/manuals/factorytalk-security-system.jpg";
-import siemensTiaReference from "@/assets/manuals/siemens-tia-portal-engineering.jpg";
-import siemensStartdriveReference from "@/assets/manuals/siemens-startdrive-tia-portal.jpg";
 import elipseE3Reference from "@/assets/manuals/elipse-e3-architecture.jpg";
 import schneiderControlReference from "@/assets/manuals/schneider-control-expert-topology.jpg";
 import schneiderMachineReference from "@/assets/manuals/schneider-machine-expert-engineering.jpg";
@@ -46,6 +44,13 @@ import ftAnalyticsLogixaiPurdueClean from "@/assets/manuals/factorytalk-analytic
 import controllogixPrpDetail from "@/assets/manuals/controllogix-prp-non-converged-detail.jpg";
 import cpweIiotOtitBridging from "@/assets/manuals/cpwe-iiot-otit-bridging.jpg";
 import cpweDefenseInDepthConcentric from "@/assets/manuals/cpwe-defense-in-depth-concentric.jpg";
+// Round 4 swaps (May 2026): replace bad Siemens product-page chrome with real diagrams
+import tiaSelectionTool from "@/assets/manuals/tia-selection-tool-portfolio.jpg";
+import siemensNetworkUserView from "@/assets/manuals/siemens-network-user-view.jpg";
+import plantpaxPasscSmall from "@/assets/manuals/plantpax-passc-small-1k-io.jpg";
+import logixDirectDlr from "@/assets/manuals/logix-direct-dlr-non-converged.jpg";
+import cpweOtitSimilaritiesDifferences from "@/assets/manuals/cpwe-otit-similarities-differences.jpg";
+
 import devicewiseEletronorArchitecture from "@/assets/manuals/devicewise-eletronor-architecture.jpg";
 import siemensNetworkLayer2 from "@/assets/manuals/siemens-network-layer2-architecture.jpg";
 
@@ -97,8 +102,6 @@ const dataMosaixSource = "Rockwell Automation - FactoryTalk DataMosaix Reference
 const cpweSource = "Cisco + Rockwell Automation - CPwE Design and Implementation Guides";
 const logixSource = "Rockwell Automation - ControlLogix High Availability Reference Architectures";
 const securitySource = "Rockwell Automation - FactoryTalk Security System Design";
-const siemensTiaSource = "Siemens - Totally Integrated Automation Portal";
-const siemensStartdriveSource = "Siemens - SINAMICS Startdrive / TIA Portal";
 const elipseE3Source = "Elipse Software - Elipse E3";
 const schneiderControlSource = "Schneider Electric - EcoStruxure Control Expert";
 const schneiderMachineSource = "Schneider Electric - EcoStruxure Machine Expert";
@@ -122,6 +125,12 @@ const idmzFirepowerSource = "Cisco + Rockwell Automation - Securely Traversing I
 const ftOptixRefSource = "Rockwell Automation - FactoryTalk Optix Reference Architectures";
 const telitEletronorSource = "Telit Cinterion + Eletronor - Eletroday (apresentação institucional)";
 const siemensNetworkRefSource = "Siemens AG - Network Reference Architecture for Discrete Manufacturing (Article 109802750)";
+const simaticSt70Source = "Siemens AG - SIMATIC ST 70 Catalog (2025)";
+const siemensNetworkUserViewSource = "Siemens AG - Network Reference Architecture for Discrete Manufacturing (Article 109802750, V2.0)";
+const plantpax520RefSource = "Rockwell Automation - PlantPAx 5.20 Reference Architectures";
+const logixRedundancyRefSource = "Rockwell Automation - Logix Redundancy Systems Reference Architectures";
+const cpweDeepDiveTableSource = "Cisco + Rockwell Automation - CPwE Deep Dive Architecture";
+
 // V3 library sources
 const plantpax540RefSource = "Rockwell Automation - PlantPAx 5.40 Reference Architectures";
 const controllogix5580BrochureSource = "Rockwell Automation - ControlLogix 5580 Controller Brochure";
@@ -401,12 +410,11 @@ export const techCatalog: TechPage[] = [
       "Engenharia de malhas de controle contínuo: PID, cascata, split-range, feed-forward e diagnósticos para operação estável e mantível.",
     intro:
       "Malha PID estável é resultado de engenharia, não de tentativa em campo. A Integra organiza o controle regulatório com critério de sintonia, documentação de parâmetros e diagnósticos que permitem manutenção sustentável depois do startup.",
-    image: plantpaxPasscAnnotated,
-    imageAlt: "Reference Architecture PASS-C Small com malhas de controle e supervisão integradas",
-    imageTitle: "Controle regulatório como camada da arquitetura",
-    imageSource: plantpax540RefSource,
-    imageCaption:
-      "Print público da Reference Architecture: o controle regulatório vive nos controladores PASS, com a biblioteca PlantPAx fornecendo blocos de processo padronizados para malhas estáveis.",
+    image: plantpaxPasscSmall,
+    imageAlt: "PASS-C Small Reference Architecture com até 1.000 pontos de I/O",
+    imageTitle: "PASS-C Small: onde o controle regulatório vive em arquitetura entry-tier",
+    imageSource: plantpax520RefSource,
+    imageCaption: "Print público da PlantPAx 5.20 Reference Architecture: em projetos pequenos, o controle regulatório roda em PASS-C consolidado com HMI, dados, alarmes e batch num só servidor — ideal para áreas com até 1.000 pontos.",
     useCases: [
       "Malhas PID instáveis, sem documentação ou com sintonia herdada.",
       "Processos contínuos (vapor, vazão, pressão, temperatura) que precisam de controle robusto.",
@@ -1433,11 +1441,11 @@ export const techCatalog: TechPage[] = [
       "Política de backup, restore testado e recuperação de VMs, projetos PLC, telas, receitas, bancos históricos e configurações de rede.",
     intro:
       "Backup que nunca foi restaurado é esperança, não estratégia. A Integra estrutura backup e recuperação de OT considerando VMs, projetos de automação, receitas, historian, switches, servidores e documentação.",
-    image: controllogixRedundancyDecision,
-    imageAlt: "Árvore de decisão entre REP, OLR e PRP em função de fault tolerance e recovery time",
-    imageTitle: "Backup e DR começam pela definição de fault tolerance e RTO",
-    imageSource: controllogixHaSource,
-    imageCaption: "Antes de definir backup e DR, alinhamos fault tolerance, RTO e topologia da rede.",
+    image: logixDirectDlr,
+    imageAlt: "Direct DLR Non-converged com 1756-EN4TR redundantes e 5015 FLEXHA 5000",
+    imageTitle: "Backup e DR começam pela camada física: redundância de rede e adaptadores",
+    imageSource: logixRedundancyRefSource,
+    imageCaption: "Print público da Logix Redundancy Reference Architecture: estratégia de backup e DR depende da camada física — adaptadores 1756-EN4TR redundantes, NIC teaming e topologia DLR são pré-requisitos para recuperação rápida e validável.",
     useCases: [
       "Ambientes sem restore testado ou com backups manuais dispersos.",
       "Proteção de projetos PLC/HMI, receitas, VMs, bancos e configs de rede.",
@@ -2066,11 +2074,11 @@ export const techCatalog: TechPage[] = [
       "Atendimento remoto e em campo para sistemas industriais, com acesso seguro, registro técnico, diagnóstico e escalonamento.",
     intro:
       "Suporte remoto em OT precisa de segurança, rastreabilidade e limites. A Integra atua com diagnóstico estruturado, acesso autorizado e, quando necessário, presença em campo para validar comunicação, painel, rede e processo.",
-    image: adCaHierarchy,
-    imageAlt: "Acesso baseado em identidade: hierarquia de CA e PKI em ambiente industrial",
-    imageTitle: "Suporte remoto exige identidade forte e auditoria",
-    imageSource: identityMobilitySource,
-    imageCaption: "Print público da CVD de Identity and Mobility - suporte remoto seguro depende de identidade auditada.",
+    image: cpweOtitSimilaritiesDifferences,
+    imageAlt: "Tabela CPwE — diferenças entre Industrial OT e Enterprise IT em rede, performance e SLA",
+    imageTitle: "Suporte remoto seguro respeita a fronteira OT vs IT",
+    imageSource: cpweDeepDiveTableSource,
+    imageCaption: "Print público do CPwE Deep Dive: suporte remoto que ignora as diferenças entre OT e IT (latência, redundância, mean time to recovery) vira porta de entrada de incidente. A engenharia de acesso remoto começa por reconhecer essas diferenças.",
     theme: "ot",
     useCases: [
       "Apoio rápido a falhas em PLC, HMI, servidores ou comunicação.",
@@ -2492,12 +2500,11 @@ export const techCatalog: TechPage[] = [
       "Ambiente Siemens para engenharia de PLCs, IHMs, redes PROFINET e drives em arquiteturas SIMATIC modernas.",
     intro:
       "TIA Portal concentra engenharia de controladores, IHMs, redes e acionamentos Siemens em um fluxo integrado. A Integra atende projetos com TIA Portal em versões antigas e atuais, principalmente quando a planta já possui base SIMATIC e precisa manter, expandir ou padronizar sistemas sem perder governança.",
-    image: siemensTiaReference,
-    imageAlt: "Material Siemens sobre Totally Integrated Automation Portal",
-    imageTitle: "TIA Portal como ambiente integrado de engenharia Siemens",
-    imageSource: siemensTiaSource,
-    imageCaption:
-      "Referência visual pública Siemens. A Integra trabalha com ferramentas Siemens como tecnologia atendida, sem afirmar programa formal de integrador Siemens.",
+    image: tiaSelectionTool,
+    imageAlt: "TIA Selection Tool — interface de configuração rápida de portfólio Siemens com TIA Portal e SIMATIC",
+    imageTitle: "TIA Selection Tool: a porta de entrada do TIA Portal",
+    imageSource: simaticSt70Source,
+    imageCaption: "Print público do catálogo SIMATIC ST 70 (2025): TIA Selection Tool é a ferramenta gratuita Siemens para configurar projetos no TIA Portal, com QR e versão desktop ou nuvem.",
     useCases: [
       "Programação e manutenção de PLCs SIMATIC S7-1200 e S7-1500.",
       "Expansão de sistemas existentes com IHMs, redes PROFINET e bibliotecas de projeto.",
@@ -2706,12 +2713,11 @@ export const techCatalog: TechPage[] = [
       "Redes industriais Siemens, PROFINET, Industrial Ethernet, diagnóstico de comunicação e integração de drives via Startdrive.",
     intro:
       "Projetos Siemens dependem de rede bem estruturada: endereçamento, topologia, PROFINET, switches industriais, diagnóstico, drives e comunicação com supervisórios. A Integra aplica conhecimento de redes industriais e treinamento CPIN-Level para sustentar essa camada com método.",
-    image: siemensStartdriveReference,
-    imageAlt: "Material Siemens SINAMICS Startdrive integrado ao TIA Portal",
-    imageTitle: "Redes, drives e engenharia Siemens precisam caminhar juntos",
-    imageSource: siemensStartdriveSource,
-    imageCaption:
-      "Referência visual pública Siemens para contextualizar o comissionamento de drives no TIA Portal e a importância de rede industrial estável.",
+    image: siemensNetworkUserView,
+    imageAlt: "Visão de usuário Siemens — Enterprise network, Industrial network, Backbone, Aggregation e Cell zones",
+    imageTitle: "Siemens em camadas: Enterprise, Industrial, Backbone, Aggregation, Cell",
+    imageSource: siemensNetworkUserViewSource,
+    imageCaption: "Print público da Network Reference Architecture for Discrete Manufacturing (Siemens AG, Article 109802750 V2.0): a arquitetura Siemens divide a planta em camadas claras desde Enterprise até Cell — base para projetar, segmentar e auditar redes industriais.",
     theme: "ot",
     useCases: [
       "Diagnóstico de falhas de comunicação PROFINET ou Industrial Ethernet.",
