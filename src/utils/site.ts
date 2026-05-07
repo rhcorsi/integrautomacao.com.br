@@ -107,24 +107,103 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
     },
     columns: [
       {
-        title: "Plataforma",
+        title: "Plataforma de controle e dados",
         links: [
-          { href: "/solucoes/plantpax", label: "PlantPAx" },
-          { href: "/solucoes/factorytalk", label: "FactoryTalk Suite" },
+          {
+            href: "/solucoes/plantpax",
+            label: "PlantPAx",
+            description: "DCS moderno com biblioteca padronizada (5.x série P)",
+          },
+          {
+            href: "/solucoes/factorytalk",
+            label: "FactoryTalk Suite",
+            description: "View SE, Optix, Batch, Historian, AssetCentre, ThinManager",
+          },
+          {
+            href: "/solucoes/pi-system",
+            label: "PI System / AVEVA",
+            description: "Dados industriais, AF Templates, integração corporativa",
+          },
         ],
       },
       {
-        title: "Redes & Segurança",
+        title: "Redes e cibersegurança OT",
         links: [
-          { href: "/solucoes/redes-iec-62443", label: "Redes Industriais e IEC 62443" },
+          {
+            href: "/solucoes/redes-iec-62443",
+            label: "Redes industriais e IEC 62443",
+            description: "CPwE, IDMZ, segmentação Purdue, defense-in-depth",
+          },
+          {
+            href: "/tecnologias/iec-62443-nist-ot",
+            label: "Diagnóstico IEC 62443 / NIST OT",
+            description: "Gap analysis, zonas e conduítes, roadmap progressivo",
+          },
+          {
+            href: "/tecnologias/hardening-industrial",
+            label: "Hardening industrial",
+            description: "Endurecimento de servidores, switches e estações OT",
+          },
+          {
+            href: "/tecnologias/monitoramento-redes-industriais",
+            label: "Monitoramento OT",
+            description: "Visibilidade contínua de rede, anomalias e ativos",
+          },
         ],
       },
       {
-        title: "Dados & Evolução",
+        title: "Infraestrutura e modernização",
         links: [
-          { href: "/solucoes/pi-system", label: "PI System / AVEVA" },
-          { href: "/solucoes/data-centers", label: "Data Centers Industriais" },
-          { href: "/solucoes/migracao-plc", label: "Migração PLC5 / SLC500" },
+          {
+            href: "/solucoes/data-centers",
+            label: "Data Centers Industriais",
+            description: "Servidores OT, virtualização, redundância e DR",
+          },
+          {
+            href: "/solucoes/migracao-plc",
+            label: "Migração PLC-5 / SLC500",
+            description: "Modernização para ControlLogix com plano de cutover",
+          },
+          {
+            href: "/tecnologias/virtualizacao-ot",
+            label: "Virtualização OT",
+            description: "VMware/Hyper-V para FactoryTalk e PlantPAx",
+          },
+          {
+            href: "/tecnologias/backup-recuperacao-desastres",
+            label: "Backup e Disaster Recovery",
+            description: "RTO/RPO definidos, restore validado",
+          },
+        ],
+      },
+      {
+        title: "Por desafio",
+        links: [
+          {
+            href: "/solucoes/migracao-plc",
+            label: "Modernizar PLC legado",
+            description: "PLC-5/SLC500 obsoleto sem virar paralisia de planta",
+          },
+          {
+            href: "/solucoes/redes-iec-62443",
+            label: "Prevenir incidentes cyber",
+            description: "IDMZ, segmentação e governança de identidade OT",
+          },
+          {
+            href: "/solucoes/plantpax",
+            label: "Padronizar engenharia",
+            description: "Biblioteca PlantPAx, AF Templates e padrão plant-wide",
+          },
+          {
+            href: "/tecnologias/auditoria-conformidade",
+            label: "Validar arquitetura existente",
+            description: "Auditoria técnica de stack OT e gap contra IEC 62443",
+          },
+          {
+            href: "/tecnologias/manutencao-corretiva-preventiva",
+            label: "Reduzir paradas não planejadas",
+            description: "Manutenção preventiva, evolutiva e analytics",
+          },
         ],
       },
     ],
@@ -135,6 +214,12 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         "Cada solução passa pelas mesmas cinco fases. Documentação completa, padronização e governança em cada entrega.",
       cta: { href: "/solucoes#metodo-integra", label: "Ver método Integra" },
     },
+    quickLinks: [
+      { href: "/setores", label: "Por setor industrial" },
+      { href: "/tecnologias", label: "Catálogo técnico completo" },
+      { href: "/cases", label: "Cases publicados" },
+      { href: "/contato?assunto=diagnostico", label: "Solicitar diagnóstico" },
+    ],
   },
 
   "/tecnologias": {
@@ -193,42 +278,115 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         "O catálogo técnico aprofunda entregáveis, normas, referências visuais públicas e critérios de aplicação por tema.",
       cta: { href: "/tecnologias", label: "Abrir catálogo" },
     },
+    quickLinks: [
+      { href: "/solucoes", label: "Ver soluções" },
+      { href: "/setores", label: "Por setor industrial" },
+      { href: "/certificacoes", label: "Parcerias e certificações" },
+      { href: "/contato?assunto=tecnologias-multivendor", label: "Avaliar stack existente" },
+    ],
   },
 
   "/setores": {
+    intro: { title: "Ver todos os setores", href: "/setores" },
     columns: [
       {
-        title: "Agronegócio",
+        title: "Agronegócio e grãos",
         links: [
-          { href: "/setores", label: "Açúcar e Etanol" },
-          { href: "/setores", label: "Etanol de Milho" },
-          { href: "/setores", label: "Armazenagem de Grãos" },
+          {
+            href: "/setores",
+            label: "Açúcar e Etanol",
+            description: "Safra 24/7, NFPA, moenda, fermentação, caldeira",
+          },
+          {
+            href: "/setores",
+            label: "Etanol de Milho",
+            description: "Plantas modernas, eficiência, rastreabilidade",
+          },
+          {
+            href: "/setores",
+            label: "Armazenagem de Grãos",
+            description: "Silos, terminais, secadores, sazonalidade",
+          },
         ],
       },
       {
-        title: "Alimentos",
+        title: "Alimentos e bebidas",
         links: [
-          { href: "/setores", label: "Alimentos e Bebidas" },
-          { href: "/setores", label: "Frigoríficos" },
-          { href: "/setores", label: "Fábricas de Ração" },
+          {
+            href: "/setores",
+            label: "Alimentos e Bebidas",
+            description: "Linhas contínuas, rastreabilidade, segurança alimentar",
+          },
+          {
+            href: "/setores",
+            label: "Frigoríficos",
+            description: "Receita por lote, rastreabilidade animal-produto",
+          },
+          {
+            href: "/setores",
+            label: "Fábricas de Ração",
+            description: "Dosagem, pesagem, batelada, mistura automatizada",
+          },
         ],
       },
       {
-        title: "Indústria de Processo",
+        title: "Indústria de processo",
         links: [
-          { href: "/setores", label: "Química e Fertilizantes" },
-          { href: "/setores", label: "Papel e Celulose" },
-          { href: "/setores", label: "Saneamento" },
+          {
+            href: "/setores",
+            label: "Química e Fertilizantes",
+            description: "24/7, intertravamentos, redundância, IEC 62443",
+          },
+          {
+            href: "/setores",
+            label: "Papel e Celulose",
+            description: "Caldeiras, digestores, controle multivariável",
+          },
+          {
+            href: "/setores",
+            label: "Saneamento",
+            description: "SCADA distribuído, monitoramento remoto, infra crítica",
+          },
+        ],
+      },
+      {
+        title: "Soluções por contexto setorial",
+        links: [
+          {
+            href: "/solucoes/plantpax",
+            label: "PlantPAx para processo",
+            description: "DCS plant-wide para açúcar, química, papel",
+          },
+          {
+            href: "/solucoes/factorytalk",
+            label: "FactoryTalk para discreto",
+            description: "Linhas de produção, frigoríficos, ração",
+          },
+          {
+            href: "/solucoes/redes-iec-62443",
+            label: "Cibersegurança OT",
+            description: "Aplicável a todos os setores em modernização",
+          },
+          {
+            href: "/solucoes/migracao-plc",
+            label: "Modernização legado",
+            description: "PLC-5/SLC500 → ControlLogix em qualquer setor",
+          },
         ],
       },
     ],
     promo: {
-      eyebrow: "Atuação nacional",
+      eyebrow: "Atuação nacional · B2B",
       title: "Indústrias de médio e grande porte com processos críticos",
       description:
-        "B2B com foco em plantas que operam 24/7 e exigem padronização, segurança e documentação para auditoria.",
+        "Atendemos plantas que operam 24/7 e exigem padronização, segurança e documentação para auditoria. Cada setor reflete experiência real da equipe.",
       cta: { href: "/setores", label: "Ver todos os setores" },
     },
+    quickLinks: [
+      { href: "/solucoes", label: "Por solução" },
+      { href: "/cases", label: "Cases por setor" },
+      { href: "/contato?assunto=diagnostico", label: "Conversar sobre meu setor" },
+    ],
   },
 
   "/certificacoes": {
