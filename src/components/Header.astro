@@ -22,9 +22,8 @@ const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 5);
 
-const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 5);
+const allEventos = (await getCollection("eventos", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const dynamicMegas: Record<string, MegaMenu> = {
   "/cases": {
@@ -75,13 +74,16 @@ const dynamicMegas: Record<string, MegaMenu> = {
           : [{ href: "/blog", label: "Em breve" }],
       },
       {
-        title: "Eventos recentes",
-        links: recentEventos.length > 0
-          ? recentEventos.map((e) => ({
-              href: `/eventos/${e.slug}/`,
-              label: e.data.title,
-              description: e.data.dateLabel,
-            }))
+        title: "Eventos",
+        links: allEventos.length > 0
+          ? [
+              ...allEventos.map((e) => ({
+                href: `/eventos/${e.slug}/`,
+                label: e.data.title,
+                description: e.data.dateLabel,
+              })),
+              { href: "/eventos", label: "Ver todos os eventos →" },
+            ]
           : [{ href: "/eventos", label: "Ver todos os eventos" }],
       },
     ],
