@@ -4,6 +4,69 @@ import SectionHeader from "@/components/SectionHeader.astro";
 import SolutionCard from "@/components/SolutionCard.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import { Icon } from "astro-icon/components";
+
+const desafios = [
+  {
+    icon: "lucide:replace",
+    label: "Modernizar PLC legado",
+    description:
+      "PLC-5/SLC500 obsoleto, spare difícil, integração nova exigida. Migração planejada com janela de cutover e plano de rollback.",
+    href: "/solucoes/migracao-plc",
+    cta: "Ver migração PLC",
+  },
+  {
+    icon: "lucide:shield-check",
+    label: "Prevenir incidentes cyber",
+    description:
+      "Rede flat, sem IDMZ, acesso remoto improvisado. Implementar segmentação Purdue, IDMZ e governança de identidade OT.",
+    href: "/solucoes/redes-iec-62443",
+    cta: "Ver redes / IEC 62443",
+  },
+  {
+    icon: "lucide:layers-3",
+    label: "Padronizar engenharia plant-wide",
+    description:
+      "Cada área com padrão diferente, manutenção dependente de quem implantou. PlantPAx Library + AF Templates + governança comum.",
+    href: "/solucoes/plantpax",
+    cta: "Ver PlantPAx",
+  },
+  {
+    icon: "lucide:clipboard-check",
+    label: "Validar arquitetura existente",
+    description:
+      "Auditoria técnica do stack OT atual, gap analysis contra IEC 62443, roadmap progressivo priorizado por risco operacional.",
+    href: "/tecnologias/auditoria-conformidade",
+    cta: "Ver auditoria",
+  },
+  {
+    icon: "lucide:wrench",
+    label: "Reduzir paradas não planejadas",
+    description:
+      "Manutenção preventiva e evolutiva, monitoramento OT, analytics e procedimentos de recuperação documentados.",
+    href: "/tecnologias/manutencao-corretiva-preventiva",
+    cta: "Ver manutenção",
+  },
+  {
+    icon: "lucide:database",
+    label: "Integrar dados OT com sistemas corporativos",
+    description:
+      "Tags, AF Templates, OPC UA, deviceWISE, edge gateways — dado industrial chegando ao ERP, MES e BI sem improviso.",
+    href: "/solucoes/pi-system",
+    cta: "Ver PI System / AVEVA",
+  },
+];
+
+const tecnologiasRelacionadas = [
+  { href: "/tecnologias/iec-62443-nist-ot", label: "Diagnóstico IEC 62443 / NIST OT" },
+  { href: "/tecnologias/hardening-industrial", label: "Hardening industrial" },
+  { href: "/tecnologias/monitoramento-redes-industriais", label: "Monitoramento OT" },
+  { href: "/tecnologias/virtualizacao-ot", label: "Virtualização OT" },
+  { href: "/tecnologias/backup-recuperacao-desastres", label: "Backup e Disaster Recovery" },
+  { href: "/tecnologias/active-directory-ot", label: "Active Directory industrial" },
+  { href: "/tecnologias/intertravamentos-sequencias", label: "Intertravamentos e safety" },
+  { href: "/tecnologias/edge-computing-industrial", label: "Edge computing industrial" },
+];
 
 const mvpSolutions = [
   {
@@ -97,6 +160,77 @@ const mvpSolutions = [
     </div>
   </section>
 
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Por desafio"
+        title="O que costuma trazer o cliente até nós"
+        description="Cada solução acima resolve um problema. Aqui mostramos os desafios mais comuns e qual caminho técnico eles tendem a seguir."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {desafios.map((d) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 flex flex-col gap-3">
+            <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
+              <Icon name={d.icon} class="size-5" aria-hidden="true" />
+            </div>
+            <h3 class="text-base font-semibold text-integra-gray-900 leading-snug">
+              {d.label}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {d.description}
+            </p>
+            <a
+              href={d.href}
+              class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+            >
+              {d.cta} <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Tecnologias relacionadas"
+        title="Quando a solução pede mais profundidade técnica"
+        description="Cada solução tem páginas técnicas dedicadas. Estas são as mais consultadas em paralelo às soluções principais."
+        accent={true}
+      />
+      <ul class="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        {tecnologiasRelacionadas.map((t) => (
+          <li>
+            <a
+              href={t.href}
+              class="group block rounded-lg border border-integra-gray-200 bg-integra-white p-4 hover:border-integra-gray-900 transition-colors"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm font-medium text-integra-gray-900 group-hover:text-integra-red transition-colors">
+                  {t.label}
+                </span>
+                <span
+                  class="text-integra-gray-400 group-hover:text-integra-red transition-colors"
+                  aria-hidden="true"
+                >→</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-8">
+        <a
+          href="/tecnologias"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+        >
+          Ver catálogo técnico completo <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <LifecycleRail
     title="Como aplicamos cada solução"
     intro="Toda solução passa pelas mesmas cinco fases. Etapas críticas, validações e documentação de engenharia são tratadas com disciplina desde o início."
@@ -105,5 +239,7 @@ const mvpSolutions = [
   <CtaBlock
     title="Tem um caso técnico para conversar?"
     description="Independentemente da solução, começamos conversando sobre o problema, a planta e os riscos. A arquitetura vem depois."
+    primaryCta={{ href: "/contato?assunto=diagnostico", label: "Solicitar diagnóstico" }}
+    secondaryCta={{ href: "/setores", label: "Ver por setor industrial" }}
   />
 </BaseLayout>

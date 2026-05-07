@@ -1,11 +1,17 @@
 ﻿---
 import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import { Icon } from "astro-icon/components";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
+
+const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 4);
 
 const dateFmt = (d: Date) =>
   d.toLocaleDateString("pt-BR", {
@@ -13,6 +19,30 @@ const dateFmt = (d: Date) =>
     month: "long",
     year: "numeric",
   });
+
+const integraAcaoFormatos = [
+  {
+    icon: "lucide:mail",
+    eyebrow: "Newsletter mensal",
+    title: "Curadoria técnica na caixa de entrada",
+    href: "/integra-acao/newsletter/",
+    cta: "Inscrever-se",
+  },
+  {
+    icon: "lucide:video",
+    eyebrow: "Webinars técnicos",
+    title: "Sessões mensais de 45–60 min com Q&A",
+    href: "/integra-acao/webinar/",
+    cta: "Ver formato",
+  },
+  {
+    icon: "lucide:calendar-days",
+    eyebrow: "Eventos presenciais",
+    title: "Onde a equipe Integra esteve recentemente",
+    href: "/eventos/",
+    cta: "Ver eventos",
+  },
+];
 ---
 
 <BaseLayout
@@ -99,9 +129,116 @@ const dateFmt = (d: Date) =>
     </div>
   </section>
 
+  <!-- Integra Ação umbrella brand -->
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <div class="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+            Marca de conteúdo · Integra Ação
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-6">
+            Conteúdo técnico em três formatos.
+          </h2>
+          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg mb-6">
+            Integra Ação é a marca guarda-chuva da Integra Automação para
+            conteúdo educativo. Mesma profundidade técnica do nosso trabalho
+            de engenharia, em formato escrito, em vídeo e em encontros
+            presenciais.
+          </p>
+          <a
+            href="/integra-acao/"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+          >
+            Conhecer Integra Ação <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="grid gap-4">
+          {integraAcaoFormatos.map((f) => (
+            <a
+              href={f.href}
+              class="group rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-5 flex items-start gap-4 hover:border-integra-gray-900 transition-colors"
+            >
+              <div class="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white group-hover:bg-integra-red transition-colors">
+                <Icon name={f.icon} class="size-5" aria-hidden="true" />
+              </div>
+              <div class="flex-1">
+                <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-1">
+                  {f.eyebrow}
+                </p>
+                <p class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors leading-snug">
+                  {f.title}
+                </p>
+              </div>
+              <span
+                class="text-integra-gray-400 group-hover:text-integra-red transition-colors mt-1"
+                aria-hidden="true"
+              >→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {recentEventos.length > 0 && (
+    <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+      <div class="container-fluid py-20">
+        <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
+          <div>
+            <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+              Eventos recentes
+            </p>
+            <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl max-w-2xl">
+              Onde a equipe Integra esteve.
+            </h2>
+          </div>
+          <a
+            href="/eventos/"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+          >
+            Ver todos os eventos <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {recentEventos.map((e) => (
+            <a
+              href={`/eventos/${e.slug}/`}
+              class="group rounded-lg border border-integra-gray-200 bg-integra-white overflow-hidden hover:border-integra-gray-900 transition-colors"
+            >
+              <div class="aspect-[16/10] overflow-hidden bg-integra-gray-100">
+                <Image
+                  src={e.data.coverImage}
+                  alt={e.data.coverAlt}
+                  widths={[300, 600]}
+                  sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 100vw"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div class="p-5">
+                <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+                  {e.data.dateLabel}
+                </p>
+                <h3 class="text-sm font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors leading-snug mb-1">
+                  {e.data.title}
+                </h3>
+                <p class="text-xs text-integra-gray-500">
+                  {e.data.location}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <CtaBlock
     title="Tem um tema técnico que gostaria de ver aqui?"
     description="Sugestões de artigos são bem-vindas — especialmente quando vêm de quem está em planta lidando com o problema diariamente."
     primaryCta={{ href: "/contato?assunto=blog", label: "Sugerir tema" }}
+    secondaryCta={{ href: "/integra-acao/newsletter/", label: "Inscrever-se na newsletter" }}
   />
 </BaseLayout>

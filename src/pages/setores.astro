@@ -78,6 +78,41 @@ const decisionMatrix = [
   ["Segurança de processo", "intertravamentos, alarmes, teste funcional e documentação"],
   ["TI/OT e auditoria", "segmentação, IDMZ, IEC 62443 e gestão de acesso"],
 ];
+
+const solucoesContexto = [
+  {
+    icon: "lucide:layers-3",
+    title: "PlantPAx para indústria de processo",
+    description:
+      "Açúcar, química, papel, saneamento e farmacêutica operam DCS plant-wide com controle regulatório, batelada e governança de alarmes ISA-18.2.",
+    href: "/solucoes/plantpax",
+    sectors: ["Açúcar e Etanol", "Química", "Papel e Celulose", "Saneamento"],
+  },
+  {
+    icon: "lucide:gauge",
+    title: "FactoryTalk para indústria discreta e híbrida",
+    description:
+      "Frigoríficos, ração, alimentos e linhas de produção exigem View SE, Optix, Batch e ThinManager com padronização visual e governança de mudanças.",
+    href: "/solucoes/factorytalk",
+    sectors: ["Frigoríficos", "Fábricas de Ração", "Alimentos e Bebidas"],
+  },
+  {
+    icon: "lucide:shield-check",
+    title: "Cibersegurança OT em qualquer setor",
+    description:
+      "Toda planta em modernização precisa de IDMZ, segmentação Purdue e governança IEC 62443 — independente do produto que sai pela porta.",
+    href: "/solucoes/redes-iec-62443",
+    sectors: ["Aplicável a todos os setores"],
+  },
+  {
+    icon: "lucide:replace",
+    title: "Modernização de legado",
+    description:
+      "PLC-5/SLC500 obsoletos vivem em todos os setores. Migração para ControlLogix com plano de cutover por área, mantendo a operação rodando.",
+    href: "/solucoes/migracao-plc",
+    sectors: ["Aplicável a todos os setores"],
+  },
+];
 ---
 
 <BaseLayout
@@ -175,8 +210,49 @@ const decisionMatrix = [
     </div>
   </section>
 
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Soluções por contexto setorial"
+        title="Cada setor pede uma combinação diferente de tecnologias"
+        description="A engenharia de processo contínuo difere da indústria discreta. Cibersegurança e modernização atravessam todos os setores."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {solucoesContexto.map((s) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-7 flex flex-col gap-4">
+            <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
+              <Icon name={s.icon} class="size-5" aria-hidden="true" />
+            </div>
+            <h3 class="text-lg font-semibold text-integra-gray-900 leading-snug">
+              {s.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-integra-gray-700">
+              {s.description}
+            </p>
+            <ul class="flex flex-wrap gap-2 pt-3 border-t border-integra-gray-100">
+              {s.sectors.map((sec) => (
+                <li class="text-[11px] font-mono uppercase tracking-wider text-integra-gray-500 px-2 py-1 bg-integra-gray-50 rounded-sm">
+                  {sec}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={s.href}
+              class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+            >
+              Ver solução <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <CtaBlock
     title="Seu setor não está listado?"
     description="Atuamos em outras indústrias quando o desafio técnico se encaixa em nossa expertise (PlantPAx, FactoryTalk, redes industriais, IEC 62443). Conversamos para avaliar."
+    primaryCta={{ href: "/contato?assunto=diagnostico", label: "Conversar sobre meu setor" }}
+    secondaryCta={{ href: "/cases", label: "Ver cases publicados" }}
   />
 </BaseLayout>
