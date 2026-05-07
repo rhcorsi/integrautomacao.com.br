@@ -13,7 +13,7 @@ import schneiderMachineReference from "@/assets/manuals/schneider-machine-expert
 import schneiderScadaReference from "@/assets/manuals/schneider-machine-scada-expert.jpg";
 
 // New: dedicated diagrams sourced from Cisco/Rockwell CVDs and reference manuals
-// to replace forced reuses (the same image appearing in 5–7 unrelated pages).
+// to replace forced reuses (the same image appearing in 5-7 unrelated pages).
 import cpweOtVsItComparison from "@/assets/manuals/cpwe-ot-vs-it-comparison.jpg";
 import cpwePlantwideZoning from "@/assets/manuals/cpwe-plantwide-zoning-levels.jpg";
 import adCaHierarchy from "@/assets/manuals/active-directory-ca-hierarchy.jpg";
@@ -241,7 +241,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença entre PlantPAx 4.x e 5.x na prática?",
-        a: "PlantPAx 5.x exige controladores da série P (CompactLogix 5380P ou ControlLogix 5580P), tem nova arquitetura de servidores (PASS modernizado), biblioteca de objetos de processo atualizada e integração mais consistente com FactoryTalk View SE moderno. A migração de 4.x para 5.x não é apenas update de versão — envolve troca de hardware de controle e revisão da engenharia.",
+        a: "PlantPAx 5.x exige controladores da série P (CompactLogix 5380P ou ControlLogix 5580P), tem nova arquitetura de servidores (PASS modernizado), biblioteca de objetos de processo atualizada e integração mais consistente com FactoryTalk View SE moderno. A migração de 4.x para 5.x não é apenas update de versão, envolve troca de hardware de controle e revisão da engenharia.",
       },
       {
         q: "O que define o cronograma de um projeto PlantPAx?",
@@ -249,11 +249,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "PlantPAx funciona em planta híbrida (processo + discreto)?",
-        a: "Sim. PlantPAx é projetado para operações híbridas — processo contínuo, batelada ISA-88 e controle discreto convivem na mesma arquitetura, com separação de áreas funcionais e governança consistente de alarmes.",
+        a: "Sim. PlantPAx é projetado para operações híbridas, processo contínuo, batelada ISA-88 e controle discreto convivem na mesma arquitetura, com separação de áreas funcionais e governança consistente de alarmes.",
       },
       {
         q: "Quem mantém o sistema PlantPAx depois do startup?",
-        a: "Sustentação fica com o cliente, mas a Integra documenta o sistema para que qualquer engenheiro qualificado possa atuar — não tem dependência exclusiva. Oferecemos contrato de suporte opcional para janelas críticas, análise de tendências e gestão de mudanças.",
+        a: "Sustentação fica com o cliente, mas a Integra documenta o sistema para que qualquer engenheiro qualificado possa atuar, não tem dependência exclusiva. Oferecemos contrato de suporte opcional para janelas críticas, análise de tendências e gestão de mudanças.",
       },
     ],
     relatedSolutions: plantpaxRelated,
@@ -385,11 +385,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "ControlLogix 5580 substitui o 5570 sem retrabalho?",
-        a: "Não diretamente. O firmware, módulos e backplane evoluem; alguns I/O são diretos, outros precisam de revisão. A migração é projeto, não troca de peça — envolve recompilar, retestar lógica e revalidar comunicação.",
+        a: "Não diretamente. O firmware, módulos e backplane evoluem; alguns I/O são diretos, outros precisam de revisão. A migração é projeto, não troca de peça, envolve recompilar, retestar lógica e revalidar comunicação.",
       },
       {
         q: "Vale a pena migrar PLC-5/SLC500 para ControlLogix em planta legada?",
-        a: "Sim quando há risco de spare obsoleto, integração nova ou requisito de cibersegurança. A migração protege a operação por 15+ anos e habilita FactoryTalk, OPC UA e arquitetura PlantPAx — coisas que PLC-5/SLC500 não suportam nativamente.",
+        a: "Sim quando há risco de spare obsoleto, integração nova ou requisito de cibersegurança. A migração protege a operação por 15+ anos e habilita FactoryTalk, OPC UA e arquitetura PlantPAx, coisas que PLC-5/SLC500 não suportam nativamente.",
       },
       {
         q: "ControlLogix tem alternativa para Safety Integrated?",
@@ -416,7 +416,7 @@ export const techCatalog: TechPage[] = [
     imageAlt: "PASS-C Small Reference Architecture com até 1.000 pontos de I/O",
     imageTitle: "PASS-C Small: onde o controle regulatório vive em arquitetura entry-tier",
     imageSource: plantpax520RefSource,
-    imageCaption: "Print público da PlantPAx 5.20 Reference Architecture: em projetos pequenos, o controle regulatório roda em PASS-C consolidado com HMI, dados, alarmes e batch num só servidor — ideal para áreas com até 1.000 pontos.",
+    imageCaption: "Print público da PlantPAx 5.20 Reference Architecture: em projetos pequenos, o controle regulatório roda em PASS-C consolidado com HMI, dados, alarmes e batch num só servidor, ideal para áreas com até 1.000 pontos.",
     useCases: [
       "Malhas PID instáveis, sem documentação ou com sintonia herdada.",
       "Processos contínuos (vapor, vazão, pressão, temperatura) que precisam de controle robusto.",
@@ -445,7 +445,7 @@ export const techCatalog: TechPage[] = [
     faq: [
       {
         q: "Vocês fazem sintonia fina em campo?",
-        a: "Sim, quando há condição operacional segura e critério acordado com a operação. A sintonia precisa respeitar processo, atuadores, sensores e limites definidos — não é experimentação cega em planta rodando.",
+        a: "Sim, quando há condição operacional segura e critério acordado com a operação. A sintonia precisa respeitar processo, atuadores, sensores e limites definidos, não é experimentação cega em planta rodando.",
       },
       {
         q: "Como vocês validam ajuste de PID antes de subir em produção?",
@@ -453,7 +453,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "PID em ladder ainda faz sentido em planta moderna?",
-        a: "Para malhas simples e legado, sim. Em planta nova ou modernização, blocos PIDe/Routine via PlantPAx Library oferecem governança, faceplate padronizada e rastreabilidade — preferível ao PID embutido em rotina ladder não documentada.",
+        a: "Para malhas simples e legado, sim. Em planta nova ou modernização, blocos PIDe/Routine via PlantPAx Library oferecem governança, faceplate padronizada e rastreabilidade, preferível ao PID embutido em rotina ladder não documentada.",
       },
       {
         q: "Quando vale a pena usar cascata ou split-range?",
@@ -511,7 +511,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quem documenta os intertravamentos do processo?",
-        a: "A engenharia da Integra documenta a matriz causa-efeito, descritivos funcionais e narrativas de operação. O cliente valida com sua equipe de processo — sem essa validação, o intertravamento vira armadilha futura.",
+        a: "A engenharia da Integra documenta a matriz causa-efeito, descritivos funcionais e narrativas de operação. O cliente valida com sua equipe de processo, sem essa validação, o intertravamento vira armadilha futura.",
       },
       {
         q: "Qual a diferença entre intertravamento operacional e safety SIL?",
@@ -523,7 +523,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso ter BPCS e SIS no mesmo controlador?",
-        a: "Tecnicamente sim em controladores com tasks separadas (GuardLogix integra controle e safety SIL3 com tasks isoladas e validadas). A decisão depende de análise de risco, classificação SIL alvo e exigências regulatórias do setor — não é apenas questão de hardware.",
+        a: "Tecnicamente sim em controladores com tasks separadas (GuardLogix integra controle e safety SIL3 com tasks isoladas e validadas). A decisão depende de análise de risco, classificação SIL alvo e exigências regulatórias do setor, não é apenas questão de hardware.",
       },
     ],
     relatedSolutions: plantpaxRelated,
@@ -585,7 +585,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quantos clientes simultâneos View SE suporta por servidor?",
-        a: "Depende do sizing — um servidor View SE Distributed dimensionado bem atende de 5 a 20 clientes em uso real. Acima disso, escalamos com servidores adicionais ou trocamos para arquitetura PlantPAx PASS.",
+        a: "Depende do sizing, um servidor View SE Distributed dimensionado bem atende de 5 a 20 clientes em uso real. Acima disso, escalamos com servidores adicionais ou trocamos para arquitetura PlantPAx PASS.",
       },
       {
         q: "Posso ter View SE e View ME na mesma planta?",
@@ -651,11 +651,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Optix substitui View SE?",
-        a: "Hoje, não. Optix é complementar — interface web moderna, mobilidade controlada, integração mais aberta. Para SCADA crítico de planta, View SE ou PlantPAx continuam padrão. A escolha depende do papel da aplicação na operação.",
+        a: "Hoje, não. Optix é complementar, interface web moderna, mobilidade controlada, integração mais aberta. Para SCADA crítico de planta, View SE ou PlantPAx continuam padrão. A escolha depende do papel da aplicação na operação.",
       },
       {
         q: "Qual a diferença entre Optix Standard e Optix Pro?",
-        a: "Standard executa runtime local em painel ou IPC; bom para máquinas e áreas isoladas. Pro habilita design em nuvem, deploy em frota e Remote Access — necessário quando há múltiplos sites ou OEMs gerenciando aplicações remotas.",
+        a: "Standard executa runtime local em painel ou IPC; bom para máquinas e áreas isoladas. Pro habilita design em nuvem, deploy em frota e Remote Access, necessário quando há múltiplos sites ou OEMs gerenciando aplicações remotas.",
       },
       {
         q: "Optix exige cloud para funcionar?",
@@ -663,7 +663,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso versionar Optix em Git como código?",
-        a: "Sim. Optix Pro suporta GitHub, GitLab, Bitbucket, Azure DevOps e Vault como provedores de versionamento. Isso muda a engenharia de SCADA — gestão de mudança real, branches, rollback e revisão por pares como em desenvolvimento de software.",
+        a: "Sim. Optix Pro suporta GitHub, GitLab, Bitbucket, Azure DevOps e Vault como provedores de versionamento. Isso muda a engenharia de SCADA, gestão de mudança real, branches, rollback e revisão por pares como em desenvolvimento de software.",
       },
     ],
     relatedSolutions: factorytalkRelated,
@@ -794,7 +794,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso usar ThinManager sem virtualização?",
-        a: "Em arquiteturas grandes não faz sentido — o ganho de ThinManager está em centralizar imagens, perfis de usuário e failover de sessão sobre VMware/Hyper-V. Em planta pequena, é overkill se só houver 2-3 estações.",
+        a: "Em arquiteturas grandes não faz sentido, o ganho de ThinManager está em centralizar imagens, perfis de usuário e failover de sessão sobre VMware/Hyper-V. Em planta pequena, é overkill se só houver 2-3 estações.",
       },
       {
         q: "Como ThinManager entrega failover de sessão?",
@@ -802,7 +802,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "ThinManager exige Active Directory?",
-        a: "Funciona com AD ou com base local própria, mas em planta industrial o AD com OU dedicada à OT é o padrão recomendado — facilita gestão de acesso, MFA, expiração e auditoria.",
+        a: "Funciona com AD ou com base local própria, mas em planta industrial o AD com OU dedicada à OT é o padrão recomendado, facilita gestão de acesso, MFA, expiração e auditoria.",
       },
     ],
     relatedSolutions: factorytalkRelated,
@@ -860,7 +860,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "AssetCentre substitui sistema de versionamento Git?",
-        a: "Não. AssetCentre é especializado em ativos industriais (PLCs, HMIs, drives, switches) — backup automatizado, comparação de programas, log de mudanças. É complemento técnico ao Git, que normalmente é usado para texto/IaC.",
+        a: "Não. AssetCentre é especializado em ativos industriais (PLCs, HMIs, drives, switches), backup automatizado, comparação de programas, log de mudanças. É complemento técnico ao Git, que normalmente é usado para texto/IaC.",
       },
       {
         q: "Quais marcas AssetCentre cobre além de Rockwell?",
@@ -872,7 +872,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Como o AssetCentre ajuda em auditoria IEC 62443?",
-        a: "Gera trilha de auditoria de mudança em ativos OT, log de acesso e backup periódico — três controles que IEC 62443-2-4 exige documentar. Não substitui a auditoria, mas alimenta evidência.",
+        a: "Gera trilha de auditoria de mudança em ativos OT, log de acesso e backup periódico, três controles que IEC 62443-2-4 exige documentar. Não substitui a auditoria, mas alimenta evidência.",
       },
     ],
     relatedSolutions: factorytalkRelated,
@@ -929,7 +929,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "FactoryTalk Historian é o mesmo que PI System?",
-        a: "Não. Historian SE é construído sobre tecnologia OSIsoft PI antiga, mas evoluiu separadamente. PI System / AVEVA tem foco em volume massivo de tags, AF Templates ricos e analytics multi-site. Para planta padrão Rockwell, Historian SE atende a maior parte dos cenários — a escolha depende do escopo.",
+        a: "Não. Historian SE é construído sobre tecnologia OSIsoft PI antiga, mas evoluiu separadamente. PI System / AVEVA tem foco em volume massivo de tags, AF Templates ricos e analytics multi-site. Para planta padrão Rockwell, Historian SE atende a maior parte dos cenários, a escolha depende do escopo.",
       },
       {
         q: "Quantas tags Historian SE suporta?",
@@ -937,7 +937,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso ler Historian de fora da planta com segurança?",
-        a: "Sim, via FactoryTalk View SE Reports, FactoryTalk Optix dashboard ou OPC UA Connector — tudo passando por IDMZ, autenticação forte e sem caminho direto enterprise→Historian.",
+        a: "Sim, via FactoryTalk View SE Reports, FactoryTalk Optix dashboard ou OPC UA Connector, tudo passando por IDMZ, autenticação forte e sem caminho direto enterprise→Historian.",
       },
       {
         q: "Quanto disco Historian consome por mês?",
@@ -1002,7 +1002,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Por que precisar de Kepware se Rockwell já tem OPC UA?",
-        a: "Kepware abrange centenas de drivers — multi-vendor (Siemens, Schneider, ABB, Yokogawa, Mitsubishi) e protocolos legados (Modbus serial, DNP3, IEC 61850, SNMP). Em planta multi-marca, Kepware é a ponte que evita gateway específico por equipamento.",
+        a: "Kepware abrange centenas de drivers, multi-vendor (Siemens, Schneider, ABB, Yokogawa, Mitsubishi) e protocolos legados (Modbus serial, DNP3, IEC 61850, SNMP). Em planta multi-marca, Kepware é a ponte que evita gateway específico por equipamento.",
       },
       {
         q: "Kepware exige licença por tag ou por servidor?",
@@ -1068,7 +1068,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "DataMosaix substitui Historian?",
-        a: "Em algumas arquiteturas sim, em outras coexistem. DataMosaix é SaaS com armazenamento contextualizado, AF-like; Historian SE é on-prem. Para plantas que querem dados em nuvem com governança, DataMosaix é caminho — para operação crítica, ainda há valor em Historian local.",
+        a: "Em algumas arquiteturas sim, em outras coexistem. DataMosaix é SaaS com armazenamento contextualizado, AF-like; Historian SE é on-prem. Para plantas que querem dados em nuvem com governança, DataMosaix é caminho, para operação crítica, ainda há valor em Historian local.",
       },
       {
         q: "DataMosaix integra com Power BI / Grafana?",
@@ -1080,7 +1080,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto custa DataMosaix?",
-        a: "Modelo de assinatura por volume de dados, número de fontes e usuários. Não publicamos valores — é avaliado por proposta. O ROI vem da redução de servidor, governança de dados e habilitação de analytics em escala.",
+        a: "Modelo de assinatura por volume de dados, número de fontes e usuários. Não publicamos valores, é avaliado por proposta. O ROI vem da redução de servidor, governança de dados e habilitação de analytics em escala.",
       },
     ],
     relatedSolutions: dataRelated,
@@ -1138,7 +1138,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Edge computing industrial é o mesmo que IoT?",
-        a: "Edge é uma camada arquitetural — processamento próximo do dado (PLC, gateway, IPC industrial). IoT é a categoria geral. Toda IIoT bem feita usa edge para reduzir latência, banda e dependência de cloud para operação crítica.",
+        a: "Edge é uma camada arquitetural, processamento próximo do dado (PLC, gateway, IPC industrial). IoT é a categoria geral. Toda IIoT bem feita usa edge para reduzir latência, banda e dependência de cloud para operação crítica.",
       },
       {
         q: "Quando vale a pena trazer compute para a borda?",
@@ -1146,7 +1146,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Edge industrial precisa de hardening?",
-        a: "Sim. Cada gateway/IPC industrial é uma superfície de ataque adicional — precisa de hardening (sem porta USB ativa, sem credenciais default, firmware atualizado, log centralizado, comunicação criptografada).",
+        a: "Sim. Cada gateway/IPC industrial é uma superfície de ataque adicional, precisa de hardening (sem porta USB ativa, sem credenciais default, firmware atualizado, log centralizado, comunicação criptografada).",
       },
       {
         q: "Quais plataformas vocês trabalham para edge industrial?",
@@ -1168,7 +1168,7 @@ export const techCatalog: TechPage[] = [
       "O data center industrial sustenta a operação 24/7. Ele precisa respeitar restrições de versão, licenciamento, latência, backup, recuperação e janelas de manutenção de OT. A Integra projeta essa infraestrutura como parte da engenharia de automação.",
     image: controllogixPrpNonConverged,
     imageAlt: "Arquitetura PRP não-convergente com VMware ESXi e racks de controle redundantes",
-    imageTitle: "Arquitetura redundante com virtualização e PRP — referência de Industrial Data Center",
+    imageTitle: "Arquitetura redundante com virtualização e PRP, referência de Industrial Data Center",
     imageSource: controllogixHaSource,
     imageCaption: "Print público mostrando como um Industrial Data Center se conecta com a planta sob arquitetura redundante.",
     useCases: [
@@ -1219,7 +1219,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Como dimensionar um IDC industrial pequeno?",
-        a: "O dimensionamento começa pela contagem de aplicações OT, requisitos de RTO/RPO, redundância desejada e crescimento previsto. Cada projeto recebe proposta específica após o diagnóstico — não publicamos faixas de investimento.",
+        a: "O dimensionamento começa pela contagem de aplicações OT, requisitos de RTO/RPO, redundância desejada e crescimento previsto. Cada projeto recebe proposta específica após o diagnóstico, não publicamos faixas de investimento.",
       },
     ],
     relatedSolutions: infraRelated,
@@ -1280,7 +1280,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso virtualizar controlador (SoftLogix)?",
-        a: "SoftLogix existe e roda em VM, mas não recomendamos para controle crítico — tempo de scan e jitter de hipervisor não atendem requisitos de muitos processos. Para controle, ControlLogix físico continua padrão.",
+        a: "SoftLogix existe e roda em VM, mas não recomendamos para controle crítico, tempo de scan e jitter de hipervisor não atendem requisitos de muitos processos. Para controle, ControlLogix físico continua padrão.",
       },
       {
         q: "Snapshot de VM substitui backup?",
@@ -1288,7 +1288,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Como atualizar VMs FactoryTalk sem parar a planta?",
-        a: "Cluster ativo-passivo com vMotion ou Live Migration permite mover VM entre hosts sem downtime. Para upgrade da própria aplicação, normalmente é janela planejada — atualizar SO/aplicação em VM espelho, validar, cutover.",
+        a: "Cluster ativo-passivo com vMotion ou Live Migration permite mover VM entre hosts sem downtime. Para upgrade da própria aplicação, normalmente é janela planejada, atualizar SO/aplicação em VM espelho, validar, cutover.",
       },
     ],
     relatedSolutions: infraRelated,
@@ -1345,7 +1345,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Migrar VMs entre hipervisores quebra licença Rockwell?",
-        a: "Não, mas exige cuidado: ativação por hardware ID muda quando o hipervisor muda. Reativamos as licenças (FactoryTalk, RSLogix) com o token correto após migração — parte do plano de cutover.",
+        a: "Não, mas exige cuidado: ativação por hardware ID muda quando o hipervisor muda. Reativamos as licenças (FactoryTalk, RSLogix) com o token correto após migração, parte do plano de cutover.",
       },
       {
         q: "Quanto tempo leva migrar 20 VMs industriais?",
@@ -1414,7 +1414,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso usar o AD corporativo para autenticar OT?",
-        a: "Tecnicamente sim, mas o padrão recomendado é AD industrial dedicado — OU separada, GPOs específicas, controle de acesso enxuto. Mistura com AD corporativo aumenta blast radius em incidentes de segurança.",
+        a: "Tecnicamente sim, mas o padrão recomendado é AD industrial dedicado, OU separada, GPOs específicas, controle de acesso enxuto. Mistura com AD corporativo aumenta blast radius em incidentes de segurança.",
       },
       {
         q: "Como integrar AD industrial com FactoryTalk Security?",
@@ -1426,7 +1426,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso ter Forest separado para OT?",
-        a: "Sim, e em plantas grandes é recomendado. Forest separado isola governança, política de senha, ciclo de vida de conta e GPOs entre IT e OT — alinha com IEC 62443 zone separation.",
+        a: "Sim, e em plantas grandes é recomendado. Forest separado isola governança, política de senha, ciclo de vida de conta e GPOs entre IT e OT, alinha com IEC 62443 zone separation.",
       },
     ],
     relatedSolutions: infraRelated,
@@ -1446,7 +1446,7 @@ export const techCatalog: TechPage[] = [
     imageAlt: "Direct DLR Non-converged com 1756-EN4TR redundantes e 5015 FLEXHA 5000",
     imageTitle: "Backup e DR começam pela camada física: redundância de rede e adaptadores",
     imageSource: logixRedundancyRefSource,
-    imageCaption: "Print público da Logix Redundancy Reference Architecture: estratégia de backup e DR depende da camada física — adaptadores 1756-EN4TR redundantes, NIC teaming e topologia DLR são pré-requisitos para recuperação rápida e validável.",
+    imageCaption: "Print público da Logix Redundancy Reference Architecture: estratégia de backup e DR depende da camada física, adaptadores 1756-EN4TR redundantes, NIC teaming e topologia DLR são pré-requisitos para recuperação rápida e validável.",
     useCases: [
       "Ambientes sem restore testado ou com backups manuais dispersos.",
       "Proteção de projetos PLC/HMI, receitas, VMs, bancos e configs de rede.",
@@ -1495,7 +1495,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Snapshot de VM substitui backup de programa PLC?",
-        a: "Não. Programa PLC vive no controlador, não no servidor. AssetCentre faz backup periódico desse programa, com versionamento, comparação e restore — esse é o backup que importa quando perde um controlador.",
+        a: "Não. Programa PLC vive no controlador, não no servidor. AssetCentre faz backup periódico desse programa, com versionamento, comparação e restore, esse é o backup que importa quando perde um controlador.",
       },
     ],
     relatedSolutions: infraRelated,
@@ -1552,7 +1552,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "FactoryTalk Security é obrigatório?",
-        a: "Não obrigatório por norma, mas é a forma estruturada de aplicar IEC 62443 dentro do ecossistema Rockwell. Sem FT Security, autorização vira improviso por aplicação — antipadrão de governança OT.",
+        a: "Não obrigatório por norma, mas é a forma estruturada de aplicar IEC 62443 dentro do ecossistema Rockwell. Sem FT Security, autorização vira improviso por aplicação, antipadrão de governança OT.",
       },
       {
         q: "Quantos usuários FactoryTalk Security suporta?",
@@ -1625,7 +1625,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "CPwE é norma ou referência?",
-        a: "Referência conjunta Cisco + Rockwell — não é norma, mas implementa princípios de IEC 62443 e ISA-99 em arquitetura concreta. Usamos CPwE como linguagem comum para projetar e auditar redes industriais.",
+        a: "Referência conjunta Cisco + Rockwell, não é norma, mas implementa princípios de IEC 62443 e ISA-99 em arquitetura concreta. Usamos CPwE como linguagem comum para projetar e auditar redes industriais.",
       },
       {
         q: "Posso ter EtherNet/IP em fibra ótica?",
@@ -1633,7 +1633,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença entre DLR e PRP?",
-        a: "DLR é anel com cura rápida (<3ms) — protocolo Rockwell para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote) — para tolerância a falha total de rede. Use cases distintos.",
+        a: "DLR é anel com cura rápida (<3ms), protocolo Rockwell para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote), para tolerância a falha total de rede. Use cases distintos.",
       },
       {
         q: "CPwE exige hardware Cisco e Rockwell juntos?",
@@ -1697,7 +1697,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Modbus TCP é seguro em planta industrial?",
-        a: "Não tem autenticação nem criptografia nativa — é protocolo dos anos 70 modernizado para Ethernet. Use somente em zonas seguras e com segmentação de VLAN. Para integração externa, prefira OPC UA.",
+        a: "Não tem autenticação nem criptografia nativa, é protocolo dos anos 70 modernizado para Ethernet. Use somente em zonas seguras e com segmentação de VLAN. Para integração externa, prefira OPC UA.",
       },
       {
         q: "OPC UA é o substituto definitivo de OPC Classic?",
@@ -1709,7 +1709,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Profibus PA continua sendo usado?",
-        a: "Em planta nova, raramente. Em plantas existentes com instrumentação Profibus PA, mantemos via gateway até modernização. Foundation Fieldbus segue caminho parecido — base instalada substituível por EtherNet/IP + HART-IP em ciclos de modernização.",
+        a: "Em planta nova, raramente. Em plantas existentes com instrumentação Profibus PA, mantemos via gateway até modernização. Foundation Fieldbus segue caminho parecido, base instalada substituível por EtherNet/IP + HART-IP em ciclos de modernização.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -1730,7 +1730,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Untrusted/Trusted: a fronteira que dá nome a IEC 62443 aplicada",
     imageSource: idmzFirepowerSource,
     imageCaption:
-      "Print público do guia ENET-TD013A-EN-P (Cisco + Rockwell): a IDMZ replica serviços, registra logs, inspeciona e desconecta — é o controle estrutural exigido pelos zone/conduit da IEC 62443.",
+      "Print público do guia ENET-TD013A-EN-P (Cisco + Rockwell): a IDMZ replica serviços, registra logs, inspeciona e desconecta, é o controle estrutural exigido pelos zone/conduit da IEC 62443.",
     theme: "ot",
     useCases: [
       "Plantas com rede flat e acesso remoto pouco controlado.",
@@ -1768,7 +1768,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Diferença entre IEC 62443 e NIST SP 800-82?",
-        a: "IEC 62443 é norma internacional ISA com framework de zonas, conduítes e níveis de segurança (SL). NIST SP 800-82 é guia americano com práticas e taxonomia de ICS. Eles são complementares — IEC 62443 estrutura, NIST detalha controles.",
+        a: "IEC 62443 é norma internacional ISA com framework de zonas, conduítes e níveis de segurança (SL). NIST SP 800-82 é guia americano com práticas e taxonomia de ICS. Eles são complementares, IEC 62443 estrutura, NIST detalha controles.",
       },
       {
         q: "Qual o nível SL recomendado para minha planta?",
@@ -1780,7 +1780,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto tempo leva certificar maturidade IEC 62443?",
-        a: "Não há certificação plant-wide única — ela vem por componente (62443-4-1, 62443-4-2 para produto) ou por sistema integrado (62443-3-3 SL-x). Implementar maturidade prática é um roadmap progressivo, fasado por área crítica e em ciclos planejados de revisão.",
+        a: "Não há certificação plant-wide única, ela vem por componente (62443-4-1, 62443-4-2 para produto) ou por sistema integrado (62443-3-3 SL-x). Implementar maturidade prática é um roadmap progressivo, fasado por área crítica e em ciclos planejados de revisão.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -1797,7 +1797,7 @@ export const techCatalog: TechPage[] = [
     intro:
       "Hardening em OT precisa ser cuidadoso. Desligar serviço errado ou aplicar política corporativa sem validação pode parar supervisão, licenças ou comunicação. A Integra aplica endurecimento com homologação, rollback e documentação.",
     image: cpweSecurityFramework,
-    imageAlt: "CPwE Industrial Security Framework — defesa em profundidade plant-wide",
+    imageAlt: "CPwE Industrial Security Framework, defesa em profundidade plant-wide",
     imageTitle: "Hardening como parte de uma estratégia de defesa em camadas",
     imageSource: cipSecuritySource,
     imageCaption: "Print público do framework CPwE de cibersegurança industrial: hardening compõe múltiplas camadas, não é evento isolado.",
@@ -1846,11 +1846,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Hardening quebra performance de HMI?",
-        a: "Bem feito, não. Mal feito (antivírus em modo agressivo, firewall com inspeção profunda em rede industrial), sim — pode adicionar latência e quebrar comunicação OPC. Por isso testamos em ambiente espelho antes de produção.",
+        a: "Bem feito, não. Mal feito (antivírus em modo agressivo, firewall com inspeção profunda em rede industrial), sim, pode adicionar latência e quebrar comunicação OPC. Por isso testamos em ambiente espelho antes de produção.",
       },
       {
         q: "Com que frequência revisar hardening?",
-        a: "Anualmente para planta estável; a cada update major do FactoryTalk ou Windows; a cada incidente. Hardening não é projeto único — é ciclo de revisão alinhado com gestão de vulnerabilidades.",
+        a: "Anualmente para planta estável; a cada update major do FactoryTalk ou Windows; a cada incidente. Hardening não é projeto único, é ciclo de revisão alinhado com gestão de vulnerabilidades.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -1920,7 +1920,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Patching de PLC para CVE é reboot obrigatório?",
-        a: "Maioria das CPUs Logix exige modo Program para flashar firmware — equivale a parada da área controlada. Daí a importância de janela planejada e roteiro de cutover, sem improvisar update em planta rodando.",
+        a: "Maioria das CPUs Logix exige modo Program para flashar firmware, equivale a parada da área controlada. Daí a importância de janela planejada e roteiro de cutover, sem improvisar update em planta rodando.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -1982,11 +1982,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Monitoramento OT detecta cyber attack?",
-        a: "Detecta padrões anômalos — comando inesperado, comunicação fora de baseline, scan de rede. Não substitui SIEM corporativo, mas alimenta com contexto industrial que SIEM tradicional ignora.",
+        a: "Detecta padrões anômalos, comando inesperado, comunicação fora de baseline, scan de rede. Não substitui SIEM corporativo, mas alimenta com contexto industrial que SIEM tradicional ignora.",
       },
       {
         q: "Tap ou SPAN port para coletar tráfego?",
-        a: "Tap é preferido para análise contínua — passivo, sem perda, sem impacto na rede. SPAN serve para diagnóstico pontual, mas com risco de perder pacote sob carga. Para monitoramento permanente, sempre tap.",
+        a: "Tap é preferido para análise contínua, passivo, sem perda, sem impacto na rede. SPAN serve para diagnóstico pontual, mas com risco de perder pacote sob carga. Para monitoramento permanente, sempre tap.",
       },
       {
         q: "O que entra no projeto de monitoramento OT?",
@@ -2079,7 +2079,7 @@ export const techCatalog: TechPage[] = [
     imageAlt: "Mobile Analytics Use Case - Plant Personnel - acesso remoto através de IDMZ, Reverse Web Proxy, Cisco ISE, FactoryTalk VantagePoint e FactoryTalk Cloud",
     imageTitle: "Acesso remoto seguro: IDMZ, Reverse Web Proxy, identidade e cloud",
     imageSource: cpweIdentityMobilitySource,
-    imageCaption: "Print público do CVD Identity and Mobility Services in CPwE (ENET-TD008B-EN-P, Figure 2-15): suporte remoto seguro atravessa IDMZ com Reverse Web Proxy, autenticação centralizada por Cisco ISE e FactoryTalk Cloud para analytics — sem acesso direto à zona industrial.",
+    imageCaption: "Print público do CVD Identity and Mobility Services in CPwE (ENET-TD008B-EN-P, Figure 2-15): suporte remoto seguro atravessa IDMZ com Reverse Web Proxy, autenticação centralizada por Cisco ISE e FactoryTalk Cloud para analytics, sem acesso direto à zona industrial.",
     theme: "ot",
     useCases: [
       "Apoio rápido a falhas em PLC, HMI, servidores ou comunicação.",
@@ -2146,7 +2146,7 @@ export const techCatalog: TechPage[] = [
     intro:
       "Auditoria técnica ajuda a enxergar o que está funcionando por sorte, por conhecimento informal ou por arquitetura realmente robusta. A Integra entrega diagnóstico objetivo, riscos priorizados e plano de ação aplicável.",
     image: cpweOtVsItComparison,
-    imageAlt: "Comparação Industrial OT vs Enterprise IT — tráfego, performance e segurança",
+    imageAlt: "Comparação Industrial OT vs Enterprise IT, tráfego, performance e segurança",
     imageTitle: "Auditar OT exige critérios diferentes dos critérios de TI corporativo",
     imageSource: cpweDeepDiveSource,
     imageCaption: "Tabela pública Cisco/Rockwell que mostra por que critérios OT exigem auditoria com escopo diferente da TI.",
@@ -2187,7 +2187,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Auditoria de OT é igual à de IT?",
-        a: "Não. Critério é diferente — disponibilidade dominante sobre confidencialidade, ciclos de vida longos, normas distintas (IEC 62443 vs ISO 27001). Auditor IT puro frequentemente erra escopo OT por desconhecimento.",
+        a: "Não. Critério é diferente, disponibilidade dominante sobre confidencialidade, ciclos de vida longos, normas distintas (IEC 62443 vs ISO 27001). Auditor IT puro frequentemente erra escopo OT por desconhecimento.",
       },
       {
         q: "Quem audita IEC 62443 no Brasil?",
@@ -2430,7 +2430,7 @@ export const techCatalog: TechPage[] = [
     intro:
       "TC deviceWISE entra quando a planta precisa transformar dados industriais em integração real: PLCs, sensores, gateways, bancos, APIs, MQTT, dashboards e sistemas corporativos trabalhando com rastreabilidade. A Integra aplica a plataforma como integradora de sistemas, conectando OT e TI sem tratar IoT como painel bonito.",
     image: devicewiseEletronorArchitecture,
-    imageAlt: "Plataforma IIoT deviceWISE — dispositivos de produção, deviceWISE VIEW, dashboards em nuvem (Azure, GCP, AWS) e integração com sistemas empresariais (SAP, Oracle, MES, ERP)",
+    imageAlt: "Plataforma IIoT deviceWISE, dispositivos de produção, deviceWISE VIEW, dashboards em nuvem (Azure, GCP, AWS) e integração com sistemas empresariais (SAP, Oracle, MES, ERP)",
     imageTitle: "Arquitetura deviceWISE: do chão de fábrica aos sistemas empresariais",
     imageSource: telitEletronorSource,
     imageCaption:
@@ -2502,7 +2502,7 @@ export const techCatalog: TechPage[] = [
     intro:
       "TIA Portal concentra engenharia de controladores, IHMs, redes e acionamentos Siemens em um fluxo integrado. A Integra atende projetos com TIA Portal em versões antigas e atuais, principalmente quando a planta já possui base SIMATIC e precisa manter, expandir ou padronizar sistemas sem perder governança.",
     image: tiaSelectionTool,
-    imageAlt: "TIA Selection Tool — interface de configuração rápida de portfólio Siemens com TIA Portal e SIMATIC",
+    imageAlt: "TIA Selection Tool, interface de configuração rápida de portfólio Siemens com TIA Portal e SIMATIC",
     imageTitle: "TIA Selection Tool: a porta de entrada do TIA Portal",
     imageSource: simaticSt70Source,
     imageCaption: "Print público do catálogo SIMATIC ST 70 (2025): TIA Selection Tool é a ferramenta gratuita Siemens para configurar projetos no TIA Portal, com QR e versão desktop ou nuvem.",
@@ -2544,7 +2544,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "TIA Portal substitui o STEP 7 Classic?",
-        a: "Para projetos novos, sim — Siemens descontinuou novo desenvolvimento em STEP 7 Classic. Base instalada com STEP 7 Classic continua suportada para manutenção, mas evolução exige migração para TIA Portal.",
+        a: "Para projetos novos, sim, Siemens descontinuou novo desenvolvimento em STEP 7 Classic. Base instalada com STEP 7 Classic continua suportada para manutenção, mas evolução exige migração para TIA Portal.",
       },
       {
         q: "TIA Portal é compatível com S7-300 e S7-400?",
@@ -2623,7 +2623,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença prática entre STL, LAD, FBD e SCL no STEP 7?",
-        a: "STL é assembly Siemens — máxima performance, baixa legibilidade. LAD/FBD são gráficos — fáceis de manter. SCL é texto estruturado — equivalente a IEC 61131 ST. Cada equipe de manutenção tem preferência; escolhemos mantendo legibilidade.",
+        a: "STL é assembly Siemens, máxima performance, baixa legibilidade. LAD/FBD são gráficos, fáceis de manter. SCL é texto estruturado, equivalente a IEC 61131 ST. Cada equipe de manutenção tem preferência; escolhemos mantendo legibilidade.",
       },
       {
         q: "Migrar de STEP 7 Classic para TIA Portal é caro?",
@@ -2644,7 +2644,7 @@ export const techCatalog: TechPage[] = [
     intro:
       "WinCC e PCS 7 aparecem em plantas que precisam operar processo, telas, alarmes, históricos e diagnósticos dentro do ecossistema Siemens. A Integra atende manutenção, evolução e integração desses ambientes, deixando claro que a atuação é técnica e não um selo formal de integrador Siemens.",
     image: siemensNetworkLayer2,
-    imageAlt: "Arquitetura de rede Siemens em camadas para manufatura — WinCC e PCS 7 vivem na camada de supervisão sobre a infraestrutura industrial",
+    imageAlt: "Arquitetura de rede Siemens em camadas para manufatura, WinCC e PCS 7 vivem na camada de supervisão sobre a infraestrutura industrial",
     imageTitle: "Onde WinCC e PCS 7 operam na arquitetura Siemens em camadas",
     imageSource: siemensNetworkRefSource,
     imageCaption:
@@ -2690,7 +2690,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "WinCC Unified substitui WinCC Classic?",
-        a: "Para projetos novos, é a recomendação. WinCC Unified é arquitetura web/HTML5, escalável e moderna. WinCC Classic continua mantida para base instalada — migração é projeto, não update.",
+        a: "Para projetos novos, é a recomendação. WinCC Unified é arquitetura web/HTML5, escalável e moderna. WinCC Classic continua mantida para base instalada. Migração é projeto, não update.",
       },
       {
         q: "PCS 7 e PlantPAx convivem na mesma planta?",
@@ -2715,10 +2715,10 @@ export const techCatalog: TechPage[] = [
     intro:
       "Projetos Siemens dependem de rede bem estruturada: endereçamento, topologia, PROFINET, switches industriais, diagnóstico, drives e comunicação com supervisórios. A Integra aplica conhecimento de redes industriais e treinamento CPIN-Level para sustentar essa camada com método.",
     image: siemensNetworkUserView,
-    imageAlt: "Visão de usuário Siemens — Enterprise network, Industrial network, Backbone, Aggregation e Cell zones",
+    imageAlt: "Visão de usuário Siemens, Enterprise network, Industrial network, Backbone, Aggregation e Cell zones",
     imageTitle: "Siemens em camadas: Enterprise, Industrial, Backbone, Aggregation, Cell",
     imageSource: siemensNetworkUserViewSource,
-    imageCaption: "Print público da Network Reference Architecture for Discrete Manufacturing (Siemens AG, Article 109802750 V2.0): a arquitetura Siemens divide a planta em camadas claras desde Enterprise até Cell — base para projetar, segmentar e auditar redes industriais.",
+    imageCaption: "Print público da Network Reference Architecture for Discrete Manufacturing (Siemens AG, Article 109802750 V2.0): a arquitetura Siemens divide a planta em camadas claras desde Enterprise até Cell, base para projetar, segmentar e auditar redes industriais.",
     theme: "ot",
     useCases: [
       "Diagnóstico de falhas de comunicação PROFINET ou Industrial Ethernet.",
@@ -2757,7 +2757,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Profinet é o mesmo que EtherNet/IP?",
-        a: "Ambos rodam sobre Ethernet, mas pilhas são diferentes. EtherNet/IP usa CIP (ODVA, Rockwell). Profinet usa pilha Siemens. Não falam diretamente — para integração, usamos gateways CIP↔Profinet.",
+        a: "Ambos rodam sobre Ethernet, mas pilhas são diferentes. EtherNet/IP usa CIP (ODVA, Rockwell). Profinet usa pilha Siemens. Não falam diretamente, para integração, usamos gateways CIP↔Profinet.",
       },
       {
         q: "SCALANCE substitui Stratix?",
@@ -2765,7 +2765,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Profinet IRT é necessário para automação de máquina?",
-        a: "Para sincronização precisa (motion, eixos coordenados), sim — IRT garante determinismo sub-microssegundo. Para automação de processo padrão, RT é suficiente. Custo de IRT em rede e dispositivos é maior.",
+        a: "Para sincronização precisa (motion, eixos coordenados), sim, IRT garante determinismo sub-microssegundo. Para automação de processo padrão, RT é suficiente. Custo de IRT em rede e dispositivos é maior.",
       },
       {
         q: "Posso ter rede Profinet com switches Cisco IE?",
@@ -2911,7 +2911,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso programar M580 sem Control Expert?",
-        a: "Não diretamente — Control Expert é o ambiente oficial. Existem ferramentas paralelas para diagnóstico (EcoStruxure Operator Terminal Expert para HMI; Web Designer para web), mas a lógica é sempre Control Expert.",
+        a: "Não diretamente, Control Expert é o ambiente oficial. Existem ferramentas paralelas para diagnóstico (EcoStruxure Operator Terminal Expert para HMI; Web Designer para web), mas a lógica é sempre Control Expert.",
       },
     ],
     relatedSolutions: multiVendorRelated,

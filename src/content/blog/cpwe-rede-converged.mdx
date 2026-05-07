@@ -22,7 +22,7 @@ informação. O sintoma típico é:
 - Atualização de Windows derruba uma linha de produção
 - Auditoria de seguro/compliance gera lista de não-conformidades
 
-CPwE — Converged Plantwide Ethernet — é a arquitetura de referência
+CPwE, Converged Plantwide Ethernet, é a arquitetura de referência
 desenvolvida em conjunto pela Rockwell, Cisco e Panduit para resolver
 isso de forma estrutural, alinhada ao modelo Purdue e às práticas da
 norma IEC 62443.
@@ -31,12 +31,12 @@ norma IEC 62443.
 
 CPwE organiza a rede em zonas e camadas bem definidas:
 
-- **Cell/Area Zone** — controle local: PLCs, IEDs, instrumentação,
+- **Cell/Area Zone**, controle local: PLCs, IEDs, instrumentação,
   redundância de anel (DLR/PRP)
-- **Industrial Zone** — supervisão, historiação, MES, gestão de ativos
-- **IDMZ (Industrial DMZ)** — zona desmilitarizada que isola o ambiente
+- **Industrial Zone**, supervisão, historiação, MES, gestão de ativos
+- **IDMZ (Industrial DMZ)**, zona desmilitarizada que isola o ambiente
   industrial do corporativo
-- **Enterprise Zone** — TI corporativa, ERP, e-mail, internet
+- **Enterprise Zone**, TI corporativa, ERP, e-mail, internet
 
 Entre cada camada existem regras explícitas de quem pode falar com
 quem, em qual porta, com qual protocolo. Sem isso, defense in depth
@@ -63,13 +63,13 @@ não passa de slogan.
 
 Redundância de rede industrial vem em sabores:
 
-- **STP/RSTP** — barato, mas convergência lenta. Não é redundância
+- **STP/RSTP**, barato, mas convergência lenta. Não é redundância
   industrial real, é redundância de TI.
-- **DLR (Device Level Ring)** — redundância em anel L2, convergência em
+- **DLR (Device Level Ring)**, redundância em anel L2, convergência em
   ms. Suportado nativamente em hardware Stratix e por dispositivos
   EtherNet/IP modernos. Boa relação custo-benefício para rings de
   controle.
-- **PRP (Parallel Redundancy Protocol)** — duas redes paralelas
+- **PRP (Parallel Redundancy Protocol)**, duas redes paralelas
   independentes. Failover é instantâneo (zero pacote perdido) porque
   os dois caminhos estão sempre ativos. Mais cara, mas indispensável
   em aplicações onde uma janela de convergência de 10ms é inaceitável
@@ -94,7 +94,7 @@ projeto:
 <TechnicalCallout variant="note" title="Boa prática: começar pelo diagnóstico">
   Antes de redesenhar uma rede em produção, faça port mirror em alguns
   pontos críticos por 1-2 semanas para entender o tráfego real. Você
-  vai descobrir coisas que ninguém documentou — e isso vai poupar
+  vai descobrir coisas que ninguém documentou, e isso vai poupar
   surpresas no cutover.
 </TechnicalCallout>
 

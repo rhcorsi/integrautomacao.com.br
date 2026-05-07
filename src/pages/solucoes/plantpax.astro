@@ -70,11 +70,11 @@ const architectureNotes = [
 const faq = [
   {
     q: "Vale a pena migrar de FactoryTalk View SE legado para PlantPAx?",
-    a: "Depende do escopo de modernização e do horizonte de uso da planta. Avaliamos ROI, risco operacional e compatibilidade de hardware antes de recomendar uma estratégia — em alguns casos a migração faseada é melhor que o cutover total.",
+    a: "Depende do escopo de modernização e do horizonte de uso da planta. Avaliamos ROI, risco operacional e compatibilidade de hardware antes de recomendar uma estratégia, em alguns casos a migração faseada é melhor que o cutover total.",
   },
   {
     q: "PlantPAx 5.x exige hardware específico?",
-    a: "Sim. PlantPAx 5.x roda em CompactLogix 5380 série P (Process) ou ControlLogix 5580 série P (Process) — não há suporte oficial para versões anteriores nessa arquitetura. A migração de plantas com hardware fora dessa linha exige troca de controlador como pré-requisito do projeto.",
+    a: "Sim. PlantPAx 5.x roda em CompactLogix 5380 série P (Process) ou ControlLogix 5580 série P (Process). Não há suporte oficial para versões anteriores nessa arquitetura. A migração de plantas com hardware fora dessa linha exige troca de controlador como pré-requisito do projeto.",
   },
   {
     q: "Como vocês integram PlantPAx com PI System / AVEVA?",
@@ -86,7 +86,7 @@ const faq = [
   },
   {
     q: "Qual a diferença entre PlantPAx e DeltaV/Experion?",
-    a: "Todos são DCS modernos. PlantPAx é Rockwell, sob ControlLogix; DeltaV é Emerson; Experion é Honeywell. A escolha em cada planta é determinada pelo histórico instalado, ecossistema de instrumentação e formação da equipe — migrar entre eles é projeto grande.",
+    a: "Todos são DCS modernos. PlantPAx é Rockwell, sob ControlLogix; DeltaV é Emerson; Experion é Honeywell. A escolha em cada planta é determinada pelo histórico instalado, ecossistema de instrumentação e formação da equipe, migrar entre eles é projeto grande.",
   },
   {
     q: "PlantPAx serve para planta pequena (até 500 I/O)?",
@@ -102,13 +102,13 @@ const faq = [
   },
   {
     q: "O que define o esforço de um projeto PlantPAx?",
-    a: "Contagem de I/O, número de áreas, redundância desejada, integração com sistemas existentes (Historian, MES, ERP), exigências de cibersegurança e janelas de parada disponíveis. Cada projeto recebe escopo, cronograma e proposta específica após o diagnóstico — não publicamos faixas de investimento.",
+    a: "Contagem de I/O, número de áreas, redundância desejada, integração com sistemas existentes (Historian, MES, ERP), exigências de cibersegurança e janelas de parada disponíveis. Cada projeto recebe escopo, cronograma e proposta específica após o diagnóstico, não publicamos faixas de investimento.",
   },
 ];
 ---
 
 <BaseLayout
-  title="PlantPAx — Sistema de Controle Distribuído"
+  title="PlantPAx, Sistema de Controle Distribuído"
   description="Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -224,7 +224,7 @@ const faq = [
             alt="Reference Architecture - Small PASS-C com até 10 clientes, 5 controladores e até 5000 tags Historian"
             title="Entry-tier: PASS-C consolidado para plantas até 1k I/O"
             source="Rockwell Automation · PlantPAx 5.20 Reference Architectures"
-            caption="Print público da arquitetura Small: PASS-C reúne HMI, Data, Alarms e Batch em um único servidor consolidado — útil para projetos abaixo de 2.000 pontos de I/O."
+            caption="Print público da arquitetura Small: PASS-C reúne HMI, Data, Alarms e Batch em um único servidor consolidado, útil para projetos abaixo de 2.000 pontos de I/O."
           />
           <ManualReference
             image={plantpaxRedundantPrp}
@@ -263,7 +263,7 @@ const faq = [
 
   <CtaBlock
     title="Tem um projeto PlantPAx para conversar?"
-    description="Apresentamos arquitetura de referência, lista de entregáveis e cronograma com base no escopo da planta — antes de qualquer proposta comercial."
+    description="Apresentamos arquitetura de referência, lista de entregáveis e cronograma com base no escopo da planta, antes de qualquer proposta comercial."
     primaryCta={{ href: "/contato?assunto=plantpax", label: "Falar com especialista" }}
     secondaryCta={{ href: "/solucoes/factorytalk", label: "Ver FactoryTalk Suite" }}
   />

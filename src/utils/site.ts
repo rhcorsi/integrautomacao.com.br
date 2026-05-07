@@ -86,7 +86,7 @@ export interface MegaMenuPromo {
   title: string;
   description: string;
   cta: { href: string; label: string };
-  /** Optional image src (relative to public/) — falls back to colored block. */
+  /** Optional image src (relative to public/), falls back to colored block. */
   imageSrc?: string;
 }
 

@@ -13,7 +13,7 @@ const phoneCommercial = COMPANY.phones[0];
 
 // Build dynamic mega-menus for Cases and Blog from content collections.
 // Static list-based, so the header re-renders on every page (Astro caches
-// the import) — no extra round trips at runtime.
+// the import); no extra round trips at runtime.
 const recentCases = (await getCollection("cases", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 5);
@@ -95,7 +95,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
           {
             href: "/integra-acao/webinar/",
             label: "Webinars técnicos",
-            description: "Sessões mensais · 45–60 min · com Q&A",
+            description: "Sessões mensais · 45-60 min · com Q&A",
           },
           {
             href: "/eventos/",
@@ -122,7 +122,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
       eyebrow: "Sugira um tema",
       title: "Tem uma dúvida técnica de planta?",
       description:
-        "Sugestões de artigos vindas de quem está em campo são bem-vindas — frequentemente viram pauta.",
+        "Sugestões de artigos vindas de quem está em campo são bem-vindas, frequentemente viram pauta.",
       cta: { href: "/contato?assunto=blog", label: "Sugerir tema" },
     },
     quickLinks: [
@@ -166,7 +166,7 @@ const allMegas: Record<string, MegaMenu> = {
       <a
         href="/"
         class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
-        aria-label="Integra — página inicial"
+        aria-label="Página inicial Integra Automação Industrial"
       >
         <Image
           src={logoColorido}
@@ -237,14 +237,14 @@ const allMegas: Record<string, MegaMenu> = {
                 ]}
               >
                 <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl">
-                  {/* "Ver tudo em X" CTA, top-right corner — stays fixed above scroll area */}
+                  {/* "Ver tudo em X" CTA, top-right corner, stays fixed above scroll area */}
                   <a
                     href={menuIntro.href}
                     class="absolute top-4 right-6 lg:right-10 xl:right-12 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-widest text-integra-gray-900 hover:text-integra-white bg-integra-gray-50 hover:bg-integra-red border border-integra-gray-200 hover:border-integra-red rounded-full transition-colors"
                   >
                     {menuIntro.title} <span aria-hidden="true">→</span>
                   </a>
-                  {/* Scrollable inner area — capped at ~36rem to keep all popups visually consistent.
+                  {/* Scrollable inner area, capped at ~36rem to keep all popups visually consistent.
                       On shorter viewports, falls back to viewport height minus header + chrome. */}
                   <div class="overflow-y-auto max-h-[min(36rem,calc(100vh-13rem))]">
                   <div class:list={[

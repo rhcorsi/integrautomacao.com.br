@@ -77,11 +77,11 @@ const faq = [
   },
   {
     q: "Vocês entregam o equipamento de rede também?",
-    a: "Não fornecemos hardware diretamente — somos integradores, não revenda. Trabalhamos com a especificação ideal (Stratix, Cisco IE) e indicamos canais de aquisição com a Rockwell ou parceiros, garantindo que o que chega na planta é o que foi projetado.",
+    a: "Não fornecemos hardware diretamente. Somos integradores, não revenda. Trabalhamos com a especificação ideal (Stratix, Cisco IE) e indicamos canais de aquisição com a Rockwell ou parceiros, garantindo que o que chega na planta é o que foi projetado.",
   },
   {
     q: "Como CPwE se relaciona com IEC 62443?",
-    a: "CPwE (Converged Plantwide Ethernet) é a arquitetura de referência conjunta da Rockwell e da Cisco para implementar exatamente os princípios de IEC 62443 em redes industriais — segmentação, defense-in-depth e zonas de segurança. Aplicamos os dois em conjunto.",
+    a: "CPwE (Converged Plantwide Ethernet) é a arquitetura de referência conjunta da Rockwell e da Cisco para implementar os princípios de IEC 62443 em redes industriais: segmentação, defense-in-depth e zonas de segurança. Aplicamos os dois em conjunto.",
   },
   {
     q: "Por onde começar uma jornada IEC 62443 numa planta legada?",
@@ -97,15 +97,15 @@ const faq = [
   },
   {
     q: "Qual a diferença entre IEC 62443 SL-2 e SL-3?",
-    a: "SL-2 protege contra ataques deliberados com recursos modestos (script kiddies, malware comum). SL-3 protege contra ataques sofisticados com habilidades específicas em ICS (engenharia social, recursos médios). SL-3 exige controles bem mais profundos — segmentação rigorosa, monitoramento ativo, MFA obrigatório.",
+    a: "SL-2 protege contra ataques deliberados com recursos modestos (script kiddies, malware comum). SL-3 protege contra ataques sofisticados com habilidades específicas em ICS (engenharia social, recursos médios). SL-3 exige controles bem mais profundos: segmentação rigorosa, monitoramento ativo e MFA obrigatório.",
   },
   {
     q: "Patch management em OT atrasa a planta?",
-    a: "Atrasa quando improvisado. Bem feito (homologação em ambiente espelho, janela planejada, plano de rollback), o patch management entra na rotina sem impactar produção. O risco é o oposto — não patchar e ser comprometido por CVE conhecido.",
+    a: "Atrasa quando improvisado. Bem feito (homologação em ambiente espelho, janela planejada, plano de rollback), o patch management entra na rotina sem impactar produção. O risco é o oposto: não patchar e ser comprometido por CVE conhecido.",
   },
   {
     q: "Vocês fazem teste de penetração em rede OT?",
-    a: "Não fazemos pentest invasivo em planta de processo — risco operacional inaceitável. Trabalhamos com red team-as-a-service em parceiros especializados, sempre em ambiente espelho ou em janela controlada com plano de recuperação aprovado.",
+    a: "Não fazemos pentest invasivo em planta de processo. Risco operacional inaceitável. Trabalhamos com red team-as-a-service em parceiros especializados, sempre em ambiente espelho ou em janela controlada com plano de recuperação aprovado.",
   },
 ];
 ---
@@ -125,7 +125,7 @@ const faq = [
         </h1>
         <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
           Projetamos e implementamos redes industriais robustas, segmentadas e
-          seguras — alinhadas ao modelo CPwE (Converged Plantwide Ethernet) e
+          seguras, alinhadas ao modelo CPwE (Converged Plantwide Ethernet) e
           ao framework de cibersegurança IEC 62443. Defense in depth do
           chão de fábrica até a integração corporativa.
         </p>
@@ -177,7 +177,7 @@ const faq = [
         alt="Figura IDMZ High Level Concepts mostrando zona Untrusted (Enterprise) e Trusted (Industrial) separadas por firewall com regra No Direct IACS Traffic"
         title="A IDMZ é a fronteira inegociável entre Untrusted e Trusted"
         source="Cisco + Rockwell Automation · Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)"
-        caption="Print público do guia ENET-TD013A-EN-P: nenhum tráfego IACS atravessa direto. A IDMZ replica serviços, registra, inspeciona e desconecta — é o controle estrutural exigido pelo CPwE e pela IEC 62443."
+        caption="Print público do guia ENET-TD013A-EN-P: nenhum tráfego IACS atravessa direto. A IDMZ replica serviços, registra, inspeciona e desconecta, é o controle estrutural exigido pelo CPwE e pela IEC 62443."
         theme="ot"
       />
       <div>
@@ -190,7 +190,7 @@ const faq = [
         <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
           A IDMZ é o ponto onde a segurança de processo deixa de ser teoria.
           Servidores replicados, gateways de transferência, RD Gateway,
-          historian em PI-to-PI e WSUS vivem na IDMZ — nunca direto na
+          historian em PI-to-PI e WSUS vivem na IDMZ, nunca direto na
           camada de controle. É essa fronteira que permite manter a planta
           conectada à TI corporativa sem expor o IACS.
         </p>
@@ -221,7 +221,7 @@ const faq = [
       <TechnicalCallout variant="ot" title="Cybersecurity by design">
         <p>
           Não tratamos segurança como camada adicional. Ela está presente
-          desde o desenho da arquitetura — autenticação, segmentação, logs
+          desde o desenho da arquitetura, autenticação, segmentação, logs
           centralizados e monitoramento entram no projeto, não no
           comissionamento.
         </p>

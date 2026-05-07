@@ -81,16 +81,16 @@ const orgJsonLd = {
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={`${SITE.name} — Blog`}
+      title={`Blog técnico ${SITE.name}`}
       href={new URL("/rss.xml", SITE.url).toString()}
     />
 
-    {/* Performance hints — preconnect to third-party services we definitely use. */}
+    {/* Performance hints, preconnect to third-party services we definitely use. */}
     <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
     <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
     <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
 
-    {/* Resource hints — let the browser parallelize the layout/critical CSS fetch. */}
+    {/* Resource hints, let the browser parallelize the layout/critical CSS fetch. */}
     <meta http-equiv="x-dns-prefetch-control" content="on" />
 
     <title>{pageTitle}</title>
@@ -120,7 +120,7 @@ const orgJsonLd = {
       set:html={JSON.stringify(orgJsonLd)}
     />
 
-    <!-- Cloudflare Web Analytics — token configured at deploy time via _headers/CSP -->
+    <!-- Cloudflare Web Analytics, token configured at deploy time via _headers/CSP -->
     <!-- Replace data-cf-beacon JSON when zone is set up -->
 
     <slot name="head" />
