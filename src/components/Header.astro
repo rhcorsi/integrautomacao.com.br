@@ -150,7 +150,7 @@ const allMegas: Record<string, MegaMenu> = {
 
   <!-- Main header bar -->
   <div class="border-b border-integra-gray-200">
-    <div class="container-fluid flex h-24 items-center gap-8 lg:h-32">
+    <div class="container-fluid flex h-20 items-center gap-8 lg:h-28">
       <a
         href="/"
         class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
@@ -213,18 +213,18 @@ const allMegas: Record<string, MegaMenu> = {
               </a>
               {/* Bridge: keeps the full-width menu open while the cursor leaves the nav item. */}
               <div
-                class="fixed inset-x-0 top-[8rem] z-[59] h-9 invisible pointer-events-none group-hover/menu:visible group-hover/menu:pointer-events-auto group-focus-within/menu:visible group-focus-within/menu:pointer-events-auto"
+                class="fixed inset-x-0 top-[7rem] z-[59] h-9 invisible pointer-events-none group-hover/menu:visible group-hover/menu:pointer-events-auto group-focus-within/menu:visible group-focus-within/menu:pointer-events-auto"
                 aria-hidden="true"
               />
               <div
                 class:list={[
-                  "fixed inset-x-0 top-[10.25rem] z-[60]",
+                  "fixed inset-x-0 top-[9.25rem] z-[60]",
                   "invisible opacity-0 -translate-y-1 pointer-events-none transition-all duration-150",
                   "group-hover/menu:visible group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto",
                   "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0 group-focus-within/menu:pointer-events-auto",
                 ]}
               >
-                <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl max-h-[calc(100vh-10.25rem)] overflow-y-auto">
+                <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl max-h-[calc(100vh-9.25rem)] overflow-y-auto">
                   {/* "Ver tudo em X" CTA, top-right corner */}
                   <a
                     href={menuIntro.href}
