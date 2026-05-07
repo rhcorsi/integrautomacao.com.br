@@ -39,4 +39,45 @@
 /wp-login.php*         /                                    301
 /wp-includes/*         /                                    301
 /wp-content/uploads/*  /                                    301
+/wp-content/themes/*   /                                    301
+/wp-content/plugins/*  /                                    301
+/wp-content/cache/*    /                                    301
+/wp-content/*          /                                    301
 /wp-json/*             /                                    301
+/wp-config.php         /                                    301
+/readme.html           /                                    301
+/license.txt           /                                    301
+
+# Common bot probes (return 301 to home; cheaper than 404 + slightly better SEO than letting them rot).
+/.env                  /                                    301
+/.git/*                /                                    301
+/.well-known/security.txt  /security.txt                    301
+/wp                    /                                    301
+/wp/                   /                                    301
+/wp/*                  /                                    301
+/blog/wp-login.php     /                                    301
+/old/*                 /                                    301
+/backup/*              /                                    301
+/admin/*               /contato                             301
+/admin                 /contato                             301
+/login                 /contato                             301
+/loja/*                /                                    301
+/produto/*             /tecnologias                         301
+/produtos/*            /tecnologias                         301
+/servicos/*            /solucoes                            301
+/sobre/*               /empresa                             301
+/sobre                 /empresa                             301
+/sobre-nos             /empresa                             301
+/quem-somos            /empresa                             301
+/equipe                /empresa#equipe                      301
+
+# Common WP page paths from old site (folders without trailing slash)
+/contact               /contato                             301
+/contact/              /contato                             301
+/contacto              /contato                             301
+/contacto/             /contato                             301
+/clientes              /cases                               301
+/clientes/             /cases                               301
+/projetos              /cases                               301
+/projetos/             /cases                               301
+/portfolio             /cases                               301

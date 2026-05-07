@@ -85,6 +85,14 @@ const orgJsonLd = {
       href={new URL("/rss.xml", SITE.url).toString()}
     />
 
+    {/* Performance hints — preconnect to third-party services we definitely use. */}
+    <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
+
+    {/* Resource hints — let the browser parallelize the layout/critical CSS fetch. */}
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}

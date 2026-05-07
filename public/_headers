@@ -1,6 +1,11 @@
-﻿# Security and caching headers applied by Cloudflare Pages.
-# References: https://developers.cloudflare.com/pages/configuration/headers/
+# Security and caching headers applied by Cloudflare Pages.
+# References:
+#   - https://developers.cloudflare.com/pages/configuration/headers/
+#   - https://developers.cloudflare.com/cache/concepts/cache-control/
 
+# ─────────────────────────────────────────────────────────────────────────────
+# SECURITY HEADERS — applied to every response.
+# ─────────────────────────────────────────────────────────────────────────────
 /*
   Strict-Transport-Security: max-age=15552000
   X-Content-Type-Options: nosniff
@@ -9,14 +14,68 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-aW50ZWdyYS1qc29ubGQ=' https://challenges.cloudflare.com https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self' data:; object-src 'none'
 
-# Aggressive cache for fingerprinted Astro build assets
+# ─────────────────────────────────────────────────────────────────────────────
+# AGGRESSIVE EDGE CACHING — fingerprinted assets (1 year, immutable).
+# Astro adds content-hash to filenames, so files never change after deploy.
+# ─────────────────────────────────────────────────────────────────────────────
 /_astro/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=31536000, immutable, s-maxage=31536000
+  Vary: Accept-Encoding
 
-# Long cache for static images (filenames are stable, hashed by Astro for src/assets)
+# Fonts — same fingerprinting story.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable, s-maxage=31536000
+  Vary: Accept-Encoding
+
+# Static images outside src/assets/ pipeline.
 /images/*
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=2592000, s-maxage=31536000
+  Vary: Accept-Encoding
 
-# Standard cache for HTML â€” allow CDN to revalidate frequently
+# OG images (generated at build time, stable per page).
+/og/*
+  Cache-Control: public, max-age=86400, s-maxage=2592000
+  Vary: Accept-Encoding
+
+# Inline scripts in /scripts/ (form handlers, header menu) — change with deploys.
+/scripts/*
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Vary: Accept-Encoding
+
+# Favicons — change rarely.
+/favicon.svg
+  Cache-Control: public, max-age=604800, s-maxage=2592000
+  Vary: Accept-Encoding
+
+/favicon.ico
+  Cache-Control: public, max-age=604800, s-maxage=2592000
+  Vary: Accept-Encoding
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HTML — short browser cache, edge caches longer with stale-while-revalidate.
+# Cloudflare invalidates on every Pages deploy automatically.
+# ─────────────────────────────────────────────────────────────────────────────
 /*.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=86400
+  Vary: Accept-Encoding
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Sitemap and RSS — refresh hourly at edge.
+# ─────────────────────────────────────────────────────────────────────────────
+/sitemap-index.xml
+  Cache-Control: public, max-age=300, s-maxage=3600
+  Content-Type: application/xml
+
+/sitemap-*.xml
+  Cache-Control: public, max-age=300, s-maxage=3600
+  Content-Type: application/xml
+
+/rss.xml
+  Cache-Control: public, max-age=300, s-maxage=3600
+  Content-Type: application/rss+xml
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DO NOT CACHE — Pages Functions and dynamic endpoints.
+# ─────────────────────────────────────────────────────────────────────────────
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
