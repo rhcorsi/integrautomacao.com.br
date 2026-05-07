@@ -32,4 +32,22 @@ const cases = defineCollection({
     }),
 });
 
-export const collections = { blog, cases };
+const eventos = defineCollection({
+  type: "content",
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+      pubDate: z.coerce.date(),
+      dateLabel: z.string(),
+      location: z.string(),
+      organizer: z.string(),
+      tags: z.array(z.string()).default([]),
+      coverImage: image(),
+      coverAlt: z.string(),
+      gallery: z.array(image()).default([]),
+      draft: z.boolean().default(false),
+    }),
+});
+
+export const collections = { blog, cases, eventos };
