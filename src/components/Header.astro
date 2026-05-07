@@ -224,14 +224,17 @@ const allMegas: Record<string, MegaMenu> = {
                   "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0 group-focus-within/menu:pointer-events-auto",
                 ]}
               >
-                <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl max-h-[calc(100vh-9.25rem)] overflow-y-auto">
-                  {/* "Ver tudo em X" CTA, top-right corner */}
+                <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl">
+                  {/* "Ver tudo em X" CTA, top-right corner — stays fixed above scroll area */}
                   <a
                     href={menuIntro.href}
-                    class="absolute top-4 right-6 lg:right-10 xl:right-12 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-widest text-integra-gray-900 hover:text-integra-white bg-integra-gray-50 hover:bg-integra-red border border-integra-gray-200 hover:border-integra-red rounded-full transition-colors"
+                    class="absolute top-4 right-6 lg:right-10 xl:right-12 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-widest text-integra-gray-900 hover:text-integra-white bg-integra-gray-50 hover:bg-integra-red border border-integra-gray-200 hover:border-integra-red rounded-full transition-colors"
                   >
                     {menuIntro.title} <span aria-hidden="true">→</span>
                   </a>
+                  {/* Scrollable inner area — capped at ~36rem to keep all popups visually consistent.
+                      On shorter viewports, falls back to viewport height minus header + chrome. */}
+                  <div class="overflow-y-auto max-h-[min(36rem,calc(100vh-13rem))]">
                   <div class:list={[
                     "container-wide grid gap-8 py-8",
                     mega.promo ? "xl:grid-cols-[minmax(0,1fr)_22rem]" : "grid-cols-1",
@@ -294,6 +297,7 @@ const allMegas: Record<string, MegaMenu> = {
                       </aside>
                     )}
                   </div>
+                  </div> {/* /scrollable inner area */}
                   {mega.quickLinks && mega.quickLinks.length > 0 && (
                     <div class="bg-integra-gray-50 border-t border-integra-gray-200">
                       <div class="container-wide py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
