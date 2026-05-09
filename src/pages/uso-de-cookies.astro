@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
-const lastUpdated = "5 de maio de 2026";
+const lastUpdated = "9 de maio de 2026";
 ---
 
 <BaseLayout
@@ -50,15 +50,16 @@ const lastUpdated = "5 de maio de 2026";
         <h3>1. Cloudflare Turnstile (proteção anti-bot)</h3>
         <p>
           Quando você acessa nossa página de
-          <a href="/contato">contato</a>, o widget Turnstile da
-          Cloudflare carrega para verificar que você é humano antes de
-          permitir o envio do formulário. Esse mecanismo pode usar
-          cookies essenciais de funcionamento.
+          <a href="/contato">contato</a> ou se inscreve na
+          <a href="/integra-acao/newsletter">newsletter Integra Ação</a>, o
+          widget Turnstile da Cloudflare carrega para verificar que você é
+          humano antes de permitir o envio do formulário. Esse mecanismo pode
+          usar cookies essenciais de funcionamento.
         </p>
         <ul>
           <li>
             <strong>Finalidade:</strong> proteção do formulário contra
-            envio automatizado por bots
+            envio automatizado por bots nos formulários de contato e newsletter
           </li>
           <li>
             <strong>Duração:</strong> sessão (apaga ao fechar o
@@ -66,7 +67,7 @@ const lastUpdated = "5 de maio de 2026";
           </li>
           <li>
             <strong>Pode ser desativado?</strong> Não, é cookie
-            essencial. Sem ele o formulário não funciona.
+            essencial. Sem ele os formulários protegidos não funcionam.
           </li>
         </ul>
 

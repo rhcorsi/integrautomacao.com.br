@@ -8,8 +8,8 @@
  * Required environment variables (set in Pages → Settings → Env vars):
  *   TURNSTILE_SECRET_KEY   — secret of the Turnstile site
  *   RESEND_API_KEY         — secret of the Resend account
- *   CONTACT_EMAIL_TO       — recipient (e.g. comercial@integrautomacao.com.br)
- *   CONTACT_EMAIL_FROM     — sender (e.g. noreply@forms.integrautomacao.com.br)
+ *   CONTACT_EMAIL_TO       — recipient (e.g. comercial@integrautomacao.com)
+ *   CONTACT_EMAIL_FROM     — sender (e.g. noreply@forms.integrautomacao.com)
  *
  * Rate limiting is enforced upstream via a Cloudflare Rate Limiting Rule
  * on the path /api/contact (3-5 req/IP per 10s on the Free plan).

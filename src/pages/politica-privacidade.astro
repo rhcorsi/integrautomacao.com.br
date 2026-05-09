@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
-const lastUpdated = "5 de maio de 2026";
+const lastUpdated = "9 de maio de 2026";
 ---
 
 <BaseLayout
@@ -50,6 +50,17 @@ const lastUpdated = "5 de maio de 2026";
           <li>Empresa (opcional)</li>
           <li>Conteúdo da mensagem que você nos enviou</li>
         </ul>
+        <p>
+          Quando você se inscreve na newsletter
+          <a href="/integra-acao/newsletter">Integra Ação</a>, coletamos:
+        </p>
+        <ul>
+          <li>Nome</li>
+          <li>E-mail corporativo</li>
+          <li>Empresa (opcional)</li>
+          <li>Cargo ou função (opcional)</li>
+          <li>Registro do consentimento para receber comunicações técnicas</li>
+        </ul>
 
         <h3>2.2 Dados técnicos coletados automaticamente</h3>
         <p>
@@ -59,7 +70,7 @@ const lastUpdated = "5 de maio de 2026";
         <ul>
           <li>
             Endereço IP da requisição (apenas no momento do envio do
-            formulário, para verificação de Turnstile / proteção
+            formulário de contato ou newsletter, para verificação de Turnstile / proteção
             anti-bot)
           </li>
           <li>
@@ -86,6 +97,11 @@ const lastUpdated = "5 de maio de 2026";
             contrato, art. 7º, V).
           </li>
           <li>
+            <strong>Enviar a newsletter Integra Ação</strong> e comunicações
+            técnicas relacionadas a automação industrial, sempre com base no
+            seu consentimento (art. 7º, I).
+          </li>
+          <li>
             <strong>Prevenir fraude e segurança do site</strong>
             (legítimo interesse, art. 7º, IX).
           </li>
@@ -103,6 +119,12 @@ const lastUpdated = "5 de maio de 2026";
           obrigações legais. Após esse período, os dados são
           anonimizados ou excluídos.
         </p>
+        <p>
+          Dados de inscrição na newsletter são mantidos enquanto a inscrição
+          estiver ativa. Se você cancelar a inscrição, deixaremos de enviar
+          comunicações e poderemos manter apenas registros mínimos necessários
+          para comprovar o cancelamento e evitar reenvios indevidos.
+        </p>
 
         <h2>5. Com quem compartilhamos</h2>
         <p>
@@ -114,8 +136,8 @@ const lastUpdated = "5 de maio de 2026";
           <li>
             <strong>Provedores de infraestrutura</strong> (Cloudflare
             Pages para hospedagem do site, Resend para envio de
-            e-mails transacionais, Microsoft 365 para correio eletrônico
-            corporativo).
+            e-mails transacionais e gestão da lista da newsletter,
+            Microsoft 365 para correio eletrônico corporativo).
           </li>
           <li>
             <strong>Autoridades competentes</strong>, quando exigido
@@ -128,7 +150,7 @@ const lastUpdated = "5 de maio de 2026";
           Este site não utiliza cookies de rastreamento ou publicidade.
           Cookies eventualmente utilizados são exclusivamente
           essenciais para o funcionamento de funcionalidades
-          específicas (proteção anti-bot do formulário de contato,
+          específicas (proteção anti-bot dos formulários de contato e newsletter,
           por exemplo). Para detalhes, consulte
           <a href="/uso-de-cookies">Uso de Cookies</a>.
         </p>
@@ -164,6 +186,11 @@ const lastUpdated = "5 de maio de 2026";
           Para exercer qualquer dos direitos acima, escreva para
           <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
           Responderemos em até 15 dias úteis.
+        </p>
+        <p>
+          Você também pode cancelar a newsletter a qualquer momento pelo link
+          de descadastro presente nos e-mails recebidos ou escrevendo para o
+          e-mail de privacidade acima.
         </p>
 
         <h2>9. Segurança</h2>

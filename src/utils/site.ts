@@ -42,8 +42,8 @@ const PHONES: Phone[] = [
 export const COMPANY = {
   legalName: "Integra Automação Industrial Ltda - ME",
   taxId: "24.543.173/0001-14",
-  email: "comercial@integrautomacao.com.br",
-  emailPrivacy: "lgpd@integrautomacao.com.br",
+  email: "comercial@integrautomacao.com",
+  emailPrivacy: "lgpd@integrautomacao.com",
   phones: PHONES,
   address: {
     street: "Rua Topázio, 965",

@@ -3,7 +3,7 @@
  * Cloudflare Pages `_redirects` cannot match (Pages _redirects ignores
  * query strings for source matching).
  *
- * Route: integrautomacao.com.br/*
+ * Route: integrautomacao.com/*
  * Behavior: inspects the request URL; if it matches a known legacy
  * pattern (?p=N, ?page_id=N, ?post_type=...), returns a 301 redirect.
  * Otherwise falls through to the origin (Cloudflare Pages site).

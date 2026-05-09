@@ -20,13 +20,13 @@ body:
     id: url
     attributes:
       label: URL afetada
-      placeholder: https://integrautomacao.com.br/...
+      placeholder: https://integrautomacao.com/...
   - type: dropdown
     id: where
     attributes:
       label: Onde foi reproduzido?
       options:
-        - Produção (integrautomacao.com.br)
+        - Produção (integrautomacao.com)
         - Preview do CF Pages (*.pages.dev)
         - Localmente (npm run dev)
     validations:

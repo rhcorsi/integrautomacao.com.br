@@ -1,4 +1,4 @@
-# integrautomacao.com.br
+# integrautomacao.com
 
 Site institucional da **Integra Automação Industrial** — engenharia e
 integração de sistemas industriais.
@@ -22,7 +22,7 @@ npm run check            # astro check (TypeScript + content collections)
 npm run build            # gera dist/
 npm run preview          # serve dist/ localmente
 npm run pages:dev        # serve dist/ + functions/ via wrangler
-                         # (necessário para testar /api/contact local)
+                         # (necessário para testar /api/contact e /api/newsletter local)
 ```
 
 ## Estrutura
@@ -36,7 +36,8 @@ site/
 │   ├── logo.png             # logo principal para JSON-LD
 │   └── robots.txt
 ├── functions/api/           # Cloudflare Pages Functions
-│   └── contact.ts           # POST /api/contact (Turnstile + Resend)
+│   ├── contact.ts           # POST /api/contact (Turnstile + Resend)
+│   └── newsletter.ts        # POST /api/newsletter (Turnstile + Resend Audience)
 ├── workers/
 │   ├── legacy-redirects.ts  # Worker para ?p=N (deploy via wrangler)
 │   └── wrangler.toml        # config do Worker (NÃO do Pages)
@@ -144,16 +145,25 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
    TURNSTILE_SECRET_KEY      = <secret>       # encrypted
    RESEND_API_KEY            = <API key>      # encrypted
-   CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
-   CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com.br
+   RESEND_AUDIENCE_ID        = <Audience ID>  # encrypted — newsletter Integra Ação
+   CONTACT_EMAIL_TO          = comercial@integrautomacao.com
+   CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com
    ```
 
-   Marque os três últimos como **Encrypted** para não vazarem nos logs.
+   Marque todas as variáveis server-side como **Encrypted** para não vazarem nos logs:
+   `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `RESEND_AUDIENCE_ID`,
+   `CONTACT_EMAIL_TO` e `CONTACT_EMAIL_FROM`.
    `PUBLIC_TURNSTILE_SITE_KEY` precisa existir no ambiente de build; se faltar,
    o formulário aparece como indisponível e não cai mais em `mailto:` automático.
 
-5. Em **Custom domains**, adicione `integrautomacao.com.br` e `www.integrautomacao.com.br`
-   *— apenas depois do cutover de DNS planejado para a Cloudflare.*
+5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
+   `integrautomacao.com`, `www.integrautomacao.com` e, se usados,
+   `newsletter.integrautomacao.com`, `webinar.integrautomacao.com` e
+   `eventos.integrautomacao.com`.
+
+   **Não adicione `forms.integrautomacao.com` em Custom domains do Pages.**
+   Esse subdomínio é dedicado ao Resend como domínio de envio transacional e
+   deve existir apenas nos registros DNS exigidos pelo Resend.
 
 ### Opção B — Deploy via GitHub Actions (uma fonte da verdade no CI)
 
@@ -170,7 +180,7 @@ URL postada como comentário. Em pushes para `main` deploya para produção.
 | `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare → Turnstile → Site → Public site key |
 
 Os secrets server-side (`TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`,
-`CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
+`RESEND_AUDIENCE_ID`, `CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
 porque eles são consumidos pela Pages Function em runtime, não pelo
 build.
 
@@ -197,8 +207,8 @@ npx wrangler deploy                 # deploya o Worker (lê workers/wrangler.tom
 ```
 
 No painel: **Workers & Pages → integrautomacao-legacy-redirects → Triggers**
-adicione a route `integrautomacao.com.br/*` (Zone:
-integrautomacao.com.br).
+adicione a route `integrautomacao.com/*` (Zone:
+integrautomacao.com).
 
 > O `wrangler.toml` fica em `workers/`, não no root, para que o Cloudflare
 > Pages não o leia como config de Pages durante o build.
@@ -224,15 +234,15 @@ npx wrangler deploy
 ```
 
 Depois, no painel da Cloudflare, configure a rota:
-`integrautomacao.com.br/*` → Worker `integrautomacao-legacy-redirects`.
+`integrautomacao.com/*` → Worker `integrautomacao-legacy-redirects`.
 
 O Worker faz pass-through quando a URL não casa nenhum padrão legado, então
 todas as URLs novas continuam servidas pelo CF Pages normalmente.
 
-### Cloudflare Rate Limiting (proteção do form)
+### Cloudflare Rate Limiting (proteção dos forms)
 
 Configure uma regra de Rate Limiting (Account → Security → Rate Limiting)
-para o path `/api/contact`:
+para os paths `/api/contact` e `/api/newsletter`:
 
 - Janela: 10 segundos (limite do Free plan)
 - Threshold: 3-5 requests por IP
@@ -251,10 +261,14 @@ Padrão de proxy seletivo para o cutover:
 | `autoconfig`, `autodiscover`    | A     | DNS only     |
 | `forms` (subdomínio do Resend)  | TXT/MX| DNS only     |
 
-DMARC inicial (apenas após criar `dmarc@integrautomacao.com.br`):
+> `forms.integrautomacao.com` não deve apontar para Cloudflare Pages e não deve
+> ficar como CNAME proxied. Use somente os registros TXT/MX/DKIM fornecidos pelo
+> painel do Resend, todos como **DNS only**.
+
+DMARC inicial (apenas após criar `dmarc@integrautomacao.com`):
 
 ```
-_dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
+_dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com; fo=1"
 ```
 
 ## Tarefas pendentes (Fase 2 — pós-launch)

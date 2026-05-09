@@ -43,7 +43,7 @@ for (const form of newsletterForms) {
       if (!form.querySelector(".cf-turnstile")) {
         setStatus(
           status,
-          "Inscrição temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.br.",
+          "Inscrição temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.",
           "error",
         );
         return;
@@ -90,14 +90,14 @@ for (const form of newsletterForms) {
       setStatus(
         status,
         data.message ??
-          "Não foi possível inscrever agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
+          "Não foi possível inscrever agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.",
         "error",
       );
     } catch (error) {
       console.error(error);
       setStatus(
         status,
-        "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
+        "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.",
         "error",
       );
     } finally {
