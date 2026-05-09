@@ -1,31 +1,32 @@
 /**
- * Cloudflare Pages Function — POST /api/newsletter
+ * Cloudflare Pages Function - POST /api/newsletter
  *
- * Validates the request, verifies the Turnstile token server-side, then
- * adds the contact to a Resend Audience for the Integra Ação newsletter.
+ * Validates the request, verifies the Turnstile token server-side, then adds
+ * the contact to a Resend Audience for the Integra Acao newsletter.
+ * If the Audience is not configured yet, falls back to an internal email
+ * notification so the subscription is not lost.
  *
- * Required environment variables (set in Pages → Settings → Env vars):
- *   TURNSTILE_SECRET_KEY        — secret of the Turnstile site
- *   RESEND_API_KEY              — secret of the Resend account
- *   RESEND_AUDIENCE_ID          — id of the Resend Audience for Integra Ação
+ * Required environment variables (set in Pages -> Settings -> Env vars):
+ *   TURNSTILE_SECRET_KEY - secret of the Turnstile site
+ *   RESEND_API_KEY       - secret of the Resend account
+ *
+ * Preferred:
+ *   RESEND_AUDIENCE_ID   - id of the Resend Audience for Integra Acao
+ *
+ * Fallback when RESEND_AUDIENCE_ID is not configured:
+ *   CONTACT_EMAIL_TO     - internal recipient
+ *   CONTACT_EMAIL_FROM   - verified Resend sender
  *
  * Rate limiting is enforced upstream via a Cloudflare Rate Limiting Rule
  * on /api/newsletter (3-5 req/IP per 10s on the Free plan).
- *
- * Response:
- *   200 { ok: true }                          — subscribed (or already subscribed)
- *   400 { ok: false, message: string }        — payload/validation error
- *   403 { ok: false, message: string }        — Turnstile failed
- *   405 { ok: false, message: string }        — wrong method
- *   415 { ok: false, message: string }        — wrong content-type
- *   503 { ok: false, message: string }        — config missing
- *   502 { ok: false, message: string }        — upstream Resend error
  */
 
 interface Env {
   TURNSTILE_SECRET_KEY: string;
   RESEND_API_KEY: string;
-  RESEND_AUDIENCE_ID: string;
+  RESEND_AUDIENCE_ID?: string;
+  CONTACT_EMAIL_TO?: string;
+  CONTACT_EMAIL_FROM?: string;
 }
 
 interface NewsletterPayload {
@@ -37,6 +38,25 @@ interface NewsletterPayload {
   website?: string; // honeypot
   "cf-turnstile-response"?: string;
 }
+
+interface ResendCreateContactResponse {
+  id?: string;
+  object?: string;
+  message?: string;
+}
+
+interface NewsletterLead {
+  name: string;
+  email: string;
+  company: string;
+  role: string;
+  ip?: string;
+  userAgent?: string;
+}
+
+type Result =
+  | { ok: true; alreadyExists?: boolean; mode?: "audience" | "email-fallback" }
+  | { ok: false; status: number; message: string };
 
 const json = (data: unknown, status = 200): Response =>
   new Response(JSON.stringify(data), {
@@ -62,6 +82,14 @@ const methodNotAllowed = (): Response =>
 const isEmail = (s: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim()) && s.length <= 180;
 
+const escapeHtml = (s: string) =>
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 async function verifyTurnstile(
   token: string,
   secret: string,
@@ -85,17 +113,16 @@ async function verifyTurnstile(
   }
 }
 
-interface ResendCreateContactResponse {
-  id?: string;
-  object?: string;
-  message?: string;
-}
-
 async function addToAudience(
   audienceId: string,
   apiKey: string,
-  payload: { email: string; first_name?: string; last_name?: string; unsubscribed?: boolean; },
-): Promise<{ ok: true; alreadyExists?: boolean } | { ok: false; status: number; message: string }> {
+  payload: {
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    unsubscribed?: boolean;
+  },
+): Promise<Result> {
   try {
     const url = `https://api.resend.com/audiences/${encodeURIComponent(audienceId)}/contacts`;
     const res = await fetch(url, {
@@ -106,16 +133,98 @@ async function addToAudience(
       },
       body: JSON.stringify(payload),
     });
-    if (res.ok) return { ok: true };
+    if (res.ok) return { ok: true, mode: "audience" };
+
     const errBody = (await res.json().catch(() => ({}))) as ResendCreateContactResponse;
     // Resend returns 422 if email is already in the audience.
-    if (res.status === 422) return { ok: true, alreadyExists: true };
+    if (res.status === 422) {
+      return { ok: true, alreadyExists: true, mode: "audience" };
+    }
+
     return {
       ok: false,
       status: res.status,
       message: errBody.message ?? "Falha ao registrar inscrição.",
     };
-  } catch (e) {
+  } catch {
+    return {
+      ok: false,
+      status: 502,
+      message: "Não foi possível alcançar o serviço de e-mail no momento.",
+    };
+  }
+}
+
+async function sendSubscriptionEmail(
+  apiKey: string,
+  from: string | undefined,
+  to: string | undefined,
+  lead: NewsletterLead,
+): Promise<Result> {
+  if (!from || !to) {
+    return {
+      ok: false,
+      status: 503,
+      message: "Configuração de inscrição indisponível.",
+    };
+  }
+
+  const subject = `[Newsletter] Nova inscrição Integra Ação - ${lead.name}`;
+  const html = `
+    <h2 style="margin:0 0 12px;font-family:sans-serif;color:#1a1a1a">Nova inscrição na newsletter Integra Ação</h2>
+    <table style="font-family:sans-serif;color:#2c2c2c;font-size:14px;line-height:1.6">
+      <tr><td><strong>Nome:</strong></td><td>${escapeHtml(lead.name)}</td></tr>
+      <tr><td><strong>E-mail:</strong></td><td>${escapeHtml(lead.email)}</td></tr>
+      ${lead.company ? `<tr><td><strong>Empresa:</strong></td><td>${escapeHtml(lead.company)}</td></tr>` : ""}
+      ${lead.role ? `<tr><td><strong>Atuação:</strong></td><td>${escapeHtml(lead.role)}</td></tr>` : ""}
+    </table>
+    <hr style="border:0;border-top:1px solid #e4e4e4;margin:24px 0">
+    <p style="font-family:monospace;font-size:11px;color:#7a7a7a">
+      Fallback usado porque RESEND_AUDIENCE_ID não está configurado no Cloudflare Pages.
+      IP: ${escapeHtml(lead.ip ?? "n/d")} · UA: ${escapeHtml(lead.userAgent ?? "n/d")}
+    </p>
+  `;
+  const text = [
+    "Nova inscrição na newsletter Integra Ação",
+    "",
+    `Nome: ${lead.name}`,
+    `E-mail: ${lead.email}`,
+    lead.company && `Empresa: ${lead.company}`,
+    lead.role && `Atuação: ${lead.role}`,
+    "",
+    "Fallback usado porque RESEND_AUDIENCE_ID não está configurado no Cloudflare Pages.",
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        reply_to: lead.email,
+        subject,
+        html,
+        text,
+      }),
+    });
+
+    if (res.ok) return { ok: true, mode: "email-fallback" };
+
+    const detail = await res.text().catch(() => "");
+    console.error("Newsletter fallback email failed", res.status, detail);
+    return {
+      ok: false,
+      status: res.status,
+      message: "Não foi possível registrar a inscrição no momento.",
+    };
+  } catch (error) {
+    console.error("Newsletter fallback email exception", error);
     return {
       ok: false,
       status: 502,
@@ -128,12 +237,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.TURNSTILE_SECRET_KEY) {
     return json(
       { ok: false, message: "Configuração de segurança indisponível." },
-      503,
-    );
-  }
-  if (!env.RESEND_API_KEY || !env.RESEND_AUDIENCE_ID) {
-    return json(
-      { ok: false, message: "Configuração de inscrição indisponível." },
       503,
     );
   }
@@ -150,12 +253,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json({ ok: false, message: "Payload inválido." }, 400);
   }
 
-  // Honeypot — silent success
+  // Honeypot - silent success.
   if (payload.website && payload.website.length > 0) {
     return json({ ok: true });
   }
 
-  // LGPD consent
   if (!payload.lgpd) {
     return json(
       {
@@ -168,6 +270,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const name = (payload.name ?? "").trim();
   const email = (payload.email ?? "").trim();
+  const company = (payload.company ?? "").trim().slice(0, 120);
+  const role = (payload.role ?? "").trim().slice(0, 80);
+
   if (name.length < 2 || name.length > 120) {
     return json({ ok: false, message: "Nome inválido." }, 400);
   }
@@ -175,7 +280,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json({ ok: false, message: "E-mail inválido." }, 400);
   }
 
-  // Turnstile
   const turnstileToken = payload["cf-turnstile-response"];
   if (!turnstileToken) {
     return json(
@@ -183,6 +287,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       403,
     );
   }
+
   const ip = request.headers.get("CF-Connecting-IP") ?? undefined;
   const valid = await verifyTurnstile(
     turnstileToken,
@@ -196,21 +301,37 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  // Split name into first/last for Resend
+  if (!env.RESEND_API_KEY) {
+    return json(
+      { ok: false, message: "Configuração de inscrição indisponível." },
+      503,
+    );
+  }
+
   const parts = name.split(/\s+/);
   const firstName = parts[0];
   const lastName = parts.slice(1).join(" ").slice(0, 80);
 
-  const result = await addToAudience(
-    env.RESEND_AUDIENCE_ID,
-    env.RESEND_API_KEY,
-    {
-      email,
-      first_name: firstName.slice(0, 80),
-      last_name: lastName,
-      unsubscribed: false,
-    },
-  );
+  const result = env.RESEND_AUDIENCE_ID
+    ? await addToAudience(env.RESEND_AUDIENCE_ID, env.RESEND_API_KEY, {
+        email,
+        first_name: firstName.slice(0, 80),
+        last_name: lastName,
+        unsubscribed: false,
+      })
+    : await sendSubscriptionEmail(
+        env.RESEND_API_KEY,
+        env.CONTACT_EMAIL_FROM,
+        env.CONTACT_EMAIL_TO,
+        {
+          name,
+          email,
+          company,
+          role,
+          ip,
+          userAgent: request.headers.get("user-agent") ?? undefined,
+        },
+      );
 
   if (!result.ok) {
     return json(
@@ -219,7 +340,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  return json({ ok: true, alreadyExists: result.alreadyExists ?? false });
+  return json({
+    ok: true,
+    alreadyExists: result.alreadyExists ?? false,
+    mode: result.mode,
+  });
 };
 
 export const onRequest: PagesFunction = async ({ request }) => {

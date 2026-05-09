@@ -157,6 +157,9 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    o formulário aparece como indisponível e não cai mais em `mailto:` automático.
    Não use placeholders como `<site key pública do Turnstile>`; a site key
    pública atual é `0x4AAAAAADKRCm67kAoc7SHU`.
+   `RESEND_AUDIENCE_ID` é o modo preferencial para a newsletter. Se ele ainda
+   não estiver configurado, `/api/newsletter` faz fallback e envia a inscrição
+   por e-mail para `CONTACT_EMAIL_TO`.
 
 5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
    `integrautomacao.com`, `www.integrautomacao.com` e, se usados,
