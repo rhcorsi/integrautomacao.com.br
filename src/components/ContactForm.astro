@@ -1,8 +1,10 @@
 ---
 import { COMPANY } from "@/utils/site";
+import { resolveTurnstileSiteKey } from "@/utils/turnstile";
 
-const turnstileSiteKey =
-  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const turnstileSiteKey = resolveTurnstileSiteKey(
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY,
+);
 const hasTurnstile = turnstileSiteKey.length > 0;
 ---
 

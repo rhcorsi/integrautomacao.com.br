@@ -155,6 +155,8 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    `CONTACT_EMAIL_TO` e `CONTACT_EMAIL_FROM`.
    `PUBLIC_TURNSTILE_SITE_KEY` precisa existir no ambiente de build; se faltar,
    o formulário aparece como indisponível e não cai mais em `mailto:` automático.
+   Não use placeholders como `<site key pública do Turnstile>`; a site key
+   pública atual é `0x4AAAAAADKRCm67kAoc7SHU`.
 
 5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
    `integrautomacao.com`, `www.integrautomacao.com` e, se usados,
