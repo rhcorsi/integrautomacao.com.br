@@ -642,8 +642,8 @@ export const techCatalog: TechPage[] = [
     ],
     faq: [
       {
-        q: "Optix substitui View SE?",
-        a: "Em alguns casos, sim; em outros, complementa. A decisão depende de criticidade, arquitetura existente, requisitos de redundância, operação e suporte.",
+        q: "Optix e View SE podem coexistir na mesma arquitetura?",
+        a: "Sim, e essa coexistência é muito comum. O View SE gerencia a operação de tempo real na sala de controle principal, enquanto o Optix atua publicando dashboards responsivos em HTML5 para visões móveis ou gerenciais na IDMZ.",
       },
       {
         q: "Pode acessar pelo celular?",
@@ -1059,16 +1059,16 @@ export const techCatalog: TechPage[] = [
     ],
     faq: [
       {
-        q: "DataMosaix substitui historian?",
-        a: "Não. Ele complementa a estratégia de dados. Historian preserva séries temporais; DataMosaix ajuda a contextualizar, governar e disponibilizar dados.",
+        q: "Qual a diferença conceitual entre DataMosaix e Historian?",
+        a: "Historian tem foco na coleta massiva e preservação de séries temporais cruas em alta fidelidade no chão de fábrica. O DataMosaix entra um nível acima, estruturando o contexto desses dados (transformando tags cruas em ativos alinhados ao modelo ISA-95), governando o acesso e servindo como hub para ferramentas IIoT e nuvem.",
       },
       {
         q: "Precisa estar tudo padronizado antes?",
         a: "Não, mas quanto melhor a base de tags, ativos e fontes, mais valor a camada de dados entrega. Normalmente fazemos saneamento gradual.",
       },
       {
-        q: "DataMosaix substitui Historian?",
-        a: "Em algumas arquiteturas sim, em outras coexistem. DataMosaix é SaaS com armazenamento contextualizado, AF-like; Historian SE é on-prem. Para plantas que querem dados em nuvem com governança, DataMosaix é caminho, para operação crítica, ainda há valor em Historian local.",
+        q: "DataMosaix pode substituir completamente o Historian local?",
+        a: "Em algumas arquiteturas sim, em outras coexistem. DataMosaix é SaaS com armazenamento contextualizado, AF-like; Historian SE é on-prem. Para plantas que querem dados em nuvem com governança, DataMosaix é o caminho; para a operação de tempo real crítica da planta, ainda há enorme valor em manter o Historian local.",
       },
       {
         q: "DataMosaix integra com Power BI / Grafana?",
@@ -1478,16 +1478,16 @@ export const techCatalog: TechPage[] = [
         a: "Ajuda, mas não substitui backup próprio do projeto, versões, exports, receitas, licenças e configurações específicas.",
       },
       {
-        q: "Com que frequência testar restore?",
-        a: "Depende da criticidade. Sistemas críticos deveriam ter testes periódicos e sempre após mudanças relevantes de arquitetura.",
+        q: "Como proteger os backups industriais contra ransomware?",
+        a: "Utilizamos a estratégia de backup 3-2-1 adaptada a ambientes industriais: 3 cópias dos dados, em 2 mídias diferentes, sendo pelo menos 1 cópia totalmente offline e isolada (air-gapped) ou imutável. Os repositórios de backup na IDMZ não devem compartilhar credenciais com o Active Directory corporativo, impedindo que uma infecção na rede de TI alcance e apague os backups de automação.",
       },
       {
         q: "Backup de aplicação industrial cabe em backup corporativo?",
         a: "Pode caber, mas com cuidado: aplicação industrial tem requisitos de captura (programa PLC, projeto FactoryTalk, configuração de drive, receitas Batch) que ferramenta TI genérica não conhece. AssetCentre + Veeam é combinação comum.",
       },
       {
-        q: "Com que frequência testar restore?",
-        a: "Mínimo trimestral para sistemas críticos. Restore não testado é backup que não existe. Em planta com janela de parada anual, testamos restore em ambiente espelho durante o ano para validar antes de precisar.",
+        q: "Com que frequência testar o restore dos backups OT?",
+        a: "Recomendamos um teste no mínimo trimestral para sistemas críticos e sempre após mudanças relevantes de arquitetura. Restore não testado é backup que não existe. Em plantas com janela de parada anual, testamos o restore em ambiente de laboratório/espelho durante o ano para validar o procedimento antes de precisar dele na prática.",
       },
       {
         q: "Plano de DR (Disaster Recovery) para OT precisa ser site offsite?",
