@@ -145,3 +145,12 @@
     padding-inline: 4rem;
   }
 }
+
+/* Premium Technical Utilities */
+@utility bg-premium-dark {
+  background: radial-gradient(circle at 50% 0%, var(--color-integra-gray-900) 0%, var(--color-integra-gray-950) 100%);
+}
+@utility bg-premium-dark-card {
+  background: linear-gradient(135deg, var(--color-integra-gray-900) 0%, #151515 100%);
+}
+

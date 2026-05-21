@@ -14,16 +14,16 @@ const { href, title, summary, icon, tags = [] } = Astro.props;
 
 <a
   href={href}
-  class="group flex flex-col h-full p-7 rounded-lg border border-integra-gray-200 bg-integra-white hover:border-integra-gray-900 transition-colors"
+  class="group flex flex-col h-full p-7 rounded-lg border border-integra-gray-200 bg-integra-white hover:-translate-y-1 hover:shadow-xl hover:shadow-integra-red/[0.04] hover:border-integra-red/60 transition-all duration-300 ease-out"
 >
   <div class="flex items-start justify-between gap-3 mb-5">
     <div
-      class="inline-flex size-11 items-center justify-center rounded-md bg-integra-gray-100 text-integra-gray-900 group-hover:bg-integra-gray-900 group-hover:text-integra-white transition-colors"
+      class="inline-flex size-11 items-center justify-center rounded-md bg-integra-gray-100 text-integra-gray-900 group-hover:bg-integra-gray-900 group-hover:text-integra-white group-hover:scale-105 transition-all duration-300 ease-out"
     >
       <Icon name={icon} class="size-5" aria-hidden="true" />
     </div>
     <span
-      class="text-integra-gray-300 group-hover:text-integra-red transition-colors"
+      class="text-integra-gray-300 group-hover:text-integra-red group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 ease-out"
       aria-hidden="true"
     >
       <svg
@@ -40,7 +40,7 @@ const { href, title, summary, icon, tags = [] } = Astro.props;
   <h3 class="text-lg font-semibold text-integra-gray-900 mb-2">{title}</h3>
   <p class="text-sm leading-relaxed text-integra-gray-700 mb-4">{summary}</p>
   {tags.length > 0 && (
-    <ul class="mt-auto flex flex-wrap gap-2 pt-4 border-t border-integra-gray-100">
+    <ul class="mt-auto flex flex-wrap gap-2 pt-4 border-t border-integra-gray-100 group-hover:border-integra-red/10 transition-colors duration-300">
       {tags.map((tag) => (
         <li class="text-[11px] font-mono uppercase tracking-wider text-integra-gray-500 px-2 py-1 bg-integra-gray-50 rounded-sm">
           {tag}

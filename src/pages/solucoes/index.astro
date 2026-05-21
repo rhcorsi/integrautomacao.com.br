@@ -1,4 +1,4 @@
-﻿---
+---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import SolutionCard from "@/components/SolutionCard.astro";
@@ -170,8 +170,8 @@ const mvpSolutions = [
       />
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {desafios.map((d) => (
-          <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 flex flex-col gap-3">
-            <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
+          <article class="group rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 flex flex-col gap-3 hover:-translate-y-1 hover:shadow-lg hover:shadow-integra-red/[0.02] hover:border-integra-red/60 transition-all duration-300 ease-out">
+            <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white group-hover:bg-integra-red group-hover:scale-105 transition-all duration-300 ease-out">
               <Icon name={d.icon} class="size-5" aria-hidden="true" />
             </div>
             <h3 class="text-base font-semibold text-integra-gray-900 leading-snug">
@@ -182,7 +182,7 @@ const mvpSolutions = [
             </p>
             <a
               href={d.href}
-              class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+              class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red hover:text-integra-red-700 group-hover:translate-x-0.5 transition-all duration-300"
             >
               {d.cta} <span aria-hidden="true">→</span>
             </a>
