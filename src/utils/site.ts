@@ -401,7 +401,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           },
           {
             href: "/certificacoes#plantpax-dcs",
-            label: "PlantPAx DCS Partner",
+            label: "Especialidade PlantPAx DCS Certified",
             description: "Rockwell Automation",
           },
           {
