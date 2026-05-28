@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -110,6 +111,14 @@ const faq = [
 <BaseLayout
   title="PlantPAx, Sistema de Controle Distribuído"
   description="Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica."
+  jsonLd={[
+    serviceSchema({
+      name: "PlantPAx, Sistema de Controle Distribuído",
+      description:
+        "Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica.",
+      url: Astro.url.href,
+    }),
+  ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">

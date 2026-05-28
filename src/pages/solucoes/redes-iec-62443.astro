@@ -1,5 +1,6 @@
 ﻿---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -113,6 +114,14 @@ const faq = [
 <BaseLayout
   title="Redes Industriais e IEC 62443"
   description="Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82."
+  jsonLd={[
+    serviceSchema({
+      name: "Redes Industriais e Cibersegurança OT (IEC 62443)",
+      description:
+        "Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82.",
+      url: Astro.url.href,
+    }),
+  ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">

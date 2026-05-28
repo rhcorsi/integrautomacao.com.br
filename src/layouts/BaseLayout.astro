@@ -2,7 +2,8 @@
 import "@/styles/global.css";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { CSP_JSON_LD_NONCE, SITE, COMPANY } from "@/utils/site";
+import { CSP_JSON_LD_NONCE, SITE } from "@/utils/site";
+import { organizationSchema, breadcrumbSchema } from "@/utils/schema";
 
 interface Props {
   title?: string;
@@ -12,6 +13,10 @@ interface Props {
   noindex?: boolean;
   canonical?: string;
   bodyClass?: string;
+  /** Schema.org blocks específicos da página (Article, Service, etc.). */
+  jsonLd?: Record<string, unknown>[];
+  /** Nome do nó-folha no breadcrumb (default: title). */
+  breadcrumbLeaf?: string;
 }
 
 const {
@@ -22,48 +27,20 @@ const {
   noindex = false,
   canonical,
   bodyClass = "",
+  jsonLd = [],
+  breadcrumbLeaf,
 } = Astro.props;
 
 const pageTitle = title ? `${SITE.name} | ${title}` : SITE.defaultTitle;
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
 const ogImageURL = new URL(ogImage, SITE.url);
 
-const orgJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: COMPANY.legalName,
-  alternateName: SITE.name,
-  url: SITE.url,
-  logo: `${SITE.url}/logo.png`,
-  taxID: COMPANY.taxId,
-  email: COMPANY.email,
-  telephone: COMPANY.phones[0].value,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: COMPANY.address.street,
-    addressLocality: COMPANY.address.city,
-    addressRegion: COMPANY.address.state,
-    postalCode: COMPANY.address.postalCode,
-    addressCountry: COMPANY.address.country,
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: COMPANY.geo.latitude,
-    longitude: COMPANY.geo.longitude,
-  },
-  foundingDate: String(COMPANY.founded),
-  sameAs: [COMPANY.social.linkedin].filter(Boolean),
-  knowsAbout: [
-    "PlantPAx",
-    "FactoryTalk",
-    "ControlLogix",
-    "PI System",
-    "Cibersegurança Industrial",
-    "IEC 62443",
-    "CPwE",
-    "Automação Industrial",
-  ],
-};
+// JSON-LD: Organization (sempre) + breadcrumb (automático, exceto na home) +
+// schema específico da página. Todos compartilham o mesmo nonce do CSP.
+const breadcrumb = breadcrumbSchema(Astro.url.pathname, breadcrumbLeaf ?? title);
+const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
+  (b): b is Record<string, unknown> => Boolean(b),
+);
 ---
 
 <!doctype html>
@@ -112,16 +89,15 @@ const orgJsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL.toString()} />
 
-    <!-- JSON-LD Organization -->
-    <script
-      is:inline
-      nonce={CSP_JSON_LD_NONCE}
-      type="application/ld+json"
-      set:html={JSON.stringify(orgJsonLd)}
-    />
-
-    <!-- Cloudflare Web Analytics, token configured at deploy time via _headers/CSP -->
-    <!-- Replace data-cf-beacon JSON when zone is set up -->
+    <!-- JSON-LD: Organization + breadcrumb + schema específico da página -->
+    {jsonLdBlocks.map((block) => (
+      <script
+        is:inline
+        nonce={CSP_JSON_LD_NONCE}
+        type="application/ld+json"
+        set:html={JSON.stringify(block)}
+      />
+    ))}
 
     <slot name="head" />
   </head>

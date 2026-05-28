@@ -4,6 +4,8 @@ import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import { SITE } from "@/utils/site";
+import { articleSchema } from "@/utils/schema";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -21,12 +23,24 @@ const dateFmt = entry.data.pubDate.toLocaleDateString("pt-BR", {
   month: "long",
   year: "numeric",
 });
+
+const postUrl = new URL(Astro.url.pathname, SITE.url).toString();
+const articleLd = articleSchema({
+  title: entry.data.title,
+  description: entry.data.description,
+  url: postUrl,
+  datePublished: entry.data.pubDate,
+  dateModified: entry.data.updatedDate,
+  author: entry.data.author,
+  tags: entry.data.tags,
+});
 ---
 
 <BaseLayout
   title={entry.data.title}
   description={entry.data.description}
   ogType="article"
+  jsonLd={[articleLd]}
 >
   <article>
     <header class="border-b border-integra-gray-200 bg-integra-white">
