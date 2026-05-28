@@ -15,7 +15,7 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
         Cases
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
@@ -36,7 +36,7 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
           <p class="text-base text-integra-gray-700 max-w-md mx-auto">
             Cases sendo publicados gradualmente. Para um portfólio detalhado
             sob NDA,
-            <a href="/contato" class="text-integra-red hover:underline">
+            <a href="/contato" class="text-integra-red-700 hover:underline">
               entre em contato</a>.
           </p>
         </div>
@@ -59,10 +59,10 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
                   </div>
                 )}
                 <div class="p-6">
-                  <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+                  <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-2">
                     {c.data.sector}
                   </p>
-                  <h2 class="text-xl font-semibold text-integra-gray-900 mb-3 group-hover:text-integra-red transition-colors">
+                  <h2 class="text-xl font-semibold text-integra-gray-900 mb-3 group-hover:text-integra-red-700 transition-colors">
                     {c.data.title}
                   </h2>
                   <p class="text-sm leading-relaxed text-integra-gray-700 mb-4">

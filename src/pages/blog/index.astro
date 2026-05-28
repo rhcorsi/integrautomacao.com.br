@@ -51,7 +51,7 @@ const integraAcaoFormatos = [
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
         Blog técnico
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
@@ -81,7 +81,7 @@ const integraAcaoFormatos = [
               >
                 <div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
                   <div>
-                    <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+                    <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-2">
                       {dateFmt(post.data.pubDate)}
                       {post.data.tags.length > 0 && (
                         <>
@@ -90,7 +90,7 @@ const integraAcaoFormatos = [
                         </>
                       )}
                     </p>
-                    <h2 class="text-xl font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors mb-2 max-w-2xl">
+                    <h2 class="text-xl font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors mb-2 max-w-2xl">
                       {post.data.title}
                     </h2>
                     <p class="text-sm leading-relaxed text-integra-gray-700 max-w-2xl">
@@ -98,7 +98,7 @@ const integraAcaoFormatos = [
                     </p>
                   </div>
                   <span
-                    class="text-integra-gray-400 group-hover:text-integra-red transition-colors lg:self-center"
+                    class="text-integra-gray-400 group-hover:text-integra-red-700 transition-colors lg:self-center"
                     aria-hidden="true"
                   >
                     <svg
@@ -122,7 +122,7 @@ const integraAcaoFormatos = [
         </ul>
       )}
       <p class="mt-8 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
-        <a href="/rss.xml" class="hover:text-integra-red transition-colors">
+        <a href="/rss.xml" class="hover:text-integra-red-700 transition-colors">
           RSS Feed →
         </a>
       </p>
@@ -134,7 +134,7 @@ const integraAcaoFormatos = [
     <div class="container-fluid py-20">
       <div class="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div>
-          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
             Marca de conteúdo · Integra Ação
           </p>
           <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-6">
@@ -148,7 +148,7 @@ const integraAcaoFormatos = [
           </p>
           <a
             href="/integra-acao/"
-            class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700"
           >
             Conhecer Integra Ação <span aria-hidden="true">→</span>
           </a>
@@ -163,15 +163,15 @@ const integraAcaoFormatos = [
                 <Icon name={f.icon} class="size-5" aria-hidden="true" />
               </div>
               <div class="flex-1">
-                <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-1">
+                <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-1">
                   {f.eyebrow}
                 </p>
-                <p class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors leading-snug">
+                <p class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors leading-snug">
                   {f.title}
                 </p>
               </div>
               <span
-                class="text-integra-gray-400 group-hover:text-integra-red transition-colors mt-1"
+                class="text-integra-gray-400 group-hover:text-integra-red-700 transition-colors mt-1"
                 aria-hidden="true"
               >→</span>
             </a>
@@ -186,7 +186,7 @@ const integraAcaoFormatos = [
       <div class="container-fluid py-20">
         <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
           <div>
-            <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+            <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
               Eventos recentes
             </p>
             <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl max-w-2xl">
@@ -195,7 +195,7 @@ const integraAcaoFormatos = [
           </div>
           <a
             href="/eventos/"
-            class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red hover:text-integra-red-700"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700"
           >
             Ver todos os eventos <span aria-hidden="true">→</span>
           </a>
@@ -218,10 +218,10 @@ const integraAcaoFormatos = [
                 />
               </div>
               <div class="p-5">
-                <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-2">
+                <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-2">
                   {e.data.dateLabel}
                 </p>
-                <h3 class="text-sm font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors leading-snug mb-1">
+                <h3 class="text-sm font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors leading-snug mb-1">
                   {e.data.title}
                 </h3>
                 <p class="text-xs text-integra-gray-500">

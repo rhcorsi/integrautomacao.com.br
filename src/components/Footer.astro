@@ -84,7 +84,7 @@ const legalLinks = [
           <a
             href={COMPANY.social.linkedin}
             rel="noopener noreferrer"
-            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red hover:bg-integra-gray-100 transition-colors"
+            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red-700 hover:bg-integra-gray-100 transition-colors"
             aria-label="LinkedIn"
           >
             <svg
@@ -100,7 +100,7 @@ const legalLinks = [
           </a>
           <EmailLink
             email={COMPANY.email}
-            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red hover:bg-integra-gray-100 transition-colors"
+            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red-700 hover:bg-integra-gray-100 transition-colors"
             ariaLabel="E-mail"
           >
             <svg
@@ -121,7 +121,7 @@ const legalLinks = [
           <a
             href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
             rel="noopener noreferrer"
-            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red hover:bg-integra-gray-100 transition-colors"
+            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red-700 hover:bg-integra-gray-100 transition-colors"
             aria-label="WhatsApp"
           >
             <svg
@@ -150,7 +150,7 @@ const legalLinks = [
               <a
                 href={link.href}
                 {...(("external" in link && link.external) && { rel: "noopener noreferrer" })}
-                class="text-sm text-integra-gray-700 hover:text-integra-red transition-colors w-fit"
+                class="text-sm text-integra-gray-700 hover:text-integra-red-700 transition-colors w-fit"
               >
                 {link.label}
               </a>
@@ -171,13 +171,13 @@ const legalLinks = [
           </h3>
           <EmailLink
             email={COMPANY.email}
-            class="text-base font-medium text-integra-gray-900 hover:text-integra-red transition-colors block break-all"
+            class="text-base font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors block break-all"
           >
             {COMPANY.email}
           </EmailLink>
           <a
             href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`}
-            class="mt-1 text-sm text-integra-gray-700 hover:text-integra-red transition-colors block"
+            class="mt-1 text-sm text-integra-gray-700 hover:text-integra-red-700 transition-colors block"
           >
             {phoneCommercial.display}
           </a>
@@ -189,7 +189,7 @@ const legalLinks = [
           <a
             href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
             rel="noopener noreferrer"
-            class="text-base font-medium text-integra-gray-900 hover:text-integra-red transition-colors block"
+            class="text-base font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors block"
           >
             {phoneWhatsApp.display}
           </a>

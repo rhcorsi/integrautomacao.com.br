@@ -77,7 +77,7 @@ const temas = [
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-28">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-4">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-4">
         Marca de conteúdo · Integra Ação
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl lg:text-6xl max-w-4xl">
@@ -112,7 +112,7 @@ const temas = [
 
   <section id="formatos" class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
         Três formatos
       </p>
       <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl max-w-3xl mb-12">
@@ -124,7 +124,7 @@ const temas = [
             <div class="inline-flex size-12 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
               <Icon name={f.icon} class="size-6" aria-hidden="true" />
             </div>
-            <p class="text-xs font-mono uppercase tracking-widest text-integra-red">
+            <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">
               {f.eyebrow}
             </p>
             <h3 class="text-lg font-semibold text-integra-gray-900 leading-snug">
@@ -135,7 +135,7 @@ const temas = [
             </p>
             <a
               href={f.href}
-              class="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red hover:text-integra-red-700 pt-2"
+              class="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700 pt-2"
             >
               {f.cta} <span aria-hidden="true">→</span>
             </a>
@@ -149,7 +149,7 @@ const temas = [
     <div class="container-fluid py-20">
       <div class="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div>
-          <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
             Linha editorial
           </p>
           <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-6">
@@ -166,7 +166,7 @@ const temas = [
         <ol class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200">
           {temas.map((t) => (
             <li class="bg-integra-white p-6 flex gap-4">
-              <span class="font-mono text-xs font-semibold text-integra-red mt-1">
+              <span class="font-mono text-xs font-semibold text-integra-red-700 mt-1">
                 {t.code}
               </span>
               <div>
@@ -185,7 +185,7 @@ const temas = [
   {(recentPosts.length > 0 || recentEventos.length > 0) && (
     <section class="border-b border-integra-gray-200 bg-integra-gray-50">
       <div class="container-fluid py-20">
-        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
           Recentes
         </p>
         <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-12">
@@ -201,7 +201,7 @@ const temas = [
                 {recentPosts.map((p) => (
                   <li class="border-b border-integra-gray-200 pb-4 last:border-b-0">
                     <a href={`/blog/${p.slug}/`} class="group">
-                      <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors">
+                      <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors">
                         {p.data.title}
                       </h4>
                       <p class="mt-1 text-sm text-integra-gray-600">
@@ -222,7 +222,7 @@ const temas = [
                 {recentEventos.map((e) => (
                   <li class="border-b border-integra-gray-200 pb-4 last:border-b-0">
                     <a href={`/eventos/${e.slug}/`} class="group">
-                      <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red transition-colors">
+                      <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors">
                         {e.data.title}
                       </h4>
                       <p class="mt-1 text-sm text-integra-gray-600">

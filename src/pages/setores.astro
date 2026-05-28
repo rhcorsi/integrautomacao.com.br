@@ -122,7 +122,7 @@ const solucoesContexto = [
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
       <div>
-        <p class="text-xs font-mono uppercase tracking-widest text-integra-red mb-3">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
           Setores
         </p>
         <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
@@ -175,7 +175,7 @@ const solucoesContexto = [
             <ul class="mt-auto pt-3 border-t border-integra-gray-100 space-y-1.5 group-hover:border-integra-red/10 transition-colors duration-300">
               {s.pains.map((p) => (
                 <li class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 flex items-start gap-2">
-                  <span class="text-integra-red mt-0.5" aria-hidden="true">·</span>
+                  <span class="text-integra-red-700 mt-0.5" aria-hidden="true">·</span>
                   {p}
                 </li>
               ))}
@@ -197,7 +197,7 @@ const solucoesContexto = [
       <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2">
         {decisionMatrix.map(([risk, response]) => (
           <article class="bg-integra-gray-50 p-6">
-            <p class="mb-2 font-mono text-[11px] uppercase tracking-widest text-integra-red">
+            <p class="mb-2 font-mono text-[11px] uppercase tracking-widest text-integra-red-700">
               Risco típico
             </p>
             <h3 class="text-lg font-semibold text-integra-gray-900">{risk}</h3>
@@ -239,7 +239,7 @@ const solucoesContexto = [
             </ul>
             <a
               href={s.href}
-              class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red hover:text-integra-red-700 group-hover:translate-x-0.5 transition-all duration-300"
+              class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700 group-hover:translate-x-0.5 transition-all duration-300"
             >
               Ver solução <span aria-hidden="true">→</span>
             </a>

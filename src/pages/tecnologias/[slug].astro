@@ -59,7 +59,7 @@ const jsonLd = {
         <p
           class:list={[
             "mb-3 text-xs font-mono uppercase tracking-widest",
-            item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red",
+            item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red-700",
           ]}
         >
           {item.type} · {item.group}
@@ -118,7 +118,7 @@ const jsonLd = {
             <p
               class:list={[
                 "mb-4 font-mono text-xs font-semibold",
-                item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red",
+                item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red-700",
               ]}
             >
               0{index + 1}
@@ -182,7 +182,7 @@ const jsonLd = {
               href={solution.href}
               class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
             >
-              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
                 Solução
               </p>
               <h3 class="text-lg font-semibold text-integra-gray-900">
@@ -198,7 +198,7 @@ const jsonLd = {
               href={`/tecnologias/${relatedItem.slug}/`}
               class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
             >
-              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red">
+              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
                 {relatedItem.type}
               </p>
               <h3 class="text-lg font-semibold text-integra-gray-900">
