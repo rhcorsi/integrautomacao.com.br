@@ -78,7 +78,7 @@ const articleLd = articleSchema({
         <div class="container-default py-8">
           <Image
             src={entry.data.heroImage}
-            alt={entry.data.heroAlt ?? ""}
+            alt={entry.data.heroAlt ?? entry.data.title}
             widths={[800, 1200, 1600]}
             sizes="(min-width: 1024px) 1100px, 100vw"
             loading="eager"
