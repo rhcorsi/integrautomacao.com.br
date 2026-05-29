@@ -160,3 +160,25 @@ export function serviceSchema(opts: {
     areaServed: { "@type": "Country", name: "Brasil" },
   };
 }
+
+/** TechArticle para páginas de tecnologia/software do catálogo técnico. */
+export function techArticleSchema(opts: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": `${opts.url}#techarticle`,
+    headline: opts.title,
+    name: opts.title,
+    description: opts.description,
+    url: opts.url,
+    mainEntityOfPage: opts.url,
+    inLanguage: "pt-BR",
+    publisher: { "@id": ORG_ID },
+    ...(opts.image ? { image: opts.image } : {}),
+  };
+}

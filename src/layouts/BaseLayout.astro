@@ -31,7 +31,7 @@ const {
   breadcrumbLeaf,
 } = Astro.props;
 
-const pageTitle = title ? `${SITE.name} | ${title}` : SITE.defaultTitle;
+const pageTitle = title ? `${title} | ${SITE.name}` : SITE.defaultTitle;
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
 const ogImageURL = new URL(ogImage, SITE.url);
 

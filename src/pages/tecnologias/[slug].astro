@@ -7,7 +7,8 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { getRelatedTech, techCatalog, type TechPage } from "@/data/techCatalog";
-import { CSP_JSON_LD_NONCE } from "@/utils/site";
+import { SITE } from "@/utils/site";
+import { serviceSchema, techArticleSchema } from "@/utils/schema";
 
 export function getStaticPaths() {
   return techCatalog.map((item) => ({
@@ -23,36 +24,19 @@ interface Props {
 const { item } = Astro.props;
 const related = getRelatedTech(item.relatedTech);
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": item.type === "Serviço" ? "Service" : "TechArticle",
-  name: item.title,
-  headline: item.title,
-  description: item.description,
-  provider: {
-    "@type": "Organization",
-    name: "Integra Automação Industrial",
-    url: "https://integrautomacao.com",
-  },
-  areaServed: "Brasil",
-  inLanguage: "pt-BR",
-};
+const pageUrl = new URL(`/tecnologias/${item.slug}/`, SITE.url).toString();
+const techLd =
+  item.type === "Serviço"
+    ? serviceSchema({ name: item.title, description: item.description, url: pageUrl })
+    : techArticleSchema({ title: item.title, description: item.description, url: pageUrl });
 ---
 
 <BaseLayout
   title={item.title}
   description={item.description}
   canonical={`/tecnologias/${item.slug}/`}
+  jsonLd={[techLd]}
 >
-  <Fragment slot="head">
-    <script
-      is:inline
-      nonce={CSP_JSON_LD_NONCE}
-      type="application/ld+json"
-      set:html={JSON.stringify(jsonLd)}
-    />
-  </Fragment>
-
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
       <div>
