@@ -2,9 +2,18 @@ const newsletterForms = document.querySelectorAll("[data-newsletter-form]");
 
 const setStatus = (status, message, tone = "info") => {
   if (!status) return;
+  // Erro é anunciado de forma assertiva (interrompe o leitor de tela);
+  // sucesso/info, de forma educada. Definir antes do texto.
+  if (tone === "error") {
+    status.setAttribute("role", "alert");
+    status.setAttribute("aria-live", "assertive");
+  } else {
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+  }
   status.textContent = message;
-  status.classList.remove("text-integra-red", "text-emerald-700");
-  if (tone === "error") status.classList.add("text-integra-red");
+  status.classList.remove("text-integra-red-700", "text-emerald-700");
+  if (tone === "error") status.classList.add("text-integra-red-700");
   if (tone === "success") status.classList.add("text-emerald-700");
 };
 

@@ -5,7 +5,7 @@
 @import "@fontsource-variable/jetbrains-mono";
 
 @theme {
-  /* Brand colors — Integra */
+  /* Brand colors - Integra */
   --color-integra-red: #e30613;
   --color-integra-red-300: #ff5a63;
   --color-integra-red-700: #b40510;
@@ -25,7 +25,7 @@
   --color-integra-gray-50: #fafafa;
   --color-integra-white: #ffffff;
 
-  /* OT/Cybersecurity accent — only for OT-themed sections */
+  /* OT/Cybersecurity accent - only for OT-themed sections */
   --color-integra-ot: #003a5d;
   --color-integra-ot-700: #002a44;
 
@@ -35,14 +35,14 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code",
     Consolas, monospace;
 
-  /* Container — ample sizes so layouts breathe on wide monitors. */
-  --container-narrow: 56rem;   /*  896px — text-heavy / prose */
-  --container-default: 80rem;  /* 1280px — standard pages */
-  --container-wide: 96rem;     /* 1536px — hero sections, dashboards */
-  --container-fluid: 120rem;   /* 1920px — full-bleed sections */
+  /* Container - ample sizes so layouts breathe on wide monitors. */
+  --container-narrow: 56rem;   /*  896px - text-heavy / prose */
+  --container-default: 80rem;  /* 1280px - standard pages */
+  --container-wide: 96rem;     /* 1536px - hero sections, dashboards */
+  --container-fluid: 120rem;   /* 1920px - full-bleed sections */
 }
 
-/* Base layer — minimal global styles, let Tailwind utilities do the rest */
+/* Base layer - minimal global styles, let Tailwind utilities do the rest */
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -105,7 +105,7 @@
   }
 }
 
-/* Component utilities — small, opt-in, technical-looking primitives */
+/* Component utilities - small, opt-in, technical-looking primitives */
 @utility container-narrow {
   width: 100%;
   max-width: var(--container-narrow);
