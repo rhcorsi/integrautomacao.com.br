@@ -129,7 +129,10 @@ const hatchColor = dark ? "rgba(227,6,19,0.16)" : "rgba(227,6,19,0.08)";
               dark ? "text-integra-gray-500" : "text-integra-gray-500",
             ]}
           >
-            <span aria-hidden="true" class="text-integra-red-300">//</span>
+            <span
+              aria-hidden="true"
+              class={dark ? "text-integra-red-300" : "text-integra-red-700"}
+            >//</span>
             {" "}{statusLine}
           </p>
         )}

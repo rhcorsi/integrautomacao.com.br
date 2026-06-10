@@ -33,27 +33,27 @@ const pulses = [
 const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
 const sans = "'Inter Variable', ui-sans-serif, system-ui, sans-serif";
 
-const bandStroke = "#2e2e2e";
-const bandFill = "rgba(255,255,255,0.02)";
-const nodeFill = "#181818";
-const nodeStroke = "#3f3f3f";
-const wire = "#3a3a3a";
-const label = "#a8a8a8";
-const labelDim = "#7a7a7a";
-const white = "#f5f5f5";
-const pulse = "#ff5a63";
-const otLine = "#5fa8d3";
-const otText = "#7cb8dd";
+const bandStroke = "#e4e4e4";
+const bandFill = "#fafafa";
+const nodeFill = "#ffffff";
+const nodeStroke = "#c9c9c9";
+const wire = "#c9c9c9";
+const label = "#4a4a4a";
+const labelDim = "#666666";
+const white = "#1a1a1a";
+const pulse = "#e30613";
+const otLine = "#003a5d";
+const otText = "#003a5d";
 ---
 
-<div class="overflow-hidden rounded-xl border border-white/10 bg-[#121212] shadow-2xl">
+<div class="overflow-hidden rounded-xl border border-integra-gray-200 bg-integra-white shadow-xl">
   {/* Barra de título do painel, estilo estação de supervisão */}
-  <div class="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-4 py-2.5">
-    <p class="font-mono text-[10px] uppercase tracking-widest text-integra-gray-400">
+  <div class="flex items-center justify-between border-b border-integra-gray-200 bg-integra-gray-50 px-4 py-2.5">
+    <p class="font-mono text-[10px] uppercase tracking-widest text-integra-gray-500">
       Supervisão · visão geral da planta
     </p>
-    <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-emerald-400">
-      <span class="apd-status inline-block size-1.5 rounded-full bg-emerald-400"></span>
+    <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-emerald-700">
+      <span class="apd-status inline-block size-1.5 rounded-full bg-emerald-500"></span>
       operacional
     </p>
   </div>
@@ -88,7 +88,7 @@ const otText = "#7cb8dd";
     <rect x="40" y="56" width="480" height="94" rx="10" fill={bandFill} stroke={bandStroke}></rect>
     <text x="56" y="76" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N4-5 · CORPORATIVO</text>
 
-    <rect x="40" y="180" width="480" height="60" rx="10" fill="rgba(95,168,211,0.05)" stroke={otLine} stroke-dasharray="5 4" stroke-opacity="0.55"></rect>
+    <rect x="40" y="180" width="480" height="60" rx="10" fill="rgba(0,58,93,0.04)" stroke={otLine} stroke-dasharray="5 4" stroke-opacity="0.45"></rect>
 
     <rect x="40" y="264" width="480" height="84" rx="10" fill={bandFill} stroke={bandStroke}></rect>
     <text x="56" y="281" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N3 · SUPERVISÃO E DADOS</text>
@@ -127,7 +127,7 @@ const otText = "#7cb8dd";
       <line x1="17" y1="5.5" x2="17" y2="10.5" stroke={otText} stroke-width="0.8"></line>
     </g>
     <text x="232" y="210" font-family={mono} font-size="10" letter-spacing="1.5" fill={otText}>IDMZ · CONDUÍTE CONTROLADO</text>
-    <text x="232" y="226" font-family={mono} font-size="8.5" fill="#6b8fa3">sem caminho direto TI ⇄ chão de fábrica</text>
+    <text x="232" y="226" font-family={mono} font-size="8.5" fill="#4a6d85">sem caminho direto TI ⇄ chão de fábrica</text>
 
     {/* ── Supervisão ─────────────────────────────────────────────── */}
     {[
@@ -179,7 +179,7 @@ const otText = "#7cb8dd";
     <circle
       class="apd-dot apd-dot-down"
       r="3"
-      fill="#e9e9e9"
+      fill="#4a4a4a"
       filter="url(#apd-glow)"
       style={`--apd-path: path('${P4}'); --apd-dur: 3.8s; --apd-delay: 2.8s;`}
     ></circle>
