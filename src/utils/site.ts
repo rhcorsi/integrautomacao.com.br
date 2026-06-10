@@ -14,8 +14,6 @@ export const SITE = {
   themeColor: "#E30613",
 } as const;
 
-export const CSP_JSON_LD_NONCE = "aW50ZWdyYS1qc29ubGQ=" as const;
-
 export interface Phone {
   label: string;
   value: string;

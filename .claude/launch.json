@@ -12,6 +12,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["astro", "dev", "--host", "127.0.0.1"],
       "port": 4321
+    },
+    {
+      "name": "integra-pages",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--ip", "127.0.0.1", "--port", "8788"],
+      "port": 8788
     }
   ]
 }

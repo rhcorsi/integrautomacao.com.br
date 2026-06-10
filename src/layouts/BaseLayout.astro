@@ -3,7 +3,7 @@ import "@/styles/global.css";
 import interLatinWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { CSP_JSON_LD_NONCE, SITE } from "@/utils/site";
+import { SITE } from "@/utils/site";
 import { organizationSchema, breadcrumbSchema } from "@/utils/schema";
 
 interface Props {
@@ -37,7 +37,8 @@ const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
 const ogImageURL = new URL(ogImage, SITE.url);
 
 // JSON-LD: Organization (sempre) + breadcrumb (automático, exceto na home) +
-// schema específico da página. Todos compartilham o mesmo nonce do CSP.
+// schema específico da página. Data blocks (application/ld+json) não executam
+// e não são afetados pelo script-src da CSP — dispensam nonce/hash.
 const breadcrumb = breadcrumbSchema(Astro.url.pathname, breadcrumbLeaf ?? title);
 const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
   (b): b is Record<string, unknown> => Boolean(b),
@@ -103,7 +104,6 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     {jsonLdBlocks.map((block) => (
       <script
         is:inline
-        nonce={CSP_JSON_LD_NONCE}
         type="application/ld+json"
         set:html={JSON.stringify(block)}
       />

@@ -5,14 +5,27 @@
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SECURITY HEADERS — applied to every response.
+#
+# CSP: não há scripts inline executáveis no site — todos os <script> têm src
+# ('self' ou challenges.cloudflare.com). Os blocos JSON-LD são data blocks
+# (type="application/ld+json") e NÃO são afetados por script-src, então não
+# precisam de nonce/hash. Manter sem nonce também mantém compatibilidade com
+# o Speed Brain da Cloudflare (incompatível com CSP baseada em nonce).
+#
+# "! Access-Control-Allow-Origin" remove o ACAO: * que a camada de assets do
+# Pages injeta por padrão — nada cross-origin consome nossos assets via CORS.
 # ─────────────────────────────────────────────────────────────────────────────
 /*
-  Strict-Transport-Security: max-age=15552000
+  Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-aW50ZWdyYS1qc29ubGQ=' https://challenges.cloudflare.com https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self' data:; object-src 'none'
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; font-src 'self' data:; object-src 'none'
+  ! Access-Control-Allow-Origin
 
 # ─────────────────────────────────────────────────────────────────────────────
 # AGGRESSIVE EDGE CACHING — fingerprinted assets (1 year, immutable).
@@ -47,11 +60,15 @@
   Vary: Accept-Encoding
 
 # ─────────────────────────────────────────────────────────────────────────────
-# HTML — short browser cache, edge caches longer with stale-while-revalidate.
-# Cloudflare invalidates on every Pages deploy automatically.
+# HTML — só casa URLs com ".html" literal (na prática, os 308 que o Pages emite
+# para normalizar /index.html → /). As páginas reais usam URLs limpas
+# (/empresa/), que NÃO casam este padrão — e isso é deliberado: a CDN da
+# Cloudflare não cacheia HTML por padrão e os docs do Pages desaconselham
+# Cache Rules de zona sobre HTML (risco de conteúdo stale pós-deploy e bypass
+# do _middleware). O HTML é servido direto do Pages com revalidação no browser.
 # ─────────────────────────────────────────────────────────────────────────────
 /*.html
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
   Vary: Accept-Encoding
 
 # ─────────────────────────────────────────────────────────────────────────────
