@@ -65,11 +65,11 @@ const faq = [
   },
   {
     q: "PI to PI replication é seguro pela IDMZ?",
-    a: "Sim, é o padrão. PI servidor industrial replica para PI servidor corporativo na IDMZ usando port único, autenticação certificate-based, sem caminho direto enterprise→industrial. Modelo recomendado pela própria OSIsoft/AVEVA.",
+    a: "Sim, é o padrão. PI servidor industrial replica para PI servidor corporativo na IDMZ usando porta única (TCP 5450), com autenticação Windows integrada (WIS) via PI Mappings, sem caminho direto enterprise→industrial. Modelo recomendado pela própria OSIsoft/AVEVA.",
   },
   {
     q: "Posso conectar Power BI direto ao PI?",
-    a: "Sim, via PI Web API ou ODBC. Em planta multi-departamento, comum: planejamento usa Power BI, processo usa PI Vision, manutenção usa AssetWise. Mesma fonte, ferramentas diferentes.",
+    a: "Sim, via PI Web API ou ODBC. Em planta multi-departamento, comum: planejamento usa Power BI, processo usa PI Vision, manutenção usa AVEVA Asset Performance Management. Mesma fonte, ferramentas diferentes.",
   },
   {
     q: "Como funciona o licenciamento PI System?",

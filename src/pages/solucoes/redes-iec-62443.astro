@@ -15,21 +15,25 @@ import idmzUntrustedTrusted from "@/assets/manuals/idmz-untrusted-trusted-zones.
 
 const layers = [
   {
+    level: "N0-1",
     title: "Camada de Controle",
     description:
       "PLCs, IEDs IEC 61850, dispositivos EtherNet/IP. Comunicação determinística com latência controlada.",
   },
   {
+    level: "N2",
     title: "Camada de Supervisão",
     description:
       "SCADA, servidores HMI, estações de operação. Segregada do controle por VLANs industriais.",
   },
   {
+    level: "N3",
     title: "Camada de Informação",
     description:
       "Historian, AF Templates, dashboards. Saída estruturada para sistemas corporativos via DMZ.",
   },
   {
+    level: "Transversal",
     title: "Camada de Segurança",
     description:
       "Firewalls industriais, controle de acesso, monitoramento de eventos OT, segmentação Purdue.",
@@ -163,12 +167,12 @@ const faq = [
         accent={true}
       />
       <ol class="grid gap-px bg-integra-gray-200 rounded-lg overflow-hidden lg:grid-cols-4">
-        {layers.map((layer, i) => (
+        {layers.map((layer) => (
           <li class="bg-integra-white p-6 flex flex-col gap-3">
             <span
               class="font-mono text-xs font-semibold text-integra-ot"
             >
-              L{4 - i}
+              {layer.level}
             </span>
             <h3 class="text-lg font-semibold text-integra-gray-900">
               {layer.title}
@@ -208,7 +212,7 @@ const faq = [
         alt="Figura IDMZ High Level Concepts mostrando zona Untrusted (Enterprise) e Trusted (Industrial) separadas por firewall com regra No Direct IACS Traffic"
         title="A IDMZ é a fronteira inegociável entre Untrusted e Trusted"
         source="Cisco + Rockwell Automation · Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)"
-        caption="Print público do guia ENET-TD013A-EN-P: nenhum tráfego IACS atravessa direto. A IDMZ replica serviços, registra, inspeciona e desconecta, é o controle estrutural exigido pelo CPwE e pela IEC 62443."
+        caption="Print público do guia ENET-TD013A-EN-P: nenhum tráfego IACS atravessa direto. A IDMZ replica serviços, registra, inspeciona e desconecta, é o controle estrutural exigido pelo CPwE para atender os requisitos de zonas e conduítes da IEC 62443."
         theme="ot"
       />
       <div>

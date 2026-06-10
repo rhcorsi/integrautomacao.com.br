@@ -245,7 +245,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "O que define o cronograma de um projeto PlantPAx?",
-        a: "Tamanho da arquitetura (PASS-C, PASS-S ou PASS-RD), contagem de I/O, número de áreas, integrações (Historian, Batch, MES) e janelas de parada disponíveis. O cronograma específico é construído após o diagnóstico, com fases de engenharia, FAT, comissionamento e SAT por área.",
+        a: "Tamanho da arquitetura (PASS-C consolidado ou PASS distribuído, com servidores de aplicação dedicados e redundância opcional), contagem de I/O, número de áreas, integrações (Historian, Batch, MES) e janelas de parada disponíveis. O cronograma específico é construído após o diagnóstico, com fases de engenharia, FAT, comissionamento e SAT por área.",
       },
       {
         q: "PlantPAx funciona em planta híbrida (processo + discreto)?",
@@ -385,7 +385,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "ControlLogix 5580 substitui o 5570 sem retrabalho?",
-        a: "Não diretamente. O firmware, módulos e backplane evoluem; alguns I/O são diretos, outros precisam de revisão. A migração é projeto, não troca de peça, envolve recompilar, retestar lógica e revalidar comunicação.",
+        a: "Não diretamente, mas o hardware ajuda: o 5580 usa o mesmo chassi e backplane 1756 do 5570 e reaproveita os módulos de I/O 1756 existentes. O retrabalho está na conversão do projeto no Studio 5000, no firmware e na revalidação da comunicação. A migração é projeto, não troca de peça, envolve recompilar, retestar lógica e revalidar comunicação.",
       },
       {
         q: "Vale a pena migrar PLC-5/SLC500 para ControlLogix em planta legada?",
@@ -515,7 +515,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença entre intertravamento operacional e safety SIL?",
-        a: "Intertravamento operacional é proteção rotineira (impedir partida sem condição, parar equipamento em falha esperada). Safety SIL é Safety Instrumented Function classificada por IEC 61511, com controlador safety dedicado, ciclo de teste e validação por terceira parte. Os dois convivem na planta, com escopos e arquiteturas distintas.",
+        a: "Intertravamento operacional é proteção rotineira (impedir partida sem condição, parar equipamento em falha esperada). Safety SIL é Safety Instrumented Function classificada conforme IEC 61511, com independência funcional em relação ao BPCS (controlador safety certificado, dedicado ou integrado com tasks isoladas), proof tests periódicos e avaliação de segurança funcional com grau de independência crescente com o SIL. Os dois convivem na planta, com escopos e arquiteturas distintas.",
       },
       {
         q: "Sequenciamento de batelada cabe em ControlLogix puro ou exige FactoryTalk Batch?",
@@ -790,7 +790,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "ThinManager é compatível com qualquer marca de thin client?",
-        a: "Sim, mas a recomendação Rockwell é hardware homologado (DELL Wyse, IGEL, ACP). Compatibilidade com clientes genéricos exige homologação caso a caso e pode quebrar em update de firmware.",
+        a: "Sim, desde que o terminal suporte PXE boot. A recomendação Rockwell é hardware ThinManager Ready, com firmware de fábrica (linha Allen-Bradley ASEM 6300, OnLogic, Advantech, Arista); thin clients genéricos de TI, como Dell Wyse e IGEL, entram como ThinManager Compatible via PXE, com validação caso a caso. Compatibilidade com clientes genéricos exige homologação caso a caso e pode quebrar em update de firmware.",
       },
       {
         q: "Posso usar ThinManager sem virtualização?",
@@ -929,7 +929,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "FactoryTalk Historian é o mesmo que PI System?",
-        a: "Não. Historian SE é construído sobre tecnologia OSIsoft PI antiga, mas evoluiu separadamente. PI System / AVEVA tem foco em volume massivo de tags, AF Templates ricos e analytics multi-site. Para planta padrão Rockwell, Historian SE atende a maior parte dos cenários, a escolha depende do escopo.",
+        a: "Não exatamente. O Historian SE é uma versão OEM (private label) do PI Server da OSIsoft/AVEVA: acompanha os releases do PI Server e usa os mesmos componentes (compressão swinging-door, PI DataLink), não evolui em separado. PI System / AVEVA tem foco em volume massivo de tags, AF Templates ricos e analytics multi-site. Para planta padrão Rockwell, Historian SE atende a maior parte dos cenários, a escolha depende do escopo.",
       },
       {
         q: "Quantas tags Historian SE suporta?",
@@ -1002,11 +1002,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Por que precisar de Kepware se Rockwell já tem OPC UA?",
-        a: "Kepware abrange centenas de drivers, multi-vendor (Siemens, Schneider, ABB, Yokogawa, Mitsubishi) e protocolos legados (Modbus serial, DNP3, IEC 61850, SNMP). Em planta multi-marca, Kepware é a ponte que evita gateway específico por equipamento.",
+        a: "Kepware abrange mais de 150 drivers, multi-vendor (Siemens, Schneider, ABB, Yokogawa, Mitsubishi) e protocolos fora do ecossistema Rockwell (Modbus serial, DNP3, IEC 61850, SNMP). Em planta multi-marca, Kepware é a ponte que evita gateway específico por equipamento.",
       },
       {
         q: "Kepware exige licença por tag ou por servidor?",
-        a: "Modelo é por servidor + drivers + canais. Cada driver é licenciado separadamente; tags são ilimitadas dentro do canal licenciado. O cálculo de licença depende do mix de marcas e do volume de canais.",
+        a: "Modelo é por servidor + drivers (avulsos ou em suítes) + plug-ins. A unidade de licença é o driver: tags, canais e devices não são licenciados (têm apenas limites técnicos que variam por driver). O cálculo depende do mix de marcas e protocolos da planta. O cálculo de licença depende do mix de marcas e do volume de canais.",
       },
       {
         q: "ThingWorx roda on-premises ou só nuvem?",
@@ -1633,7 +1633,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença entre DLR e PRP?",
-        a: "DLR é anel com cura rápida (<3ms), protocolo Rockwell para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote), para tolerância a falha total de rede. Use cases distintos.",
+        a: "DLR é anel com cura rápida (<3 ms em anel de 50 nós), tecnologia ODVA da especificação EtherNet/IP (origem Rockwell) para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote), para tolerância a falha total de rede. Use cases distintos.",
       },
       {
         q: "CPwE exige hardware Cisco e Rockwell juntos?",
@@ -1730,7 +1730,7 @@ export const techCatalog: TechPage[] = [
     imageTitle: "Untrusted/Trusted: a fronteira que dá nome a IEC 62443 aplicada",
     imageSource: idmzFirepowerSource,
     imageCaption:
-      "Print público do guia ENET-TD013A-EN-P (Cisco + Rockwell): a IDMZ replica serviços, registra logs, inspeciona e desconecta, é o controle estrutural exigido pelos zone/conduit da IEC 62443.",
+      "Print público do guia ENET-TD013A-EN-P (Cisco + Rockwell): a IDMZ replica serviços, registra logs, inspeciona e desconecta, é a implementação de referência do CPwE e do NIST SP 800-82 para os requisitos de zonas e conduítes da IEC 62443.",
     theme: "ot",
     useCases: [
       "Plantas com rede flat e acesso remoto pouco controlado.",
@@ -1838,7 +1838,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Hardening industrial é o mesmo que hardening corporativo?",
-        a: "Princípios são similares (mínimo privilégio, desabilitar serviços inúteis, atualizar). Mas cuidado: ferramentas de hardening corporativo podem desabilitar serviços que aplicação industrial usa. Sempre referência o vendor (Rockwell hardening guide, Microsoft STIG industrial).",
+        a: "Princípios são similares (mínimo privilégio, desabilitar serviços inúteis, atualizar). Mas cuidado: ferramentas de hardening corporativo podem desabilitar serviços que aplicação industrial usa. Sempre referencie o vendor e baselines reconhecidos: guias de hardening da Rockwell, Microsoft Security Baselines (Security Compliance Toolkit), STIGs da DISA e CIS Benchmarks.",
       },
       {
         q: "Posso aplicar GPO corporativa em estações OT?",
@@ -1940,7 +1940,7 @@ export const techCatalog: TechPage[] = [
     imageAlt: "CPwE Industrial IoT / IT Bridging - Smart Endpoints, Segmentation, Managed Infrastructure, Resiliency, Time-critical Data, Wireless e Mobility",
     imageTitle: "CPwE traduz monitoramento OT em sete tenets aplicáveis",
     imageSource: cpweDeepDiveSource,
-    imageCaption: "Print público do CPwE Deep Dive: os sete tenets (segmentação, infra gerenciada, dados time-critical, mobilidade, holistic defense in depth, convergence-ready, smart endpoints) são exatamente o que o monitoramento de rede industrial precisa entregar.",
+    imageCaption: "Print público do CPwE Deep Dive: os key tenets do CPwE (smart IIoT devices, segmentação por zonas, infraestrutura gerenciada, resiliência, dados time-critical, mobilidade wireless, holistic defense-in-depth e convergence-ready) são exatamente o que o monitoramento de rede industrial precisa entregar.",
     theme: "ot",
     useCases: [
       "Quedas intermitentes de HMI, PLC, I/O remoto, inversores ou historian.",
@@ -2477,7 +2477,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "deviceWISE roda em hardware industrial?",
-        a: "Sim. Suporta gateways industriais (Telit Cinterion HE910, Eurotech, Advantech, Dell Edge) e VMs Linux/Windows. Para planta com ambiente Linux industrial, é caminho natural.",
+        a: "Sim. Suporta gateways e IPCs industriais (Eurotech, Advantech, Dell Edge) e VMs Linux/Windows. Para planta com ambiente Linux industrial, é caminho natural.",
       },
       {
         q: "Quanto custa o deviceWISE?",
@@ -2757,7 +2757,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Profinet é o mesmo que EtherNet/IP?",
-        a: "Ambos rodam sobre Ethernet, mas pilhas são diferentes. EtherNet/IP usa CIP (ODVA, Rockwell). Profinet usa pilha Siemens. Não falam diretamente, para integração, usamos gateways CIP↔Profinet.",
+        a: "Ambos rodam sobre Ethernet, mas pilhas são diferentes. EtherNet/IP usa CIP (padrão ODVA, origem Rockwell). Profinet é padrão aberto da PROFIBUS & PROFINET International (PI, origem Siemens), normalizado na IEC 61158/61784 e implementado por vários fabricantes. Não falam diretamente, para integração, usamos gateways CIP↔Profinet.",
       },
       {
         q: "SCALANCE substitui Stratix?",
@@ -2769,7 +2769,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso ter rede Profinet com switches Cisco IE?",
-        a: "Tecnicamente sim, mas limita features Profinet (LLDP-PNIO, neighbor discovery automático). O recomendado é SCALANCE ou switches certificados Profinet para preservar diagnóstico nativo.",
+        a: "Sim. Os switches Cisco IE (IE3x00, IE4000) são certificados Profinet Conformance Class B: suportam LLDP com extensões PNIO, DCP, GSDML e diagnóstico de topologia no TIA Portal. A limitação real frente ao SCALANCE é IRT (Conformance Class C), necessário para motion sincronizado; nesse caso, o caminho é SCALANCE ou switch com suporte a IRT.",
       },
     ],
     relatedSolutions: cyberRelated,
@@ -2828,11 +2828,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Elipse E3 está sendo descontinuado?",
-        a: "Não. Elipse mantém E3 com updates. A nova plataforma é Elipse Plant Manager, mas E3 continua sendo vendida e suportada. Para projeto novo, avaliar Plant Manager pelo roadmap; para base instalada, E3 segue plenamente operacional.",
+        a: "Não. A Elipse mantém o E3 ativo, com atualizações e novas versões. O Elipse Plant Manager (EPM) não substitui o E3: é plataforma complementar de historiador e gestão de dados em tempo real (PIMS) que se integra ao E3. Para SCADA/HMI, o E3 segue sendo o produto da Elipse, em projeto novo e em base instalada.",
       },
       {
         q: "E3 lê PLC Rockwell e Siemens?",
-        a: "Sim, via drivers nativos (RSLinx, S7) ou OPC. Em planta multi-vendor, E3 entra como camada de supervisão neutra que padroniza visualização sobre PLCs heterogêneos.",
+        a: "Sim, via drivers nativos (ABCIP para Rockwell, S7 para Siemens) ou OPC, incluindo RSLinx atuando como servidor OPC. Em planta multi-vendor, E3 entra como camada de supervisão neutra que padroniza visualização sobre PLCs heterogêneos.",
       },
       {
         q: "Como funciona o licenciamento Elipse E3?",
@@ -3041,7 +3041,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Machine SCADA Expert é o mesmo que InTouch?",
-        a: "Não. Machine SCADA Expert é o substituto Schneider/AVEVA para Vijeo Citect / Wonderware InTouch em segmento de máquina e área. AVEVA System Platform cobre planta inteira; Machine SCADA Expert cobre máquina e células.",
+        a: "Não. Machine SCADA Expert (ex-Vijeo XL) usa o mesmo motor do InduSoft Web Studio / AVEVA InTouch Machine Edition (hoje AVEVA Edge), voltado a máquina e área. Vijeo Citect e InTouch clássico evoluíram para AVEVA Plant SCADA e AVEVA InTouch HMI, orientados a planta. AVEVA System Platform cobre planta inteira; Machine SCADA Expert cobre máquina e células.",
       },
       {
         q: "Roda em IPC industrial Schneider?",
@@ -3053,7 +3053,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Diferença prática para AVEVA System Platform?",
-        a: "System Platform é orientado a planta (modelagem AF Templates, multi-aplicação, histórico massivo). Machine SCADA Expert é orientado a máquina/área (rápido de montar, ideal para skids OEM e integradores de máquina).",
+        a: "System Platform é orientado a planta (modelagem por templates ArchestrA / Automation Objects no Galaxy, multi-aplicação, histórico massivo). Machine SCADA Expert é orientado a máquina/área (rápido de montar, ideal para skids OEM e integradores de máquina).",
       },
     ],
     relatedSolutions: multiVendorRelated,
