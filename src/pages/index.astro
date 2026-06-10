@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import HeroIntegridade from "@/components/HeroIntegridade.astro";
+import AnimatedPlantDiagram from "@/components/AnimatedPlantDiagram.astro";
 import CredentialStrip from "@/components/CredentialStrip.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
 import FeatureBlock from "@/components/FeatureBlock.astro";
@@ -74,15 +75,17 @@ const evidence = [
   description="Engenharia de sistemas industriais para plantas críticas: PlantPAx, FactoryTalk, redes industriais e cibersegurança OT, com método e documentação."
 >
   <HeroIntegridade
+    variant="dark"
     eyebrow="Engenharia com Integridade"
     title="Sistemas industriais"
     highlight="seguros, estruturados e mantíveis."
     description="A Integra não vende apenas programação ou telas de supervisão. Entregamos arquitetura, governança de engenharia e responsabilidade técnica do projeto ao handover, do start-up ao suporte contínuo."
     primaryCta={{ href: "/contato", label: "Falar com especialista" }}
     secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
-    heroImage={plantpaxReference}
-    heroAlt="Arquitetura de referência PlantPAx para sistema DCS"
-  />
+    statusLine="Maringá-PR · atuação nacional · Silver System Integrator"
+  >
+    <AnimatedPlantDiagram slot="media" />
+  </HeroIntegridade>
 
   <!-- Rockwell Silver System Integrator highlight -->
   <section class="border-y border-integra-gray-200 bg-integra-gray-50">

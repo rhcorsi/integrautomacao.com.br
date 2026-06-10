@@ -116,6 +116,12 @@
     color: var(--color-integra-white);
   }
 
+  /* Scrollbar fina e discreta, coerente com o visual de instrumentação */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-integra-gray-300) transparent;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-integra-red);
     outline-offset: 3px;

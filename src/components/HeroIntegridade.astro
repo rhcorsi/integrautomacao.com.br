@@ -1,4 +1,4 @@
-﻿---
+---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
@@ -11,6 +11,10 @@ interface Props {
   secondaryCta?: { href: string; label: string };
   heroImage?: ImageMetadata;
   heroAlt?: string;
+  /** "dark" transforma o hero em painel de sala de controle. */
+  variant?: "light" | "dark";
+  /** Linha de status mono no rodapé do hero (fatos verificáveis). */
+  statusLine?: string;
 }
 
 const {
@@ -22,21 +26,39 @@ const {
   secondaryCta = { href: "/solucoes", label: "Ver soluções" },
   heroImage,
   heroAlt = "",
+  variant = "light",
+  statusLine,
 } = Astro.props;
+
+const dark = variant === "dark";
+const gridColor = dark ? "rgba(255,255,255,0.06)" : "var(--color-integra-gray-900)";
+const hatchColor = dark ? "rgba(227,6,19,0.16)" : "rgba(227,6,19,0.08)";
 ---
 
 <section
-  class="relative overflow-hidden border-b border-integra-gray-200 bg-integra-white"
+  class:list={[
+    "relative overflow-hidden border-b",
+    dark
+      ? "border-integra-gray-800 bg-premium-dark text-integra-white"
+      : "border-integra-gray-200 bg-integra-white",
+  ]}
 >
   <div
-    class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
+    class:list={[
+      "pointer-events-none absolute inset-0 -z-10",
+      dark ? "opacity-100" : "opacity-[0.04]",
+    ]}
     aria-hidden="true"
-    style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 64px 64px;"
+    style={`background-image: linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px); background-size: 64px 64px;`}
   >
   </div>
   <div
-    class="pointer-events-none absolute right-0 top-0 -z-10 h-full w-1/3 border-l border-integra-gray-200/70 bg-[linear-gradient(135deg,rgba(227,6,19,0.08)_0,rgba(227,6,19,0.08)_1px,transparent_1px,transparent_18px)]"
+    class:list={[
+      "pointer-events-none absolute right-0 top-0 -z-10 h-full w-1/3 border-l",
+      dark ? "border-white/5" : "border-integra-gray-200/70",
+    ]}
     aria-hidden="true"
+    style={`background-image: linear-gradient(135deg, ${hatchColor} 0, ${hatchColor} 1px, transparent 1px, transparent 18px);`}
   >
   </div>
 
@@ -46,13 +68,21 @@ const {
     >
       <div>
         <p
-          class="inline-flex items-center gap-2 rounded-full border border-integra-gray-200 bg-integra-gray-50 px-4 py-1.5 text-xs font-mono uppercase tracking-widest text-integra-gray-700 mb-8"
+          class:list={[
+            "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-mono uppercase tracking-widest mb-8",
+            dark
+              ? "border-white/15 bg-white/5 text-integra-gray-300"
+              : "border-integra-gray-200 bg-integra-gray-50 text-integra-gray-700",
+          ]}
         >
-          <span class="size-1.5 rounded-full bg-integra-red"></span>
+          <span class="hero-status-dot size-1.5 rounded-full bg-integra-red"></span>
           {eyebrow}
         </p>
         <h1
-          class="text-5xl font-semibold tracking-tight text-integra-gray-900 sm:text-6xl lg:text-7xl"
+          class:list={[
+            "text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl",
+            dark ? "text-white" : "text-integra-gray-900",
+          ]}
         >
           {title}{" "}
           {highlight && (
@@ -60,43 +90,86 @@ const {
           )}
         </h1>
         <p
-          class="mt-8 text-lg leading-relaxed text-integra-gray-700 max-w-xl lg:text-xl"
+          class:list={[
+            "mt-8 text-lg leading-relaxed max-w-xl lg:text-xl",
+            dark ? "text-integra-gray-300" : "text-integra-gray-700",
+          ]}
         >
           {description}
         </p>
         <div class="mt-10 flex flex-wrap gap-4">
           <a
             href={primaryCta.href}
-            class="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-integra-white bg-integra-gray-900 hover:bg-integra-black rounded-md transition-colors"
+            class:list={[
+              "group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-md transition-colors",
+              dark
+                ? "text-integra-white bg-integra-red hover:bg-integra-red-700"
+                : "text-integra-white bg-integra-gray-900 hover:bg-integra-black",
+            ]}
           >
             {primaryCta.label}
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
           </a>
           <a
             href={secondaryCta.href}
-            class="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-integra-gray-900 bg-integra-white border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+            class:list={[
+              "inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-md transition-colors border",
+              dark
+                ? "text-white border-white/25 hover:border-white/60"
+                : "text-integra-gray-900 bg-integra-white border-integra-gray-300 hover:border-integra-gray-900",
+            ]}
           >
             {secondaryCta.label}
           </a>
         </div>
+        {statusLine && (
+          <p
+            class:list={[
+              "mt-10 font-mono text-xs uppercase tracking-widest",
+              dark ? "text-integra-gray-500" : "text-integra-gray-500",
+            ]}
+          >
+            <span aria-hidden="true" class="text-integra-red-300">//</span>
+            {" "}{statusLine}
+          </p>
+        )}
       </div>
 
-      {heroImage && (
-        <div class="relative">
-          <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10 bg-integra-white">
-            <Image
-              src={heroImage}
-              alt={heroAlt}
-              widths={[800, 1200, 1600, 2000]}
-              sizes="(min-width: 1024px) 800px, 100vw"
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-              class="w-full h-auto object-contain aspect-[16/9]"
-            />
+      <slot name="media">
+        {heroImage && (
+          <div class="relative">
+            <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10 bg-integra-white">
+              <Image
+                src={heroImage}
+                alt={heroAlt}
+                widths={[800, 1200, 1600, 2000]}
+                sizes="(min-width: 1024px) 800px, 100vw"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+                class="w-full h-auto object-contain aspect-[16/9]"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </slot>
     </div>
   </div>
 </section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-status-dot {
+      animation: hero-blink 2.4s ease-in-out infinite;
+    }
+  }
+  @keyframes hero-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+</style>

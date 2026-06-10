@@ -14,26 +14,66 @@ const popular = [
   description="A página que você procura não existe ou foi movida. Veja os caminhos sugeridos abaixo."
   noindex={true}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-narrow py-24 lg:py-32 text-center">
-      <p class="font-mono text-xs font-semibold uppercase tracking-widest text-integra-red-700 mb-4">
-        Erro 404
-      </p>
-      <h1 class="text-5xl font-semibold text-integra-gray-900 sm:text-6xl">
+  <section class="border-b border-integra-gray-800 bg-premium-dark text-integra-white">
+    <div class="container-narrow py-24 lg:py-32">
+      {/* Sumário de alarmes, estilo supervisório ISA-18.2 */}
+      <div class="overflow-hidden rounded-xl border border-white/10 bg-[#121212] shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-5 py-3">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-integra-gray-400">
+            Sumário de alarmes · navegação
+          </p>
+          <p class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-integra-red-300">
+            <span class="alarm-dot inline-block size-2 rounded-full bg-integra-red"></span>
+            1 alarme ativo
+          </p>
+        </div>
+
+        <div class="grid gap-px bg-white/5 font-mono text-sm">
+          <div class="grid gap-3 bg-[#161616] px-5 py-4 sm:grid-cols-[auto_1fr_auto] sm:items-center">
+            <span class="inline-flex w-fit items-center rounded-sm bg-integra-red px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white">
+              404
+            </span>
+            <div class="min-w-0">
+              <p class="text-integra-white">TAG: PAGINA_NAO_ENCONTRADA</p>
+              <p class="mt-1 text-xs text-integra-gray-500">
+                Causa provável: endereço digitado, link antigo do site
+                WordPress ou conteúdo reorganizado.
+              </p>
+            </div>
+            <p class="text-xs uppercase tracking-wider text-integra-gray-500">
+              prioridade: baixa
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 border-t border-white/10 px-5 py-4">
+          <a
+            href="/"
+            class="group inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-integra-red-700"
+          >
+            Reconhecer (ACK) e voltar ao início
+            <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+          </a>
+          <p class="font-mono text-[11px] uppercase tracking-widest text-integra-gray-500">
+            governança de alarmes é com a gente · ISA-18.2
+          </p>
+        </div>
+      </div>
+
+      <h1 class="mt-14 text-4xl font-semibold text-white sm:text-5xl">
         Página não encontrada.
       </h1>
-      <p class="mt-6 text-lg text-integra-gray-700 max-w-xl mx-auto leading-relaxed">
-        O endereço que você acessou não existe ou foi movido. Se chegou aqui
-        a partir de um link antigo do site WordPress, é provável que o
-        conteúdo tenha sido reorganizado.
+      <p class="mt-5 max-w-xl text-lg leading-relaxed text-integra-gray-300">
+        O endereço que você acessou não existe ou foi movido. Estes caminhos
+        resolvem a maioria dos casos:
       </p>
 
-      <ul class="mt-12 grid gap-3 max-w-md mx-auto sm:grid-cols-2">
+      <ul class="mt-10 grid max-w-xl gap-3 sm:grid-cols-2">
         {popular.map(({ href, label }) => (
           <li>
             <a
               href={href}
-              class="inline-flex w-full items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-integra-gray-900 bg-integra-white border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+              class="inline-flex w-full items-center justify-between gap-2 rounded-md border border-white/15 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-white/50"
             >
               {label}
               <span aria-hidden="true">→</span>
@@ -41,12 +81,23 @@ const popular = [
           </li>
         ))}
       </ul>
-
-      <p class="mt-10 text-sm text-integra-gray-500">
-        <a href="/" class="text-integra-red-700 hover:underline">
-          Voltar para a página inicial
-        </a>
-      </p>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .alarm-dot {
+      animation: alarm-blink 1.6s ease-in-out infinite;
+    }
+  }
+  @keyframes alarm-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+</style>
