@@ -207,7 +207,9 @@ export function eventSchema(opts: {
     startDate: opts.startDate.toISOString().slice(0, 10),
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
-    location: { "@type": "Place", name: opts.location },
+    // address como texto e valido em schema.org e evita o warning de
+    // "location sem address" no Google Rich Results Test.
+    location: { "@type": "Place", name: opts.location, address: opts.location },
     organizer: { "@type": "Organization", name: opts.organizer },
     performer: { "@id": ORG_ID },
     ...(opts.image ? { image: opts.image } : {}),
