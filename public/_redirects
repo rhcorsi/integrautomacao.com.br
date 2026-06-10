@@ -23,12 +23,31 @@
 /xmlrpc.php            /                                    301
 /wp-json               /                                    301
 /sitemap.xml           /sitemap-index.xml                   301
+/wp-sitemap.xml        /sitemap-index.xml                   301
 /feed                  /rss.xml                             301
 /feed/                 /rss.xml                             301
 /comments/feed         /rss.xml                             301
 /comments/feed/        /rss.xml                             301
 
+# Paths em inglês que assistentes de IA chutam (vistos nos Demand Signals
+# do AI Crawl Control) — entregar a página certa em vez de 404.
+/company               /empresa                             301
+/company/              /empresa                             301
+/about                 /empresa                             301
+/about/                /empresa                             301
+/about-us              /empresa                             301
+/aboutus               /empresa                             301
+/team                  /empresa                             301
+/services              /solucoes                            301
+/services/             /solucoes                            301
+/solutions             /solucoes                            301
+/products              /tecnologias                         301
+/technologies          /tecnologias                         301
+/case-studies          /cases                               301
+/news                  /blog                                301
+
 # WP splats (taxonomies, archives, admin subpaths)
+/wp-sitemap-*          /sitemap-index.xml                   301
 /category/*            /blog                                301
 /tag/*                 /blog                                301
 /author/*              /blog                                301
