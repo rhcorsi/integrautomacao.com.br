@@ -1556,7 +1556,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quantos usuários FactoryTalk Security suporta?",
-        a: "Centenas de usuários e grupos sem problema; a limitação prática vem da gestão (revisar permissões, expiração, auditoria). Por isso integramos com AD industrial e usamos Roles ao invés de usuário individual.",
+        a: "Centenas de usuários e grupos sem problema; a limitação prática vem da gestão (revisar permissões, expiração, auditoria). Por isso integramos com AD industrial e usamos Roles em vez de usuário individual.",
       },
       {
         q: "FT Security registra log de quem fez o quê?",

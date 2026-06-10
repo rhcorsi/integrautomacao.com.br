@@ -81,12 +81,16 @@ function humanize(seg: string): string {
 }
 
 /**
- * BreadcrumbList a partir do pathname. O nó-folha (página atual) usa `leafName`
- * (normalmente o título da página). Retorna `null` para a home / profundidade 0.
+ * Itens de breadcrumb a partir do pathname (compartilhado entre o JSON-LD e o
+ * componente visual Breadcrumbs.astro). URLs com barra final, alinhadas ao
+ * canonical/sitemap do site. Retorna [] para a home.
  */
-export function breadcrumbSchema(pathname: string, leafName?: string) {
+export function breadcrumbItems(
+  pathname: string,
+  leafName?: string,
+): { name: string; url: string }[] {
   const segments = pathname.replace(/^\/+|\/+$/g, "").split("/").filter(Boolean);
-  if (segments.length === 0) return null;
+  if (segments.length === 0) return [];
 
   const items: { name: string; url: string }[] = [
     { name: "Início", url: `${SITE.url}/` },
@@ -98,8 +102,18 @@ export function breadcrumbSchema(pathname: string, leafName?: string) {
     const name = isLeaf
       ? leafName ?? SEGMENT_LABELS[seg] ?? humanize(seg)
       : SEGMENT_LABELS[seg] ?? humanize(seg);
-    items.push({ name, url: new URL(acc, SITE.url).toString() });
+    items.push({ name, url: new URL(`${acc}/`, SITE.url).toString() });
   });
+  return items;
+}
+
+/**
+ * BreadcrumbList a partir do pathname. O nó-folha (página atual) usa `leafName`
+ * (normalmente o título da página). Retorna `null` para a home / profundidade 0.
+ */
+export function breadcrumbSchema(pathname: string, leafName?: string) {
+  const items = breadcrumbItems(pathname, leafName);
+  if (items.length === 0) return null;
 
   return {
     "@context": "https://schema.org",
@@ -158,6 +172,46 @@ export function serviceSchema(opts: {
     serviceType: opts.serviceType ?? "Engenharia e integração de automação industrial",
     provider: { "@id": ORG_ID },
     areaServed: { "@type": "Country", name: "Brasil" },
+  };
+}
+
+/** FAQPage para páginas que renderizam listas reais de perguntas e respostas. */
+export function faqSchema(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+}
+
+/** Event para o registro de eventos e treinamentos em que a Integra participou. */
+export function eventSchema(opts: {
+  name: string;
+  description: string;
+  url: string;
+  startDate: Date;
+  location: string;
+  organizer: string;
+  image?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    startDate: opts.startDate.toISOString().slice(0, 10),
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: { "@type": "Place", name: opts.location },
+    organizer: { "@type": "Organization", name: opts.organizer },
+    performer: { "@id": ORG_ID },
+    ...(opts.image ? { image: opts.image } : {}),
+    inLanguage: "pt-BR",
   };
 }
 

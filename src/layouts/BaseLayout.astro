@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import interLatinWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { CSP_JSON_LD_NONCE, SITE } from "@/utils/site";
@@ -62,9 +63,18 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
       href={new URL("/rss.xml", SITE.url).toString()}
     />
 
-    {/* Performance hints, preconnect to third-party services we definitely use. */}
+    {/* Fonte do texto LCP: preload do subset latin da Inter variável. */}
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={interLatinWoff2}
+      crossorigin
+    />
+
+    {/* Performance hints: dns-prefetch barato e sitewide. O preconnect do
+        Turnstile fica nos formulários que realmente o carregam. */}
     <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
-    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
     <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
 
     {/* Resource hints, let the browser parallelize the layout/critical CSS fetch. */}

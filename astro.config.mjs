@@ -9,7 +9,9 @@ export default defineConfig({
   output: "static",
   trailingSlash: "ignore",
   prefetch: {
-    defaultStrategy: "viewport",
+    // "hover" prefetcha no intento de clique; "viewport" baixava o HTML de
+    // centenas de links (mega-menu + grids) conforme o usuário rolava.
+    defaultStrategy: "hover",
   },
   integrations: [
     mdx(),

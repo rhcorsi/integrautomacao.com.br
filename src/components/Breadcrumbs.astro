@@ -1,0 +1,48 @@
+---
+/**
+ * Trilha de navegação visível, gerada da mesma fonte do BreadcrumbList JSON-LD
+ * (breadcrumbItems em utils/schema.ts), para UI e dados estruturados nunca
+ * divergirem. Renderiza nada na home / profundidade 0.
+ */
+import { breadcrumbItems } from "@/utils/schema";
+
+interface Props {
+  /** Nome do nó-folha (título da página atual). */
+  leaf?: string;
+}
+
+const { leaf } = Astro.props;
+const items = breadcrumbItems(Astro.url.pathname, leaf);
+---
+
+{items.length > 1 && (
+  <nav aria-label="Trilha de navegação" class="mb-6">
+    <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+      {items.map((item, i) => {
+        const isLeaf = i === items.length - 1;
+        return (
+          <li class="flex min-w-0 items-center gap-2">
+            {i > 0 && (
+              <span aria-hidden="true" class="text-integra-gray-300">›</span>
+            )}
+            {isLeaf ? (
+              <span
+                aria-current="page"
+                class="max-w-[18rem] truncate text-integra-gray-700"
+              >
+                {item.name}
+              </span>
+            ) : (
+              <a
+                href={new URL(item.url).pathname}
+                class="transition-colors hover:text-integra-red-700"
+              >
+                {item.name}
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </nav>
+)}

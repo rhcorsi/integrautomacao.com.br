@@ -1,6 +1,6 @@
 ﻿---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { serviceSchema } from "@/utils/schema";
+import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -121,6 +121,7 @@ const faq = [
         "Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82.",
       url: Astro.url.href,
     }),
+    faqSchema(faq),
   ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">

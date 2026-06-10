@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import NewsletterForm from "@/components/NewsletterForm.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import { faqSchema } from "@/utils/schema";
 
 const temas = [
   {
@@ -58,6 +59,7 @@ const faq = [
 <BaseLayout
   title="Newsletter Integra Ação"
   description="Inscreva-se na newsletter Integra Ação: uma edição mensal de conteúdo técnico sobre PlantPAx, redes industriais, IEC 62443, FactoryTalk e governança de engenharia."
+  jsonLd={[faqSchema(faq)]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">

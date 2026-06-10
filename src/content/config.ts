@@ -12,6 +12,8 @@ const blog = defineCollection({
       tags: z.array(z.string()).default([]),
       heroImage: image().optional(),
       heroAlt: z.string().optional(),
+      /** Arte social dedicada (1200x630) em public/, ex.: "/og/blog-slug.png". */
+      ogImage: z.string().optional(),
       draft: z.boolean().default(false),
     }),
 });

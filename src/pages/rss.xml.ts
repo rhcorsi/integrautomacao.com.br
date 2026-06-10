@@ -14,13 +14,15 @@ export async function GET(context: APIContext) {
       "Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443 e governança de engenharia industrial.",
     site: context.site!,
     stylesheet: "/rss.xsl",
+    xmlns: { dc: "http://purl.org/dc/elements/1.1/" },
     items: posts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      author: `${SITE.name}`,
       link: `/blog/${post.slug}/`,
       categories: post.data.tags,
+      // RSS 2.0 reserva <author> para e-mail; nome de autor vai em dc:creator.
+      customData: `<dc:creator><![CDATA[${post.data.author}]]></dc:creator>`,
     })),
     customData: `<language>pt-BR</language>`,
   });

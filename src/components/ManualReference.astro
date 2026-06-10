@@ -57,9 +57,10 @@ const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red-700"
     <Image
       src={image}
       alt={alt}
-      widths={[800, 1200, 1800, 2400]}
+      widths={[800, 1200, 1600, 2000]}
       sizes="(min-width: 1024px) 800px, 100vw"
       loading={loading}
+      fetchpriority={loading === "eager" ? "high" : undefined}
       decoding="async"
       class="h-full w-full object-contain"
     />

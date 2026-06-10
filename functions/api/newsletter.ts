@@ -347,11 +347,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   });
 };
 
-export const onRequest: PagesFunction = async ({ request }) => {
-  if (request.method === "POST") {
-    // Should not reach here because onRequestPost handles POST specifically,
-    // but keeping for safety with explicit method routing.
-    return new Response(null, { status: 200 });
-  }
-  return methodNotAllowed();
-};
+// Métodos não suportados respondem 405 explicitamente (mesmo padrão do
+// contact.ts). POST é tratado exclusivamente por onRequestPost acima.
+export const onRequestGet: PagesFunction = async () => methodNotAllowed();
+export const onRequestPut: PagesFunction = async () => methodNotAllowed();
+export const onRequestPatch: PagesFunction = async () => methodNotAllowed();
+export const onRequestDelete: PagesFunction = async () => methodNotAllowed();

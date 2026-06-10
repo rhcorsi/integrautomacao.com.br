@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { serviceSchema } from "@/utils/schema";
+import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: "Posso conectar Power BI direto ao PI?",
-    a: "Sim, via PI Web API ou ODBC. Em planta multi-departamento, comum: planeamento usa Power BI, processo usa PI Vision, manutenção usa AssetWise. Mesma fonte, ferramentas diferentes.",
+    a: "Sim, via PI Web API ou ODBC. Em planta multi-departamento, comum: planejamento usa Power BI, processo usa PI Vision, manutenção usa AssetWise. Mesma fonte, ferramentas diferentes.",
   },
   {
     q: "Como funciona o licenciamento PI System?",
@@ -92,6 +92,7 @@ const faq = [
         "Engenharia de dados industriais com PI System / AVEVA: tags, AF Templates, historian, qualidade de dados e integração com PlantPAx e FactoryTalk.",
       url: Astro.url.href,
     }),
+    faqSchema(faq),
   ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">

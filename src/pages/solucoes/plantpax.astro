@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { serviceSchema } from "@/utils/schema";
+import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -118,6 +118,7 @@ const faq = [
         "Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica.",
       url: Astro.url.href,
     }),
+    faqSchema(faq),
   ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">

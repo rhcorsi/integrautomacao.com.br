@@ -1,0 +1,6 @@
+# Política de divulgação de vulnerabilidades (RFC 9116)
+# Integra Automação Industrial
+Contact: mailto:lgpd@integrautomacao.com
+Expires: 2027-06-30T23:59:59.000Z
+Preferred-Languages: pt-BR, en
+Canonical: https://integrautomacao.com/.well-known/security.txt

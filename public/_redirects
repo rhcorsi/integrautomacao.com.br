@@ -51,7 +51,7 @@
 # Common bot probes (return 301 to home; cheaper than 404 + slightly better SEO than letting them rot).
 /.env                  /                                    301
 /.git/*                /                                    301
-/.well-known/security.txt  /security.txt                    301
+/security.txt          /.well-known/security.txt            301
 /wp                    /                                    301
 /wp/                   /                                    301
 /wp/*                  /                                    301

@@ -8,6 +8,10 @@ const turnstileSiteKey = resolveTurnstileSiteKey(
 const hasTurnstile = turnstileSiteKey.length > 0;
 ---
 
+{hasTurnstile && (
+  <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+)}
+
 <form
   id="newsletter-form"
   data-newsletter-form
@@ -16,6 +20,9 @@ const hasTurnstile = turnstileSiteKey.length > 0;
   action="/api/newsletter"
   class="grid gap-5"
 >
+  <p class="text-xs text-integra-gray-500">
+    Campos marcados com <span class="font-semibold text-integra-red-700">*</span> são obrigatórios.
+  </p>
   <div class="grid gap-2">
     <label for="nl-name" class="text-sm font-medium text-integra-gray-900">
       Nome <span class="text-integra-red" aria-hidden="true">*</span>
