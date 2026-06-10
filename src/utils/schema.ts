@@ -38,16 +38,38 @@ export function organizationSchema() {
     },
     areaServed: { "@type": "Country", name: "Brasil" },
     foundingDate: String(COMPANY.founded),
+    description: SITE.defaultDescription,
+    slogan: SITE.tagline,
     sameAs: [COMPANY.social.linkedin].filter(Boolean),
+    // Credenciais formais em formato máquina-legível (entidade p/ grafos de
+    // conhecimento e citações em IA). Detalhes em /certificacoes/.
+    hasCredential: [
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "Silver System Integrator — Rockwell Automation PartnerNetwork",
+        url: `${SITE.url}/certificacoes/silver-system-integrator/`,
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "PlantPAx DCS Certified — Rockwell Automation",
+        url: `${SITE.url}/certificacoes/`,
+      },
+    ],
     knowsAbout: [
+      "Automação Industrial",
+      "Integração de Sistemas de Automação",
       "PlantPAx",
       "FactoryTalk",
       "ControlLogix",
+      "Studio 5000",
+      "Migração de PLC-5 e SLC-500 para ControlLogix",
+      "SCADA",
+      "Siemens TIA Portal",
       "PI System",
       "Cibersegurança Industrial",
       "IEC 62443",
       "CPwE",
-      "Automação Industrial",
+      "Virtualização OT",
     ],
     contactPoint: {
       "@type": "ContactPoint",
@@ -223,6 +245,9 @@ export function techArticleSchema(opts: {
   description: string;
   url: string;
   image?: string;
+  /** Datas ISO (YYYY-MM-DD). Freshness pesa em citações de IA (~3,2x). */
+  datePublished?: string;
+  dateModified?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -235,6 +260,8 @@ export function techArticleSchema(opts: {
     mainEntityOfPage: opts.url,
     inLanguage: "pt-BR",
     publisher: { "@id": ORG_ID },
+    ...(opts.datePublished ? { datePublished: opts.datePublished } : {}),
+    ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
     ...(opts.image ? { image: opts.image } : {}),
   };
 }

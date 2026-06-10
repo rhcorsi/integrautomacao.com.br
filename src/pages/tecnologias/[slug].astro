@@ -7,7 +7,13 @@ import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
-import { getRelatedTech, techCatalog, type TechPage } from "@/data/techCatalog";
+import {
+  CATALOG_PUBLISHED,
+  CATALOG_REVIEWED,
+  getRelatedTech,
+  techCatalog,
+  type TechPage,
+} from "@/data/techCatalog";
 import { SITE } from "@/utils/site";
 import { faqSchema, serviceSchema, techArticleSchema } from "@/utils/schema";
 
@@ -29,7 +35,18 @@ const pageUrl = new URL(`/tecnologias/${item.slug}/`, SITE.url).toString();
 const techLd =
   item.type === "Serviço"
     ? serviceSchema({ name: item.title, description: item.description, url: pageUrl })
-    : techArticleSchema({ title: item.title, description: item.description, url: pageUrl });
+    : techArticleSchema({
+        title: item.title,
+        description: item.description,
+        url: pageUrl,
+        datePublished: CATALOG_PUBLISHED,
+        dateModified: CATALOG_REVIEWED,
+      });
+const reviewedDisplay = new Date(`${CATALOG_REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 const jsonLdBlocks =
   item.faq && item.faq.length > 0 ? [techLd, faqSchema(item.faq)] : [techLd];
 ---
@@ -50,7 +67,7 @@ const jsonLdBlocks =
             item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red-700",
           ]}
         >
-          {item.type} · {item.group}
+          {item.type} · {item.group} · <span class="normal-case">Revisado em {reviewedDisplay}</span>
         </p>
         <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           {item.title}

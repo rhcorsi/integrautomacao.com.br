@@ -12,6 +12,8 @@ projeta, implementa, documenta e sustenta sistemas de automação para
 plantas críticas (açúcar e etanol, agronegócio, alimentos, química,
 frigoríficos, ração, papel e celulose, saneamento).
 
+Última atualização: 2026-06.
+
 ## Páginas principais
 
 - [Empresa](https://integrautomacao.com.br/empresa/): história, propósito, valores e timeline desde 2016.
@@ -19,10 +21,41 @@ frigoríficos, ração, papel e celulose, saneamento).
 - [PlantPAx](https://integrautomacao.com.br/solucoes/plantpax/): DCS moderno da Rockwell, versões 3.x a 5.x.
 - [FactoryTalk Suite](https://integrautomacao.com.br/solucoes/factorytalk/): View SE, Optix, Batch, Historian, AssetCentre, ThinManager.
 - [Redes Industriais e IEC 62443](https://integrautomacao.com.br/solucoes/redes-iec-62443/): CPwE, IDMZ, segmentação, defense-in-depth.
+- [Migração PLC-5/SLC500](https://integrautomacao.com.br/solucoes/migracao-plc/): modernização para ControlLogix com plano de cutover.
+- [Data Centers Industriais](https://integrautomacao.com.br/solucoes/data-centers/): servidores OT, virtualização, redundância e DR.
+- [PI System / AVEVA](https://integrautomacao.com.br/solucoes/pi-system/): dados industriais, AF Templates, integração corporativa.
 - [Catálogo técnico](https://integrautomacao.com.br/tecnologias/): 40+ páginas de tecnologias e serviços com FAQs de engenharia.
 - [Certificações](https://integrautomacao.com.br/certificacoes/): parcerias formais e capacitações, com política de transparência.
 - [Blog técnico](https://integrautomacao.com.br/blog/): artigos sobre arquitetura DCS, CPwE e IEC 62443.
 - [Contato](https://integrautomacao.com.br/contato/): conversa técnica antes de qualquer proposta.
+
+## Catálogo técnico — páginas mais consultadas
+
+Cada página tem FAQ de engenharia com respostas diretas (versões, normas, hardware).
+
+- [PlantPAx 5.x](https://integrautomacao.com.br/tecnologias/plantpax-5x/): objetos de processo embarcados, requisitos e migração 4.x→5.x.
+- [PlantPAx Library of Process Objects](https://integrautomacao.com.br/tecnologias/plantpax-library/): biblioteca padronizada de objetos de processo.
+- [Migração PLC-5/SLC-500 para Logix](https://integrautomacao.com.br/tecnologias/migracao-plc5-slc500/): caminhos de migração, riscos e janela de parada.
+- [ControlLogix e CompactLogix](https://integrautomacao.com.br/tecnologias/controllogix-compactlogix/): famílias Logix, redundância e dimensionamento.
+- [FactoryTalk View SE](https://integrautomacao.com.br/tecnologias/factorytalk-view-se/): supervisório distribuído, redundância e alarmes.
+- [FactoryTalk Optix](https://integrautomacao.com.br/tecnologias/factorytalk-optix/): HMI moderna baseada em OPC UA.
+- [FactoryTalk Historian](https://integrautomacao.com.br/tecnologias/factorytalk-historian/): historiador de processo baseado em PI System.
+- [FactoryTalk Batch e ISA-88](https://integrautomacao.com.br/tecnologias/factorytalk-batch/): receitas, fases e rastreabilidade.
+- [EtherNet/IP e CPwE](https://integrautomacao.com.br/tecnologias/ethernet-ip-cpwe/): arquitetura de rede plant-wide Cisco/Rockwell, DLR, segmentação.
+- [ISA/IEC 62443 e NIST SP 800-82](https://integrautomacao.com.br/tecnologias/iec-62443-nist-ot/): zonas e conduítes, gap analysis, roadmap de cibersegurança OT.
+- [Hardening Industrial](https://integrautomacao.com.br/tecnologias/hardening-industrial/): endurecimento de servidores, switches e estações OT.
+- [Virtualização OT](https://integrautomacao.com.br/tecnologias/virtualizacao-ot/): VMware/Hyper-V para FactoryTalk e PlantPAx.
+- [Siemens TIA Portal](https://integrautomacao.com.br/tecnologias/tia-portal/): engenharia integrada S7-1200/1500.
+- [SIMATIC WinCC e PCS 7](https://integrautomacao.com.br/tecnologias/siemens-wincc-pcs7/): supervisão e DCS Siemens.
+- [Elipse E3](https://integrautomacao.com.br/tecnologias/elipse-e3/): SCADA brasileiro para aplicações distribuídas.
+- [TC deviceWISE](https://integrautomacao.com.br/tecnologias/tc-devicewise/): integração IIoT chão-de-fábrica ↔ sistemas corporativos.
+
+## Optional
+
+- [Eventos e treinamentos](https://integrautomacao.com.br/eventos/): participação técnica em eventos Rockwell, Siemens, Telit e TI Safe.
+- [Cases](https://integrautomacao.com.br/cases/): projetos publicados (sanitizados, sem dados de clientes).
+- [Integra Ação](https://integrautomacao.com.br/integra-acao/): newsletter e webinars técnicos.
+- [Política de privacidade](https://integrautomacao.com.br/politica-privacidade/)
 
 ## Observações
 

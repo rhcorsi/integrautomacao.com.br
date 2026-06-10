@@ -97,6 +97,15 @@ export const GROUP_ORDER: TechGroup[] = [
   "Serviços de Engenharia",
 ];
 
+/**
+ * Datas editoriais do catálogo (ISO). Emitidas no TechArticle JSON-LD e
+ * visíveis nas páginas — freshness pesa em citações de IA. Atualize
+ * CATALOG_REVIEWED a cada revisão técnica SUBSTANTIVA do catálogo (a última
+ * foi o fact-check com 35 correções verificadas via web).
+ */
+export const CATALOG_PUBLISHED = "2026-05-06";
+export const CATALOG_REVIEWED = "2026-06-10";
+
 const batchSource = "Rockwell Automation - PlantPAx Batch Design Considerations";
 const viewSeSource = "Rockwell Automation - FactoryTalk View SE Reference Architectures";
 const historianSource = "Rockwell Automation - FactoryTalk Historian SE Reference Architectures";
