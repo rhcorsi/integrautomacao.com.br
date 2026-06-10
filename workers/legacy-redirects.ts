@@ -3,7 +3,7 @@
  * Cloudflare Pages `_redirects` cannot match (Pages _redirects ignores
  * query strings for source matching).
  *
- * Route: integrautomacao.com/*
+ * Route: integrautomacao.com.br/*
  *
  * NOTA: functions/_middleware.ts já cobre estes redirects no próprio deploy
  * do Pages. Este Worker é redundante e só precisa existir se a rota estiver

@@ -1,4 +1,4 @@
-# integrautomacao.com
+# integrautomacao.com.br
 
 Site institucional da **Integra Automação Industrial** — engenharia e
 integração de sistemas industriais.
@@ -131,9 +131,9 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
 ### Opção A — Conexão direta GitHub ↔ Cloudflare Pages (mais simples)
 
 1. Acesse https://dash.cloudflare.com/ → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**
-2. Autorize a Cloudflare a acessar o repositório `rhcorsi/integrautomacao.com`
+2. Autorize a Cloudflare a acessar o repositório `rhcorsi/integrautomacao.com.br`
 3. Configure o build:
-   - **Project name**: `integrautomacao`
+   - **Project name**: `integrautomacao-com-br`
    - **Production branch**: `main`
    - **Framework preset**: Astro
    - **Build command**: `npm run build`
@@ -146,8 +146,8 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    TURNSTILE_SECRET_KEY      = <secret>       # encrypted
    RESEND_API_KEY            = <API key>      # encrypted
    RESEND_AUDIENCE_ID        = <Audience ID>  # encrypted — newsletter Integra Ação
-   CONTACT_EMAIL_TO          = comercial@integrautomacao.com
-   CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com
+   CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
+   CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com.br
    ```
 
    Marque todas as variáveis server-side como **Encrypted** para não vazarem nos logs:
@@ -162,11 +162,11 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    por e-mail para `CONTACT_EMAIL_TO`.
 
 5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
-   `integrautomacao.com`, `www.integrautomacao.com` e, se usados,
-   `newsletter.integrautomacao.com`, `webinar.integrautomacao.com` e
-   `eventos.integrautomacao.com`.
+   `integrautomacao.com.br`, `www.integrautomacao.com.br` e, se usados,
+   `newsletter.integrautomacao.com.br`, `webinar.integrautomacao.com.br` e
+   `eventos.integrautomacao.com.br`.
 
-   **Não adicione `forms.integrautomacao.com` em Custom domains do Pages.**
+   **Não adicione `forms.integrautomacao.com.br` em Custom domains do Pages.**
    Esse subdomínio é dedicado ao Resend como domínio de envio transacional e
    deve existir apenas nos registros DNS exigidos pelo Resend.
 
@@ -212,8 +212,8 @@ npx wrangler deploy                 # deploya o Worker (lê workers/wrangler.tom
 ```
 
 No painel: **Workers & Pages → integrautomacao-legacy-redirects → Triggers**
-adicione a route `integrautomacao.com/*` (Zone:
-integrautomacao.com).
+adicione a route `integrautomacao.com.br/*` (Zone:
+integrautomacao.com.br).
 
 > O `wrangler.toml` fica em `workers/`, não no root, para que o Cloudflare
 > Pages não o leia como config de Pages durante o build.
@@ -239,7 +239,7 @@ npx wrangler deploy
 ```
 
 Depois, no painel da Cloudflare, configure a rota:
-`integrautomacao.com/*` → Worker `integrautomacao-legacy-redirects`.
+`integrautomacao.com.br/*` → Worker `integrautomacao-legacy-redirects`.
 
 O Worker faz pass-through quando a URL não casa nenhum padrão legado, então
 todas as URLs novas continuam servidas pelo CF Pages normalmente.
@@ -266,14 +266,14 @@ Padrão de proxy seletivo para o cutover:
 | `autoconfig`, `autodiscover`    | A     | DNS only     |
 | `forms` (subdomínio do Resend)  | TXT/MX| DNS only     |
 
-> `forms.integrautomacao.com` não deve apontar para Cloudflare Pages e não deve
+> `forms.integrautomacao.com.br` não deve apontar para Cloudflare Pages e não deve
 > ficar como CNAME proxied. Use somente os registros TXT/MX/DKIM fornecidos pelo
 > painel do Resend, todos como **DNS only**.
 
-DMARC inicial (apenas após criar `dmarc@integrautomacao.com`):
+DMARC inicial (apenas após criar `dmarc@integrautomacao.com.br`):
 
 ```
-_dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com; fo=1"
+_dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 ```
 
 ## Tarefas pendentes (Fase 2 — pós-launch)

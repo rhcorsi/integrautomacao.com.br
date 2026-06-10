@@ -6,7 +6,7 @@ export const SITE = {
   name: "Integra Automação Industrial",
   shortName: "Integra",
   tagline: "Tecnologia e Engenharia de Sistemas Industriais",
-  url: "https://integrautomacao.com",
+  url: "https://integrautomacao.com.br",
   defaultTitle: "Integra Automação Industrial | Tecnologia e Engenharia de Sistemas Industriais",
   defaultDescription:
     "Engenharia e integração de sistemas industriais para plantas críticas: arquitetura, padronização, segurança operacional e governança técnica de longo prazo.",
@@ -42,8 +42,8 @@ const PHONES: Phone[] = [
 export const COMPANY = {
   legalName: "Integra Automação Industrial Ltda - ME",
   taxId: "24.543.173/0001-14",
-  email: "comercial@integrautomacao.com",
-  emailPrivacy: "lgpd@integrautomacao.com",
+  email: "comercial@integrautomacao.com.br",
+  emailPrivacy: "lgpd@integrautomacao.com.br",
   phones: PHONES,
   address: {
     street: "Rua Topázio, 965",

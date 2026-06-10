@@ -52,7 +52,7 @@ for (const form of contactForms) {
       if (!form.querySelector(".cf-turnstile")) {
         setStatus(
           status,
-          "Formulário temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.",
+          "Formulário temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.br.",
           "error",
         );
         return;
@@ -95,14 +95,14 @@ for (const form of contactForms) {
       setStatus(
         status,
         data.message ??
-          "Não foi possível enviar agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.",
+          "Não foi possível enviar agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
         "error",
       );
     } catch (error) {
       console.error(error);
       setStatus(
         status,
-        "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.",
+        "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
         "error",
       );
     } finally {
