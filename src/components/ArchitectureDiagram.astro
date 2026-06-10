@@ -1,0 +1,247 @@
+---
+/**
+ * Diagrama de arquitetura plant-wide da Integra: modelo Purdue com IDMZ,
+ * zonas e conduítes controlados, alinhado a CPwE e IEC 62443.
+ * SVG autoral, responsivo, sem JavaScript; rótulos em pt-BR.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const ink = "#1a1a1a";
+const sub = "#4a4a4a";
+const rail = "#666666";
+const line = "#e4e4e4";
+const cellLine = "#c9c9c9";
+const zoneFill = "#fafafa";
+const red = "#b40510";
+const ot = "#003a5d";
+
+const sans = "'Inter Variable', ui-sans-serif, system-ui, sans-serif";
+const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
+---
+
+<svg
+  viewBox="0 0 880 656"
+  role="img"
+  aria-labelledby="archdiag-title archdiag-desc"
+  class:list={["h-auto w-full", className]}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title id="archdiag-title">
+    Arquitetura de referência Integra: segmentação plant-wide com IDMZ
+  </title>
+  <desc id="archdiag-desc">
+    Diagrama em camadas do modelo Purdue: Enterprise Zone (níveis 4 e 5) no
+    topo, IDMZ no nível 3.5, Industrial Zone com servidores de operação no
+    nível 3 e três Cell/Area Zones (níveis 0 a 2) na base, separadas por
+    conduítes controlados com firewall.
+  </desc>
+
+  <defs>
+    <marker id="archdiag-arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill={red}></path>
+    </marker>
+  </defs>
+
+  {/* ── Trilho esquerdo: níveis Purdue ─────────────────────────────── */}
+  <g font-family={mono} font-size="10" fill={rail} text-anchor="middle">
+    <text x="46" y="70">N4-5</text>
+    <line x1="64" y1="66" x2="80" y2="66" stroke={line} stroke-width="1"></line>
+    <text x="46" y="205">N3.5</text>
+    <line x1="64" y1="201" x2="80" y2="201" stroke={line} stroke-width="1"></line>
+    <text x="46" y="350">N3</text>
+    <line x1="64" y1="346" x2="80" y2="346" stroke={line} stroke-width="1"></line>
+    <text x="46" y="515">N0-2</text>
+    <line x1="64" y1="511" x2="80" y2="511" stroke={line} stroke-width="1"></line>
+  </g>
+
+  {/* ── Enterprise Zone (N4-5) ─────────────────────────────────────── */}
+  <g>
+    <rect x="90" y="20" width="780" height="92" rx="8" fill={zoneFill} stroke={line}></rect>
+    <text x="108" y="44" font-family={mono} font-size="11" letter-spacing="1.5" fill={sub}>
+      ENTERPRISE ZONE · TI CORPORATIVA
+    </text>
+    {[
+      { x: 108, label: "ERP / MES corporativo" },
+      { x: 372, label: "E-mail e serviços" },
+      { x: 636, label: "BI / nuvem corporativa" },
+    ].map((item) => (
+      <g>
+        <rect x={item.x} y="56" width="216" height="40" rx="6" fill="#ffffff" stroke={line}></rect>
+        <text
+          x={item.x + 108}
+          y="81"
+          font-family={sans}
+          font-size="13"
+          font-weight="600"
+          fill={ink}
+          text-anchor="middle"
+        >
+          {item.label}
+        </text>
+      </g>
+    ))}
+  </g>
+
+  {/* ── Conduíte 1: Enterprise ⇄ IDMZ ─────────────────────────────── */}
+  <g>
+    <line x1="480" y1="112" x2="480" y2="124" stroke={red} stroke-width="1.5"></line>
+    <g transform="translate(463, 124)">
+      <rect width="34" height="20" rx="3" fill="#ffffff" stroke={red} stroke-width="1.5"></rect>
+      <line x1="2" y1="7" x2="32" y2="7" stroke={red} stroke-width="1"></line>
+      <line x1="2" y1="13" x2="32" y2="13" stroke={red} stroke-width="1"></line>
+      <line x1="12" y1="1" x2="12" y2="7" stroke={red} stroke-width="1"></line>
+      <line x1="22" y1="7" x2="22" y2="13" stroke={red} stroke-width="1"></line>
+      <line x1="12" y1="13" x2="12" y2="19" stroke={red} stroke-width="1"></line>
+    </g>
+    <line x1="480" y1="144" x2="480" y2="156" stroke={red} stroke-width="1.5" marker-end="url(#archdiag-arrow)"></line>
+    <text x="510" y="138" font-family={mono} font-size="10" fill={red}>
+      conduíte controlado · firewall
+    </text>
+  </g>
+
+  {/* ── IDMZ (N3.5) ────────────────────────────────────────────────── */}
+  <g>
+    <rect x="90" y="160" width="780" height="92" rx="8" fill="rgba(0,58,93,0.05)" stroke="rgba(0,58,93,0.35)"></rect>
+    <text x="108" y="184" font-family={mono} font-size="11" letter-spacing="1.5" fill={ot}>
+      IDMZ · ZONA DESMILITARIZADA INDUSTRIAL
+    </text>
+    {[
+      { x: 108, label: "RD Gateway / jump server" },
+      { x: 372, label: "Espelho de dados (PI-to-PI)" },
+      { x: 636, label: "Relay de patch e antivírus" },
+    ].map((item) => (
+      <g>
+        <rect x={item.x} y="196" width="216" height="40" rx="6" fill="#ffffff" stroke="rgba(0,58,93,0.3)"></rect>
+        <text
+          x={item.x + 108}
+          y="221"
+          font-family={sans}
+          font-size="13"
+          font-weight="600"
+          fill={ink}
+          text-anchor="middle"
+        >
+          {item.label}
+        </text>
+      </g>
+    ))}
+  </g>
+
+  {/* ── Conduíte 2: IDMZ ⇄ Industrial ─────────────────────────────── */}
+  <g>
+    <line x1="480" y1="252" x2="480" y2="264" stroke={red} stroke-width="1.5"></line>
+    <g transform="translate(463, 264)">
+      <rect width="34" height="20" rx="3" fill="#ffffff" stroke={red} stroke-width="1.5"></rect>
+      <line x1="2" y1="7" x2="32" y2="7" stroke={red} stroke-width="1"></line>
+      <line x1="2" y1="13" x2="32" y2="13" stroke={red} stroke-width="1"></line>
+      <line x1="12" y1="1" x2="12" y2="7" stroke={red} stroke-width="1"></line>
+      <line x1="22" y1="7" x2="22" y2="13" stroke={red} stroke-width="1"></line>
+      <line x1="12" y1="13" x2="12" y2="19" stroke={red} stroke-width="1"></line>
+    </g>
+    <line x1="480" y1="284" x2="480" y2="296" stroke={red} stroke-width="1.5" marker-end="url(#archdiag-arrow)"></line>
+    <text x="510" y="278" font-family={mono} font-size="10" fill={red}>
+      sem caminho direto TI ⇄ chão de fábrica
+    </text>
+  </g>
+
+  {/* ── Industrial Zone (N3) ───────────────────────────────────────── */}
+  <g>
+    <rect x="90" y="300" width="780" height="100" rx="8" fill={zoneFill} stroke={line}></rect>
+    <text x="108" y="324" font-family={mono} font-size="11" letter-spacing="1.5" fill={red}>
+      INDUSTRIAL ZONE · SITE OPERATIONS
+    </text>
+    {[
+      { x: 108, label: "Servidores SCADA", sub: "PASS · redundância" },
+      { x: 300, label: "Historian", sub: "dados de processo" },
+      { x: 492, label: "Directory / AD", sub: "identidade OT" },
+      { x: 684, label: "Virtualização", sub: "backup · DR" },
+    ].map((item) => (
+      <g>
+        <rect x={item.x} y="336" width="178" height="52" rx="6" fill="#ffffff" stroke={line}></rect>
+        <text
+          x={item.x + 89}
+          y="357"
+          font-family={sans}
+          font-size="13"
+          font-weight="600"
+          fill={ink}
+          text-anchor="middle"
+        >
+          {item.label}
+        </text>
+        <text
+          x={item.x + 89}
+          y="376"
+          font-family={mono}
+          font-size="10"
+          fill={sub}
+          text-anchor="middle"
+        >
+          {item.sub}
+        </text>
+      </g>
+    ))}
+  </g>
+
+  {/* ── Conduítes para as Cell/Area Zones ─────────────────────────── */}
+  <g stroke={red} stroke-width="1.5">
+    <line x1="210" y1="400" x2="210" y2="428" marker-end="url(#archdiag-arrow)"></line>
+    <line x1="480" y1="400" x2="480" y2="428" marker-end="url(#archdiag-arrow)"></line>
+    <line x1="750" y1="400" x2="750" y2="428" marker-end="url(#archdiag-arrow)"></line>
+  </g>
+
+  {/* ── Cell/Area Zones (N0-2) ─────────────────────────────────────── */}
+  {[
+    { x: 90, name: "CELL/AREA ZONE · ÁREA A", net: "anel DLR" },
+    { x: 360, name: "CELL/AREA ZONE · ÁREA B", net: "estrela gerenciada" },
+    { x: 630, name: "CELL/AREA ZONE · ÁREA C", net: "PRP (alta disp.)" },
+  ].map((zone) => (
+    <g>
+      <rect x={zone.x} y="432" width="240" height="156" rx="8" fill="#ffffff" stroke={cellLine}></rect>
+      <text
+        x={zone.x + 16}
+        y="456"
+        font-family={mono}
+        font-size="10"
+        letter-spacing="1"
+        fill={red}
+      >
+        {zone.name}
+      </text>
+      <rect x={zone.x + 16} y="468" width="208" height="30" rx="4" fill={zoneFill} stroke={line}></rect>
+      <text x={zone.x + 120} y="487" font-family={sans} font-size="12" font-weight="600" fill={ink} text-anchor="middle">
+        HMI local · operação
+      </text>
+      <rect x={zone.x + 16} y="504" width="208" height="30" rx="4" fill={zoneFill} stroke={line}></rect>
+      <text x={zone.x + 120} y="523" font-family={sans} font-size="12" font-weight="600" fill={ink} text-anchor="middle">
+        PLC / DCS · ControlLogix
+      </text>
+      <rect x={zone.x + 16} y="540" width="208" height="30" rx="4" fill={zoneFill} stroke={line}></rect>
+      <text x={zone.x + 120} y="559" font-family={sans} font-size="12" font-weight="600" fill={ink} text-anchor="middle">
+        I/O · instrumentos · drives
+      </text>
+      <text x={zone.x + 16} y="582" font-family={mono} font-size="9" fill={sub}>
+        rede: {zone.net}
+      </text>
+    </g>
+  ))}
+
+  {/* ── Legenda ───────────────────────────────────────────────────── */}
+  <g transform="translate(90, 616)">
+    <g transform="translate(0, -6)">
+      <rect width="24" height="14" rx="2" fill="#ffffff" stroke={red} stroke-width="1.2"></rect>
+      <line x1="2" y1="5" x2="22" y2="5" stroke={red} stroke-width="0.8"></line>
+      <line x1="2" y1="9" x2="22" y2="9" stroke={red} stroke-width="0.8"></line>
+    </g>
+    <text x="32" y="6" font-family={mono} font-size="10" fill={sub}>
+      conduíte com firewall e regras explícitas por porta e protocolo
+    </text>
+    <text x="790" y="6" font-family={mono} font-size="10" fill={rail} text-anchor="end">
+      Purdue · CPwE · IEC 62443
+    </text>
+  </g>
+</svg>

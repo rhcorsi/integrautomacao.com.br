@@ -14,6 +14,7 @@ const totals = [
 <BaseLayout
   title="Tecnologias e Serviços"
   description="Catálogo técnico da Integra: PlantPAx, FactoryTalk, TC deviceWISE, Siemens, Elipse E3, Schneider, IEC 62443, CPwE, virtualização OT e dados industriais."
+  ogImage="/og/tecnologias.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
@@ -114,7 +115,7 @@ const totals = [
             {items.map((item) => (
               <a
                 href={`/tecnologias/${item.slug}/`}
-                class="group flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-6 transition-colors hover:border-integra-gray-900"
+                class="reveal group flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-6 transition-colors hover:border-integra-gray-900"
               >
                 <div class="mb-5 flex items-start justify-between gap-4">
                   <span

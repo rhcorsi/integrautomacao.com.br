@@ -1,6 +1,7 @@
 ﻿---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { faqSchema, serviceSchema } from "@/utils/schema";
+import ArchitectureDiagram from "@/components/ArchitectureDiagram.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import DeliverableList from "@/components/DeliverableList.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -114,6 +115,7 @@ const faq = [
 <BaseLayout
   title="Redes Industriais e IEC 62443"
   description="Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82."
+  ogImage="/og/solucoes-redes-iec-62443.png"
   jsonLd={[
     serviceSchema({
       name: "Redes Industriais e Cibersegurança OT (IEC 62443)",
@@ -177,6 +179,25 @@ const faq = [
           </li>
         ))}
       </ol>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Arquitetura de referência Integra"
+        title="O desenho que aplicamos na prática"
+        description="Diagrama autoral da Integra: como o modelo Purdue, a IDMZ e as Cell/Area Zones se organizam em uma planta real. Cada conduíte entre camadas tem firewall e regras explícitas por porta e protocolo."
+        accent={true}
+      />
+      <figure class="reveal overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-white p-6 shadow-sm lg:p-10">
+        <ArchitectureDiagram />
+        <figcaption class="mt-6 border-t border-integra-gray-100 pt-4 text-xs leading-relaxed text-integra-gray-600">
+          Diagrama Integra Automação Industrial, baseado nas referências
+          públicas CPwE (Cisco + Rockwell Automation) e na série ISA/IEC
+          62443. A topologia real de cada planta é definida em diagnóstico.
+        </figcaption>
+      </figure>
     </div>
   </section>
 

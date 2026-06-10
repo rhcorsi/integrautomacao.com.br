@@ -1,0 +1,31 @@
+# Integra Automação Industrial
+
+> Empresa brasileira de engenharia e integração de sistemas industriais
+> (Maringá-PR, fundada em 2016, atuação nacional). Silver System Integrator
+> da Rockwell Automation e PlantPAx DCS Certified Partner. Especialidades:
+> PlantPAx (DCS), FactoryTalk Suite, redes industriais CPwE, cibersegurança
+> OT (ISA/IEC 62443), PI System / AVEVA, virtualização OT e migração de
+> PLC-5/SLC500 para ControlLogix.
+
+Posicionamento: engenharia com método e governança técnica. A Integra
+projeta, implementa, documenta e sustenta sistemas de automação para
+plantas críticas (açúcar e etanol, agronegócio, alimentos, química,
+frigoríficos, ração, papel e celulose, saneamento).
+
+## Páginas principais
+
+- [Empresa](https://integrautomacao.com/empresa/): história, propósito, valores e timeline desde 2016.
+- [Soluções](https://integrautomacao.com/solucoes/): visão geral das frentes de engenharia.
+- [PlantPAx](https://integrautomacao.com/solucoes/plantpax/): DCS moderno da Rockwell, versões 3.x a 5.x.
+- [FactoryTalk Suite](https://integrautomacao.com/solucoes/factorytalk/): View SE, Optix, Batch, Historian, AssetCentre, ThinManager.
+- [Redes Industriais e IEC 62443](https://integrautomacao.com/solucoes/redes-iec-62443/): CPwE, IDMZ, segmentação, defense-in-depth.
+- [Catálogo técnico](https://integrautomacao.com/tecnologias/): 40+ páginas de tecnologias e serviços com FAQs de engenharia.
+- [Certificações](https://integrautomacao.com/certificacoes/): parcerias formais e capacitações, com política de transparência.
+- [Blog técnico](https://integrautomacao.com/blog/): artigos sobre arquitetura DCS, CPwE e IEC 62443.
+- [Contato](https://integrautomacao.com/contato/): conversa técnica antes de qualquer proposta.
+
+## Observações
+
+- Conteúdo em português do Brasil (pt-BR).
+- Sitemap: https://integrautomacao.com/sitemap-index.xml
+- RSS do blog: https://integrautomacao.com/rss.xml
