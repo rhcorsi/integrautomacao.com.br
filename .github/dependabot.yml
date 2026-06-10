@@ -9,8 +9,6 @@ updates:
       time: "06:00"
       timezone: America/Sao_Paulo
     open-pull-requests-limit: 5
-    labels:
-      - dependencies
     # Ignore major updates for frameworks where breaking changes need
     # manual review (Astro 5→6, MDX 4→5 alongside Astro, Zod 3→4 typing
     # changes, etc.). Bump these by hand after reading the changelog.
@@ -55,9 +53,6 @@ updates:
       time: "06:00"
       timezone: America/Sao_Paulo
     open-pull-requests-limit: 3
-    labels:
-      - dependencies
-      - github-actions
     # Major updates of Actions sometimes change input/output names;
     # review by hand. cloudflare/wrangler-action and actions/setup-node
     # are most likely to introduce breaking changes.
