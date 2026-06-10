@@ -1,0 +1,296 @@
+---
+title: "Automação industrial em projetos greenfield: do FEED ao comissionamento"
+description: "Greenfield em automação industrial: por que decidir arquitetura, rede CPwE, biblioteca e IEC 62443 no FEED economiza durante toda a vida útil da planta."
+pubDate: 2026-06-10
+tags: ["Greenfield", "FEED", "Comissionamento"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+**Projeto greenfield**, em automação industrial, é o projeto de uma planta
+nova, construída do zero, sem sistema legado para conviver ou migrar. O
+oposto é o projeto **brownfield**: intervenção em planta existente, onde
+PLCs, redes e supervisórios em operação limitam as escolhas. Em greenfield
+a folha está em branco — e cada decisão de automação tomada (ou adiada)
+no FEED acompanha a planta pelos 20 ou 30 anos seguintes de operação.
+
+## O que diferencia greenfield de brownfield na automação?
+
+Em um projeto brownfield, a automação herda restrições: o protocolo da
+rede existente, o padrão de programação do integrador anterior, as janelas
+de parada disponíveis para cutover. Boa parte da engenharia é gasta
+mapeando o que existe — é o mundo das [migrações de PLC](/solucoes/migracao-plc/)
+e das modernizações por fases.
+
+Em um projeto greenfield, nada disso existe ainda. As consequências
+práticas são três:
+
+- **Não há restrição herdada** — a arquitetura pode nascer correta, em vez
+  de ser corrigida depois.
+- **Não há parada de produção** — FAT, SAT e comissionamento acontecem sem
+  o relógio de uma planta parada custando produção.
+- **Não há segunda chance barata** — o que não for especificado antes da
+  compra dos pacotes vira retrabalho em campo, na fase mais cara do
+  projeto.
+
+O terceiro ponto é o que define o sucesso ou fracasso da automação em
+greenfield. A planta nova só é uma vantagem se a disciplina de automação
+entrar cedo o suficiente para aproveitá-la.
+
+## Por que decidir automação no FEED, e não no detalhamento?
+
+**FEED (Front-End Engineering Design)** é a fase de engenharia que define
+escopo técnico, especificações e estimativa de investimento antes da
+contratação de construção e montagem. É o estágio final do processo de
+*front-end loading* (FEL), usado nas indústrias de processo — óleo e gás,
+química, papel e celulose, alimentos — exatamente para amarrar as decisões
+de maior impacto enquanto mudar ainda é barato.
+
+A lógica do front-end loading é conhecida: a capacidade de influenciar o
+custo total do empreendimento é máxima nas fases iniciais e cai à medida
+que o projeto avança, enquanto o custo de qualquer mudança sobe. Para a
+automação, isso significa que decisões aparentemente "de TI" — topologia
+de rede, padrão de software, arquitetura de servidores — precisam estar
+no FEED, porque depois delas vêm em cascata:
+
+- a especificação dos pacotes mecânicos (que chegam com painéis e PLCs
+  embarcados);
+- o projeto elétrico (bandejamento, fibra óptica, salas técnicas);
+- o civil (sala de controle, sala de servidores, climatização);
+- o cronograma de testes (FAT de cada pacote contra qual padrão?).
+
+Quando a automação só é discutida no detalhamento, essas decisões já
+foram tomadas por outras disciplinas — sem critério de automação. O
+resultado típico: cada fornecedor de pacote entrega seu próprio PLC, sua
+própria IHM e seu próprio "padrão", e o custo de integrar isso aparece
+no comissionamento, multiplicado.
+
+## O que especificar cedo em um greenfield de automação?
+
+Quatro definições estruturais precisam constar da especificação de
+automação ainda no FEED. Não é necessário detalhar tudo — é necessário
+**decidir e documentar o padrão** que todos os fornecedores seguirão.
+
+### Arquitetura de rede industrial (CPwE)
+
+A rede é a fundação. A referência consolidada para plantas baseadas em
+EtherNet/IP é a **CPwE (Converged Plantwide Ethernet)**, arquitetura
+publicada em conjunto por Rockwell Automation e Cisco (guia base
+ENET-TD001 e família de design guides). A CPwE organiza a planta em
+camadas — do dispositivo de campo à zona desmilitarizada industrial
+(IDMZ) que separa OT de TI — e define segmentação, resiliência e
+gerenciamento desde o projeto.
+
+Especificar [a arquitetura CPwE no FEED](/tecnologias/ethernet-ip-cpwe/)
+significa que o projeto elétrico já nasce com as fibras, switches
+industriais e salas técnicas nos lugares certos, e que cada pacote
+comprado recebe uma folha de dados de rede: VLAN, faixa de IP, ponto de
+conexão. Sem isso, a "rede da planta" vira uma coleção de switches não
+gerenciáveis instalados por cada montador.
+
+### Padrão de biblioteca e plataforma de controle
+
+A segunda definição é a plataforma de controle e o padrão de software.
+Em plantas de processo sobre Logix, isso tipicamente significa
+[PlantPAx como DCS](/solucoes/plantpax/) e a
+[PlantPAx Library of Process Objects](/tecnologias/plantpax-library/)
+como padrão obrigatório de programação — motores, válvulas, malhas PID e
+intertravamentos instanciados a partir dos mesmos objetos, com os mesmos
+faceplates e a mesma filosofia de alarmes. A release de sistema atual é a
+PlantPAx 5.50, documentada no Selection Guide PROCES-SG001 da Rockwell
+(rev. W, abril de 2026).
+
+O ponto crítico em greenfield: o padrão de biblioteca precisa estar
+**anexado à requisição de compra de cada pacote**. Um secador, uma
+caldeira ou um sistema de envase comprados sem essa exigência chegam com
+lógica proprietária — e a planta começa a vida com três ou quatro padrões
+diferentes, o problema clássico que a biblioteca existe para evitar.
+
+### Cibersegurança por projeto (IEC 62443)
+
+Em planta nova, cibersegurança não é um adendo: é requisito de projeto. A
+série **ISA/IEC 62443** — designada pela IEC como norma horizontal em
+2021, aplicável a uma ampla gama de setores — fornece o método:
+
+- A **IEC 62443-3-2:2020** define a avaliação de risco que particiona o
+  sistema em **zonas e conduítes** e atribui a cada um o nível de
+  segurança alvo (SL-T, em escala de SL 0 a SL 4).
+- A **IEC 62443-3-3** lista os requisitos técnicos de sistema, ligados aos
+  sete foundational requirements (FRs), que cada zona precisa atender para
+  alcançar seu SL.
+- A **IEC 62443-2-4** define os requisitos de programa de segurança para
+  provedores de serviço — o critério objetivo para qualificar integradores
+  e fornecedores de pacote.
+
+Fazer [o projeto de redes já alinhado à IEC 62443](/solucoes/redes-iec-62443/)
+no FEED custa uma fração do retrofit: as zonas viram VLANs e firewalls no
+projeto de rede, os conduítes viram regras documentadas, e a IDMZ nasce
+no orçamento — não numa verba de emergência três anos depois.
+
+<TechnicalCallout variant="ot" title="Zonas e conduítes no papel, antes do campo">
+  A avaliação de risco da IEC 62443-3-2 sobre o P&ID e a arquitetura
+  preliminar — ainda no FEED — define quais áreas da planta podem
+  compartilhar rede e quais exigem segregação. Essa decisão muda
+  quantidade de switches, firewalls e fibra do projeto elétrico. Feita
+  depois da compra, ela não muda o projeto: muda o custo.
+</TechnicalCallout>
+
+### Infraestrutura OT e data center industrial
+
+A quarta definição é onde o sistema vai rodar. Um DCS moderno é também um
+conjunto de servidores — PASS, historian, engenharia, domínio — e em
+greenfield a pergunta "sala de servidores ou painel no canto da sala
+elétrica?" precisa de resposta antes do projeto civil. Especificar cedo a
+[infraestrutura de data center industrial](/solucoes/data-centers/) e a
+[camada de virtualização OT](/tecnologias/virtualizacao-ot/) define:
+
+- requisitos de sala (climatização, energia estabilizada, nobreak);
+- redundância de hosts e armazenamento;
+- estratégia de backup e recuperação de desastre desde o dia um;
+- ponto único e organizado para a IDMZ e os serviços de rede.
+
+Plantas que tratam isso como "compra de TI de última hora" terminam com
+servidores de escritório em ambiente industrial — e descobrem o custo
+disso na primeira falha de disco em safra.
+
+## Qual é a sequência típica de um greenfield: da URS ao startup?
+
+A espinha dorsal documental de um projeto greenfield de automação segue o
+modelo V usado em projetos de sistemas (formalizado, por exemplo, no
+GAMP): cada especificação à esquerda do V tem um teste correspondente à
+direita.
+
+1. **URS (User Requirements Specification)** — o que a planta precisa que
+   o sistema faça: capacidades, filosofia de operação, requisitos de
+   disponibilidade, padrões obrigatórios (biblioteca, rede, IEC 62443).
+   É o documento que vai anexado às requisições de compra.
+2. **FRS/FDS (Functional Requirements/Design Specification)** — como o
+   sistema atende a URS: arquitetura detalhada, descritivos funcionais
+   por área, matriz de causa e efeito, filosofia de alarmes.
+3. **Desenvolvimento e integração** — programação sobre a biblioteca
+   padrão, telas, configuração de rede e servidores.
+4. **FAT (Factory Acceptance Test)** — teste de aceitação na bancada do
+   fornecedor ou integrador, contra a FRS, antes do embarque. Em
+   greenfield o FAT é a única chance de testar sem pressão de obra:
+   simulação de processo, teste de intertravamentos, validação dos
+   faceplates. Pendência encontrada no FAT custa horas; a mesma pendência
+   no site custa mobilização.
+5. **SAT (Site Acceptance Test)** — repetição dirigida dos testes no
+   site, agora com o hardware definitivo instalado, redes reais e
+   integração entre os pacotes que o FAT testou isoladamente.
+6. **Comissionamento** — verificação sistemática de cada malha: bump test
+   de motores, stroke de válvulas, loop check de instrumentos, teste de
+   intertravamentos com o processo frio e depois com utilidades vivas.
+7. **Startup e ramp-up** — partida assistida com produto, sintonia de
+   malhas, ajuste de alarmes com a operação real.
+
+<TechnicalCallout variant="note" title="O comissionamento devolve o que o FEED investiu">
+  É no comissionamento que as decisões do FEED pagam ou cobram: com
+  biblioteca única, um loop check segue o mesmo roteiro nas 1.500 malhas;
+  com rede CPwE documentada, um dispositivo que não comunica é
+  diagnosticado em minutos. Sem padrão, cada pacote exige o especialista
+  do fornecedor em campo — e o caminho crítico da obra passa a ser a
+  agenda de terceiros.
+</TechnicalCallout>
+
+## Armadilhas clássicas em projetos greenfield
+
+**Automação como última linha do orçamento.** A automação costuma ser
+percentual pequeno do CAPEX total de uma planta nova, mas é o sistema que
+a operação usa todos os dias pelas décadas seguintes. Cortar a
+especificação de automação no FEED para "otimizar" o investimento
+transfere o custo — com juros — para comissionamento, treinamento e
+manutenção.
+
+**Cada pacote com um padrão.** A planta compra secador, caldeira,
+envase e utilidades de fornecedores diferentes; cada um entrega seu PLC,
+sua IHM local e sua lógica fechada. Sem URS impondo plataforma,
+biblioteca e folha de dados de rede, a "integração" vira um projeto
+extra, descoberto tarde.
+
+**Rede tratada como disciplina elétrica.** Switch industrial especificado
+como material elétrico, sem projeto lógico, sem segmentação, sem
+gerenciamento. A planta parte — e dois anos depois ninguém sabe dizer o
+que está conectado onde, condição que inviabiliza qualquer trabalho sério
+de cibersegurança.
+
+**Cibersegurança adiada para "depois da partida".** Depois da partida não
+existe janela: a planta está produzindo. O retrofit de segmentação em
+planta operando é exatamente o cenário brownfield caro que o greenfield
+existia para evitar — a IEC 62443-3-2 aplicada no FEED elimina esse
+passivo antes de ele nascer.
+
+**FAT tratado como formalidade.** Aceitar FAT sem simulação de processo,
+sem teste de intertravamentos e sem checklist contra a FRS transfere
+para o SAT e o comissionamento — as fases mais caras e com menos folga
+de cronograma — o que poderia ter sido resolvido em bancada.
+
+## Como a Integra atua em projetos greenfield
+
+A Integra Automação Industrial, de Maringá-PR e com atuação nacional
+desde 2016, trabalha nas duas pontas do problema: na engenharia (apoio à
+especificação de automação no FEED, URS, arquitetura de rede e
+cibersegurança) e na execução (desenvolvimento sobre biblioteca PlantPAx,
+FAT, SAT, comissionamento e partida assistida). Como
+[Silver System Integrator Rockwell](/certificacoes/silver-system-integrator/)
+e integrador certificado PlantPAx DCS, com base multi-vendor (Siemens TIA
+Portal e PCS 7, Schneider, Elipse E3), atendemos os setores onde
+greenfield é rotina: açúcar e etanol, agro e grãos, alimentos,
+frigoríficos, ração e química.
+
+## Perguntas frequentes
+
+### O que é um projeto greenfield em automação industrial?
+
+Projeto greenfield é a automação de uma planta industrial nova, projetada
+e construída do zero, sem sistemas legados. Isso permite definir
+arquitetura de rede, plataforma de controle, biblioteca de software e
+cibersegurança sem restrições herdadas — desde que essas definições sejam
+feitas cedo, na fase de FEED.
+
+### Qual a diferença entre greenfield e brownfield?
+
+Greenfield é planta nova, sem sistema existente; brownfield é intervenção
+em planta operando, com PLCs, redes e supervisórios legados. Em
+brownfield, o projeto gira em torno de migração e janelas de parada; em
+greenfield, gira em torno de especificação e padronização antecipadas,
+porque não há base instalada limitando as escolhas.
+
+### O que é FEED (Front-End Engineering Design)?
+
+FEED é a fase de engenharia que define escopo técnico, especificações e
+estimativa de investimento de um projeto industrial antes da contratação
+de construção e montagem. É o estágio final do front-end loading (FEL) e
+o momento de maior capacidade de influência sobre o custo total — por
+isso as definições estruturais de automação devem ser tomadas nela.
+
+### Qual a diferença entre FAT e SAT?
+
+FAT (Factory Acceptance Test) é o teste de aceitação realizado na fábrica
+ou bancada do fornecedor, antes do embarque, contra a especificação
+funcional. SAT (Site Acceptance Test) é o teste realizado no site, com o
+sistema instalado no hardware e na rede definitivos, verificando também a
+integração entre pacotes que o FAT testou isoladamente.
+
+### Quando o integrador de automação deve entrar em um projeto greenfield?
+
+No FEED, antes da compra dos pacotes mecânicos. É nesse momento que se
+definem a arquitetura de rede CPwE, o padrão de biblioteca e os requisitos
+IEC 62443 que serão anexados a cada requisição de compra. Integrador
+contratado apenas para o comissionamento herda decisões já tomadas — e o
+custo de integrá-las.
+
+### O que a IEC 62443 exige em uma planta nova?
+
+A IEC 62443-3-2:2020 exige uma avaliação de risco que particiona o
+sistema em zonas e conduítes, com nível de segurança alvo (SL-T, de SL 0
+a SL 4) para cada um; a IEC 62443-3-3 define os requisitos técnicos para
+atingir esses níveis. Em greenfield, o resultado da avaliação vira
+diretamente segmentação de rede, firewalls e IDMZ no projeto — sem custo
+de retrofit.
+
+---
+
+Planta nova em estudo ou FEED em andamento?
+[Conversamos antes da especificação](/contato?assunto=greenfield).

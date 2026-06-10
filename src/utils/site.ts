@@ -291,7 +291,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Agronegócio e grãos",
         links: [
           {
-            href: "/setores",
+            href: "/setores/acucar-e-etanol",
             label: "Açúcar e Etanol",
             description: "Safra 24/7, NFPA, moenda, fermentação, caldeira",
           },

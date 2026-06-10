@@ -1,0 +1,257 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+
+const regionalStrengths = [
+  {
+    title: "Proteína animal e alimentos",
+    description:
+      "O Paraná é o maior produtor e exportador de frango do Brasil: 34,4% do abate nacional em 2025, segundo o IBGE. Frigoríficos, fábricas de ração e plantas de alimentos operam em todo o estado com receita por lote, rastreabilidade e linhas contínuas que não toleram parada de automação.",
+  },
+  {
+    title: "Grãos e cooperativas agroindustriais",
+    description:
+      "Mato Grosso e Paraná são os dois maiores produtores de grãos do país, segundo a Conab. Cooperativas entre as maiores do Brasil têm sede na região de Maringá e do centro-oeste paranaense, com silos, terminais, secadores e esmagamento que dependem de automação confiável na janela de safra.",
+  },
+  {
+    title: "Açúcar e etanol: cana e milho",
+    description:
+      "O norte e o noroeste do Paraná concentram as usinas sucroenergéticas do estado, incluindo grupo sucroenergético de grande porte sediado na própria Maringá. A primeira usina de etanol de milho do Paraná está em implantação em Campo Mourão, com partida prevista para 2026 e capacidade acima de 250 milhões de litros por ano.",
+  },
+];
+
+const solutions = [
+  {
+    title: "PlantPAx DCS",
+    href: "/solucoes/plantpax/",
+    description:
+      "DCS plant-wide para processo contínuo: usinas, química, papel e celulose. A Integra é PlantPAx DCS Certified e trabalha com a versão 5.x, com instruções de processo embarcadas no firmware do controlador.",
+  },
+  {
+    title: "FactoryTalk Suite",
+    href: "/solucoes/factorytalk/",
+    description:
+      "View SE, Optix, Historian, Batch e AssetCentre para supervisão, historização e gestão de ativos — de frigoríficos e fábricas de ração a linhas de envase.",
+  },
+  {
+    title: "Migração PLC-5 / SLC500",
+    href: "/solucoes/migracao-plc/",
+    description:
+      "O PLC-5 está descontinuado desde 2017 e os últimos controladores SLC 500 saíram de venda em 31 de março de 2024 (Rockwell Automation). A Integra migra para ControlLogix/CompactLogix com inventário, simulação e plano de rollback.",
+  },
+  {
+    title: "Redes industriais e IEC 62443",
+    href: "/solucoes/redes-iec-62443/",
+    description:
+      "Segmentação por zonas e conduítes, IDMZ e arquitetura CPwE. Base obrigatória para qualquer planta do Paraná que queira suporte remoto seguro sem expor o chão de fábrica.",
+  },
+  {
+    title: "PI System / AVEVA",
+    href: "/solucoes/pi-system/",
+    description:
+      "Infraestrutura de dados industriais com AF Templates para transformar dados de processo em informação de gestão — da moenda ao corporativo.",
+  },
+  {
+    title: "Data centers industriais",
+    href: "/solucoes/data-centers/",
+    description:
+      "Servidores OT, virtualização, redundância e disaster recovery para sustentar SCADA, Historian e domínio FactoryTalk com disponibilidade compatível com operação 24/7.",
+  },
+];
+
+const faq = [
+  {
+    q: "A Integra atende somente Maringá e região?",
+    a: "Não. A Integra Automação Industrial tem sede em Maringá-PR, mas atua nacionalmente desde 2016, com projetos executados em vários estados. No Paraná, a base local reduz custo e tempo de deslocamento para levantamento de campo, comissionamento e atendimento presencial; fora do estado, o modelo combina engenharia remota com mobilização presencial planejada para FAT, SAT e startup.",
+  },
+  {
+    q: "Vocês fazem manutenção emergencial em sistemas de automação?",
+    a: "Sim. A Integra atende corretivas em PLC, SCADA, redes industriais e servidores OT, de forma remota ou presencial conforme a falha. Clientes com contrato de suporte têm canal prioritário; para um primeiro atendimento, o caminho é o telefone comercial ou o WhatsApp da empresa. Em paralelo à correção, a recomendação técnica é estruturar backup validado, sobressalentes críticos e diagnóstico da causa raiz — emergência recorrente é sintoma de arquitetura, não acidente.",
+  },
+  {
+    q: "Atendem usinas, cooperativas e agroindústrias da região?",
+    a: "Sim, esse é o núcleo da atuação da Integra: açúcar e etanol (cana e milho), armazenagem e esmagamento de grãos, fábricas de ração, frigoríficos e alimentos. A equipe conhece a realidade de safra 24/7 do setor sucroenergético paranaense e as janelas curtas de parada das cooperativas — os projetos são planejados por fase, com FAT, simulação e cutover dentro da janela disponível.",
+  },
+  {
+    q: "Como agendar uma visita técnica em Maringá ou no Paraná?",
+    a: "Pelo formulário da página de contato, pelo telefone comercial (44) 3305-7147 ou pelo WhatsApp (44) 99952-3947. O fluxo típico: uma primeira conversa técnica para entender o problema, visita de levantamento na planta e, a partir daí, um diagnóstico documentado com arquitetura, riscos e plano de ação — antes de qualquer proposta.",
+  },
+];
+---
+
+<BaseLayout
+  title="Automação Industrial em Maringá e no Paraná"
+  description="Empresa de automação industrial em Maringá-PR com atuação nacional: PlantPAx, FactoryTalk, migração de PLC, redes industriais e cibersegurança OT para agroindústria e usinas."
+  breadcrumbLeaf="Automação Industrial em Maringá"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação Industrial em Maringá e no Paraná",
+      description:
+        "Engenharia e integração de automação industrial a partir de Maringá-PR: DCS PlantPAx, FactoryTalk, migração de PLC legado, redes industriais IEC 62443 e infraestrutura OT para plantas no Paraná e no Brasil.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 lg:py-24">
+      <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+        Atendimento local · Maringá-PR
+      </p>
+      <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Automação Industrial em Maringá e no Paraná
+      </h1>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+        A Integra Automação Industrial é uma empresa de engenharia e integração
+        de automação industrial com sede em Maringá-PR (Rua Topázio, 965),
+        fundada em 2016, que projeta, implanta e sustenta sistemas de controle,
+        SCADA, redes industriais e cibersegurança OT para plantas em todo o
+        Paraná e no Brasil. Reconhecida como
+        <a
+          href="/certificacoes/silver-system-integrator/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >Silver System Integrator da Rockwell Automation</a
+        > e PlantPAx DCS Certified, a equipe também trabalha com Siemens (TIA
+        Portal e PCS 7), Schneider Electric, Elipse E3 e Telit deviceWISE.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Vocação regional"
+        title="Por que Maringá é uma base estratégica para automação industrial no Paraná?"
+        description="Maringá é a terceira maior cidade do Paraná, com 409.657 habitantes no Censo 2022 (IBGE), e fica no entroncamento entre o norte, o noroeste e o centro-oeste do estado — exatamente onde a agroindústria paranaense se concentra."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-3">
+        {regionalStrengths.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        Esse perfil industrial define o tipo de automação que a região exige:
+        processo contínuo em regime de safra, batelada com rastreabilidade,
+        intertravamentos de segurança e infraestrutura OT que precisa
+        sobreviver a poeira, calor e operação ininterrupta. A Integra organiza
+        sua atuação exatamente em torno desses
+        <a href="/setores/" class="font-medium text-integra-red-700 hover:underline"
+          >setores industriais</a
+        >: açúcar e etanol, agro e grãos, alimentos, frigoríficos, ração,
+        química, papel e celulose e saneamento.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Portfólio"
+        title="Quais soluções de automação industrial a Integra entrega no Paraná?"
+        description="O portfólio cobre o ciclo completo: arquitetura, engenharia, implantação, validação e suporte. Rockwell Automation no centro — PlantPAx, FactoryTalk, ControlLogix — e ecossistema multi-vendor ao redor."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {solutions.map((item) => (
+          <article class="flex flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+            <a
+              href={item.href}
+              class="mt-4 inline-flex text-sm font-semibold text-integra-red-700 hover:underline"
+            >
+              Ver solução →
+            </a>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        Para plantas da região que ainda operam controladores legados, o ponto
+        de partida costuma ser o
+        <a
+          href="/tecnologias/migracao-plc5-slc500/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >inventário técnico de PLC-5 e SLC500</a
+        >: levantamento de hardware, I/O e redes, matriz de risco por área e
+        estratégia de migração faseada — antes de qualquer troca de CPU. Um
+        exemplo documentado dessa abordagem está no
+        <a
+          href="/cases/projeto-moinho/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >case do projeto de moinho</a
+        > publicado pela Integra.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Modelo de atendimento"
+        title="Atendimento presencial em Maringá, suporte remoto no Brasil inteiro"
+        description="A decisão entre presencial e remoto não é comercial, é técnica: depende da fase do projeto, da criticidade da intervenção e da arquitetura de acesso disponível na planta."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-lg font-semibold text-integra-gray-900">
+            O que a Integra faz presencialmente
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Levantamento de campo, validação de painéis e redes, FAT com a
+            equipe do cliente, SAT, comissionamento, cutover e acompanhamento
+            de startup. Para plantas do Paraná, a base em Maringá significa
+            mobilização rápida em janelas de parada curtas — relevante em
+            setores onde a parada é sazonal e a entressafra concentra todas as
+            intervenções do ano.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-lg font-semibold text-integra-gray-900">
+            O que a Integra faz remotamente
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Engenharia de software (lógica, telas, relatórios), diagnóstico de
+            falhas, ajustes de aplicação, atualizações planejadas e suporte
+            continuado. Sempre por acesso remoto seguro alinhado à IEC 62443 —
+            jump server em IDMZ, sem exposição direta da rede de controle à
+            internet. Plantas sem essa arquitetura recebem primeiro um
+            diagnóstico de
+            <a
+              href="/solucoes/redes-iec-62443/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >redes industriais e segmentação</a
+            >.
+          </p>
+        </article>
+      </div>
+
+      <FAQAccordion
+        title="Perguntas frequentes sobre automação industrial em Maringá"
+        items={faq}
+      />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Procurando empresa de automação industrial em Maringá ou no Paraná?"
+    description="A primeira conversa é técnica: arquitetura, método e referências antes de qualquer proposta. Atendemos presencialmente em Maringá e região e remotamente em todo o Brasil."
+    primaryCta={{ href: "/contato?assunto=automacao-maringa", label: "Agendar conversa técnica" }}
+    secondaryCta={{ href: "/setores/", label: "Ver setores atendidos" }}
+  />
+</BaseLayout>

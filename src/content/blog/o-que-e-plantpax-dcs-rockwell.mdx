@@ -1,0 +1,336 @@
+---
+title: "O que é PlantPAx? O DCS moderno da Rockwell Automation explicado"
+description: "O que é PlantPAx: guia em português do DCS moderno da Rockwell. Componentes (PASS, biblioteca, controladores de processo), o que mudou na 5.x e quando adotar."
+pubDate: 2026-06-10
+tags: ["PlantPAx", "DCS", "Rockwell Automation"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+**PlantPAx é o sistema de controle distribuído (DCS) da Rockwell
+Automation**, construído sobre a plataforma Logix e o ecossistema
+FactoryTalk. Não é um produto único com part number: é um sistema completo
+de controle de processo — controladores, servidores, biblioteca de objetos,
+HMI, historiador, arquitetura de rede e cibersegurança — projetado,
+testado e documentado pela Rockwell para operar como um DCS de verdade,
+usando o mesmo hardware ControlLogix e CompactLogix que já domina o chão
+de fábrica brasileiro.
+
+Este guia responde, em português e sem rodeio, as perguntas que aparecem
+em toda reunião de modernização: o que exatamente é o PlantPAx, do que ele
+é feito, o que mudou na geração 5.x e quando ele faz sentido (ou não) para
+a sua planta.
+
+## O que significa PlantPAx e de onde ele veio?
+
+PlantPAx significa, na origem, *Plant Process Automation eXperience* — o
+nome que a Rockwell Automation deu à sua plataforma de DCS quando decidiu
+competir de frente com os sistemas de controle distribuído tradicionais
+(Honeywell, Emerson, Yokogawa, ABB), mas com uma tese diferente: em vez de
+hardware proprietário e fechado, um DCS montado sobre a **Integrated
+Architecture** — a mesma base Logix usada em automação discreta, motion e
+segurança.
+
+A consequência prática dessa tese é o principal argumento de venda do
+PlantPAx até hoje: **uma única plataforma de controle para processo
+contínuo, batelada, intertravamento de segurança, acionamentos e
+utilidades**, com um único ambiente de engenharia (Studio 5000), uma única
+rede ([EtherNet/IP](/tecnologias/ethernet-ip-cpwe/)) e um único ecossistema
+de software (FactoryTalk). Em uma usina de açúcar e etanol ou em um
+frigorífico, onde processo e automação discreta convivem na mesma planta,
+isso elimina a fronteira artificial entre "o DCS da área quente" e "os
+PLCs do resto da fábrica".
+
+A linha do tempo importa para entender a maturidade do sistema: a geração
+5.0 foi lançada em 2020, segundo a Rockwell Automation, e o
+sistema evolui em releases incrementais desde então — o guia de seleção
+oficial (PROCES-SG001, edição de abril de 2026) já documenta a **release
+5.50** como versão corrente do sistema. Ou seja: quem especifica "PlantPAx
+5.x" hoje está falando de uma plataforma com mais de cinco anos de
+evolução contínua em campo, não de uma aposta recém-lançada.
+
+## PlantPAx é DCS, SCADA ou PLC com supervisório?
+
+PlantPAx é um **DCS** — e a distinção não é semântica, é estrutural. Vale
+detalhar, porque é aqui que a maioria das especificações erra:
+
+- **PLC + supervisório** é uma integração artesanal: cada integrador
+  programa o controlador do seu jeito, desenha telas do seu jeito e define
+  alarmes do seu jeito. Funciona, mas cada projeto é único — e o custo
+  disso aparece anos depois, em manutenção, treinamento e expansão.
+- **SCADA** é uma camada de supervisão sobre ativos distribuídos,
+  frequentemente heterogêneos. O foco é visibilidade e telecomando, não
+  controle regulatório de malha fechada com governança de alarmes e
+  bateladas.
+- **DCS** é um sistema onde controle, HMI, alarmes, historiador e
+  engenharia nascem integrados, com um namespace único de tags, biblioteca
+  padronizada de objetos de processo e comportamento previsível de ponta a
+  ponta.
+
+O PlantPAx entrega a experiência do terceiro item usando o hardware do
+primeiro. É um DCS no sentido funcional — biblioteca, governança de
+alarmes, gestão de bateladas, redundância, arquitetura de referência
+testada — rodando sobre controladores
+[ControlLogix e CompactLogix](/tecnologias/controllogix-compactlogix/) de
+catálogo, o que reduz a dependência de hardware proprietário e aproveita a
+base instalada e a mão de obra que já existe no Brasil.
+
+Se a sua dúvida é mais profunda — como essa arquitetura se organiza em
+camadas, servidores e redes — já publicamos uma análise dedicada em
+[PlantPAx e arquitetura DCS moderna](/blog/plantpax-arquitetura-dcs/).
+Este guia aqui é o mapa; aquele post é o mergulho na planta baixa.
+
+## Quais são os componentes de um sistema PlantPAx?
+
+Um sistema PlantPAx caracterizado — isto é, dentro das arquiteturas que a
+Rockwell testa e documenta — combina seis blocos. Quem avalia uma proposta
+de DCS deveria conseguir apontar cada um deles na lista de materiais.
+
+### Controladores de processo
+
+Na geração 5.x, o controle roda em **controladores de processo dedicados**:
+ControlLogix 5580P (catálogos como 1756-L81EP, 1756-L83EP e 1756-L85EP) e
+CompactLogix 5380P (como 5069-L320ERP e 5069-L340ERP). O sufixo **"P"**
+não é cosmético: esses controladores trazem as instruções de processo
+embarcadas no firmware, um modelo de tarefas (tasking model) pré-configurado
+para processo e contadores de uso de instruções para dimensionamento.
+
+### PASS — Process Automation System Server
+
+O PASS é o coração de servidores do sistema. Em um PASS rodam o
+FactoryTalk Directory, o servidor HMI do
+[FactoryTalk View SE](/tecnologias/factorytalk-view-se/), o servidor de
+alarmes e eventos (FactoryTalk Alarms and Events), o servidor de dados
+FactoryTalk Linx e a interface de coleta do Historian. Em sistemas
+menores — tipicamente abaixo de 2.000 pontos de I/O, segundo a
+documentação da Rockwell — tudo isso pode ser consolidado em um único
+servidor (PASS-C); em sistemas maiores, distribui-se em múltiplos
+servidores com redundância por camada.
+
+### Servidores de aplicação (AppServ)
+
+Funções adicionais entram como servidores de aplicação dedicados: o
+AppServ-Info hospeda o
+[FactoryTalk Historian](/tecnologias/factorytalk-historian/) para
+historização de processo; o AppServ-Batch executa o FactoryTalk Batch para
+bateladas ISA-88 com receitas e registro eletrônico; o AppServ-OWS serve
+estações de operação como thin clients via Remote Desktop Services —
+relevante para salas de controle com muitas posições de operação.
+
+### Estações de trabalho (EWS e OWS)
+
+EWS (Engineering Workstation) para engenharia e manutenção do sistema;
+OWS (Operator Workstation) para operação. A separação é deliberada:
+operador não edita aplicação, e engenharia não disputa recurso com a
+operação.
+
+### Biblioteca de objetos de processo
+
+A [PlantPAx Library of Process Objects](/tecnologias/plantpax-library/) é
+o que padroniza o sistema: cada motor, válvula, transmissor e malha PID é
+instanciado a partir de um objeto testado pela Rockwell, com lógica,
+faceplate, alarmes e modos de operação consistentes. É a diferença entre
+um DCS e uma coleção de telas.
+
+### Infraestrutura de rede e segurança
+
+A arquitetura de referência de redes segue o
+[CPwE (Converged Plantwide Ethernet)](/tecnologias/ethernet-ip-cpwe/),
+desenvolvido pela Rockwell com a Cisco, e a governança de cibersegurança
+se alinha à [IEC 62443](/tecnologias/iec-62443-nist-ot/) — não como
+acessório, mas como parte da arquitetura certificada.
+
+## O que mudou no PlantPAx 5.x?
+
+A mudança estrutural da geração 5.x — e o motivo de ela ser tratada como
+um divisor de águas — está na forma como a biblioteca de objetos chega ao
+controlador.
+
+Até o PlantPAx 4.x, os objetos de processo eram **Add-On Instructions
+(AOIs)**: blocos de código importados para dentro de cada projeto Studio
+5000. Funcionava, mas cada projeto carregava sua cópia da biblioteca,
+consumindo memória do controlador e criando o clássico problema de
+versionamento — plantas com três versões de biblioteca convivendo no mesmo
+site.
+
+No PlantPAx 5.x, as instruções de processo são **embarcadas no firmware
+dos controladores de processo** (5380P/5580P). Instruções como PAI
+(Process Analog Input), PPID (Process PID), PVLV (Process Valve) e PMTR
+(Process Motor) — documentadas no manual de referência PROCES-RM215 da
+Rockwell — fazem parte do firmware, exatamente como uma instrução TON ou
+MOV. As consequências práticas:
+
+- **Memória**: a lógica da instrução não consome memória de aplicação do
+  usuário; o projeto carrega apenas as instâncias e seus dados.
+- **Consistência**: todo controlador com o mesmo firmware executa a mesma
+  versão da instrução — multi-site com comportamento idêntico deixa de ser
+  promessa e vira propriedade do sistema.
+- **Ciclo de vida**: atualizar a biblioteca passa a ser uma decisão de
+  firmware, gerenciada como qualquer atualização de controlador, e não uma
+  reimportação de AOIs projeto a projeto.
+
+O requisito de entrada: o PlantPAx 5.0 exige Studio 5000 e firmware a
+partir da **versão 33**. Quem está em ControlLogix 5570 ou anterior não
+roda as instruções embarcadas — esse é um dos critérios objetivos para
+planejar [migração de controladores](/solucoes/migracao-plc/).
+
+<TechnicalCallout variant="note" title="Como reconhecer um controlador de processo">
+  O sufixo do catálogo diz tudo: 1756-L85EP e 5069-L340ERP terminam em
+  "P" de *Process*. Nas propriedades do controlador no Studio 5000, esses
+  modelos exibem uma aba PlantPAx para configurar o tasking model e
+  acompanhar o contador de instruções de processo. Se a proposta de "DCS
+  PlantPAx 5.x" lista controladores sem o sufixo P, o que está sendo
+  vendido é outra arquitetura.
+</TechnicalCallout>
+
+Além da biblioteca embarcada, a geração 5.x trouxe frameworks de análise
+conectando dados ao vivo e históricos a ferramentas de relatório, HMI
+alinhada à ISA-101 e — ponto relevante para quem responde a auditoria —
+**arquiteturas certificadas pela TÜV conforme a IEC 62443-3-3**, segundo o
+anúncio oficial da Rockwell. A partir da 5.0, o sistema seguiu evoluindo
+em releases incrementais (5.10, 5.20, 5.30, 5.40) até a 5.50 documentada
+no guia de seleção de abril de 2026. O detalhe técnico de cada release
+está na nossa página de [PlantPAx 5.x](/tecnologias/plantpax-5x/).
+
+## Quais normas ISA e IEC o PlantPAx segue?
+
+Para quem opera processo regulado — alimentos, química, saneamento — o
+alinhamento normativo não é detalhe de brochura, é requisito de projeto.
+O PlantPAx incorpora três normas ISA e uma IEC como fundação:
+
+- **ISA-88 (batch)**: o modelo de bateladas do sistema é estruturado em
+  ISA-88, do sequenciamento local no controlador (controller-based) ao
+  FactoryTalk Batch com gestão de receitas e registros eletrônicos.
+- **ISA-18.2 (gestão de alarmes)**: os objetos da biblioteca nascem com
+  estados, prioridades e shelving compatíveis com a filosofia de alarmes
+  da ISA-18.2 — racionalização de alarmes deixa de ser retrabalho.
+- **ISA-101 (HMI)**: os faceplates e elementos gráficos seguem as
+  diretrizes de HMI de alto desempenho da ISA-101 — tons de cinza, cor
+  reservada para anormalidade, hierarquia de navegação.
+- **IEC 62443 (cibersegurança)**: as arquiteturas de referência são
+  certificadas conforme a IEC 62443-3-3, e o desenho de zonas e conduítes
+  segue o CPwE.
+
+<TechnicalCallout variant="ot" title="Norma no papel não protege planta">
+  A certificação IEC 62443-3-3 vale para a arquitetura de referência —
+  não para qualquer instalação que use os mesmos produtos. Se a
+  implementação achata zonas, pula o IDMZ ou expõe o PASS à rede
+  corporativa, o certificado da Rockwell não socorre. Tratamos disso em
+  [redes industriais e IEC 62443](/solucoes/redes-iec-62443/).
+</TechnicalCallout>
+
+## Quando o PlantPAx faz sentido — e quando não?
+
+PlantPAx é a resposta certa para um conjunto específico de problemas. O
+padrão que vemos em campo, atendendo açúcar e etanol, agroindústria,
+alimentos, química, papel e celulose e saneamento:
+
+**Faz sentido quando:**
+
+- O processo é **contínuo ou em batelada** com controle regulatório
+  relevante — malhas PID, intertravamentos de processo, sequenciamentos —
+  e não apenas lógica discreta.
+- A planta tem **escala de instrumentação**: centenas de motores e
+  válvulas e milhares de instrumentos, onde padronização de objetos vira
+  economia estrutural de manutenção e treinamento.
+- Há requisito de **governança de alarmes (ISA-18.2)**, **bateladas com
+  rastreabilidade (ISA-88)** ou **auditoria de cibersegurança (IEC
+  62443)** — exigências que PLC + supervisório artesanal não atende sem
+  reinventar o DCS por conta própria.
+- A empresa é **multi-site** e quer o mesmo comportamento de controle e
+  operação em todas as unidades.
+- Já existe **base instalada Rockwell** e equipe treinada em Logix — o
+  custo de adoção cai drasticamente.
+
+**Não é o caminho quando:**
+
+- A aplicação é **máquina ou linha discreta** sem controle regulatório
+  significativo — um ControlLogix com FactoryTalk View resolve, sem a
+  camada de servidores de um DCS.
+- O sistema é **pequeno e isolado**, sem perspectiva de expansão — o
+  investimento em arquitetura de servidores não se paga.
+- A planta precisa apenas de **supervisão remota de ativos dispersos** —
+  isso é problema de SCADA/telemetria, não de DCS.
+
+Sobre custo: o que define o investimento em um PlantPAx não é uma tabela
+de preço, são **fatores de arquitetura** — contagem de I/O e de objetos de
+processo, redundância exigida por camada (controlador, rede, servidores),
+virtualização da camada de servidores, escopo de migração do legado e
+maturidade da infraestrutura de rede existente. Dois projetos com o mesmo
+número de I/O podem ter ordens de grandeza diferentes conforme esses
+fatores. Desconfie de quem dá preço de DCS sem antes responder essas
+perguntas.
+
+## Como a Integra implementa PlantPAx
+
+A Integra Automação Industrial, de Maringá-PR e com atuação nacional desde
+2016, é [Silver System Integrator da Rockwell
+Automation](/certificacoes/silver-system-integrator/) com certificação
+PlantPAx DCS. Na prática, isso significa projetos entregues conforme as
+arquiteturas caracterizadas — PASS dimensionado pelo guia de seleção,
+biblioteca de objetos sem customização desnecessária, rede CPwE e governança
+IEC 62443 desde o desenho, não como retrofit.
+
+Por sermos multi-vendor (Siemens TIA Portal e PCS 7, Schneider, Elipse
+E3), a recomendação de PlantPAx sai de uma análise técnica, não de um
+catálogo único: quando a resposta certa for outra plataforma, é isso que
+vai estar no relatório. O ponto de partida típico é um diagnóstico da base
+instalada — controladores, rede, HMI, historiador — que ordena a
+modernização em fases executáveis, como detalhamos em [soluções
+PlantPAx](/solucoes/plantpax/).
+
+## Perguntas frequentes
+
+### PlantPAx é um DCS ou um SCADA?
+
+PlantPAx é um DCS — sistema de controle distribuído. Ele integra
+controladores, HMI, alarmes, historiador e biblioteca de objetos como um
+sistema único e caracterizado, que é a definição funcional de DCS. Um
+SCADA supervisiona ativos distribuídos; o PlantPAx controla o processo em
+malha fechada com governança de ponta a ponta.
+
+### Qual é a versão atual do PlantPAx?
+
+A release corrente documentada pela Rockwell Automation é a PlantPAx
+5.50, conforme o guia de seleção PROCES-SG001 de abril de 2026. A geração
+5.x existe desde 2020, quando a 5.0 foi lançada, e evolui em
+releases incrementais (5.10, 5.20, 5.30, 5.40, 5.50).
+
+### Preciso de controladores especiais para o PlantPAx 5.x?
+
+Sim. O PlantPAx 5.x usa controladores de processo dedicados — ControlLogix
+5580P e CompactLogix 5380P, identificados pelo sufixo "P" no catálogo
+(por exemplo 1756-L85EP, 5069-L340ERP) — que trazem as instruções de
+processo embarcadas no firmware. O requisito mínimo de plataforma é Studio
+5000 e firmware versão 33.
+
+### PlantPAx funciona com os ControlLogix que já tenho na planta?
+
+Em parte. Controladores ControlLogix padrão rodam a biblioteca de objetos
+em formato Add-On Instruction (modelo do PlantPAx 4.x), mas não executam
+as instruções embarcadas da geração 5.x — isso exige os modelos de
+processo 5380P/5580P. Em modernizações, é comum operar arquiteturas mistas
+durante a transição, com migração de controladores planejada por fases.
+
+### Quanto custa um sistema PlantPAx?
+
+Não existe preço de tabela: o investimento é função da contagem de I/O e
+de objetos de processo, da redundância exigida em cada camada, da
+virtualização dos servidores, do escopo de migração do legado e da
+infraestrutura de rede existente. Sistemas pequenos podem consolidar os
+serviços em um único servidor (PASS-C, tipicamente até 2.000 I/O), o que
+reduz significativamente a camada de servidores.
+
+### Qual a diferença entre PlantPAx e FactoryTalk View SE?
+
+FactoryTalk View SE é o software de HMI/supervisório da Rockwell — um
+componente. PlantPAx é o sistema DCS completo, que usa o FactoryTalk View
+SE como camada de visualização ao lado dos controladores de processo, da
+biblioteca de objetos, do FactoryTalk Historian, dos servidores PASS e da
+arquitetura de rede e segurança. Comprar View SE não é comprar um DCS.
+
+---
+
+Avaliando PlantPAx para a sua planta? [Conversamos antes da
+proposta](/contato?assunto=plantpax).

@@ -1,0 +1,389 @@
+---
+title: "Migração PLC-5 para ControlLogix: o guia completo"
+description: "Guia técnico de migração PLC-5 para ControlLogix: datas de fim de vida, conversão de I/O com Bulletin 1492, tradução de lógica RSLogix 5 e cutover faseado."
+pubDate: 2026-06-10
+tags: ["Migração PLC", "ControlLogix", "Rockwell"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+## O que é a migração PLC-5 para ControlLogix?
+
+Migração PLC-5 é o processo de substituir um sistema de controle Allen-Bradley
+PLC-5 (controladores 1785 e I/O 1771) por uma plataforma Logix moderna,
+tipicamente ControlLogix com programação em Studio 5000 Logix Designer. Migrar
+não é só "trocar a CPU": envolve converter a lógica de aplicação, decidir o
+destino das centenas de pontos de I/O em campo, modernizar a rede de
+comunicação e fazer tudo isso com o mínimo de parada possível em uma planta que
+não pode ficar desligada.
+
+A urgência tem data. A Rockwell Automation descontinuou o hardware PLC-5 (linhas
+1785 e 1771) em **junho de 2017** — não vende mais nem dá suporte de fábrica. E
+o software de programação **RSLogix 5 chegou à fase final de ciclo de vida em 31
+de dezembro de 2025**: depois dessa data não há novas ativações de licença. Ou
+seja, quem ainda roda PLC-5 hoje opera sobre uma base sem fornecimento de peças
+novas e sem ferramenta de engenharia atualizada.
+
+Este guia descreve a [migração PLC-5/SLC 500](/tecnologias/migracao-plc5-slc500)
+em seis fases — levantamento, engenharia, conversão, FAT, cutover e suporte — do
+ponto de vista de quem precisa entregar a planta rodando no fim.
+
+## Quando o PLC-5 e o SLC 500 saíram de linha?
+
+O calendário de obsolescência da Rockwell é o gatilho mais objetivo para
+priorizar a migração PLC-5. Três marcos importam:
+
+- **PLC-5 (hardware 1785 e I/O 1771)** — descontinuado em **junho de 2017**.
+  Sem venda nova nem suporte de fábrica desde então; o mercado restante é peça
+  usada e refurbished, sem garantia de fornecimento.
+- **SLC 500 (controladores e I/O 1746/1747)** — a Rockwell anunciou a
+  descontinuação dos controladores remanescentes para **31 de março de 2024**,
+  com o suporte encerrando ao longo de 2024. A recomendação oficial de destino
+  para o SLC 500 é CompactLogix 5380 com I/O Compact 5000.
+- **RSLogix 5 (software do PLC-5)** — fase de descontinuação em **31 de dezembro
+  de 2025**. Sem novas ativações depois dessa data; só continua quem já tem
+  licença instalada (e, para suporte, contrato Legacy TechConnect).
+
+A leitura de engenharia é direta: o PLC-5 está há quase uma década fora de linha
+e a janela de "deixar como está" fechou. Cada falha de módulo agora é uma
+caçada por peça no mercado secundário, com tempo de parada imprevisível. Vale
+verificar o status de ciclo de vida (Product Lifecycle Status) de cada catálogo
+direto na Rockwell antes de decidir; veja como tratamos a
+[migração PLC-5/SLC 500](/solucoes/migracao-plc).
+
+<TechnicalCallout variant="warning" title="O risco silencioso é a engenharia, não o hardware">
+  Muita planta foca em estocar módulos 1771 sobressalentes e esquece que, sem
+  RSLogix 5 ativável, uma simples alteração de lógica ou um download de
+  recuperação pode ficar inviável. Backup do projeto, mídia de instalação e
+  chave de ativação do RSLogix 5 fazem parte do inventário crítico tanto quanto
+  o hardware.
+</TechnicalCallout>
+
+## Quais são as seis fases de uma migração PLC-5?
+
+Uma migração PLC-5 para ControlLogix bem conduzida segue seis fases sequenciais:
+**(1) levantamento** do sistema existente, **(2) engenharia** da arquitetura
+nova, **(3) conversão** de lógica e I/O, **(4) FAT** (teste de aceitação em
+fábrica), **(5) cutover** em campo e **(6) suporte** pós-energização. Pular ou
+comprimir fases é a origem da maioria dos problemas de comissionamento.
+
+A lógica do faseamento é gerenciar risco: cada fase reduz incerteza antes de
+você tocar no que está em produção. Quanto mais cedo um problema aparece — de
+preferência ainda no FAT, em bancada —, mais barato e seguro é resolver. As
+seções a seguir detalham cada fase.
+
+## Fase 1 — Como levantar o sistema PLC-5 existente?
+
+O levantamento é a fotografia precisa do PLC-5 que está em produção: programa,
+hardware, I/O, rede e documentação real (não a de projeto, que costuma estar
+desatualizada). Sem essa base, toda estimativa de engenharia vira chute.
+
+O levantamento mínimo de uma migração PLC-5 inclui:
+
+- **Upload e backup do programa** de cada processador PLC-5, com a versão exata
+  de RSLogix 5 e o status de ativação registrados.
+- **Inventário de I/O**: contagem de cartões 1771 por tipo (digital, analógico,
+  especiais), e mapeamento de quais usam swing-arm (braço articulado) — fator
+  decisivo para a estratégia de conversão de I/O na Fase 3.
+- **Mapa da rede**: quem está em Data Highway Plus (DH+), Remote I/O (RIO), e
+  quem precisa continuar conversando com PLC-5/SLC 500 que não serão migrados
+  agora.
+- **Interfaces externas**: mensagens (`MSG`) para outros controladores, SCADA,
+  historiadores, gateways, e qualquer indireção que dependa de endereçamento
+  físico do PLC-5.
+- **Estado físico**: condição de painéis, borneiras, fiação de campo e
+  documentação as-built — o que é confiável e o que precisa ser conferido em
+  campo.
+
+O entregável dessa fase é um documento de premissas que alimenta a engenharia.
+É também onde se decide o escopo honesto: nem toda planta precisa migrar tudo de
+uma vez, e o levantamento revela quais áreas podem ser faseadas.
+
+## Fase 2 — Como projetar a arquitetura ControlLogix de destino?
+
+A engenharia traduz o levantamento em uma arquitetura ControlLogix dimensionada:
+controlador, chassi, módulos de I/O, rede e estratégia de comunicação. É aqui
+que se define o que é troca direta e o que exige reprojeto. A plataforma de
+destino padrão para o PLC-5 é
+[ControlLogix](/tecnologias/controllogix-compactlogix) — o porte do PLC-5
+costuma pedir o chassi 1756 pela densidade de I/O e pela necessidade de redes
+redundantes; o SLC 500 normalmente migra para CompactLogix 5380.
+
+As decisões estruturais da fase de engenharia:
+
+- **Controlador e chassi**: dimensionar memória, número de tasks e slots de I/O
+  com folga para crescimento, não para o estado atual.
+- **Estratégia de I/O** (detalhada na Fase 3): conversão de fiação com Bulletin
+  1492 versus substituição completa de chassi e remarcação de campo.
+- **Rede**: caminho de DH+/RIO para EtherNet/IP, incluindo o período de
+  convivência entre o legado e o novo (ver seção de rede).
+- **HMI/SCADA**: a migração de controlador quase sempre arrasta a camada de
+  supervisão. Vale alinhar desde já com
+  [FactoryTalk View SE](/tecnologias/factorytalk-view-se) ou a plataforma de
+  visualização existente para não descobrir incompatibilidade no cutover.
+
+Aqui não falamos em números de custo — eles dependem de fatores como contagem de
+I/O, quantidade de pontos que exigem reprojeto de fiação, criticidade da janela
+de parada e grau de modernização da rede. O papel da engenharia é tornar esses
+fatores visíveis e dimensionáveis antes de qualquer compromisso de prazo.
+
+## Fase 3 — O que a ferramenta de tradução RSLogix 5 converte e o que precisa ser reescrito?
+
+A conversão de lógica usa o migrador embutido no Studio 5000 Logix Designer,
+acessado em **Tools > Translate PLC-5/SLC** (a partir da v19 corresponde ao
+utilitário RSLogix Project Migrator). O fluxo é exportar o programa PLC-5 para o
+formato `.PC5` (mais um arquivo `.TXT` para trazer comentários e símbolos) e
+importar no migrador. A ferramenta converte a maior parte da lógica de relés e
+instruções básicas, mas **não é uma conversão 100% automática** — a parcela
+convertida automaticamente varia bastante conforme o projeto, e o restante exige
+reescrita manual com validação de engenheiro.
+
+O que normalmente **converte automaticamente** sem intervenção:
+
+- Lógica de contatos e bobinas, temporizadores, contadores e comparações
+  básicas.
+- Estrutura geral de rotinas e a maioria das instruções aritméticas e lógicas.
+
+O que **exige atenção ou reescrita manual** em quase toda migração PLC-5:
+
+- **Bases de tempo de timer**: o PLC-5 usa bases de 0,01 s e 1,0 s, enquanto o
+  Logix opera em base de 1 ms (0,001 s). Pré-sets precisam ser revisados para
+  não mudar o comportamento de processo.
+- **Endereçamento indireto e indexado**: o PLC-5 referencia memória por endereço
+  físico (ex.: `N7:[N7:0]`); o Logix usa tags simbólicas. Toda indireção que
+  dependia de offset numérico tem de ser remodelada com arrays e índices.
+- **Instruções `MSG` (mensagens)**: a sintaxe e o roteamento mudam por completo
+  com a saída do DH+/RIO para EtherNet/IP. Cada mensagem precisa ser
+  reconfigurada e testada quanto a caminho e mapeamento de tags.
+- **Malhas `PID`**: a instrução PID do PLC-5 não tem equivalência 1:1 — escala,
+  ganhos e modo de operação têm de ser revisados, e muitos projetos aproveitam
+  para padronizar em blocos de processo.
+- **Instruções de bloco e especiais** (por exemplo `BTR`/`BTW` de block-transfer
+  do I/O 1771, I/O imediato `IIN`/`IOT`, e `MSG`/`PID`): exigem revisão na
+  conversão. Instruções sem equivalente direto no Logix são importadas como
+  **UNK** (unknown); rungs com conversão duvidosa recebem um **PCE (Program
+  Conversion Error)** — nos dois casos o migrador marca o ponto que o engenheiro
+  precisa rever.
+
+<TechnicalCallout variant="note" title="Trate UNK e PCE como lista de tarefas, não como erro">
+  O migrador sinaliza a lógica que precisa de intervenção de duas formas:
+  instruções sem equivalente no Logix entram como UNK (unknown) e rungs com
+  conversão duvidosa recebem um Program Conversion Error (PCE). Em vez de "limpar
+  os avisos" às pressas, use UNKs e PCEs como roteiro de revisão linha a linha —
+  cada um deve ser apagado e substituído pela lógica corrigida. A Rockwell mantém
+  um manual inteiro sobre isso (referência 1756-RM085, "Converting PLC-5 or SLC
+  500 Logic to Logix-Based Logic") — é leitura obrigatória antes de fechar a
+  lógica convertida.
+</TechnicalCallout>
+
+## Fase 3 (I/O) — Converter a fiação com Bulletin 1492 ou trocar o chassi?
+
+A decisão de I/O da migração PLC-5 tem dois caminhos: **(a)** usar o sistema de
+conversão de fiação Bulletin 1492 (swing-arm) para reaproveitar a fiação de
+campo existente, ou **(b)** substituir o chassi 1771 por 1756 e remarcar toda a
+fiação de campo nas borneiras novas. A escolha muda radicalmente o tempo de
+parada e o risco de erro de fiação no cutover.
+
+O **sistema de conversão de fiação Bulletin 1492** (Selection Guide 1492-SG121,
+"PLC-5 1771 to ControlLogix 1756") foi feito para eliminar o "rip and replace"
+da fiação. O princípio:
+
+- Os **braços articulados (swing-arms) 1771 existentes** encaixam direto no
+  conector de borda dos **módulos de conversão 1492** — nenhum fio de campo é
+  removido do swing-arm, o que praticamente elimina o risco de troca de fiação.
+- Cabos **pré-fabricados** ligam o módulo de conversão 1492 ao bloco de bornes
+  removível (RTB) do módulo 1756 correspondente, em comprimentos padronizados
+  (tipicamente 0,5 m ou 1,0 m).
+- Há módulos de conversão para I/O **digital e analógico** 1771 → 1756.
+
+Na prática, o Bulletin 1492 troca uma campanha demorada de remarcação de campo
+por uma operação de "plug" controlada — o que encurta drasticamente a janela de
+parada e reduz a chance de fio trocado. A troca de chassi com remarcação total
+faz sentido quando a fiação de campo está em mau estado, quando o layout do
+painel vai mudar de qualquer forma, ou quando a planta prefere zerar a
+documentação. Não existe resposta única: a escolha sai do levantamento da Fase 1
+(quais cartões usam swing-arm e em que estado está a borneira).
+
+## Como migrar a rede de DH+ para EtherNet/IP?
+
+A migração de rede é o ponto onde o PLC-5 mais resiste, porque a planta quase
+nunca pode largar o Data Highway Plus (DH+) de uma vez. DH+ é uma rede de
+passagem de token que opera em 57,6 / 115,2 / 230,4 kbps — décadas mais lenta e
+menos diagnosticável que o EtherNet/IP de destino. A estratégia padrão é
+**conviver antes de cortar**.
+
+O caminho recomendado pela Rockwell para a fase de transição é um **gateway
+ControlLogix**: um chassi 1756 com módulo **1756-DHRIO** (que oferece dois canais
+DH+/RIO independentes, A e B) para falar com o legado, e um módulo
+**1756-EN2T** de EtherNet/IP para a rede nova. Esse gateway desacopla a saúde da
+rede nova do estado de qualquer PLC-5 individual — diferente de simplesmente
+trocar um PLC-5/40 por um PLC-5/40E, em que a porta DH+ vira ponto único de
+falha se o processador entrar em Program ou faltar.
+
+Na prática, isso permite migrar área por área: os controladores ControlLogix
+novos já nascem em EtherNet/IP, enquanto o gateway mantém a comunicação com os
+PLC-5 e SLC 500 que ainda não foram migrados. Quando o último nó legado sai, o
+gateway DH+ é removido. Modernizar a rede também é a porta de entrada para
+arquitetura [CPwE / EtherNet/IP](/tecnologias/ethernet-ip-cpwe) e para a camada
+de cibersegurança industrial — assunto que o DH+ simplesmente não endereça.
+
+## Fase 4 — Por que o FAT é a fase que mais reduz risco?
+
+O FAT (Factory Acceptance Test) é o teste do sistema ControlLogix migrado em
+bancada, antes de ir a campo: controlador, lógica convertida e, idealmente,
+simulação de I/O e da HMI rodando juntos. É a última oportunidade de achar
+problema com a planta ainda intocada — e por isso é a fase que mais barateia a
+migração PLC-5 como um todo.
+
+Um FAT consistente em migração PLC-5 cobre:
+
+- **Validação rung a rung dos PCEs**: confirmar que cada Program Conversion
+  Error foi resolvido com o comportamento idêntico ao do PLC-5 original.
+- **Teste de timers e PIDs** com a nova base de tempo de 1 ms, comparando
+  resposta com a referência do sistema antigo.
+- **Mensagens `MSG`** reconfiguradas para EtherNet/IP, testadas contra
+  destinos simulados ou reais.
+- **Sequências de intertravamento e modos de falha** — exatamente os pontos onde
+  uma conversão silenciosamente errada vira incidente de segurança no cutover.
+- **Integração com a HMI/SCADA** e com o historiador, validando tags e telas.
+
+Quanto mais o FAT se aproximar das condições reais (mesma topologia de rede,
+mesma versão de firmware, simulação de I/O fiel), menos surpresa no campo. Um
+FAT bem documentado também vira a base do checklist de cutover.
+
+## Fase 5 — Como fazer o cutover com a planta rodando?
+
+Cutover é a substituição física do PLC-5 pelo ControlLogix em campo, dentro de
+uma janela de parada planejada. Em planta de processo contínuo — açúcar e
+etanol, papel e celulose, química, saneamento — essa janela é curta e cara, e a
+estratégia é **faseada**: migrar por área ou por sistema, não a planta inteira
+num único final de semana.
+
+Os princípios de um cutover faseado de migração PLC-5:
+
+- **Sequenciar por área**: aproveitar paradas parciais (uma linha, um setor) em
+  vez de exigir uma parada geral. O gateway DH+/EtherNet/IP é o que torna isso
+  possível, mantendo a comunicação entre o que já migrou e o que ainda não.
+- **Pré-montagem**: chassi 1756, módulos de conversão Bulletin 1492 e cabos
+  pré-fabricados preparados e testados no FAT, para que a janela seja de
+  conexão, não de montagem.
+- **Plano de rollback escrito**: para cada área, o caminho documentado de voltar
+  ao PLC-5 caso algo dê errado dentro da janela. Sem rollback, não se inicia o
+  cutover.
+- **Energização e verificação ponto a ponto**: conferir cada entrada e saída
+  contra o campo antes de devolver o controle ao operador — é onde a abordagem
+  swing-arm do 1492 paga dividendos, por reduzir o número de fios mexidos.
+
+A frase que resume a fase: a migração se planeja para que o cutover seja
+entediante. Toda a engenharia das fases 1 a 4 existe para que a janela de campo
+não tenha descobertas.
+
+## Fase 6 — O que o suporte pós-energização precisa cobrir?
+
+O suporte (comissionamento assistido) é o acompanhamento da operação logo após o
+cutover, com a equipe de engenharia disponível para ajuste fino e resposta
+rápida. Energizar não é o fim da migração PLC-5 — é o início do período em que
+diferenças sutis de comportamento aparecem sob carga real de processo.
+
+O suporte pós-cutover normalmente cobre:
+
+- **Acompanhamento assistido nos primeiros turnos**, com presença ou plantão
+  remoto para tratar qualquer divergência de comportamento.
+- **Ajuste fino de malhas PID** sob condição real, já que o FAT roda em
+  simulação e o processo real sempre tem nuances.
+- **Atualização da documentação as-built** — programa final, fiação real,
+  configuração de rede e backup do projeto Studio 5000 entregues e versionados.
+- **Transferência de conhecimento** para a equipe de manutenção: como dar
+  upload, fazer backup, restaurar e diagnosticar o novo sistema.
+
+Esse fechamento é o que separa uma migração entregue de uma migração abandonada.
+O ControlLogix novo só agrega valor se a planta souber operar e manter o que
+recebeu.
+
+## Quais são os riscos típicos de uma migração PLC-5 e como mitigá-los?
+
+Os riscos recorrentes de uma migração PLC-5 são previsíveis — e por serem
+previsíveis, são mitigáveis com método. Os principais:
+
+- **Conversão de lógica tratada como automática.** Mitigação: revisar todo UNK e
+  PCE, validar timers (base 1 ms × 0,01/1,0 s), PIDs e indireções no FAT, com o
+  manual 1756-RM085 na mão.
+- **Erro de fiação no cutover.** Mitigação: preferir o sistema Bulletin 1492
+  swing-arm onde a fiação de campo está sã, reduzindo o número de fios mexidos a
+  quase zero.
+- **Rede subestimada.** Mitigação: planejar a convivência DH+ ↔ EtherNet/IP com
+  gateway ControlLogix (1756-DHRIO + 1756-EN2T) desde a engenharia, não no
+  campo.
+- **Janela de parada estourada.** Mitigação: cutover faseado por área, com
+  pré-montagem e rollback escrito para cada fase.
+- **Documentação e ativação perdidas.** Mitigação: tratar backup do projeto,
+  mídia e ativação do RSLogix 5 como item crítico de inventário — lembrando que
+  não há novas ativações desde 31 de dezembro de 2025.
+- **Escopo "tudo de uma vez".** Mitigação: faseamento honesto saído do
+  levantamento; migrar primeiro o que está mais crítico ou mais exposto a
+  falha de hardware.
+
+A Integra Automação Industrial — integradora Silver System Integrator Rockwell,
+de Maringá-PR, com atuação nacional em setores de processo contínuo como açúcar
+e etanol, grãos, alimentos, papel e celulose e saneamento — conduz
+[migração PLC-5/SLC 500 para Logix](/solucoes/migracao-plc) seguindo exatamente
+esse faseamento, com FAT e cutover planejados para planta em operação. Veja os
+[setores atendidos](/setores) ou [fale com a engenharia](/contato?assunto=migracao-plc)
+antes de fechar escopo.
+
+## Perguntas frequentes
+
+### O PLC-5 ainda tem suporte da Rockwell em 2026?
+
+Não. A Rockwell descontinuou o hardware PLC-5 (linhas 1785 e I/O 1771) em junho
+de 2017 e o software RSLogix 5 chegou à fase final de ciclo de vida em 31 de
+dezembro de 2025, sem novas ativações de licença. Em 2026, manter PLC-5 significa
+depender de peças do mercado secundário e de uma licença de engenharia que não
+pode mais ser reativada.
+
+### A ferramenta de tradução converte 100% do programa PLC-5 automaticamente?
+
+Não. O migrador do Studio 5000 (Tools > Translate PLC-5/SLC) converte a maior
+parte da lógica básica, mas a parcela automática varia conforme o projeto. Timers
+(mudança de base para 1 ms), malhas PID, endereçamento indireto e instruções MSG
+exigem revisão manual — instruções sem equivalente no Logix entram como UNK
+(unknown) e rungs com conversão duvidosa recebem um Program Conversion Error
+(PCE), ambos para o engenheiro resolver e validar.
+
+### Preciso refazer toda a fiação de campo ao migrar para ControlLogix?
+
+Nem sempre. O sistema de conversão de fiação Bulletin 1492 (swing-arm) permite
+reaproveitar a fiação de campo existente: os braços articulados 1771 encaixam em
+módulos de conversão 1492 ligados por cabos pré-fabricados ao I/O 1756, sem
+remover fios do campo. Refazer a fiação só compensa quando a borneira está em mau
+estado ou o layout do painel vai mudar de qualquer forma.
+
+### Dá para migrar o PLC-5 sem parar a planta inteira?
+
+Sim, com cutover faseado. A estratégia é migrar por área ou por sistema dentro de
+janelas de parada parciais, usando um gateway ControlLogix (1756-DHRIO +
+1756-EN2T) para manter a comunicação entre o que já migrou para EtherNet/IP e os
+PLC-5/SLC 500 ainda em DH+. Cada fase tem pré-montagem e plano de rollback
+escrito antes de iniciar.
+
+### O que acontece com a rede DH+ na migração?
+
+A rede Data Highway Plus (DH+) — token-passing a 57,6 / 115,2 / 230,4 kbps — é
+substituída por EtherNet/IP. Durante a transição, um gateway ControlLogix com
+módulo 1756-DHRIO faz a ponte entre o DH+ legado e a rede nova, permitindo
+convivência até o último nó migrar. O gateway DH+ é removido quando não há mais
+equipamento legado na rede.
+
+### O SLC 500 segue o mesmo caminho do PLC-5?
+
+Em parte. O SLC 500 também foi descontinuado (controladores remanescentes
+anunciados para 31 de março de 2024), mas o destino recomendado pela Rockwell é
+CompactLogix 5380 com I/O Compact 5000, não ControlLogix. A mesma ferramenta de
+tradução e a mesma lógica de fases (levantamento, engenharia, conversão, FAT,
+cutover, suporte) se aplicam à
+[migração de SLC 500](/tecnologias/migracao-plc5-slc500).
+
+---
+
+Tem um parque PLC-5 ou SLC 500 para modernizar? [Conversamos antes da proposta](/contato?assunto=migracao-plc).

@@ -1,0 +1,373 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const silverRequisitos = [
+  "Marcos comerciais anuais sobre a plataforma Rockwell, verificados pela fabricante",
+  "Competências técnicas validadas nas Technology Disciplines do programa — no caso da Integra: Control, Visualization, Process e Power",
+  "Engenheiros capacitados no currículo oficial de cada disciplina, com atualização contínua",
+  "Processo formal de avaliação e aprovação, com renovação periódica do status",
+];
+
+const diferenciais = [
+  {
+    title: "Canal direto com a engenharia Rockwell",
+    description:
+      "Integradores do PartnerNetwork têm canais oficiais de escalação técnica, acesso antecipado a roadmap e participação em laboratórios da fabricante. Dúvida de compatibilidade de firmware ControlLogix ou de versão FactoryTalk não vira pesquisa em fórum: vira chamado tratado com a engenharia de produto.",
+  },
+  {
+    title: "Projeto no padrão de referência",
+    description:
+      "Arquitetura dimensionada pelo PSRM (PlantPAx System Reference Manual) e pelos guias CPwE de rede industrial, não pela intuição de quem está no teclado. Padrão de referência reduz retrabalho em FAT, surpresa de startup e dívida técnica que aparece anos depois.",
+  },
+  {
+    title: "Competência auditada, não autodeclarada",
+    description:
+      "O status Silver resulta de avaliação formal da Rockwell Automation — competência técnica, desempenho comercial e capacitação contínua — e precisa ser mantido. Quem deixa de cumprir os critérios sai do programa e deixa de aparecer no Partner Locator.",
+  },
+];
+
+const frentes = [
+  {
+    title: "PlantPAx DCS",
+    description:
+      "Especificação, implantação e modernização do DCS moderno da Rockwell Automation. Trabalhamos com PlantPAx 3.x, 4.x e 5.x — a Rockwell documenta releases de sistema da 5.00 à 5.50 — usando a biblioteca de objetos de processo, dimensionamento conforme o PSRM e gestão de alarmes ISA-18.2. A especialidade PlantPAx DCS Certified da Integra cobre exatamente essa frente.",
+    href: "/solucoes/plantpax",
+    label: "Ver atuação em PlantPAx",
+  },
+  {
+    title: "FactoryTalk",
+    description:
+      "Supervisão e informação de planta: FactoryTalk View SE para SCADA distribuído com redundância, FactoryTalk Optix para visualização multiplataforma e FactoryTalk Historian para historização de processo. Os projetos incluem padronização de telas, governança de alarmes conforme ISA-18.2 e integração com PI System.",
+    href: "/solucoes/factorytalk",
+    label: "Ver atuação em FactoryTalk",
+  },
+  {
+    title: "Migração para Logix",
+    description:
+      "O PLC-5 foi descontinuado em junho de 2017, os últimos controladores SLC 500 saíram de venda em 31 de março de 2024 e o software RSLogix 5 deixou de ser comercializado em 31 de dezembro de 2025. A Integra migra essas plataformas para ControlLogix e CompactLogix com inventário, simulação, FAT/SAT e plano de rollback.",
+    href: "/solucoes/migracao-plc",
+    label: "Ver migração de PLC legado",
+  },
+  {
+    title: "Redes industriais CPwE",
+    description:
+      "Projeto de rede EtherNet/IP seguindo os guias CPwE (Converged Plantwide Ethernet), desenvolvidos em conjunto por Rockwell Automation e Cisco — como o ENET-TD001: segmentação pelo modelo Purdue, IDMZ entre os ambientes corporativo e industrial e zonas e conduítes conforme IEC 62443.",
+    href: "/tecnologias/ethernet-ip-cpwe",
+    label: "Ver redes EtherNet/IP e CPwE",
+  },
+];
+
+const etapas = [
+  {
+    title: "Conversa técnica de contexto",
+    description:
+      "Uma reunião com engenharia, manutenção ou TI/OT para entender o problema real: obsolescência, expansão, alarmes fora de controle, rede instável, exigência de auditoria ou de cliente. Sem apresentação comercial.",
+  },
+  {
+    title: "Inventário e diagnóstico",
+    description:
+      "Levantamento de controladores, firmware, versões de software, redes, servidores e dependências de processo, com checagem do status de ciclo de vida de cada item no catálogo da Rockwell — de Active a Discontinued.",
+  },
+  {
+    title: "Leitura de arquitetura e risco",
+    description:
+      "O que pode ser aproveitado, o que precisa mudar e em que ordem — priorizado por risco operacional e janela de parada, não por catálogo de produto.",
+  },
+  {
+    title: "Recomendação técnica faseada",
+    description:
+      "Documento com fases, critérios de aceite (FAT/SAT) e premissas de janela de parada. A proposta comercial só vem depois que a recomendação técnica faz sentido para a operação.",
+  },
+];
+
+const faq = [
+  {
+    q: "Como verificar se um integrador é certificado pela Rockwell Automation?",
+    a: "Use o Partner Locator, o diretório público da Rockwell Automation em locator.rockwellautomation.com, que lista os System Integrators do PartnerNetwork por país, disciplina e nível do programa. Peça também o certificado emitido pelo programa — a Integra publica o dela, com PDF para download, na página de certificações deste site. Desconfie de quem se apresenta como parceiro e não aparece no diretório.",
+  },
+  {
+    q: "Qual a diferença entre integrador Silver e Gold?",
+    a: "São níveis do mesmo programa System Integrator do PartnerNetwork, que vai de Bronze a Platinum. O Silver exige competências técnicas validadas, marcos comerciais anuais e capacitação contínua. O Gold acrescenta exigências maiores, como três ou mais disciplinas tecnológicas certificadas e desempenho comercial superior. Para o cliente, ambos têm competência auditada pela Rockwell; a diferença está na amplitude de disciplinas e no volume de negócios com a plataforma, não na qualidade mínima exigida.",
+  },
+  {
+    q: "A Rockwell Automation indica integradores para projetos?",
+    a: "A Rockwell tem um braço próprio de serviços (Lifecycle Services), mas o modelo dominante para projetos de integração é a entrega por meio do PartnerNetwork. As indicações chegam pelos distribuidores autorizados e pelas equipes comerciais da Rockwell, que direcionam o cliente a integradores do programa conforme disciplina, setor e região. Estar certificado é condição para entrar nesse fluxo de indicação; o nível e as especialidades definem para quais projetos o integrador é indicado.",
+  },
+  {
+    q: "Um integrador Rockwell atende outras marcas?",
+    a: "Depende do integrador. A Integra é multi-vendor: além da plataforma Rockwell, trabalhamos com Siemens (TIA Portal e PCS 7), Schneider Electric, Elipse E3 e Telit deviceWISE. Isso importa em plantas com parque misto, onde a integração entre plataformas de fabricantes diferentes costuma ser o problema mais caro de resolver — e onde um integrador monomarca tende a propor a troca de tudo.",
+  },
+  {
+    q: "Integrador certificado custa mais caro que um não certificado?",
+    a: "A comparação correta é por custo total do projeto, não por taxa horária. Os fatores que dominam o custo são retrabalho de engenharia, horas de parada não planejada, suporte pós-startup e adequação de licenciamento — e é exatamente nesses pontos que padrão de referência e canal de escalação com a fabricante fazem diferença. Proposta mais barata com arquitetura errada é a forma mais cara de comprar automação.",
+  },
+  {
+    q: "O integrador substitui o distribuidor autorizado?",
+    a: "Não. São papéis complementares dentro do PartnerNetwork: o distribuidor autorizado fornece hardware, software e contratos de suporte; o integrador projeta, programa, testa e coloca o sistema em operação. Em projetos típicos, a Integra trabalha em conjunto com o distribuidor que atende a região do cliente.",
+  },
+];
+
+const description =
+  "Integradora Silver System Integrator do Rockwell PartnerNetwork, com atuação nacional: PlantPAx, FactoryTalk, migração para Logix e redes CPwE, com diagnóstico técnico antes da proposta.";
+---
+
+<BaseLayout
+  title="Integrador Rockwell Automation no Brasil"
+  description={description}
+  breadcrumbLeaf="Integrador Rockwell Automation"
+  jsonLd={[
+    serviceSchema({
+      name: "Integração de sistemas Rockwell Automation",
+      description,
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Integração de Sistemas · Rockwell Automation
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Integrador Rockwell Automation no Brasil
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Integrador Rockwell Automation é a empresa de engenharia que projeta,
+          programa, testa e sustenta sistemas de automação sobre a plataforma
+          Rockwell — ControlLogix, PlantPAx, FactoryTalk e redes EtherNet/IP —
+          dentro do programa oficial PartnerNetwork. A Integra Automação
+          Industrial, de Maringá-PR, exerce esse papel desde 2016: somos Silver
+          System Integrator e PlantPAx DCS Certified, com projetos em todo o
+          Brasil em açúcar e etanol, agroindústria, alimentos, frigoríficos,
+          química, papel e celulose e saneamento.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a
+            href="/contato"
+            class="inline-flex items-center gap-2 rounded-md bg-integra-red px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
+          >
+            Falar com um engenheiro
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href="/certificacoes/silver-system-integrator"
+            class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-6 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+          >
+            Ver certificação Silver
+          </a>
+        </div>
+      </div>
+      <div class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-8">
+        <p class="mb-5 text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Credenciais no PartnerNetwork
+        </p>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+            <span class="text-base text-integra-gray-900">
+              <strong>Silver System Integrator</strong> — programa de
+              integradores do Rockwell PartnerNetwork
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+            <span class="text-base text-integra-gray-900">
+              <strong>PlantPAx DCS Certified</strong> — especialidade restrita
+              em sistema de controle distribuído
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+            <span class="text-base text-integra-gray-900">
+              <strong>Quatro disciplinas ativas</strong> — Control,
+              Visualization, Process e Power
+            </span>
+          </li>
+        </ul>
+        <p class="mt-6 text-sm leading-relaxed text-integra-gray-700">
+          Credenciais verificáveis no Partner Locator público da Rockwell
+          Automation e na nossa
+          <a href="/certificacoes/silver-system-integrator" class="font-semibold text-integra-red-700 hover:text-integra-red">página de certificações</a>,
+          com certificado em PDF.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="PartnerNetwork"
+        title="O que é um integrador do Rockwell PartnerNetwork?"
+        description="O PartnerNetwork é o ecossistema oficial de parceiros da Rockwell Automation: distribuidores autorizados, fabricantes de máquina (OEMs), parceiros de tecnologia e integradores de sistemas — empresas independentes de engenharia avaliadas pela fabricante para entregar projetos sobre a plataforma."
+        accent={true}
+      />
+      <p class="max-w-3xl text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+        No programa atual de System Integrators, a Rockwell Automation organiza
+        os integradores em quatro níveis — Bronze, Silver, Gold e Platinum —
+        conforme três eixos: competência técnica validada nas Technology
+        Disciplines do programa, desempenho comercial recorrente sobre a
+        plataforma e alinhamento com o roadmap da fabricante. O nível não é
+        comprado nem vitalício: é avaliado e renovado pela própria Rockwell.
+      </p>
+      <h3 class="mb-5 mt-10 text-xl font-semibold text-integra-gray-900">
+        O que o status Silver exige na prática
+      </h3>
+      <ul class="space-y-3">
+        {silverRequisitos.map((item) => (
+          <li class="flex items-start gap-3 text-base text-integra-gray-900">
+            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+      <TechnicalCallout variant="note" title="Certificação se verifica, não se acredita">
+        <p>
+          O Partner Locator (locator.rockwellautomation.com) é público e lista
+          os integradores do PartnerNetwork por país, disciplina e nível. Antes
+          de contratar qualquer empresa que se apresente como parceira Rockwell,
+          consulte o diretório. O detalhe da credencial da Integra está em
+          <a href="/certificacoes/silver-system-integrator">certificações → Silver System Integrator</a>.
+        </p>
+      </TechnicalCallout>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Certificado vs. não certificado"
+        title="Por que contratar um integrador certificado?"
+        description="Empresas sem certificação podem ter bons profissionais — a questão não é essa. A questão é o que acontece quando o projeto sai do trivial: uma incompatibilidade de firmware em produção, uma arquitetura PlantPAx no limite de dimensionamento, uma rede que derruba I/O em rajada de broadcast. Sem canal com a fabricante, a resposta vira tentativa e erro na sua planta."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-3">
+        {diferenciais.map((item) => (
+          <article class="h-full rounded-lg border border-integra-gray-200 bg-integra-white p-7">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        Há ainda um efeito de longo prazo: integrador certificado entrega
+        projeto documentado dentro dos padrões que outros integradores do
+        PartnerNetwork reconhecem. Se daqui a alguns anos a planta precisar
+        expandir o sistema com outra equipe, a base instalada conversa com o
+        padrão de mercado — em vez de depender de uma solução proprietária que
+        só quem fez entende.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Frentes de atuação"
+        title="Em que frentes a Integra atua como integradora Rockwell?"
+        description="Quatro frentes concentram a maior parte dos projetos Rockwell da Integra Automação Industrial — nos setores de processo em que a plataforma é dominante, de açúcar e etanol a papel e celulose. O detalhe por segmento está na página de setores deste site."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {frentes.map((item) => (
+          <article class="flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-7">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+            <a
+              href={item.href}
+              class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-integra-red-700 hover:text-integra-red"
+            >
+              {item.label}
+              <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        O detalhe da atuação por segmento está em
+        <a href="/setores" class="font-semibold text-integra-red-700 hover:text-integra-red">setores atendidos</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Início de conversa"
+        title="Como começa a conversa com a Integra?"
+        description="Não começa por proposta comercial. Começa por diagnóstico: entender o que a planta tem hoje, qual o risco real e qual a ordem certa de ataque. Esse processo evita o erro mais comum em projetos de automação — comprar a solução antes de entender o problema."
+        accent={true}
+      />
+      <ol class="space-y-6">
+        {etapas.map((item, i) => (
+          <li class="flex items-start gap-4">
+            <span class="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-integra-gray-900 font-mono text-sm font-semibold text-integra-white" aria-hidden="true">
+              {i + 1}
+            </span>
+            <div>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {item.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+                {item.description}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <TechnicalCallout variant="note" title="Sobre custo de projeto">
+        <p>
+          Falamos de custo em termos de fatores — contagem de I/O, janela de
+          parada disponível, licenciamento, infraestrutura de rede e servidores,
+          estado da documentação existente — porque é isso que define o esforço
+          de engenharia. Número fechado antes do diagnóstico é chute, e chute
+          em automação industrial sai caro para quem opera.
+        </p>
+      </TechnicalCallout>
+      <p class="mt-8 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        Um exemplo documentado dessa forma de trabalhar está no
+        <a href="/cases/projeto-moinho" class="font-semibold text-integra-red-700 hover:text-integra-red">case do projeto de moinho</a>,
+        do diagnóstico ao startup. Para entender as práticas de segurança que
+        aplicamos em redes industriais, veja
+        <a href="/solucoes/redes-iec-62443" class="font-semibold text-integra-red-700 hover:text-integra-red">redes industriais e IEC 62443</a>.
+      </p>
+
+      <StandardsBadges
+        title="Padrões e referências aplicados em projetos Rockwell"
+        standards={[
+          { code: "PartnerNetwork", description: "Programa oficial de parceiros" },
+          { code: "PSRM", description: "PlantPAx System Reference Manual" },
+          { code: "CPwE", description: "Converged Plantwide Ethernet (Rockwell + Cisco + Panduit)" },
+          { code: "EtherNet/IP", description: "Rede de controle" },
+          { code: "ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança industrial" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Procurando um integrador Rockwell certificado para o seu projeto?"
+    description="Conte o contexto da planta para um engenheiro da Integra. Começamos pelo diagnóstico técnico — inventário, arquitetura e risco — antes de qualquer proposta comercial."
+    primaryCta={{ href: "/contato", label: "Iniciar diagnóstico" }}
+    secondaryCta={{ href: "/certificacoes/silver-system-integrator", label: "Ver certificação Silver" }}
+  />
+</BaseLayout>

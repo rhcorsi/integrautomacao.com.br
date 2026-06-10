@@ -1,0 +1,314 @@
+---
+title: "FactoryTalk View SE: o guia completo em português"
+description: "O que é FactoryTalk View SE, como funciona a arquitetura distribuída, redundância de servidores, FTAE, licenciamento e quando escolher View SE ou Optix."
+pubDate: 2026-06-10
+tags: ["FactoryTalk View SE", "SCADA", "Rockwell"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+**FactoryTalk View SE (Site Edition)** é o software de supervisão (SCADA/HMI)
+da Rockwell Automation para aplicações de nível de planta: arquitetura
+cliente-servidor distribuída, redundância nativa de servidores HMI,
+integração direta com controladores Logix e com o ecossistema FactoryTalk
+(Directory, Linx, Alarms and Events, Historian). É o HMI padrão de
+arquiteturas [PlantPAx](/solucoes/plantpax/) e de boa parte das salas de
+controle Rockwell em operação no Brasil. Este guia consolida, em português,
+o que um engenheiro ou gestor precisa saber antes de especificar, migrar ou
+expandir um sistema [FactoryTalk View SE](/tecnologias/factorytalk-view-se/).
+
+## View SE ou View ME: qual a diferença?
+
+A confusão mais comum do portfólio: FactoryTalk View tem duas edições com
+propósitos diferentes, e o erro de escolha custa caro na expansão.
+
+**FactoryTalk View ME (Machine Edition)** é HMI de máquina. A aplicação é
+desenvolvida no FactoryTalk View Studio e **compilada em um arquivo runtime
+(.mer)** que roda em um terminal PanelView Plus, em um computador industrial
+ou em um PC com ME Station. É um sistema fechado por equipamento: uma IHM,
+um runtime, sem servidor central. Alterou a aplicação? Recompila e baixa o
+.mer de novo no terminal.
+
+**FactoryTalk View SE (Site Edition)** é supervisório de planta. Não existe
+runtime compilado: a aplicação vive em um **servidor HMI** que publica telas,
+alarmes e dados para clientes em rede. Edições feitas no View Studio
+conectado ao servidor entram em vigor ao salvar, sem parar a operação — em
+uma planta 24/7, isso é diferença estrutural, não detalhe.
+
+A regra prática que usamos em projeto:
+
+- **Uma máquina, um operador, um painel** → View ME em PanelView Plus
+- **Uma estação supervisória isolada** (poço de captação, CCM de utilidades)
+  → View SE Station
+- **Sala de controle, múltiplos operadores, múltiplas áreas, redundância**
+  → View SE Network Distributed
+
+Importa também para o legado: o View SE é o caminho de migração natural de
+aplicações **RSView32**, e telas de View ME podem ser importadas para SE
+(o inverso exige adaptação, porque SE usa recursos que o ME não suporta,
+como VBA e FactoryTalk Alarms and Events).
+
+## Como funciona a arquitetura distribuída do View SE?
+
+Uma aplicação View SE Network Distributed separa funções em componentes que
+podem (e devem) rodar em máquinas diferentes:
+
+- **FactoryTalk Directory (FTD)**: o serviço de diretório que amarra tudo —
+  usuários, servidores, áreas e políticas de segurança. Em aplicação de rede,
+  um servidor de diretório centralizado é o primeiro componente a ser
+  projetado, não o último.
+- **Servidor HMI (HMI Server)**: hospeda telas, macros, eventos, derived
+  tags e a configuração de alarmes da sua área. Uma aplicação distribuída
+  pode ter vários servidores HMI, um por área de processo.
+- **Servidor de dados (Data Server)**: a ponte com os controladores, via
+  FactoryTalk Linx (comunicação nativa Logix) ou OPC. Separar servidor de
+  dados do servidor HMI distribui carga e isola falhas.
+- **Clientes SE (SE Client)**: as estações de operação e engenharia, que
+  consomem telas e dados dos servidores.
+
+Os limites documentados pela Rockwell no manual do usuário do View SE dão a
+escala da plataforma: até **10 servidores HMI (ou pares redundantes)** e até
+**50 clientes simultâneos** por aplicação distribuída — e a própria Rockwell
+recomenda assistência de arquitetura quando o projeto passa de 2 servidores
+e 20 clientes. Em [PlantPAx](/solucoes/plantpax/), essa estrutura aparece
+formalizada no PASS (Process Automation System Server), que consolida
+servidor HMI, servidor de dados e FTAE conforme a arquitetura de referência.
+
+Um ponto que merece atenção desde o dia um: aplicações View SE distribuídas
+rodam muito bem **virtualizadas**. Consolidar servidores HMI, de dados e de
+diretório em um cluster com alta disponibilidade é prática consolidada — o
+que muda são os requisitos de dimensionamento e de rede, tema que tratamos
+em [virtualização de ambientes OT](/tecnologias/virtualizacao-ot/).
+
+## Como funciona a redundância de servidor HMI?
+
+Redundância no View SE é nativa, por par de servidores: um **primário** e
+um **secundário**, configurados na aba Redundancy das propriedades do
+servidor HMI. O funcionamento, conforme a documentação da Rockwell:
+
+1. Os dois servidores se monitoram por heartbeat através do FactoryTalk
+   Directory e da rede.
+2. Se o servidor ativo falha, o standby **assume automaticamente** e os
+   clientes reconectam sozinhos ao novo ativo — sem intervenção do operador.
+3. Quando o servidor que falhou volta, o comportamento de **switchback** é
+   configurável: retornar automaticamente ao primário ou manter o secundário
+   ativo até uma troca manual.
+
+O mesmo conceito se aplica aos servidores de dados (FactoryTalk Linx
+redundante) e ao FactoryTalk Alarms and Events. Ou seja: redundância de
+verdade em View SE é redundância **por camada** — HMI, dados, alarmes,
+diretório — e não apenas um segundo PC com a aplicação instalada.
+
+<TechnicalCallout variant="ot" title="Redundância sem teste de failover não é redundância">
+  O par primário/secundário sincroniza a aplicação, mas não dispensa
+  procedimento: replicação de alterações após edição online, sincronismo de
+  datalog e teste de failover documentado em comissionamento e depois em
+  paradas programadas. Já encontramos sistemas "redundantes" em que o
+  secundário não assumia havia anos — e ninguém sabia, porque nunca foi
+  testado. Failover que nunca rodou é hipótese, não proteção.
+</TechnicalCallout>
+
+## FTAE ou alarmes tag-based: qual usar?
+
+Alarme em View SE passa pelo **FactoryTalk Alarms and Events (FTAE)**, o
+subsistema de alarmes do ecossistema FactoryTalk. Ele trabalha em dois
+modos:
+
+**Alarmes device-based (no controlador).** As instruções `ALMD` (digital) e
+`ALMA` (analógica), disponíveis no Logix desde a versão 16 do RSLogix 5000,
+colocam a definição do alarme **dentro do controlador**. O servidor FTAE
+assina os alarmes por subscrição, sem polling e sem duplicar tags no
+servidor HMI. Estados, timestamps e acknowledgement ficam consistentes entre
+todos os clientes — e entre HMI e historiador. É o modelo padrão em PlantPAx
+e o que recomendamos para qualquer projeto novo com ControlLogix ou
+CompactLogix.
+
+**Alarmes tag-based (no servidor).** O servidor FTAE monitora tags de
+qualquer fonte (incluindo PLC-5, SLC 500 e controladores de terceiros via
+OPC) e avalia as condições de alarme no servidor. É o caminho quando o
+controlador não suporta instruções de alarme — cenário típico em plantas que
+ainda não concluíram a [migração de PLC-5 e SLC 500](/solucoes/migracao-plc/).
+
+E os **alarmes HMI legados** (HMI tag alarms, herança do RSView32)? Foram
+descontinuados: a versão 10.00 do FactoryTalk View foi a última a
+suportá-los, e a partir da 11.00 a funcionalidade foi removida do produto.
+
+<TechnicalCallout variant="warning" title="Upgrade com HMI tag alarms exige migração planejada">
+  Se a sua aplicação View SE ainda roda em versão 10 ou anterior com alarmes
+  HMI tag-based, o upgrade para versões atuais não é um "next-next-finish":
+  as definições de alarme precisam ser migradas para FTAE com a ferramenta
+  de migração da Rockwell, e o resultado precisa ser revisado — severidades,
+  classes, mensagens e filosofia de alarmes (boa hora para alinhar com a
+  ISA-18.2). Trate como um miniprojeto dentro do upgrade, com horas de
+  engenharia próprias.
+</TechnicalCallout>
+
+## Qual é a versão atual e o que ela exige?
+
+Na data deste guia (junho de 2026), a versão corrente é o **FactoryTalk
+View 16.00**, liberado pela Rockwell em outubro de 2025. A versão 15.00,
+de setembro de 2024, foi um marco por trazer recursos que apontam a direção
+da plataforma:
+
+- **DataLogPro**: datalog histórico com suporte a banco InfluxDB externo,
+  além dos modelos tradicionais de log
+- **MQTT** no modelo de objetos do SE Client, permitindo configurar o View
+  SE como publisher ou subscriber
+- **HTTPS habilitado por padrão** em instalações novas, consolidando a
+  conformidade com o DCOM hardening da Microsoft — segurança deixando de
+  ser opcional
+
+Requisitos de sistema da v15.00 (conferir sempre o release note da versão
+exata no Product Compatibility and Download Center antes de comprar
+hardware): Windows Server 2022 e 2019, Windows 11 Pro/Enterprise e Windows
+10 Enterprise; estação de operação com mínimo de 4 núcleos e 4 GB de RAM
+(recomendado 8 GB ou mais), e estação de engenharia com mínimo de 4 núcleos
+e 8 GB de RAM (recomendado 8 núcleos e 16 GB). Em servidor consolidando
+HMI, FTAE, FactoryTalk Linx e Directory, dimensione com folga: o gargalo
+clássico é memória e disco de log, não CPU.
+
+Para quem está várias versões atrás, a matemática do upgrade envolve mais
+do que o View SE: versão do FactoryTalk Services Platform, do Linx, do
+sistema operacional Windows suportado e compatibilidade com o firmware dos
+controladores. É o tipo de levantamento que fazemos antes de qualquer
+proposta de modernização do [ecossistema FactoryTalk](/solucoes/factorytalk/).
+
+## Como funciona o licenciamento do View SE?
+
+Sem falar de preço — isso muda por região, contrato e programa comercial —,
+o que importa é entender **o que se licencia**, segundo o FactoryTalk View
+Ordering Guide da Rockwell:
+
+- **FactoryTalk View Studio**: o ambiente de desenvolvimento, licenciado por
+  estação de engenharia.
+- **View SE Server**: desde a versão 13 (abril de 2022), é vendido em
+  **bundles com displays ilimitados**, dimensionados pelo número de clientes
+  incluídos — Small (5 clientes), Medium (10) ou Large (25) —, todos com web
+  clients FactoryTalk ViewPoint ilimitados. Clientes adicionais entram como
+  add-on.
+- **View SE Server Redundante**: o par secundário tem licença própria,
+  específica para redundância.
+- **View SE Client**: licenciado por estação cliente, com variantes de
+  operação completa e somente leitura (read-only).
+- **View SE Station**: o pacote standalone (servidor + cliente na mesma
+  máquina), hoje em duas opções: Station, com displays ilimitados, ou
+  Station Lite, com 25 displays — ambas com web clients ViewPoint
+  ilimitados.
+
+Desde a transição da Rockwell para o modelo de software por assinatura,
+há duas formas de contratar: **subscrição** (custo inicial menor,
+atualizações incluídas, expansão modular) ou **perpétua com contrato de
+manutenção** (investimento inicial maior, manutenção anual menor). Para
+plantas com horizonte longo e parque estável, a perpétua ainda costuma
+fazer sentido; para projetos que crescem por fases, a subscrição dá
+flexibilidade. O dimensionamento correto do bundle de clientes no início do
+projeto evita o cenário clássico: sistema que ganha novas estações de
+operação no terceiro ano e força compra de clientes add-on ou upgrade de
+bundle não orçados.
+
+## View SE ou FactoryTalk Optix: qual escolher em 2026?
+
+Pergunta cada vez mais frequente, porque a Rockwell hoje mantém duas
+plataformas de visualização ativas. O
+[FactoryTalk Optix](/tecnologias/factorytalk-optix/) é a plataforma nova:
+web-native, multiplataforma (Windows e Linux, incluindo painéis OptixPanel
+e edge), com conectividade aberta via OPC UA e MQTT, suporte a controladores
+de terceiros e fluxo de desenvolvimento integrado à nuvem (FactoryTalk Hub).
+A Rockwell vem expandindo o Optix na direção de SCADA distribuído — com
+redundância, arquitetura multi-site e gestão centralizada anunciadas no
+roadmap com disponibilidade inicial prevista para 2026.
+
+A leitura honesta para decisão hoje:
+
+- **View SE continua sendo a escolha** para SCADA distribuído de planta em
+  ecossistema Rockwell consolidado: PlantPAx, redundância madura e provada
+  em campo, FTAE device-based, VBA legado, base instalada gigante e
+  migração natural de RSView32. Não há descontinuação anunciada — a versão
+  16.00 é prova de roadmap ativo.
+- **Optix ganha força** em HMI de máquina moderna, OEMs que atendem
+  multimarca, aplicações edge/IIoT e projetos novos onde acesso web nativo
+  e Linux pesam mais do que a profundidade do ecossistema FactoryTalk
+  clássico.
+- **Os dois coexistem** na mesma planta sem conflito: View SE na sala de
+  controle, Optix nas máquinas e nas bordas. É a combinação que mais temos
+  especificado em projetos recentes.
+
+O erro a evitar é trocar de plataforma por novidade: migrar um View SE
+distribuído e redundante, estável, para qualquer outra coisa exige
+justificativa técnica — fim de suporte de SO, limitação real de arquitetura
+ou requisito novo de negócio — e não apenas um slide de lançamento.
+
+## Onde o View SE entra nos nossos projetos
+
+A Integra Automação Industrial, de Maringá-PR, é
+[Silver System Integrator Rockwell](/certificacoes/silver-system-integrator/)
+e trabalha com FactoryTalk View SE em três frentes recorrentes: HMI de
+arquiteturas PlantPAx (PASS, redundância, FTAE e biblioteca de objetos de
+processo), modernização de supervisórios legados (RSView32 e versões
+antigas de View SE, frequentemente junto com a migração dos controladores)
+e expansão de sistemas existentes — novo servidor de área, novos clientes,
+virtualização e adequação de segurança alinhada à
+[IEC 62443](/solucoes/redes-iec-62443/). Setores onde isso mais aparece:
+açúcar e etanol, grãos, alimentos, frigoríficos e saneamento.
+
+## Perguntas frequentes
+
+### O que é FactoryTalk View SE?
+
+FactoryTalk View SE (Site Edition) é o software SCADA/HMI da Rockwell
+Automation para supervisão de planta, com arquitetura cliente-servidor
+distribuída, redundância de servidores e integração nativa com
+controladores Logix e com o ecossistema FactoryTalk. Ele atende desde uma
+estação standalone (SE Station) até aplicações distribuídas com até 10
+servidores HMI e 50 clientes simultâneos.
+
+### Qual a diferença entre FactoryTalk View SE e ME?
+
+View ME (Machine Edition) é HMI de máquina: a aplicação é compilada em um
+runtime .mer que roda em um PanelView Plus ou PC, sem servidor central.
+View SE (Site Edition) é supervisório de planta: a aplicação roda em
+servidores HMI que publicam telas e dados para múltiplos clientes em rede,
+com edição online e redundância. Máquina isolada pede ME; sala de controle
+com vários operadores pede SE.
+
+### Qual é a versão atual do FactoryTalk View SE?
+
+A versão corrente é o FactoryTalk View 16.00, liberado pela Rockwell em
+outubro de 2025. A versão 15.00 (setembro de 2024) trouxe DataLogPro com
+suporte a InfluxDB, integração MQTT e HTTPS habilitado por padrão. Confirme
+sempre a versão e os requisitos no Product Compatibility and Download
+Center (PCDC) da Rockwell, porque a compatibilidade com Windows e com o
+FactoryTalk Services Platform muda a cada release.
+
+### FactoryTalk View SE tem redundância?
+
+Sim, redundância é recurso nativo do View SE em aplicação distribuída: um
+par de servidores HMI primário/secundário com failover automático — se o
+ativo falha, o standby assume e os clientes reconectam sozinhos. O
+comportamento de retorno (switchback) é configurável, e o mesmo conceito se
+estende aos servidores de dados e ao FactoryTalk Alarms and Events. O
+servidor redundante exige licença específica.
+
+### O FactoryTalk View SE vai ser substituído pelo Optix?
+
+Não há descontinuação anunciada: a Rockwell mantém as duas plataformas
+ativas, e o lançamento do View 16.00 em 2025 confirma o roadmap. O Optix é
+a aposta para HMI web-native, multiplataforma e multi-vendor; o View SE
+segue como referência para SCADA distribuído em ecossistema Rockwell,
+especialmente PlantPAx. Em muitas plantas, os dois coexistem — View SE na
+supervisão central, Optix em máquinas e edge.
+
+### Ainda posso usar alarmes HMI tag-based no View SE?
+
+Não nas versões atuais. A versão 10.00 do FactoryTalk View foi a última a
+suportar os alarmes HMI tag-based legados; da 11.00 em diante a função foi
+removida. Quem faz upgrade de versões antigas precisa migrar as definições
+para o FactoryTalk Alarms and Events (FTAE) usando a ferramenta de migração
+da Rockwell — e vale aproveitar para revisar a filosofia de alarmes da
+planta no processo.
+
+---
+
+Planejando especificar, migrar ou expandir um FactoryTalk View SE?
+[Conversamos antes da proposta](/contato?assunto=factorytalk-view-se).

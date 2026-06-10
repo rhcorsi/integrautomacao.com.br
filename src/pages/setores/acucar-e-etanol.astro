@@ -1,0 +1,281 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Moenda e extração",
+    description:
+      "Acionamentos de grande porte, ternos, picadores e desfibradores que não podem oscilar durante a safra. Controle de carga, velocidade e embuchamento exige resposta rápida e intertravamento de partida e parada de cada conjunto.",
+  },
+  {
+    title: "Fermentação",
+    description:
+      "Dornas operadas em batelada ou batelada alimentada (fed-batch), com controle de temperatura, dosagem de mosto, tratamento de fermento e ciclos de limpeza. É a etapa em que a lógica de receita e sequência (ISA-88) faz diferença na produtividade.",
+  },
+  {
+    title: "Destilaria e desidratação",
+    description:
+      "Colunas de destilação e peneiras moleculares operam em regime contínuo. Pedem malhas regulatórias estáveis, controle de pressão e temperatura e governança de alarmes para sustentar grau alcoólico e rendimento.",
+  },
+  {
+    title: "Caldeiras e cogeração",
+    description:
+      "Geração de vapor a partir do bagaço alimenta o processo e a cogeração de energia. Caldeiras de bagaço voltadas à cogeração eficiente operam tipicamente entre 60 e 65 bar a 480 °C, e as mais modernas chegam a 100 bar, sob requisitos de segurança da NR-13.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por área de processo (moenda, fermentação, destilaria, caldeira e cogeração)",
+  "Arquitetura PlantPAx / DCS com controle regulatório, sequencial e batelada (ISA-88)",
+  "Padronização de bibliotecas, malhas PID e telas operacionais entre áreas",
+  "Governança de alarmes por ISA-18.2 para reduzir avalanche em partida de safra",
+  "Migração de controladores PLC-5/SLC500 legados para ControlLogix/CompactLogix",
+  "Segmentação de rede EtherNet/IP, IDMZ e adequação à IEC 62443",
+  "Integração de dados de processo com historian e sistemas de gestão agroindustrial",
+  "Plano de cutover por etapas dentro da janela de entressafra, com FAT, SAT e rollback",
+];
+
+const faq = [
+  {
+    q: "Dá para modernizar a automação na entressafra?",
+    a: "Sim, e a entressafra é a janela natural para isso. No Centro-Sul a entressafra costuma ocorrer entre dezembro e abril, quando a moagem cai ou cessa e a usina concentra grandes manutenções. É o período em que faz sentido executar cutover de controladores, comissionamento de painéis e startup de áreas modernizadas. O ponto crítico é o calendário: o escopo de engenharia, FAT e simulação precisa estar pronto antes da janela abrir, porque a entressafra tem prazo fixo e o início da safra seguinte não espera. A Integra trabalha com migração faseada e <a href=\"/solucoes/migracao-plc/\">plano de rollback</a> justamente para caber nessa janela sem comprometer o arranque.",
+  },
+  {
+    q: "DCS ou SCADA para uma usina de açúcar e etanol?",
+    a: "Depende de quanto da planta é processo contínuo e batelada integrados. SCADA puro resolve supervisão, mas trata controle como ilhas. Uma usina mistura regulatório contínuo (destilaria, caldeira), sequencial (moenda) e batelada (fermentação) — esse é o caso de uso clássico de um DCS como o <a href=\"/solucoes/plantpax/\">PlantPAx</a>, que entrega biblioteca de objetos de processo padronizada, controle de batelada nativo e governança de alarmes plant-wide num único ambiente. Em plantas menores ou áreas isoladas, uma arquitetura SCADA + ControlLogix pode bastar. O critério é a integração entre áreas, não a sigla.",
+  },
+  {
+    q: "Como tratar a obsolescência de PLC-5 em usina?",
+    a: "A linha PLC-5 (1785) entrou em status discontinued em 30 de junho de 2017 e os últimos controladores SLC500 saíram de venda em 31 de março de 2024 (Rockwell Automation Lifecycle Status). Em usina, isso significa spare cada vez mais caro e raro sustentando moenda, caldeira ou utilidades. O caminho é inventariar onde esses controladores ainda operam, classificar por criticidade e migrar de forma planejada para <a href=\"/tecnologias/controllogix-compactlogix/\">ControlLogix/CompactLogix</a> durante a entressafra — antes que uma falha force a troca em plena safra, sob pressão de parada não planejada.",
+  },
+  {
+    q: "Como integrar a automação com sistemas de gestão agroindustrial?",
+    a: "A integração se faz por camadas. O controle (PLC/DCS) expõe tags de processo; um historian consolida a série temporal; e a camada de gestão (PIMS, MES e ERP agroindustrial) consome esses dados por interfaces padronizadas, alinhadas ao modelo ISA-95 de integração empresa-controle. A Integra estrutura essa pirâmide para que indicadores de moagem, ATR, rendimento de fermentação e geração de energia cheguem aos sistemas de gestão sem digitação manual, usando <a href=\"/tecnologias/factorytalk-historian/\">historian</a> como ponte entre o chão de fábrica e a gestão.",
+  },
+];
+---
+
+<BaseLayout
+  title="Automação para Açúcar e Etanol"
+  description="Automação para usinas de açúcar e etanol: moenda, fermentação, destilaria, caldeiras e cogeração com PlantPAx/DCS, ISA-88, NR-13 e migração na entressafra."
+  breadcrumbLeaf="Açúcar e Etanol"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Açúcar e Etanol",
+      description:
+        "Engenharia de automação para usinas de açúcar e etanol: PlantPAx/DCS, controle de batelada na fermentação, caldeiras e cogeração sob NR-13, redes industriais e modernização de controladores na entressafra.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Sucroenergético
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Açúcar e Etanol
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para usinas de açúcar e etanol é a engenharia de controle
+          que mantém moenda, fermentação, destilaria e caldeiras operando de
+          forma integrada durante a safra 24/7, quando uma parada não planejada
+          custa cana parada no pátio. A Integra Automação Industrial conhece
+          esse setor por dentro: um dos fundadores começou a carreira em usina
+          de açúcar e etanol, e a equipe vive o ritmo de safra, paradas e
+          entressafra desde então.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Na safra 2024/2025 o Centro-Sul moeu 621,88 milhões de toneladas de
+          cana — a segunda maior moagem da história da região, com novo recorde
+          de produção de etanol, segundo a UNICA. Boa parte dessa cana passa por
+          plantas que rodam de forma praticamente ininterrupta por cerca de oito
+          meses por ano.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          Fonte: UNICA · safra 2024/2025
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de uma usina"
+        title="Quatro áreas com lógicas de controle diferentes"
+        description="Uma usina não é uma planta só: cada área tem regime, risco e estratégia de controle próprios — e todas precisam conviver no mesmo arranque de safra."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Por que DCS encaixa em usina"
+        title="Por que um DCS como o PlantPAx encaixa em usina de açúcar e etanol?"
+        description="A usina combina processo contínuo (destilaria, caldeira), sequencial (moenda) e batelada (fermentação). Tratar tudo como ilhas de SCADA cria inconsistência; um DCS plant-wide unifica controle, alarmes e dados."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O PlantPAx é o DCS moderno da Rockwell Automation — a versão 5.0 foi
+        lançada em novembro de 2020 —, construído sobre a família Logix e uma
+        biblioteca de objetos de processo (Process Library) padronizada. Numa
+        usina, isso significa que a malha de temperatura de uma dorna de
+        fermentação, a regulação de pressão de uma coluna de destilação e o
+        controle de uma caldeira usam os mesmos blocos, os mesmos faceplates
+        (faces de operação) e a mesma lógica de alarme. O operador que entra na
+        safra encontra padrão, não dez telas feitas por dez integradores
+        diferentes ao longo dos anos.
+      </p>
+
+      <TechnicalCallout variant="note" title="Fermentação é batelada — e batelada pede ISA-88">
+        <p>
+          A fermentação alcoólica opera em batelada ou batelada alimentada, com
+          enchimento, fermentação, descarga e limpeza (CIP) em sequência. A
+          norma ISA-88 (adotada pela IEC como IEC 61512 em 1997) define o modelo
+          de receita, procedimento e equipamento que torna essa sequência
+          reproduzível, auditável e fácil de ajustar. Estruturar a fermentação
+          em ISA-88 é o que permite alterar uma receita de fermento sem
+          reescrever lógica de chão de fábrica.
+        </p>
+      </TechnicalCallout>
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A escolha entre DCS e SCADA não é dogmática: depende de quanto da planta
+        precisa operar de forma integrada. Para o núcleo de processo contínuo +
+        batelada da usina, o <a href="/solucoes/plantpax/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx</a>
+        entrega controle regulatório, sequencial e de batelada num só ambiente,
+        com a <a href="/tecnologias/plantpax-library/" class="text-integra-red-700 underline hover:text-integra-red">biblioteca de objetos de processo</a>
+        sustentando a padronização. Quem quiser entender a arquitetura por
+        dentro pode ver a página técnica do <a href="/tecnologias/plantpax-5x/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx 5.x</a>.
+        A Integra é Silver System Integrator e PlantPAx DCS Certified pela
+        Rockwell — ver <a href="/certificacoes/silver-system-integrator/" class="text-integra-red-700 underline hover:text-integra-red">certificações</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="Caldeiras, cogeração e NR-13"
+        title="Caldeira de usina opera sob NR-13 — e isso entra no projeto de automação"
+        description="A geração de vapor a partir do bagaço alimenta o processo e a cogeração de energia. Segurança de caldeira não é detalhe periférico: é norma regulamentadora com prazos legais."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A NR-13 é a norma regulamentadora brasileira de caldeiras, vasos de
+        pressão e tubulações. Para caldeiras, a inspeção de segurança periódica
+        tem prazo máximo de 12 meses, que pode chegar a 24 meses para a categoria
+        A quando se testa a abertura das válvulas de segurança aos 12 meses.
+        Estabelecimentos com Serviço Próprio de Inspeção de Equipamentos (SPIE)
+        certificado podem estender esses prazos — até 30 meses para categoria A —
+        e caldeiras categoria A em operação contínua com Sistema Instrumentado de
+        Segurança (SIS) podem chegar a 48 meses de inspeção interna, desde que
+        atendam aos requisitos da norma. Na prática, isso significa que o projeto
+        de automação da caldeira e da cogeração precisa contemplar
+        intertravamentos de segurança, registro de eventos e a camada SIS que
+        sustenta a extensão de prazo permitida pela NR-13.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega numa usina"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Redes em ambiente agressivo"
+        title="Por que a rede industrial sofre mais numa usina?"
+        description="Vapor, vibração de moenda, calor de caldeira, poeira de bagaço e distâncias longas entre áreas castigam cabeamento, conectores e switches. Rede frágil vira parada de safra."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Numa usina, a rede de controle atravessa ambientes que poucos parques
+        industriais reúnem ao mesmo tempo: a vibração contínua da moenda, o calor
+        e a umidade da casa de força, a poeira de bagaço e longas distâncias
+        entre extração, fermentação e destilaria. A Integra projeta a rede sobre
+        EtherNet/IP seguindo a arquitetura de referência CPwE, com topologias
+        redundantes (DLR / anel), com recuperação típica abaixo de 3 ms em anel
+        de 50 nós segundo a Rockwell Automation, para que a queda de um trecho
+        não derrube uma área inteira, e com segmentação que separa células de
+        processo, IDMZ e a camada de TI. Os detalhes de projeto estão em
+        <a href="/tecnologias/ethernet-ip-cpwe/" class="text-integra-red-700 underline hover:text-integra-red">EtherNet/IP e CPwE</a>,
+        e a camada de defesa e segmentação em
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">redes industriais e IEC 62443</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="Entressafra como janela de modernização"
+        title="A entressafra é a janela curta para modernizar sem perder moagem"
+        description="No Centro-Sul a entressafra costuma ir de dezembro a abril. É o intervalo em que a usina pode trocar controladores obsoletos, comissionar painéis e fazer startup de áreas modernizadas."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A maior dívida técnica de muitas usinas são controladores legados que
+        ninguém quer mexer durante a safra. A linha PLC-5 entrou em status
+        discontinued em 30 de junho de 2017 e os últimos controladores SLC500
+        saíram de venda em 31 de março de 2024 (Rockwell Automation Lifecycle
+        Status). Cada ano que passa,
+        o spare fica mais caro e raro sustentando moenda, caldeira ou utilidades.
+        A entressafra é a janela para resolver isso de forma planejada: inventário,
+        engenharia, simulação e FAT prontos antes da janela abrir, cutover por
+        área e plano de rollback validado. A Integra estrutura essas migrações em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>,
+        com a página técnica de
+        <a href="/tecnologias/migracao-plc5-slc500/" class="text-integra-red-700 underline hover:text-integra-red">migração PLC-5/SLC500</a>
+        detalhando a estratégia de conversão. Migrar planejado custa menos em
+        horas, risco e janela do que migrar sob pressão de uma falha no pico de
+        moagem.
+      </p>
+
+      <StandardsBadges
+        title="Normas e tecnologias aplicadas no setor"
+        standards={[
+          { code: "PlantPAx", description: "DCS de processo" },
+          { code: "ISA-88", description: "Batelada na fermentação" },
+          { code: "ISA-18.2", description: "Governança de alarmes" },
+          { code: "NR-13", description: "Caldeiras e vasos de pressão" },
+          { code: "EtherNet/IP", description: "Rede de controle (CPwE)" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Vai aproveitar a próxima entressafra para modernizar?"
+    description="O melhor momento para definir escopo, arquitetura e plano de cutover é antes da janela abrir. Começamos pelo diagnóstico por área de processo e pela matriz de risco — a execução vem depois que a operação entende impacto e rollback."
+    primaryCta={{ href: "/contato?assunto=acucar-e-etanol", label: "Conversar sobre a usina" }}
+    secondaryCta={{ href: "/solucoes/plantpax", label: "Ver PlantPAx para processo" }}
+  />
+</BaseLayout>

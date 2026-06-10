@@ -1,0 +1,213 @@
+---
+title: "Quanto custa migrar um PLC-5? Os fatores que definem o orçamento"
+description: "Entenda os fatores que definem o orçamento de uma migração PLC-5: contagem de I/O, fiação 1492, complexidade da lógica, HMI, redes DH+/RIO e janela de parada."
+pubDate: 2026-06-10
+tags: ["Migração", "PLC-5", "ControlLogix"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+O custo de uma migração de PLC-5 é definido por oito fatores técnicos:
+contagem e tipo de I/O, estratégia de fiação, complexidade da lógica,
+escopo de HMI, redes legadas (DH+ e Remote I/O), janela de parada
+disponível, documentação existente e profundidade dos testes FAT/SAT.
+Não existe "preço por ponto" que sirva de referência séria: dois
+projetos com o mesmo processador 1785 podem ter orçamentos com ordem de
+grandeza de diferença.
+
+O contexto que pressiona a decisão é conhecido. A plataforma PLC-5,
+lançada em 1986, teve processadores 1785 e I/O 1771 descontinuados pela
+Rockwell em junho de 2017, e o RSLogix 5, software de programação da
+família, foi descontinuado em 31 de dezembro de 2025. Quem ainda opera
+PLC-5 depende de mercado secundário para peças e de licenças legadas
+para manter o software. A pergunta deixou de ser *se* migrar e passou a
+ser *como* — e o orçamento do "como" depende dos fatores abaixo.
+
+## Por que ninguém sério dá preço sem levantamento?
+
+Porque a dispersão entre projetos de [migração de
+PLC-5](/tecnologias/migracao-plc5-slc500/) é enorme. Um PLC-5 com 300
+pontos discretos, painel em bom estado, programa documentado e parada
+anual de dez dias é um projeto. Um PLC-5 com 1.800 pontos, analógicas
+em block transfer, doze estações em DH+, backup desatualizado e janela
+de 36 horas é outro projeto — com o mesmo processador na foto.
+
+Quando um fornecedor responde "quanto custa migrar um PLC-5" com número
+fechado por telefone, esse número ou embute margem para o pior cenário,
+ou omite escopo. Nos dois casos, a diferença aparece depois, em aditivo
+ou em parada estourada.
+
+## Quais fatores definem o orçamento de uma migração de PLC-5?
+
+### 1. Contagem e tipo de I/O
+
+A contagem de racks 1771 e de módulos por tipo é a primeira variável de
+hardware e de horas. I/O discreto tem mapeamento direto; analógicas que
+usam block transfer exigem tratamento individual na conversão; módulos
+especiais (termopar, contagem rápida, posicionamento) nem sempre têm
+equivalente 1756 direto e podem exigir reengenharia pontual. A mesma
+contagem define ainda o tempo de loop check no comissionamento — o
+inventário é feito por chassi 1771 (4, 8, 12 ou 16 slots), e é ele que
+dimensiona o hardware 1756 equivalente.
+
+### 2. Fiação: conversão 1492 ou painel novo?
+
+O Bulletin 1492 da Rockwell (guia de seleção 1492-SG121) oferece
+módulos de conversão que recebem os swing arms 1771 existentes, com
+cabos pré-fabricados até os RTBs dos módulos 1756 e placa de montagem
+com a mesma furação do chassi 1771. O campo não é refiado: as horas de
+parada e o risco de erro de fiação caem drasticamente. A alternativa,
+painel novo, faz sentido quando o painel está degradado, quando há
+adequação normativa ou expansão prevista — mas adiciona material,
+montagem e refiação de campo. Essa única decisão desloca o orçamento
+mais do que qualquer outra variável de hardware.
+
+### 3. Complexidade da lógica: MSG, PID e indireções
+
+O Studio 5000 importa o programa exportado do RSLogix 5 e converte a
+maior parte do ladder — o processo é documentado pela Rockwell no
+manual de referência 1756-RM085. Três categorias, porém, exigem
+retrabalho manual: instruções **MSG** (endereçamento por estação DH+
+vira caminho CIP, reconfiguradas uma a uma), instruções **PID** que
+usam arquivo de controle N (não convertem por completo e falham na
+verificação do projeto) e **indireções** do tipo `N7:[N10:0]` (viram
+arrays e exigem revisão de lógica). Quanto maior a fração do programa
+nessas categorias, mais horas de engenharia e de teste.
+
+<TechnicalCallout variant="warning" title="Conversão automática não é projeto pronto">
+  A ferramenta de conversão entrega um ponto de partida, não um
+  programa comissionável. MSG, PID com arquivo N, block transfers e
+  indireções precisam de revisão humana — e é exatamente esse volume de
+  revisão que um levantamento sério quantifica antes de precificar.
+</TechnicalCallout>
+
+### 4. HMI: migrar junto ou depois?
+
+Se a supervisão atual aponta para o PLC-5 via DH+ — rede que admite até
+64 estações por link —, manter a HMI antiga exige sustentar uma ponte
+de comunicação com o controlador novo. Migrar junto para [FactoryTalk
+View SE/ME](/tecnologias/factorytalk-view-se/) elimina o legado de uma
+vez, mas amplia o escopo da mesma parada: telas, alarmes, históricos e
+treinamento de operação entram no pacote. Não há resposta única — há
+impacto distinto no orçamento e no cronograma, e a decisão precisa ser
+tomada antes da proposta, não durante a obra.
+
+### 5. Rede legada: DH+ e Remote I/O
+
+O módulo 1756-DHRIO dá ao ControlLogix dois canais configuráveis para
+DH+ (57,6, 115,2 ou 230,4 kbit/s, conforme o comprimento do tronco) ou
+para Remote I/O em modo scanner, varrendo racks 1771 remotos sem
+trocá-los. Isso habilita migração faseada: primeiro o processador,
+depois os racks remotos, janela a janela. Uma migração big bang
+concentra risco e custo em uma parada; a faseada dilui ambos, ao preço
+de conviver com a ponte por mais tempo. O perfil de desembolso muda
+completamente entre as duas estratégias.
+
+### 6. Janela de parada disponível
+
+A janela define a estratégia, e a estratégia define o custo. Uma parada
+curta exige mais pré-fabricação, simulação prévia da lógica, equipes em
+paralelo e plano de rollback ensaiado — tudo isso é hora de engenharia
+comprada antes da parada para reduzir risco durante ela.
+
+<TechnicalCallout variant="ot" title="Rollback não é pessimismo, é requisito">
+  Em ambiente OT, a migração só deve cortar a fiação definitivamente
+  depois do ponto de não retorno declarado. Até lá, o plano precisa
+  permitir voltar o PLC-5 a operar dentro da própria janela. Quem não
+  orça o rollback está orçando outra coisa.
+</TechnicalCallout>
+
+### 7. Documentação existente
+
+Backup atualizado do projeto RSLogix 5, diagramas elétricos as-built,
+lista de I/O e descritivo funcional reduzem horas de levantamento. Um
+detalhe que surpreende gestores: os comentários do programa PLC-5 vivem
+no arquivo offline, não no processador — se só existe um upload antigo
+sem o projeto original, a lógica chega sem comentários, e a engenharia
+reversa entra na conta.
+
+### 8. FAT e SAT
+
+A profundidade dos testes é escopo, não acessório: bancada com
+simulação de I/O, FAT documentado com presença do cliente, loop check
+em campo, SAT e acompanhamento de partida. A referência internacional
+para escopo desses testes é a IEC 62381, que define as atividades de
+FAT, SAT e SIT em projetos de automação de processo. Cortar teste
+barateia a proposta no papel e encarece a parada na prática — o lugar
+mais caro do mundo para descobrir um PID mal convertido é a planta
+partindo.
+
+## O que um bom levantamento contém?
+
+Um levantamento que sustenta orçamento firme de [migração de
+PLC-5](/solucoes/migracao-plc/) entrega, no mínimo:
+
+- Inventário dos racks e módulos 1771, com contagem por tipo de I/O
+- Métricas do programa: quantidade de MSG, PID, block transfers e
+  indireções
+- Mapa das redes DH+ e Remote I/O, com todas as estações
+- Estado físico dos painéis e parecer sobre conversão 1492 vs painel
+  novo
+- Inventário de HMI/SCADA e dependências de comunicação
+- Restrições reais de parada, por área de processo
+- Lista da documentação disponível e das lacunas
+- Critérios de aceitação propostos para FAT e SAT
+
+Com isso em mãos, o orçamento sai com premissas explícitas — e o
+hardware [ControlLogix ou
+CompactLogix](/tecnologias/controllogix-compactlogix/) é dimensionado
+para o que a planta é, não para o que se imagina dela. É exatamente
+esse diagnóstico que fazemos antes de qualquer proposta:
+[fale com a Integra](/contato) e comece pelo levantamento, não pelo
+número.
+
+## Perguntas frequentes
+
+### Quanto custa migrar um PLC-5?
+
+Depende de oito fatores: contagem e tipo de I/O, estratégia de fiação
+(conversão 1492 ou painel novo), complexidade da lógica, escopo de HMI,
+redes DH+/RIO, janela de parada, documentação existente e profundidade
+de FAT/SAT. Número dado sem levantamento desses fatores é estimativa
+sem compromisso técnico. O caminho correto é um diagnóstico em campo
+antes da proposta.
+
+### O PLC-5 ainda tem suporte da Rockwell?
+
+Não. Os processadores 1785 e o I/O 1771 foram descontinuados em junho
+de 2017, e o RSLogix 5 foi descontinuado em 31 de dezembro de 2025.
+Peças novas não são mais fabricadas; o que existe é mercado secundário,
+sem garantia de procedência ou de vida útil.
+
+### Dá para aproveitar a fiação existente na migração?
+
+Sim. O sistema de conversão Bulletin 1492 da Rockwell recebe os swing
+arms 1771 com a fiação de campo intacta e os conecta aos módulos 1756
+por cabos pré-fabricados. Isso reduz horas de parada e elimina boa
+parte do risco de erro de refiação — mas só se aplica quando o painel
+existente está em condição de permanecer.
+
+### É possível migrar por etapas, sem parar a planta inteira?
+
+Sim. O módulo 1756-DHRIO conecta o ControlLogix novo às redes DH+ e
+Remote I/O legadas, permitindo trocar o processador primeiro e os racks
+1771 remotos depois, janela a janela. A migração faseada dilui risco e
+desembolso, em troca de conviver com a ponte de comunicação por mais
+tempo.
+
+### A conversão do programa PLC-5 para Studio 5000 é automática?
+
+Parcialmente. A ferramenta de importação do Studio 5000 converte a
+maior parte do ladder, conforme o manual 1756-RM085 da Rockwell, mas
+instruções MSG, PID com arquivo de controle N, block transfers e
+endereçamento indireto exigem retrabalho manual e teste. O volume desse
+retrabalho é um dos principais fatores de horas de engenharia.
+
+### Preciso migrar a HMI junto com o PLC-5?
+
+Não obrigatoriamente, mas a decisão precisa ser tomada antes do
+orçamento. Manter a HMI legada exige sustentar comunicação com o
+controlador novo; migrar junto para FactoryTalk View amplia o escopo da
+mesma parada. As duas opções são válidas — com custos e cronogramas
+diferentes.

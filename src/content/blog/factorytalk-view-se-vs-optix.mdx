@@ -1,0 +1,191 @@
+---
+title: "FactoryTalk View SE vs Optix: qual escolher?"
+description: "FactoryTalk Optix ou View SE? Comparativo técnico honesto: arquitetura, redundância, licenciamento, PlantPAx e cenários de decisão para sua planta."
+pubDate: 2026-06-10
+tags: ["FactoryTalk Optix", "FactoryTalk View SE", "HMI"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+**FactoryTalk Optix** é a plataforma de visualização mais recente da Rockwell
+Automation: nativa em OPC UA, multiplataforma (Windows e Linux, x86 e ARM) e
+com engenharia via navegador. **FactoryTalk View SE** é o HMI/SCADA
+cliente-servidor que sustenta aplicações distribuídas e o PlantPAx há mais de
+duas décadas. A escolha entre os dois não é "novo vs velho": é uma decisão de
+arquitetura, e errar aqui custa caro ao longo do ciclo de vida do sistema.
+
+## O que é o FactoryTalk Optix?
+
+O FactoryTalk Optix foi lançado pela Rockwell Automation na Automation Fair de
+novembro de 2022 como uma plataforma de HMI construída do zero, sem herdar a
+base de código do [FactoryTalk View SE](/tecnologias/factorytalk-view-se/).
+As características que o diferenciam:
+
+- **Engenharia web.** O FactoryTalk Optix Studio roda no navegador (via
+  FactoryTalk Hub) ou como editor desktop, com colaboração multiusuário
+  simultânea e controle de versão integrado a Git.
+- **OPC UA nativo.** O Optix fala OPC UA nativamente, como cliente e como
+  servidor, e traz drivers nativos para controladores Rockwell e de terceiros.
+  É a primeira plataforma de visualização da Rockwell pensada para ambientes
+  multi-vendor desde o início.
+- **Multiplataforma de verdade.** Segundo as notas de versão da Rockwell, o
+  runtime roda em Windows 10/11, Windows Server 2016 a 2025 e Ubuntu 22 (x64),
+  em x86; em ARM, o suporte oficial é em dispositivos fechados da Rockwell com
+  Yocto (ARM64), como os terminais OptixPanel e os módulos Embedded Edge
+  Compute, além dos painéis PC ASEM (x86).
+- **Cliente 100% web.** A interface de operação é HTML5 puro: qualquer
+  navegador vira cliente, sem instalação de software na estação.
+- **Licenciamento por tokens.** Em vez de licença por contagem de displays,
+  o Optix usa *feature tokens*: cada função consome tokens, e os maiores
+  consumidores são clientes web simultâneos, conexões OPC UA e conexões de
+  banco de dados, conforme a base de conhecimento da Rockwell.
+
+## O que o FactoryTalk View SE entrega que o Optix ainda não entrega?
+
+A pergunta certa não é "qual é mais moderno", e sim "o que cada um faz hoje,
+com suporte oficial". O FactoryTalk View SE continua sendo desenvolvido: a
+versão 15.00, lançada em setembro de 2024, trouxe data logging em InfluxDB,
+conectividade MQTT e bibliotecas de aplicação pré-configuradas. E mantém
+vantagens estruturais:
+
+- **Redundância nativa e provada.** Servidores HMI, de dados e de alarmes em
+  pares redundantes com sincronização automática, validados há anos em campo.
+  Uma aplicação distribuída View SE suporta até 10 servidores HMI (cada par
+  redundante consome 2 dessa conta), segundo a documentação da Rockwell.
+- **Integração profunda com Logix.** Alarmes baseados em tag do controlador
+  via FactoryTalk Alarms & Events, diagnóstico direto de
+  [ControlLogix/CompactLogix](/tecnologias/controllogix-compactlogix/) e
+  browsing nativo de tags sem mapeamento intermediário.
+- **PlantPAx.** O HMI de sistema do [PlantPAx](/solucoes/plantpax/) é o View
+  SE, com a Library of Process Objects completa, faceplates, alarmes e
+  diagnósticos integrados à arquitetura de referência.
+- **Maturidade operacional.** Duas décadas de base instalada significam mão
+  de obra disponível, padrões de projeto consolidados e comportamento
+  conhecido em cenários de falha. Isso tem valor de engenharia real.
+
+<TechnicalCallout variant="warning" title="Redundância no Optix: roadmap não é produto">
+  A camada HMI do FactoryTalk Optix não possui redundância nativa de servidor.
+  A Rockwell anunciou uma camada SCADA do Optix com redundância de servidores e
+  arquitetura multi-site, com disponibilidade inicial prevista para 2026. Até
+  que isso esteja lançado, testado e documentado, não projete uma aplicação
+  crítica contando com esse recurso. Valide a disponibilidade real com a
+  Rockwell antes de definir arquitetura.
+</TechnicalCallout>
+
+## Tabela comparativa: View SE vs Optix
+
+| Critério | FactoryTalk View SE | FactoryTalk Optix |
+| --- | --- | --- |
+| Arquitetura | Cliente-servidor distribuído (até 10 servidores HMI) | Aplicação autônoma com clientes web |
+| Sistema operacional | Windows / Windows Server | Windows, Windows Server e Linux (x86 e ARM) |
+| Cliente de operação | Cliente instalado + ViewPoint (web limitado) | Navegador HTML5, sem instalação |
+| Engenharia | View Studio (desktop, multiusuário com coordenação manual, sem versionamento nativo) | Optix Studio (web ou desktop, multiusuário, Git) |
+| Conectividade | Foco em Logix; OPC DA/UA via FactoryTalk Linx | OPC UA nativo + drivers de terceiros |
+| Redundância de servidor | Nativa e consolidada | Indisponível na camada HMI (SCADA anunciado p/ 2026) |
+| PlantPAx | HMI de sistema oficial, biblioteca completa | HMI local de skid a partir do PlantPAx 5.50 |
+| Licenciamento | Por servidor + contagem de displays/clientes | Feature tokens (clientes web, OPC UA, banco) |
+| Maturidade | 20+ anos de campo | Lançado em novembro de 2022 |
+
+## Quando escolher cada um?
+
+**Escolha o FactoryTalk View SE quando:**
+
+- O projeto é DCS/PlantPAx: o guia de seleção PlantPAx (PROCES-SG001) define
+  o View SE como HMI de sistema, e a biblioteca de objetos de processo foi
+  construída sobre ele.
+- Redundância de servidor é requisito de disponibilidade hoje, não em roadmap.
+- A planta já opera View SE: ampliar uma arquitetura existente quase sempre
+  custa menos (engenharia, treinamento, conhecimento já consolidado na equipe)
+  do que introduzir uma segunda plataforma.
+- A base é 100% Logix e a equipe domina o ecossistema FactoryTalk.
+
+**Escolha o FactoryTalk Optix quando:**
+
+- O escopo é máquina, skid ou OEM: aplicação compacta, replicável, com
+  cliente web e deployment em painel ou edge, inclusive Linux/ARM.
+- O ambiente é multi-vendor: PLCs de fabricantes diferentes, integração via
+  OPC UA, sem servidor Windows dedicado para visualização.
+- É greenfield leve, sem requisito de redundância de servidor, onde o modelo
+  de tokens e o cliente sem instalação reduzem o custo total. Os fatores que
+  pesam aqui são contagem de clientes simultâneos, conexões e infraestrutura
+  de servidor evitada; avalie caso a caso, não por regra de bolso.
+- Engenharia distribuída importa: times em locais diferentes trabalhando no
+  mesmo projeto com versionamento Git.
+
+## View SE e Optix podem coexistir na mesma planta?
+
+Podem, e essa é a leitura mais realista para os próximos anos. A própria
+Rockwell sinaliza convivência: a partir da release 5.50, o PlantPAx documenta
+uma oferta de HMI local baseada em Optix (OptixPanel Standard ou painel ASEM
+6300P) com objetos da Library of Process Objects, como PMTR, PAI e PVLV,
+para skids e interfaces locais, enquanto o View SE segue como HMI de sistema.
+O OPC UA é a ponte natural entre as duas camadas.
+
+Na prática que vemos em [projetos FactoryTalk](/solucoes/factorytalk/): View
+SE no plant-wide (sala de controle, redundância, alarmes A&E) e Optix nas
+bordas (máquinas novas, skids de terceiros, dashboards web para gestão). A
+Integra Automação, Silver System Integrator Rockwell com base em Maringá-PR e
+atuação nacional, projeta as duas plataformas, o que ajuda a manter a
+recomendação honesta em vez de empurrar a ferramenta da moda.
+
+<TechnicalCallout variant="note" title="Não existe migração automática">
+  Não há conversor oficial de aplicações FactoryTalk View SE para FactoryTalk
+  Optix. Telas, scripts VBA e alarmes precisam ser reprojetados, não
+  convertidos. Trate qualquer mudança de plataforma como projeto de
+  reengenharia de HMI, com revisão de hierarquia de telas e racionalização de
+  alarmes, não como um "save as".
+</TechnicalCallout>
+
+Está avaliando [FactoryTalk Optix](/tecnologias/factorytalk-optix/) ou
+expandindo um View SE existente? [Conversamos antes da
+proposta](/contato?assunto=factorytalk).
+
+## Perguntas frequentes
+
+### O FactoryTalk Optix substitui o FactoryTalk View SE?
+
+Não. A Rockwell mantém as duas plataformas ativas no portfólio e segue
+lançando versões do View SE (a 15.00 saiu em setembro de 2024). O Optix cobre
+casos que o View SE atendia mal, como cliente web puro, Linux e multi-vendor,
+mas não replica hoje redundância de servidor nem o papel de HMI de sistema do
+PlantPAx.
+
+### O FactoryTalk Optix funciona com PlantPAx?
+
+Parcialmente. Desde a release 5.50, o guia de seleção do PlantPAx documenta o
+Optix como HMI local de skid, com objetos da Library of Process Objects
+disponíveis em OptixPanel Standard ou painel ASEM 6300P. O HMI de sistema do
+PlantPAx, com redundância e alarmes integrados, continua sendo o FactoryTalk
+View SE.
+
+### O FactoryTalk Optix roda em Linux?
+
+Sim. O runtime do Optix é suportado em Ubuntu 22 (x64) além de Windows 10/11
+e Windows Server 2016 a 2025, e roda em dispositivos ARM64 fechados da Rockwell
+(com Yocto), como OptixPanel e módulos Embedded Edge Compute, segundo a
+documentação da Rockwell. Isso permite rodar a aplicação em painéis, IPCs e
+dispositivos edge sem licença de Windows Server.
+
+### O FactoryTalk View SE vai ser descontinuado?
+
+Não há qualquer anúncio de descontinuação. O View SE recebeu a versão 15.00
+em setembro de 2024, com InfluxDB, MQTT e novas bibliotecas de aplicação, e
+permanece como HMI de sistema do PlantPAx na release 5.50. Planejar como se o
+View SE fosse morrer em breve é um erro de avaliação hoje.
+
+### Como funciona o licenciamento do FactoryTalk Optix?
+
+Por feature tokens: cada licença de runtime traz uma cota de tokens, e cada
+recurso ativado no projeto consome parte dela. Segundo a base de conhecimento
+da Rockwell, os maiores consumidores são clientes web simultâneos, conexões
+OPC UA e conexões de banco de dados. Há opções perpétuas e por assinatura, e
+o dimensionamento correto dos tokens deve ser feito na fase de engenharia.
+
+### Vale a pena migrar do View SE para o Optix?
+
+Na maioria das plantas em operação, não por enquanto. Não existe conversão
+automática de aplicações, e o Optix ainda não oferece redundância nativa de
+servidor na camada HMI. Faz sentido adotar Optix em máquinas novas, skids e
+dashboards web, mantendo o View SE no plant-wide, e reavaliar quando a camada
+SCADA do Optix anunciada pela Rockwell estiver madura em campo.
