@@ -1,0 +1,506 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import ManualReference from "@/components/ManualReference.astro";
+import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
+
+const sinais = [
+  {
+    title: "Sistema operacional sem suporte",
+    description:
+      "Windows Server 2012 R2 perdeu o suporte estendido da Microsoft em 10 de outubro de 2023; o Windows 10, em 14 de outubro de 2025. Supervisório rodando nesses sistemas opera sem patch de segurança e sem caminho de atualização do próprio software SCADA.",
+  },
+  {
+    title: "Software descontinuado e licenças órfãs",
+    description:
+      "RSView32 saiu de venda em 2022. Chave de ativação antiga, dongle perdido, mídia de instalação que ninguém encontra: quando o servidor falhar, a reinstalação pode ser impossível.",
+  },
+  {
+    title: "Telas lentas, clientes travando",
+    description:
+      "Troca de tela que demora segundos, cliente que congela em turno de madrugada, gráficos herdados de duas ou três conversões sucessivas. O custo aparece em decisão operacional atrasada.",
+  },
+  {
+    title: "Alarmes ruidosos",
+    description:
+      "A ISA-18.2 trabalha com meta de 1 a 2 alarmes por 10 minutos por operador. Sistema legado sem racionalização entrega ordens de grandeza acima disso — e o operador aprende a ignorar a banda de alarmes inteira.",
+  },
+  {
+    title: "Sem historian",
+    description:
+      "Dado de processo que morre na tela ou vive em datalog proprietário espalhado em arquivos locais não sustenta análise de causa raiz, laudo de parada nem melhoria de processo.",
+  },
+  {
+    title: "Risco cibernético acumulado",
+    description:
+      "Servidor SCADA na mesma rede plana da TI corporativa, acesso remoto improvisado por TeamViewer, sem IDMZ e sem inventário de quem acessa o quê. Cada ano nessa condição aumenta a superfície de ataque.",
+  },
+];
+
+const fases = [
+  {
+    n: "01",
+    title: "Inventário do supervisório existente",
+    description:
+      "Levantamento de telas, tags, alarmes configurados, scripts e VBA, servidores e clientes, versões de SO, licenças, drivers de comunicação e integrações com PLC, historian e MES. Sem esse retrato, qualquer proposta de modernização é chute.",
+  },
+  {
+    n: "02",
+    title: "Arquitetura-alvo",
+    description:
+      "Definição de plataforma, redundância de servidores, quantidade de clientes, Remote Desktop Services, virtualização e dimensionamento — documentada e validada com operação e TI antes de qualquer licença ser comprada.",
+  },
+  {
+    n: "03",
+    title: "Padronização de telas conforme ISA-101",
+    description:
+      "A ANSI/ISA-101.01-2015 define o ciclo de vida de HMI para automação de processo: filosofia, guia de estilo, hierarquia de navegação e biblioteca de objetos. Telas em alto desempenho (high-performance HMI) substituem o mosaico colorido legado.",
+  },
+  {
+    n: "04",
+    title: "Racionalização de alarmes conforme ISA-18.2",
+    description:
+      "Filosofia de alarmes, classificação, priorização e métricas de desempenho seguindo a ANSI/ISA-18.2-2016. Alarme que não exige ação do operador não é alarme.",
+  },
+  {
+    n: "05",
+    title: "Historian e continuidade de dados",
+    description:
+      "Implantação ou atualização de historian (FactoryTalk Historian, PI System) com estratégia definida para o histórico legado: importação, arquivamento consultável ou corte documentado.",
+  },
+  {
+    n: "06",
+    title: "Virtualização dos servidores",
+    description:
+      "Servidores SCADA, historian e engenharia em máquinas virtuais com snapshot antes de mudança, recuperação rápida de falha de hardware e independência do ciclo de vida físico.",
+  },
+  {
+    n: "07",
+    title: "Hardening e segmentação de rede",
+    description:
+      "Segmentação em zonas e conduítes conforme IEC 62443-3-2, IDMZ entre TI e OT, hardening de servidores e estações, controle de acesso e backup testado.",
+  },
+  {
+    n: "08",
+    title: "FAT em ambiente espelho",
+    description:
+      "O sistema novo é testado contra a lógica real — tela a tela, alarme a alarme — em ambiente de homologação, com participação da operação antes de qualquer cutover.",
+  },
+  {
+    n: "09",
+    title: "Cutover com rollback e sustentação",
+    description:
+      "Comutação por área ou console, com o sistema legado em paralelo e plano de rollback validado. Depois do go-live: treinamento, as-built e suporte de estabilização.",
+  },
+];
+
+const deliverables = [
+  "Inventário completo: telas, tags, alarmes, scripts, servidores, licenças e integrações",
+  "Documento de arquitetura-alvo com redundância, virtualização e dimensionamento",
+  "Guia de estilo HMI e biblioteca de objetos conforme ISA-101",
+  "Filosofia de alarmes e racionalização conforme ISA-18.2",
+  "Historian configurado com estratégia de continuidade do histórico legado",
+  "Servidores virtualizados com plano de backup e recuperação de desastres",
+  "Segmentação de rede, IDMZ e hardening alinhados à IEC 62443",
+  "FAT documentado, plano de cutover com rollback e suporte pós-go-live",
+];
+
+const faq = [
+  {
+    q: "Quanto tempo leva uma modernização de SCADA?",
+    a: "Depende de três variáveis principais: quantidade de telas e tags, número de integrações (PLCs, historian, MES, relatórios) e a janela de validação que a operação consegue dar. Um supervisório standalone com poucas dezenas de telas é um projeto curto; um sistema distribuído redundante com historian e racionalização de alarmes é um programa de meses, executado em fases. O inventário inicial é o que permite estimar com responsabilidade — antes dele, qualquer prazo é especulação.",
+  },
+  {
+    q: "Dá para modernizar o supervisório sem parar a planta?",
+    a: "Na maioria dos casos, sim. O sistema novo é montado em paralelo, lendo os mesmos PLCs que o sistema legado, e validado em FAT antes da comutação. O cutover é feito por área ou por console de operação, com o legado pronto para reassumir (rollback). Parada total só costuma ser necessária quando a modernização do SCADA coincide com troca de controlador ou de rede na mesma janela.",
+  },
+  {
+    q: "Preciso trocar o PLC junto com o SCADA?",
+    a: "Não necessariamente — supervisório e controlador têm ciclos de vida independentes, e o SCADA novo conversa com o PLC existente pelos drivers atuais. Mas o inventário avalia os dois: se a planta roda PLC-5 ou SLC500 (linhas descontinuadas pela Rockwell, com venda dos últimos SLC encerrada em março de 2024), faz sentido ao menos planejar a migração de controladores no mesmo horizonte, porque tags e telas bem estruturadas agora reduzem o retrabalho depois.",
+  },
+  {
+    q: "O que acontece com meu histórico de dados?",
+    a: "Definimos isso na fase de historian, antes do cutover. As opções típicas: importar o histórico legado para o historian novo (quando o formato permite), manter o banco antigo em modo consulta por um período de retenção definido, ou estabelecer um corte documentado. O ponto inegociável é não perder rastreabilidade: a decisão fica registrada e o dado antigo permanece acessível pelo tempo que o processo e a auditoria exigirem.",
+  },
+  {
+    q: "RSView32 ainda é suportado pela Rockwell?",
+    a: "Não para novas vendas: o RSView32 foi descontinuado e saiu de comercialização em 27 de maio de 2022, e consta como Discontinued no Product Lifecycle Status da Rockwell Automation. O substituto oficial é o FactoryTalk View SE, e a própria Rockwell publica o guia de modernização (publicação FTALK-QR004, edição C) descrevendo o que o import converte. Na prática, o risco é composto: pela matriz de compatibilidade da Rockwell, o último sistema operacional testado para o RSView32 7.60 foi o Windows 7 Professional SP1 32 bits — o software depende de banco de dados 32 bits e não roda em SO 64 bits —, e o próprio Windows 7 está sem suporte da Microsoft desde 14 de janeiro de 2020.",
+  },
+  {
+    q: "SCADA na nuvem faz sentido em planta industrial?",
+    a: "Para supervisão e controle em tempo real, o servidor SCADA continua on-premises: latência, disponibilidade e a segmentação exigida pela IEC 62443 mandam nessa decisão. O que faz sentido levar para a nuvem é a camada de dados — historian agregado, dashboards corporativos, analytics — alimentada de forma unidirecional a partir da planta, atravessando a IDMZ. Arquitetura híbrida, com tempo real dentro da cerca e análise fora, é o padrão que recomendamos.",
+  },
+];
+---
+
+<BaseLayout
+  title="Modernização de SCADA Industrial"
+  description="Modernização de SCADA e supervisórios legados: migração RSView32 → FactoryTalk View SE, telas ISA-101, alarmes ISA-18.2, historian, virtualização e IEC 62443."
+  ogImage="/og/solucoes-modernizacao-scada.png"
+  breadcrumbLeaf="Modernização de SCADA"
+  jsonLd={[
+    serviceSchema({
+      name: "Modernização de SCADA Industrial",
+      description:
+        "Modernização de sistemas SCADA e supervisórios legados com inventário, padronização ISA-101 e ISA-18.2, historian, virtualização, segurança IEC 62443 e cutover com rollback.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Solução · Modernização de Supervisórios
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Modernização de SCADA Industrial
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Modernização de SCADA é a substituição planejada de um sistema
+          supervisório legado — software, servidores, telas, alarmes e
+          histórico — por uma plataforma atual e suportada, sem perder
+          comportamento operacional nem rastreabilidade de dados. A Integra
+          Automação Industrial conduz esse processo em fases: inventário,
+          arquitetura-alvo, padronização ISA-101 e ISA-18.2, historian,
+          virtualização, segurança OT e cutover com rollback.
+        </p>
+        <p class="mt-4 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+          Atuamos como
+          <a href="/integrador-rockwell" class="font-medium text-integra-red-700 hover:underline">Silver System Integrator da Rockwell Automation</a>
+          e em ambiente multi-vendor: FactoryTalk View SE e Optix, Elipse E3,
+          Siemens WinCC. De Maringá-PR para plantas em todo o Brasil, desde
+          2016.
+        </p>
+      </div>
+      <ManualReference
+        image={viewSeReference}
+        alt="Arquitetura distribuída FactoryTalk View SE com servidores e clientes"
+        title="Arquitetura distribuída como alvo de modernização de SCADA"
+        source="Rockwell Automation - FactoryTalk View SE Reference Architectures"
+        caption="Referência visual pública para contextualizar HMI Server, Data Server, clientes e redundância em projetos de modernização de supervisório."
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Diagnóstico"
+        title="Quando o supervisório precisa ser modernizado?"
+        description="Nenhum desses sinais derruba a planta sozinho. O problema é que eles se acumulam em silêncio — e cobram a conta juntos, na pior janela possível."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {sinais.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-sm leading-relaxed text-integra-gray-700">
+        Dois ou mais sinais simultâneos indicam que a modernização do SCADA
+        deixou de ser melhoria e virou gestão de risco operacional. O custo de
+        modernizar de forma planejada é consistentemente menor — em horas de
+        engenharia, em janela de parada e em exposição — do que reconstruir um
+        supervisório às pressas depois de uma falha de servidor sem mídia de
+        instalação e sem licença recuperável.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Método"
+        title="Como a Integra conduz uma modernização de SCADA"
+        description="Nove fases, cada uma com entregável verificável. A sequência reduz risco: ninguém compra licença antes da arquitetura, ninguém faz cutover antes do FAT."
+        accent={true}
+      />
+
+      <ol class="space-y-5">
+        {fases.map((fase) => (
+          <li class="flex gap-5 rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <span
+              class="font-mono text-sm font-semibold text-integra-red-700"
+              aria-hidden="true"
+            >
+              {fase.n}
+            </span>
+            <div>
+              <h3 class="text-base font-semibold text-integra-gray-900">
+                {fase.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+                {fase.description}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <TechnicalCallout variant="note" title="Rollback é parte do escopo">
+        <p>
+          Modernização de supervisório séria sabe como voltar atrás. O sistema
+          legado permanece operável em paralelo durante o cutover, e o plano de
+          rollback é validado junto com o FAT — não improvisado às 3h da manhã.
+        </p>
+      </TechnicalCallout>
+
+      <p class="mt-8 text-sm leading-relaxed text-integra-gray-700">
+        As fases de virtualização e infraestrutura se apoiam nas práticas que
+        documentamos em
+        <a href="/tecnologias/virtualizacao-ot" class="font-medium text-integra-red-700 hover:underline">virtualização OT</a>,
+        <a href="/solucoes/data-centers" class="font-medium text-integra-red-700 hover:underline">data centers industriais</a>
+        e
+        <a href="/tecnologias/backup-recuperacao-desastres" class="font-medium text-integra-red-700 hover:underline">backup e recuperação de desastres</a>.
+        Em plantas de processo, a modernização do supervisório costuma ser a
+        porta de entrada para uma arquitetura
+        <a href="/solucoes/plantpax" class="font-medium text-integra-red-700 hover:underline">PlantPAx DCS</a>
+        completa.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Caminho Rockwell"
+        title="Como funciona a migração RSView32 → FactoryTalk View SE?"
+        description="O RSView32 foi descontinuado pela Rockwell Automation e saiu de comercialização em 27 de maio de 2022. O substituto oficial é o FactoryTalk View Site Edition."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A Rockwell documenta o caminho de modernização no guia público
+        <em>RSView32 to FactoryTalk View SE modernization</em> (publicação
+        FTALK-QR004): o FactoryTalk View Studio importa componentes do projeto
+        RSView32 — telas gráficas, objetos animados, textos, banco de tags,
+        expressões e macros — preservando boa parte do trabalho de engenharia
+        acumulado. O import, porém, não é o projeto inteiro. Itens que exigem
+        reengenharia manual:
+      </p>
+
+      <ul class="mt-6 space-y-2.5">
+        {
+          [
+            "Código VBA: no RSView32 ele roda no servidor; no FactoryTalk View SE, roda no cliente, a partir das telas. A lógica precisa ser revisada e reposicionada, não apenas copiada.",
+            "Controles ActiveX e integrações de terceiros, que dependem de versão de SO e raramente sobrevivem intactos.",
+            "Segurança e usuários: o modelo passa a ser o FactoryTalk Security, integrado a usuários e grupos do domínio Windows.",
+            "Datalog e alarmes: o View SE usa FactoryTalk Alarms and Events e novo modelo de logging — oportunidade para racionalizar conforme ISA-18.2 em vez de reproduzir o ruído antigo.",
+            "Comunicação: drivers RSLinx Classic dão lugar ao FactoryTalk Linx, com revisão de topologia e redundância de data servers.",
+          ].map((item) => (
+            <li class="flex items-start gap-3 text-sm leading-relaxed text-integra-gray-700">
+              <span
+                class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-gray-900 text-integra-white text-[10px]"
+                aria-hidden="true"
+              >
+                →
+              </span>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <TechnicalCallout variant="warning" title="Importar não é modernizar">
+        <p>
+          O import do RSView32 reproduz no View SE a tela desenhada há vinte
+          anos — com a mesma poluição visual e os mesmos alarmes ruidosos. Nós
+          usamos o import como acelerador de inventário e tradução de tags,
+          mas a interface de operação é reconstruída sobre guia de estilo
+          ISA-101 e filosofia de alarmes ISA-18.2. É a diferença entre trocar
+          de software e modernizar o supervisório.
+        </p>
+      </TechnicalCallout>
+
+      <p class="mt-8 text-sm leading-relaxed text-integra-gray-700">
+        Detalhamos a plataforma na página técnica do
+        <a href="/tecnologias/factorytalk-view-se" class="font-medium text-integra-red-700 hover:underline">FactoryTalk View SE</a>
+        e o ecossistema completo em
+        <a href="/solucoes/factorytalk" class="font-medium text-integra-red-700 hover:underline">soluções FactoryTalk</a>.
+        Quando a planta também roda PLC-5 ou SLC500, tratamos supervisório e
+        controlador no mesmo plano de modernização — veja
+        <a href="/solucoes/migracao-plc" class="font-medium text-integra-red-700 hover:underline">migração de PLC legado</a>
+        e o
+        <a href="/blog/migracao-plc5-controllogix-guia-completo/" class="font-medium text-integra-red-700 hover:underline">guia completo de migração PLC-5 → ControlLogix</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Plataforma-alvo"
+        title="View SE, Optix, Elipse E3 ou WinCC: qual escolher?"
+        description="A resposta certa depende da base instalada de controladores, do modelo de licenciamento, da equipe que vai manter o sistema e das integrações previstas. Não existe plataforma vencedora universal."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-lg font-semibold text-integra-gray-900">
+            FactoryTalk View SE
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            SCADA distribuído consolidado para plantas com ControlLogix e
+            ecossistema Rockwell: redundância nativa de servidores, FactoryTalk
+            Alarms and Events e caminho documentado a partir do RSView32. A
+            versão 15.00 (setembro de 2024) adicionou conectividade MQTT e o
+            DataLogPro com InfluxDB; a versão 16.00 chegou em 2025. É a escolha
+            natural quando o investimento em Logix e
+            <a href="/tecnologias/factorytalk-historian" class="font-medium text-integra-red-700 hover:underline">FactoryTalk Historian</a>
+            já existe.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-lg font-semibold text-integra-gray-900">
+            FactoryTalk Optix
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Plataforma mais recente da Rockwell, nativa em OPC UA e MQTT, com
+            clientes web sem licenciamento por estação e drivers para
+            controladores de terceiros. Forte candidata em projetos greenfield,
+            aplicações edge e cenários multi-vendor em que o navegador é o
+            cliente. Comparamos os dois caminhos na página do
+            <a href="/tecnologias/factorytalk-optix" class="font-medium text-integra-red-700 hover:underline">FactoryTalk Optix</a>.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-lg font-semibold text-integra-gray-900">
+            Elipse E3
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Plataforma brasileira da Elipse Software, com arquitetura
+            cliente-servidor em múltiplas camadas, mais de 400 drivers de
+            comunicação e atuação como cliente e servidor OPC. Suporte e
+            documentação em português pesam a favor em plantas multi-vendor e
+            em utilidades. Detalhes na página do
+            <a href="/tecnologias/elipse-e3" class="font-medium text-integra-red-700 hover:underline">Elipse E3</a>.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-lg font-semibold text-integra-gray-900">
+            Siemens WinCC / PCS 7
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Quando a base instalada é S7 e a planta já opera no ecossistema
+            Siemens, modernizar dentro da família
+            <a href="/tecnologias/siemens-wincc-pcs7" class="font-medium text-integra-red-700 hover:underline">WinCC / PCS 7</a>
+            costuma vencer pelo custo de integração e pela curva da equipe de
+            manutenção. A Integra é integradora Rockwell, mas atua multi-vendor
+            — Siemens, Schneider e Elipse — justamente para que a recomendação
+            saia da engenharia, não do catálogo de um fabricante.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Segurança OT"
+        title="Por que cibersegurança entra no mesmo projeto?"
+        description="Modernizar o SCADA mexe em servidores, rede, contas e acessos de uma vez. Essa é exatamente a janela em que segmentar custa menos — refazer depois custa outra parada."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A IEC 62443-3-2 estrutura a rede industrial em zonas e conduítes, com
+        avaliação de risco por zona. Entre TI e OT entra a IDMZ — a zona
+        desmilitarizada industrial do nível 3.5: nenhum tráfego atravessa
+        direto; sessões da rede corporativa terminam em servidores da IDMZ e
+        novas sessões são iniciadas dali para a rede de controle. O servidor
+        SCADA modernizado nasce dentro dessa segmentação, com hardening de
+        sistema operacional, contas nominais, acesso remoto controlado e
+        backup testado — em vez de herdar a rede plana do sistema antigo.
+      </p>
+
+      <TechnicalCallout variant="ot" title="Sequência que recomendamos">
+        <p>
+          Segmentação e IDMZ se definem na fase de arquitetura-alvo, antes da
+          compra de servidores — não depois do go-live. O racional completo
+          está em
+          <a href="/solucoes/redes-iec-62443" class="font-medium text-integra-red-700 hover:underline">redes industriais e IEC 62443</a>,
+          <a href="/tecnologias/iec-62443-nist-ot" class="font-medium text-integra-red-700 hover:underline">IEC 62443 e NIST para OT</a>
+          e
+          <a href="/tecnologias/hardening-industrial" class="font-medium text-integra-red-700 hover:underline">hardening industrial</a>.
+        </p>
+      </TechnicalCallout>
+
+      <div class="mt-10 rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+        <h3 class="text-xl font-semibold text-integra-gray-900">
+          Estações de operação: thin clients com ThinManager
+        </h3>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Na arquitetura modernizada, as estações de operação deixam de ser
+          PCs completos espalhados pela planta. Com o
+          <a href="/tecnologias/thinmanager" class="font-medium text-integra-red-700 hover:underline">ThinManager</a>,
+          plataforma de gestão de thin clients da Rockwell com mais de 25 anos
+          de mercado, o conteúdo é entregue de servidores centrais para
+          terminais sem disco — por função, por localização ou por evento — e
+          o failover entre servidores Remote Desktop está incluído em todas as
+          licenças. Estação que queima é substituída em minutos, sem
+          reinstalação de software; combinada à virtualização dos servidores,
+          essa camada elimina a maior fonte de chamados do supervisório
+          legado: o PC de operação.
+        </p>
+      </div>
+
+      <p class="mt-8 text-sm leading-relaxed text-integra-gray-700">
+        Em setores de operação sazonal, como
+        <a href="/setores/acucar-e-etanol" class="font-medium text-integra-red-700 hover:underline">açúcar e etanol</a>,
+        planejamos as fases para que FAT e cutover caiam na entressafra — a
+        modernização avança o ano todo, mas a comutação acontece quando a
+        planta pode validar com calma.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Escopo e entregáveis"
+        title="O que uma modernização de SCADA entrega"
+        description="Cada fase fecha com documento verificável. No final, a planta tem um supervisório suportado — e a documentação para mantê-lo assim."
+        accent={true}
+      />
+
+      <DeliverableList items={deliverables} twoColumn={true} />
+
+      <StandardsBadges
+        title="Normas e referências aplicadas"
+        standards={[
+          { code: "ISA-101", description: "Ciclo de vida de HMI" },
+          { code: "ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança industrial" },
+          { code: "NIST SP 800-82", description: "Segurança de OT" },
+          { code: "CPwE", description: "Arquitetura de referência" },
+          { code: "OPC UA", description: "Comunicação industrial" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Seu supervisório ainda depende de um Windows sem suporte?"
+    description="Começamos pelo inventário: telas, tags, alarmes, servidores e licenças. Com o retrato na mesa, a discussão de plataforma, fases e janela de cutover deixa de ser opinião e vira engenharia."
+    primaryCta={{ href: "/contato?assunto=modernizacao-scada", label: "Avaliar modernização" }}
+    secondaryCta={{ href: "/solucoes/factorytalk", label: "Ver soluções FactoryTalk" }}
+  />
+</BaseLayout>

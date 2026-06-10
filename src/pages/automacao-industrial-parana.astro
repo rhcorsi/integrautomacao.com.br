@@ -1,0 +1,418 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const industryFacts = [
+  {
+    title: "4ª maior economia, 3º parque industrial",
+    description:
+      "O Paraná é a quarta maior economia do Brasil segundo o IBGE e tem o terceiro maior Valor de Transformação Industrial do país: 6,89% do VTI nacional em 2023 (PIA/IBGE). A fabricação de alimentos lidera a indústria paranaense, com 24,6% do VTI estadual.",
+  },
+  {
+    title: "Líder nacional em proteína animal",
+    description:
+      "O Paraná respondeu por 34,4% do abate nacional de frangos em 2025, segundo o IBGE — recorde histórico e liderança isolada. Frigoríficos, fábricas de ração e plantas de alimentos operam 24/7, com rastreabilidade por lote e linhas que não toleram parada de automação.",
+  },
+  {
+    title: "2º maior produtor de grãos do Brasil",
+    description:
+      "O estado é o segundo maior produtor de grãos do país e responde por cerca de 14% da safra nacional de soja (IBGE/Deral). Cooperativas, silos, secadores e plantas de esmagamento concentram toda a manutenção e os projetos de automação nas janelas de entressafra.",
+  },
+];
+
+const supplierTypes = [
+  {
+    title: "Fabricante",
+    what: "Rockwell Automation, Siemens, Schneider Electric: desenvolvem hardware e software, definem roadmap de produto e homologam parceiros. Não executam o projeto da sua planta.",
+    when: "definição estratégica de plataforma, contratos de suporte de produto e firmware. Para execução, o próprio fabricante encaminha a integradores do seu programa de parceiros.",
+  },
+  {
+    title: "Distribuidor",
+    what: "Canal comercial autorizado do fabricante: estoque regional, reposição de peças, pequenos serviços e intermediação comercial.",
+    when: "compra de hardware, sobressalentes críticos e prazo de reposição. Distribuidor vende caixa; quem responde pela lógica, pelas telas e pelo startup é o integrador.",
+  },
+  {
+    title: "Montador de painéis",
+    what: "Fabrica painéis elétricos e de controle conforme projeto recebido: estrutura, barramentos, bornes, cabeamento e ensaios de rotina.",
+    when: "execução de montagem a partir de projeto elétrico pronto. O risco clássico é contratar montador esperando engenharia de software e de processo — escopo que ele não entrega.",
+  },
+  {
+    title: "Integrador de sistemas",
+    what: "Faz a engenharia que vem antes e depois do painel: arquitetura de controle, programação de PLC/DCS e SCADA, redes industriais, FAT, SAT, comissionamento, startup e suporte.",
+    when: "projetos completos, migrações de legado, DCS, SCADA, redes e cibersegurança OT. É o papel da Integra Automação Industrial — e o foco dos critérios deste guia.",
+  },
+];
+
+const regions = [
+  {
+    title: "Norte e noroeste do Paraná",
+    description:
+      "Maringá, Londrina, Apucarana, Umuarama, Paranavaí e Campo Mourão: usinas de açúcar e etanol, cooperativas de grãos, fábricas de ração e alimentos. Base da Integra — atendimento presencial com mobilização rápida para janelas curtas de parada.",
+  },
+  {
+    title: "Curitiba e região metropolitana",
+    description:
+      "Maior polo industrial do estado, com alimentos, bebidas, química e logística. A Integra atende com levantamento presencial planejado e engenharia remota estruturada para projeto, ajuste e suporte.",
+  },
+  {
+    title: "Oeste e sudoeste",
+    description:
+      "Cascavel, Toledo, Pato Branco e Francisco Beltrão: frigoríficos, cooperativas agroindustriais, lácteos e ração — o eixo da proteína animal que faz do Paraná o líder nacional no abate de frangos (34,4% em 2025, IBGE).",
+  },
+  {
+    title: "Atuação nacional",
+    description:
+      "Desde a fundação em 2016 a Integra executa projetos em vários estados do Brasil, combinando engenharia remota segura (alinhada à IEC 62443) com mobilização presencial para levantamento, FAT, SAT e startup.",
+  },
+];
+
+const faq = [
+  {
+    q: "Como validar se uma empresa é integradora certificada da Rockwell Automation?",
+    a: "Pelo Partner Locator, o diretório público da Rockwell Automation (locator.rockwellautomation.com). Toda empresa do programa System Integrator do PartnerNetwork aparece lá, com nível (Bronze, Silver, Gold ou Platinum), localização e competências registradas. Se a empresa se apresenta como integradora certificada mas não consta no diretório, a afirmação não tem lastro formal. O mesmo princípio vale para outros fabricantes: Siemens e Schneider Electric mantêm programas de parceiros equivalentes com diretórios públicos. A Integra Automação Industrial é Silver System Integrator e PlantPAx DCS Certified, e publica as credenciais, com certificado em PDF, em integrautomacao.com.br/certificacoes/.",
+  },
+  {
+    q: "É melhor contratar um integrador local ou um de fora do estado?",
+    a: "O critério decisivo é método, não CEP. Um integrador com FAT documentado, plano de cutover e suporte estruturado entrega melhor de longe do que um vizinho sem método. Dito isso, a base local pesa em três situações: levantamento de campo detalhado, janelas de parada curtas (mobilização rápida em regime de safra) e suporte presencial pós-partida. O cenário ideal no Paraná é o integrador com base no estado e engenharia remota estruturada: presencial quando a fase do projeto exige, remoto seguro no dia a dia.",
+  },
+  {
+    q: "Qual a diferença entre integrador de sistemas e montador de painéis?",
+    a: "O montador de painéis fabrica o painel elétrico e de controle conforme um projeto recebido: estrutura, barramentos, bornes, cabeamento e ensaios de rotina. O integrador de sistemas faz a engenharia que vem antes e depois do painel: arquitetura de controle, programação de PLC e SCADA, redes industriais, FAT, SAT, comissionamento e startup. São papéis complementares — projetos completos costumam envolver os dois, e o integrador normalmente especifica ou subcontrata a montagem. O erro caro é contratar um montador esperando engenharia de software e de processo que não faz parte do escopo dele.",
+  },
+  {
+    q: "A Integra atende Curitiba, Londrina e o oeste do Paraná?",
+    a: "Sim. A Integra Automação Industrial tem sede em Maringá-PR e atende todo o Paraná: norte e noroeste (Maringá, Londrina, Apucarana, Umuarama, Paranavaí, Campo Mourão), Curitiba e região metropolitana, oeste (Cascavel, Toledo), sudoeste e demais regiões. Desde 2016 a atuação é nacional, combinando engenharia remota estruturada com mobilização presencial para levantamento de campo, FAT, SAT, comissionamento e startup.",
+  },
+  {
+    q: "Quanto custa um projeto de automação industrial?",
+    a: "Depende de fatores que só um diagnóstico técnico define: quantidade de I/O e malhas de controle, estado da documentação existente, idade do legado (migrar PLC sem as-built custa mais), janela de parada disponível, requisitos de validação e rastreabilidade do setor, escopo de telas e relatórios e exigências de cibersegurança OT. Em termos relativos: modernizações com boa documentação e janela flexível ficam no extremo de menor custo; migrações em processo contínuo, sem documentação e com janela única de cutover, no extremo superior. Desconfie de orçamento fechado apresentado sem levantamento de campo.",
+  },
+];
+---
+
+<BaseLayout
+  title="Automação Industrial no Paraná: Como Escolher a Empresa Certa"
+  description="Guia técnico para escolher empresa de automação industrial no Paraná: tipos de fornecedor, certificações verificáveis, FAT/SAT, cibersegurança OT e suporte pós-partida."
+  breadcrumbLeaf="Automação Industrial no Paraná"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação Industrial no Paraná",
+      description:
+        "Engenharia e integração de automação industrial no Paraná: DCS PlantPAx, FactoryTalk, migração de PLC legado, redes industriais IEC 62443 e suporte OT, a partir de Maringá-PR.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20 lg:py-24">
+      <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+        Guia regional · Paraná
+      </p>
+      <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Automação Industrial no Paraná: como escolher a empresa certa
+      </h1>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+        Escolher uma empresa de automação industrial no Paraná é decidir quem
+        vai projetar, programar e sustentar os sistemas que controlam a sua
+        planta: PLCs, DCS, SCADA, redes industriais e cibersegurança OT. Este
+        guia apresenta os critérios técnicos dessa escolha — tipos de
+        fornecedor, certificações verificáveis, testes documentados e suporte
+        pós-partida. Ele é mantido pela
+        <a
+          href="/automacao-industrial-maringa/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >Integra Automação Industrial, de Maringá-PR</a
+        >, fundada em 2016,
+        <a
+          href="/integrador-rockwell/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >Silver System Integrator da Rockwell Automation</a
+        > e PlantPAx DCS Certified, com atuação em todo o Paraná e no Brasil.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Contexto regional"
+        title="Por que o parque industrial do Paraná exige critério na escolha?"
+        description="A indústria paranaense é grande, contínua e concentrada em processos que não perdoam erro de automação. Os números explicam o tamanho da responsabilidade de quem assume um projeto no estado."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-3">
+        {industryFacts.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        Esse perfil — frigoríficos e alimentos em operação contínua, grãos e
+        esmagamento em regime de safra,
+        <a
+          href="/setores/acucar-e-etanol/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >usinas de açúcar e etanol</a
+        > no norte e noroeste, papel e celulose nos Campos Gerais — significa
+        que o custo real de um fornecedor de automação mal escolhido não está
+        na proposta: está na parada não planejada, no startup que atrasa a
+        safra e no sistema entregue sem documentação que ninguém consegue
+        manter depois.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Tipos de fornecedor"
+        title="Fabricante, distribuidor, montador de painéis ou integrador: quem contratar?"
+        description="“Empresa de automação industrial” descreve quatro papéis diferentes na cadeia. Boa parte das frustrações de projeto nasce de contratar um papel esperando o escopo de outro."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {supplierTypes.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.what}
+            </p>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              <strong class="font-semibold text-integra-gray-900">Quando contratar:</strong>
+              {" "}{item.when}
+            </p>
+          </article>
+        ))}
+      </div>
+
+      <TechnicalCallout variant="note" title="Como o fabricante enxerga essa cadeia">
+        <p>
+          O programa PartnerNetwork da Rockwell Automation formaliza essa
+          divisão: integradores de sistemas são classificados em quatro níveis
+          (Bronze, Silver, Gold e Platinum) conforme competências comprovadas,
+          treinamento e auditoria — e todos aparecem no Partner Locator, o
+          diretório público do fabricante. Quem não está no diretório não faz
+          parte do programa, por mais que o site da empresa diga o contrário.
+        </p>
+      </TechnicalCallout>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Critérios técnicos"
+        title="Quais critérios separam um integrador sério de um genérico?"
+        description="Nove pontos objetivos para avaliar qualquer empresa de automação industrial no Paraná — todos verificáveis antes de assinar contrato."
+        accent={true}
+      />
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            1. Certificação formal de fabricante, verificável
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Peça o registro no programa do fabricante e confira no diretório
+            público — no caso Rockwell, o Partner Locator. Certificação de
+            programa de parceiros envolve auditoria e treinamento contínuo;
+            "trabalhamos com a marca" não envolve nada. Veja o que isso
+            significa na prática na página
+            <a
+              href="/integrador-rockwell/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >integrador Rockwell</a
+            >.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            2. Cases no mesmo processo, não "em automação"
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Experiência em envase não prepara ninguém para evaporação de usina
+            ou para receita de ração com rastreabilidade. Exija referências no
+            mesmo tipo de processo: contínuo, batelada ou discreto — e, de
+            preferência, no mesmo setor.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            3. FAT e SAT documentados
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Teste de aceitação em fábrica (FAT) e em campo (SAT) com protocolo
+            escrito: lista de testes, critérios de aceite e assinatura das duas
+            partes. "Testamos e funcionou" não é evidência — é promessa.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            4. Plano de cutover com rollback
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Em
+            <a
+              href="/solucoes/migracao-plc/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >migrações de PLC legado</a
+            > e trocas de sistema, o plano de virada precisa existir por escrito
+            antes da parada — incluindo o caminho de volta se algo sair do
+            previsto. O
+            <a
+              href="/blog/migracao-plc5-controllogix-guia-completo/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >guia de migração PLC-5 → ControlLogix</a
+            > da Integra mostra o nível de detalhe esperado.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            5. Documentação as-built no escopo
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Lógica comentada, arquitetura de rede, lista de tags, data book.
+            Sistema sem as-built é refém de quem o implantou — e esse custo
+            aparece anos depois, na pior hora.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            6. Governança de alarmes por norma
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Alarme é projeto, não efeito colateral. A referência é a
+            ANSI/ISA-18.2-2016 (gestão de sistemas de alarme para indústrias de
+            processo): filosofia, racionalização e monitoramento contínuo —
+            prática aplicada pela Integra em projetos
+            <a
+              href="/solucoes/factorytalk/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >FactoryTalk</a
+            > e
+            <a
+              href="/solucoes/plantpax/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >PlantPAx</a
+            >.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            7. Cibersegurança OT desde o projeto
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Pergunte como o integrador segmenta
+            <a
+              href="/solucoes/redes-iec-62443/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >redes industriais</a
+            > e como faz acesso remoto. A referência é a série
+            <a
+              href="/tecnologias/iec-62443-nist-ot/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >IEC 62443</a
+            > — a parte 3-2 estrutura a rede em zonas e conduítes e a parte 3-3
+            define os níveis de segurança SL 1 a 4. Acesso remoto por TeamViewer
+            na rede de controle é resposta errada.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            8. Suporte pós-partida e continuidade
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            O projeto não termina no startup. Verifique o modelo de suporte, o
+            acordo de atendimento e se a entrega inclui
+            <a
+              href="/tecnologias/backup-recuperacao-desastres/"
+              class="font-medium text-integra-red-700 hover:underline"
+              >backup validado e plano de recuperação de desastres</a
+            > dos servidores e controladores.
+          </p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6 md:col-span-2">
+          <h3 class="text-base font-semibold text-integra-gray-900">
+            9. Equipe nominal, não "corpo técnico qualificado"
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Pergunte quem vai executar: nomes, experiência e responsável
+            técnico. Proposta que vende a empresa mas esconde a equipe costuma
+            significar que o projeto será tocado por quem estiver disponível.
+            Em automação, o resultado depende mais do engenheiro que assina a
+            lógica do que do logotipo na capa da proposta.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Cobertura"
+        title="Quais regiões do Paraná a Integra atende a partir de Maringá?"
+        description="A Integra Automação Industrial opera a partir de Maringá — terceira maior cidade do Paraná, com 409.657 habitantes no Censo 2022 (IBGE) — no entroncamento entre o norte, o noroeste e o centro-oeste do estado."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {regions.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+      <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        Os setores fortes do Paraná são exatamente os setores-núcleo da
+        Integra: açúcar e etanol (cana e milho), grãos e cooperativas,
+        frigoríficos e alimentos, ração, papel e celulose e saneamento. O
+        detalhe do modelo de atendimento — o que é presencial, o que é remoto
+        e como funciona o acesso seguro — está na página de
+        <a
+          href="/automacao-industrial-maringa/"
+          class="font-medium text-integra-red-700 hover:underline"
+          >automação industrial em Maringá</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="FAQ"
+        title="Perguntas frequentes sobre empresas de automação no Paraná"
+        accent={true}
+      />
+      <FAQAccordion
+        title="Dúvidas de quem está escolhendo fornecedor"
+        items={faq}
+      />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Avaliando empresas de automação industrial no Paraná?"
+    description="Aplique os critérios deste guia à Integra: a primeira conversa é técnica — arquitetura, método, certificações e referências antes de qualquer proposta."
+    primaryCta={{ href: "/contato?assunto=automacao-parana", label: "Agendar conversa técnica" }}
+    secondaryCta={{ href: "/integrador-rockwell/", label: "Ver certificações Rockwell" }}
+  />
+</BaseLayout>

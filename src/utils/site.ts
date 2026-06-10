@@ -163,6 +163,11 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
             description: "Modernização para ControlLogix com plano de cutover",
           },
           {
+            href: "/solucoes/modernizacao-scada",
+            label: "Modernização de SCADA",
+            description: "Supervisório legado para View SE/Optix com cutover controlado",
+          },
+          {
             href: "/tecnologias/virtualizacao-ot",
             label: "Virtualização OT",
             description: "VMware/Hyper-V para FactoryTalk e PlantPAx",

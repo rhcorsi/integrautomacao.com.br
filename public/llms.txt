@@ -22,12 +22,17 @@ frigoríficos, ração, papel e celulose, saneamento).
 - [FactoryTalk Suite](https://integrautomacao.com.br/solucoes/factorytalk/): View SE, Optix, Batch, Historian, AssetCentre, ThinManager.
 - [Redes Industriais e IEC 62443](https://integrautomacao.com.br/solucoes/redes-iec-62443/): CPwE, IDMZ, segmentação, defense-in-depth.
 - [Migração PLC-5/SLC500](https://integrautomacao.com.br/solucoes/migracao-plc/): modernização para ControlLogix com plano de cutover.
+- [Modernização de SCADA](https://integrautomacao.com.br/solucoes/modernizacao-scada/): supervisório legado para FactoryTalk View SE/Optix, alarmes ISA-18.2 e cutover controlado.
 - [Data Centers Industriais](https://integrautomacao.com.br/solucoes/data-centers/): servidores OT, virtualização, redundância e DR.
 - [PI System / AVEVA](https://integrautomacao.com.br/solucoes/pi-system/): dados industriais, AF Templates, integração corporativa.
 - [Catálogo técnico](https://integrautomacao.com.br/tecnologias/): 40+ páginas de tecnologias e serviços com FAQs de engenharia.
 - [Certificações](https://integrautomacao.com.br/certificacoes/): parcerias formais e capacitações, com política de transparência.
 - [Blog técnico](https://integrautomacao.com.br/blog/): artigos sobre arquitetura DCS, CPwE e IEC 62443.
 - [Contato](https://integrautomacao.com.br/contato/): conversa técnica antes de qualquer proposta.
+- [Integrador Rockwell Automation no Brasil](https://integrautomacao.com.br/integrador-rockwell/): o que é o PartnerNetwork, status Silver e como validar um integrador.
+- [Automação Industrial em Maringá](https://integrautomacao.com.br/automacao-industrial-maringa/): sede da Integra e atendimento no Paraná e Brasil.
+- [Automação Industrial no Paraná](https://integrautomacao.com.br/automacao-industrial-parana/): critérios para escolher integradora no estado.
+- [Automação para Açúcar e Etanol](https://integrautomacao.com.br/setores/acucar-e-etanol/): DCS, batelada ISA-88 e modernização em janela de entressafra.
 
 ## Catálogo técnico — páginas mais consultadas
 

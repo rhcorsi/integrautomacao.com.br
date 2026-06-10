@@ -90,6 +90,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   setores: "Setores",
   "integrador-rockwell": "Integrador Rockwell",
   "automacao-industrial-maringa": "Automação Industrial em Maringá",
+  "automacao-industrial-parana": "Automação Industrial no Paraná",
   "acucar-e-etanol": "Açúcar e Etanol",
   certificacoes: "Certificações",
   cases: "Cases",

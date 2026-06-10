@@ -163,6 +163,81 @@ const faq = [
 
       <DeliverableList items={deliverables} twoColumn={true} />
 
+      <div class="my-10">
+        <h3 class="text-xl font-semibold text-integra-gray-900">
+          Conversão, híbrida ou reengenharia: qual caminho de escopo?
+        </h3>
+        <p class="mt-3 max-w-3xl text-sm leading-relaxed text-integra-gray-700">
+          Não existe preço fechado para migração de PLC legado — existe escopo.
+          Os três caminhos abaixo equilibram custo, prazo, risco e qualidade da
+          manutenção futura. O diagnóstico técnico define qual se aplica a cada
+          área da planta (uma mesma migração pode combinar caminhos diferentes
+          por área).
+        </p>
+        <div class="mt-6 overflow-x-auto">
+          <table class="w-full min-w-[640px] border-collapse text-sm">
+            <thead>
+              <tr class="border-b-2 border-integra-gray-900 text-left">
+                <th class="py-3 pr-4 font-semibold text-integra-gray-900">Caminho</th>
+                <th class="py-3 pr-4 font-semibold text-integra-gray-900">O que é</th>
+                <th class="py-3 pr-4 font-semibold text-integra-gray-900">Custo relativo</th>
+                <th class="py-3 font-semibold text-integra-gray-900">Quando faz sentido</th>
+              </tr>
+            </thead>
+            <tbody class="text-integra-gray-700">
+              <tr class="border-b border-integra-gray-200 align-top">
+                <td class="py-4 pr-4 font-semibold text-integra-gray-900">Conversão assistida</td>
+                <td class="py-4 pr-4">
+                  Ferramenta de migração converte a lógica; a engenharia corrige
+                  os erros de conversão (timers, PID, MSG, sequenciadores) e
+                  mantém a estrutura de tags legada com refatoração mínima.
+                </td>
+                <td class="py-4 pr-4">Mais baixo</td>
+                <td class="py-4">
+                  Sistema pequeno, documentação razoável e baixo risco de
+                  processo. Entrega rápida, mas herda tags pouco legíveis
+                  (N7, B3) para a manutenção.
+                </td>
+              </tr>
+              <tr class="border-b border-integra-gray-200 align-top">
+                <td class="py-4 pr-4 font-semibold text-integra-gray-900">Híbrida</td>
+                <td class="py-4 pr-4">
+                  Converte a base e reescreve os trechos críticos —
+                  intertravamentos, PID, sequências — com tags nomeadas,
+                  UDTs e instruções Add-On padronizadas.
+                </td>
+                <td class="py-4 pr-4">Intermediário</td>
+                <td class="py-4">
+                  O equilíbrio mais comum entre prazo, risco e manutenção
+                  futura. Boa escolha quando a janela de parada é curta mas a
+                  planta vai conviver com o sistema por décadas.
+                </td>
+              </tr>
+              <tr class="border-b border-integra-gray-200 align-top">
+                <td class="py-4 pr-4 font-semibold text-integra-gray-900">Reengenharia completa</td>
+                <td class="py-4 pr-4">
+                  Lógica reescrita do zero sobre padrão de biblioteca, com
+                  telas, alarmes (ISA-18.2) e documentação reconstruídos a
+                  partir de descrição funcional validada com a operação.
+                </td>
+                <td class="py-4 pr-4">Mais alto</td>
+                <td class="py-4">
+                  Processo crítico, documentação fraca ou inexistente,
+                  exigência de padronização plant-wide, auditoria ou
+                  integração futura com PlantPAx.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-integra-gray-700">
+          Para uma estimativa técnica séria, o que acelera o diagnóstico:
+          backup do projeto (RSLogix 5/500), fotos dos painéis, lista de I/O e
+          a janela de parada disponível. Com esses quatro insumos, a Integra
+          consegue indicar o caminho e a ordem de grandeza do esforço por área.
+        </p>
+      </div>
+
       <div class="my-10 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
         <h3 class="text-xl font-semibold text-integra-gray-900">
           A migração inclui controle, HMI, rede e sustentação
@@ -200,8 +275,8 @@ const faq = [
 
   <CtaBlock
     title="Tem controladores legados sustentando uma área crítica?"
-    description="Começamos com inventário técnico e matriz de risco. A migração só vem depois que a operação entende janela, impacto e plano de rollback."
+    description="Envie backup do projeto, fotos do painel e lista de I/O para uma estimativa técnica por área. A migração só vem depois que a operação entende janela, impacto e plano de rollback."
     primaryCta={{ href: "/contato?assunto=migracao-plc", label: "Avaliar migração" }}
-    secondaryCta={{ href: "/solucoes/redes-iec-62443", label: "Ver redes industriais" }}
+    secondaryCta={{ href: "/blog/migracao-plc5-controllogix-guia-completo/", label: "Ler o guia completo de migração" }}
   />
 </BaseLayout>
