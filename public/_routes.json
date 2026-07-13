@@ -1,5 +1,15 @@
 {
   "version": 1,
-  "include": ["/", "/api/*"],
-  "exclude": []
+  "include": ["/*"],
+  "exclude": [
+    "/_astro/*",
+    "/downloads/*",
+    "/images/*",
+    "/og/*",
+    "/scripts/*",
+    "/favicon.png",
+    "/favicon.svg",
+    "/logo.png",
+    "/rss.xsl"
+  ]
 }
