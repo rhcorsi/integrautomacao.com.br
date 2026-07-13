@@ -5,6 +5,8 @@ import SolutionCard from "@/components/SolutionCard.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { Icon } from "astro-icon/components";
+import { itemListSchema } from "@/utils/schema";
+import { SITE } from "@/utils/site";
 
 const desafios = [
   {
@@ -12,7 +14,7 @@ const desafios = [
     label: "Modernizar PLC legado",
     description:
       "PLC-5 ou SLC 500 obsoleto, sobressalente difícil e nova integração exigida. Migração planejada com janela de cutover e plano de rollback.",
-    href: "/solucoes/migracao-plc",
+    href: "/solucoes/migracao-plc/",
     cta: "Ver migração PLC",
   },
   {
@@ -20,7 +22,7 @@ const desafios = [
     label: "Prevenir incidentes cyber",
     description:
       "Rede flat, sem IDMZ, acesso remoto improvisado. Implementar segmentação Purdue, IDMZ e governança de identidade OT.",
-    href: "/solucoes/redes-iec-62443",
+    href: "/solucoes/redes-iec-62443/",
     cta: "Ver redes / IEC 62443",
   },
   {
@@ -28,7 +30,7 @@ const desafios = [
     label: "Padronizar engenharia plant-wide",
     description:
       "Cada área com padrão diferente, manutenção dependente de quem implantou. PlantPAx Library + AF Templates + governança comum.",
-    href: "/solucoes/plantpax",
+    href: "/solucoes/plantpax/",
     cta: "Ver PlantPAx",
   },
   {
@@ -36,7 +38,7 @@ const desafios = [
     label: "Validar arquitetura existente",
     description:
       "Auditoria técnica do stack OT atual, gap analysis contra IEC 62443, roadmap progressivo priorizado por risco operacional.",
-    href: "/tecnologias/auditoria-conformidade",
+    href: "/tecnologias/auditoria-conformidade/",
     cta: "Ver auditoria",
   },
   {
@@ -44,7 +46,7 @@ const desafios = [
     label: "Reduzir paradas não planejadas",
     description:
       "Manutenção preventiva e evolutiva, monitoramento OT, analytics e procedimentos de recuperação documentados.",
-    href: "/tecnologias/manutencao-corretiva-preventiva",
+    href: "/tecnologias/manutencao-corretiva-preventiva/",
     cta: "Ver manutenção",
   },
   {
@@ -52,25 +54,25 @@ const desafios = [
     label: "Integrar dados OT com sistemas corporativos",
     description:
       "Tags, AF Templates, OPC UA, deviceWISE, edge gateways, dado industrial chegando ao ERP, MES e BI sem improviso.",
-    href: "/solucoes/pi-system",
+    href: "/solucoes/pi-system/",
     cta: "Ver PI System / AVEVA",
   },
 ];
 
 const tecnologiasRelacionadas = [
-  { href: "/tecnologias/iec-62443-nist-ot", label: "Diagnóstico IEC 62443 / NIST OT" },
-  { href: "/tecnologias/hardening-industrial", label: "Hardening industrial" },
-  { href: "/tecnologias/monitoramento-redes-industriais", label: "Monitoramento OT" },
-  { href: "/tecnologias/virtualizacao-ot", label: "Virtualização OT" },
-  { href: "/tecnologias/backup-recuperacao-desastres", label: "Backup e Disaster Recovery" },
-  { href: "/tecnologias/active-directory-ot", label: "Active Directory industrial" },
-  { href: "/tecnologias/intertravamentos-sequencias", label: "Intertravamentos e safety" },
-  { href: "/tecnologias/edge-computing-industrial", label: "Edge computing industrial" },
+  { href: "/tecnologias/iec-62443-nist-ot/", label: "Diagnóstico IEC 62443 / NIST OT" },
+  { href: "/tecnologias/hardening-industrial/", label: "Hardening industrial" },
+  { href: "/tecnologias/monitoramento-redes-industriais/", label: "Monitoramento OT" },
+  { href: "/tecnologias/virtualizacao-ot/", label: "Virtualização OT" },
+  { href: "/tecnologias/backup-recuperacao-desastres/", label: "Backup e Disaster Recovery" },
+  { href: "/tecnologias/active-directory-ot/", label: "Active Directory industrial" },
+  { href: "/tecnologias/intertravamentos-sequencias/", label: "Intertravamentos e safety" },
+  { href: "/tecnologias/edge-computing-industrial/", label: "Edge computing industrial" },
 ];
 
 const mvpSolutions = [
   {
-    href: "/solucoes/plantpax",
+    href: "/solucoes/plantpax/",
     title: "PlantPAx",
     summary:
       "DCS moderno da Rockwell Automation. Arquitetura escalável, biblioteca de objetos de processo, integração plant-wide.",
@@ -78,7 +80,7 @@ const mvpSolutions = [
     tags: ["DCS", "ControlLogix", "PlantPAx 5.x", "FactoryTalk"],
   },
   {
-    href: "/solucoes/factorytalk",
+    href: "/solucoes/factorytalk/",
     title: "FactoryTalk Suite",
     summary:
       "View SE, Optix, Batch, Historian, AssetCentre, ThinManager, supervisão, gestão de ativos e dados industriais integrados.",
@@ -86,7 +88,7 @@ const mvpSolutions = [
     tags: ["View SE", "Optix", "Batch", "Historian", "ThinManager"],
   },
   {
-    href: "/solucoes/redes-iec-62443",
+    href: "/solucoes/redes-iec-62443/",
     title: "Redes Industriais e IEC 62443",
     summary:
       "Topologia, segmentação, switches Stratix/Cisco, OPC UA. Cibersegurança OT do projeto à operação.",
@@ -94,7 +96,7 @@ const mvpSolutions = [
     tags: ["CPwE", "IEC 62443", "Stratix", "OPC UA", "NIST SP 800-82"],
   },
   {
-    href: "/solucoes/data-centers",
+    href: "/solucoes/data-centers/",
     title: "Data Centers Industriais (IDC)",
     summary:
       "Virtualização, redundância, alta disponibilidade para aplicações industriais críticas.",
@@ -102,7 +104,7 @@ const mvpSolutions = [
     tags: ["VMware", "Redundância", "Backup", "ThinManager"],
   },
   {
-    href: "/solucoes/pi-system",
+    href: "/solucoes/pi-system/",
     title: "PI System / AVEVA",
     summary:
       "Tags, AF Templates, historian, contexto de ativos e integração com PlantPAx/FactoryTalk.",
@@ -110,7 +112,7 @@ const mvpSolutions = [
     tags: ["PI", "AVEVA", "AF Templates", "OPC UA"],
   },
   {
-    href: "/solucoes/migracao-plc",
+    href: "/solucoes/migracao-plc/",
     title: "Migração PLC-5 / SLC 500 → ControlLogix",
     summary:
       "Modernização de controladores legados sem comprometer a operação.",
@@ -118,7 +120,7 @@ const mvpSolutions = [
     tags: ["PLC-5", "SLC 500", "ControlLogix", "Cutover"],
   },
   {
-    href: "/solucoes/modernizacao-scada",
+    href: "/solucoes/modernizacao-scada/",
     title: "Modernização de SCADA",
     summary:
       "Supervisório legado para FactoryTalk View SE/Optix ou multi-vendor, com alarmes ISA-18.2, historian e cutover controlado.",
@@ -132,6 +134,17 @@ const mvpSolutions = [
   title="Soluções de automação industrial"
   description="Soluções de engenharia industrial com PlantPAx, FactoryTalk, redes e cibersegurança OT, virtualização, PI System e migração de controladores."
   ogImage="/og/solucoes.png"
+  jsonLd={[
+    itemListSchema({
+      name: "Soluções de automação industrial",
+      url: new URL("/solucoes/", SITE.url).toString(),
+      items: mvpSolutions.map((solution) => ({
+        name: solution.title,
+        description: solution.summary,
+        url: new URL(`${solution.href}/`, SITE.url).toString(),
+      })),
+    }),
+  ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
@@ -149,13 +162,13 @@ const mvpSolutions = [
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
-          href="/contato?assunto=triagem&sourcePage=%2Fsolucoes&sourceLabel=Hero%20de%20solu%C3%A7%C3%B5es&cta=Solicitar%20triagem%20t%C3%A9cnica"
+          href="/contato/?assunto=triagem"
           class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
         >
           Solicitar triagem técnica <span aria-hidden="true">→</span>
         </a>
         <a
-          href="/cases"
+          href="/cases/"
           class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
         >
           Ver cases e entregáveis
@@ -240,7 +253,7 @@ const mvpSolutions = [
       </ul>
       <div class="mt-8">
         <a
-          href="/tecnologias"
+          href="/tecnologias/"
           class="inline-flex items-center gap-2 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700"
         >
           Ver catálogo técnico completo <span aria-hidden="true">→</span>
@@ -257,7 +270,7 @@ const mvpSolutions = [
   <CtaBlock
     title="Qual é o próximo passo para o seu caso?"
     description="A triagem inicial enquadra o problema e verifica aderência. Se a decisão exigir inventário, visita ou diagnóstico documentado, esse trabalho recebe escopo próprio antes de começar."
-    primaryCta={{ href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" }}
-    secondaryCta={{ href: "/setores", label: "Ver por setor industrial" }}
+    primaryCta={{ href: "/contato/?assunto=triagem", label: "Solicitar triagem técnica" }}
+    secondaryCta={{ href: "/setores/", label: "Ver por setor industrial" }}
   />
 </BaseLayout>

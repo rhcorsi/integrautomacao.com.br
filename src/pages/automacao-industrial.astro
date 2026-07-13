@@ -1,0 +1,529 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import { faqSchema, techArticleSchema } from "@/utils/schema";
+import { SITE } from "@/utils/site";
+import { Icon } from "astro-icon/components";
+
+const description =
+  "Guia completo de automação industrial: arquitetura, CLP, DCS, SCADA, redes, dados, tipos de processo, etapas de projeto, normas e glossário técnico.";
+
+const pageUrl = new URL("/automacao-industrial/", SITE.url).toString();
+
+const architectureLayers = [
+  {
+    level: "Nível 0 · Processo",
+    icon: "lucide:activity",
+    title: "Sensores, instrumentos e atuadores",
+    description:
+      "É onde o sistema mede e altera o processo físico: temperatura, pressão, vazão, nível, posição, motores, válvulas, inversores e demais elementos de campo.",
+    links: [
+      { href: "/tecnologias/protocolos-industriais/", label: "Protocolos industriais" },
+      { href: "/tecnologias/intertravamentos-sequencias/", label: "Intertravamentos e sequências" },
+    ],
+  },
+  {
+    level: "Nível 1 · Controle",
+    icon: "lucide:cpu",
+    title: "CLP, PLC, PAC, DCS e controle regulatório",
+    description:
+      "Controladores executam lógicas, sequências, intertravamentos e malhas PID. A arquitetura varia conforme criticidade, escala, disponibilidade e natureza discreta, contínua ou em batelada.",
+    links: [
+      { href: "/tecnologias/controllogix-compactlogix/", label: "ControlLogix e CompactLogix" },
+      { href: "/tecnologias/plantpax-5x/", label: "PlantPAx DCS" },
+      { href: "/tecnologias/controle-regulatorio-pid/", label: "Controle PID" },
+    ],
+  },
+  {
+    level: "Nível 2 · Supervisão",
+    icon: "lucide:monitor-cog",
+    title: "IHM, SCADA, alarmes e operação",
+    description:
+      "A camada de supervisão apresenta o processo ao operador, registra eventos, organiza alarmes e permite comando conforme permissões e filosofia operacional definidas.",
+    links: [
+      { href: "/tecnologias/factorytalk-view-se/", label: "FactoryTalk View SE" },
+      { href: "/tecnologias/factorytalk-optix/", label: "FactoryTalk Optix" },
+      { href: "/tecnologias/elipse-e3/", label: "Elipse E3" },
+    ],
+  },
+  {
+    level: "Nível 3 · Operações",
+    icon: "lucide:database",
+    title: "Historian, batelada, rastreabilidade e MES",
+    description:
+      "Dados de processo ganham contexto de ativo, lote, receita, evento e qualidade. É a ponte entre controle em tempo real, análise operacional e gestão da produção.",
+    links: [
+      { href: "/tecnologias/factorytalk-historian/", label: "Historian industrial" },
+      { href: "/tecnologias/factorytalk-batch/", label: "Batelada e ISA-88" },
+      { href: "/solucoes/pi-system/", label: "PI System e dados industriais" },
+    ],
+  },
+  {
+    level: "Níveis 3.5–4 · Integração",
+    icon: "lucide:network",
+    title: "IDMZ, edge, IIoT, ERP e nuvem",
+    description:
+      "A integração vertical conecta OT e sistemas corporativos sem transformar a rede industrial em extensão irrestrita da TI. Fluxos, identidades, zonas e responsabilidades precisam ser explícitos.",
+    links: [
+      { href: "/tecnologias/edge-computing-industrial/", label: "Edge computing industrial" },
+      { href: "/tecnologias/tc-devicewise/", label: "TC deviceWISE e IIoT" },
+      { href: "/solucoes/redes-iec-62443/", label: "Redes e IEC 62443" },
+    ],
+  },
+];
+
+const automationTypes = [
+  {
+    title: "Automação discreta",
+    examples: "Máquinas, linhas de montagem, transportadores, embalagem e movimentação.",
+    focus: "Sequências, estados, movimento, sincronismo, segurança de máquina e alta repetibilidade.",
+    links: [
+      { href: "/tecnologias/tia-portal/", label: "TIA Portal" },
+      { href: "/tecnologias/controllogix-compactlogix/", label: "Plataformas Logix" },
+    ],
+  },
+  {
+    title: "Automação de processo contínuo",
+    examples: "Usinas, química, papel e celulose, utilidades, energia e saneamento.",
+    focus: "Malhas regulatórias, disponibilidade, redundância, alarmes, historian e estabilidade operacional.",
+    links: [
+      { href: "/solucoes/plantpax/", label: "Solução PlantPAx" },
+      { href: "/tecnologias/controle-regulatorio-pid/", label: "Controle regulatório" },
+    ],
+  },
+  {
+    title: "Automação em batelada",
+    examples: "Alimentos, bebidas, química, fertilizantes, ração e processos por receita.",
+    focus: "Receitas, fases, equipamentos compartilhados, genealogia do lote e rastreabilidade conforme o modelo do processo.",
+    links: [
+      { href: "/tecnologias/factorytalk-batch/", label: "FactoryTalk Batch" },
+      { href: "/setores/acucar-e-etanol/", label: "Aplicação em açúcar e etanol" },
+    ],
+  },
+];
+
+const projectPhases = [
+  ["01", "Diagnóstico e requisitos", "Processo, riscos, base instalada, restrições, usuários, dados e critérios de sucesso são levantados antes da escolha de produto."],
+  ["02", "Arquitetura e especificação", "Controladores, redes, servidores, licenças, disponibilidade, segurança e integrações são definidos em documentos verificáveis."],
+  ["03", "Engenharia e desenvolvimento", "Padrões de software, telas, tags, alarmes, permissivos, intertravamentos, receitas e interfaces são implementados com controle de versão."],
+  ["04", "FAT e preparação de campo", "A lógica é testada contra casos de uso, falhas previstas e critérios de aceite antes de consumir a janela de parada da planta."],
+  ["05", "Comissionamento, SAT e partida", "Sinais, redes, equipamentos, sequências e desempenho são validados no ambiente real com registro de desvios e plano de rollback."],
+  ["06", "Handover e sustentação", "Backups, as-built, matriz de versões, treinamento, rotinas de manutenção e responsabilidades de suporte encerram a entrega."],
+];
+
+const decisionPaths = [
+  {
+    question: "A planta tem PLC, IHM ou SCADA obsoleto?",
+    answer: "Comece por inventário, dependências e plano de migração por risco.",
+    href: "/solucoes/migracao-plc/",
+    label: "Planejar migração de PLC legado",
+  },
+  {
+    question: "O supervisório está lento, instável ou difícil de manter?",
+    answer: "Avalie arquitetura, servidores, clientes, drivers, alarmes, telas e estratégia de cutover.",
+    href: "/solucoes/modernizacao-scada/",
+    label: "Modernizar SCADA",
+  },
+  {
+    question: "Há rede flat, acesso remoto informal ou baixa visibilidade OT?",
+    answer: "Mapeie ativos e fluxos antes de definir segmentação, IDMZ e controles de acesso.",
+    href: "/solucoes/redes-iec-62443/",
+    label: "Estruturar redes e cibersegurança OT",
+  },
+  {
+    question: "Dados de produção não chegam ao contexto de negócio?",
+    answer: "Defina modelo de ativos, qualidade do dado, historian, edge e contratos de integração.",
+    href: "/solucoes/pi-system/",
+    label: "Integrar dados industriais",
+  },
+  {
+    question: "Cada área foi programada com um padrão diferente?",
+    answer: "Crie governança plant-wide para objetos, alarmes, telas, versões e documentação.",
+    href: "/solucoes/plantpax/",
+    label: "Padronizar com arquitetura de processo",
+  },
+  {
+    question: "Precisa desenvolver ou revisar software de controle?",
+    answer: "Defina requisitos, padrão, interfaces, testes, versões e manutenção antes de estimar horas de programação.",
+    href: "/servicos/programacao-clp/",
+    label: "Contratar programação de CLP",
+  },
+  {
+    question: "Existe uma partida, parada ou FAT/SAT em planejamento?",
+    answer: "Organize prontidão, responsabilidades, evidências, go/no-go e contingência antes da mobilização.",
+    href: "/servicos/comissionamento-industrial/",
+    label: "Planejar comissionamento industrial",
+  },
+  {
+    question: "A decisão ainda não tem escopo técnico claro?",
+    answer: "Uma triagem seguida de diagnóstico evita cotar soluções incomparáveis.",
+    href: "/contato/?assunto=guia-automacao-industrial",
+    label: "Solicitar triagem técnica",
+  },
+];
+
+const glossary = [
+  { term: "Automação industrial", definition: "Aplicação de tecnologias para monitorar e controlar processos, máquinas e sistemas de produção com objetivos operacionais definidos." },
+  { term: "CLP ou PLC", definition: "Controlador programável que executa lógica, sequências, temporizações, intertravamentos e controle de equipamentos.", href: "/tecnologias/controllogix-compactlogix/" },
+  { term: "PAC", definition: "Controlador de automação programável com recursos ampliados de computação, comunicação, dados e integração, sem uma fronteira universal em relação ao PLC." },
+  { term: "DCS ou SDCD", definition: "Sistema de controle distribuído orientado à operação de processos, com arquitetura, engenharia, supervisão e gestão integradas.", href: "/tecnologias/plantpax-5x/" },
+  { term: "IHM", definition: "Interface homem-máquina usada pelo operador para visualizar estados, alarmes, tendências e comandos de uma máquina ou processo.", href: "/tecnologias/factorytalk-optix/" },
+  { term: "SCADA", definition: "Sistema de supervisão, controle e aquisição de dados para acompanhar processos distribuídos, eventos, alarmes e históricos.", href: "/tecnologias/factorytalk-view-se/" },
+  { term: "Historian", definition: "Banco temporal especializado em armazenar dados industriais, eventos e contexto de ativos com alta eficiência de consulta.", href: "/tecnologias/factorytalk-historian/" },
+  { term: "MES", definition: "Sistema de execução da manufatura que organiza ordens, produção, qualidade, materiais, desempenho e rastreabilidade entre a automação e o ERP." },
+  { term: "ERP", definition: "Sistema corporativo que integra processos empresariais como planejamento, compras, estoque, custos, vendas e finanças." },
+  { term: "OT", definition: "Tecnologia operacional: sistemas e dispositivos que monitoram ou causam mudanças diretas no ambiente físico e no processo industrial.", href: "/tecnologias/iec-62443-nist-ot/" },
+  { term: "IIoT", definition: "Internet Industrial das Coisas: conectividade de ativos e dados industriais para aplicações de monitoramento, análise e integração.", href: "/tecnologias/tc-devicewise/" },
+  { term: "Edge computing", definition: "Processamento próximo à fonte do dado para reduzir dependência de conectividade externa, latência e tráfego desnecessário.", href: "/tecnologias/edge-computing-industrial/" },
+  { term: "OPC UA", definition: "Padrão independente de plataforma para troca estruturada de informações entre dispositivos, controle, software industrial e sistemas corporativos.", href: "/tecnologias/protocolos-industriais/" },
+  { term: "EtherNet/IP", definition: "Rede industrial baseada em Ethernet e CIP, usada para controle, segurança, movimento, diagnóstico e integração de dispositivos.", href: "/tecnologias/ethernet-ip-cpwe/" },
+  { term: "PROFINET", definition: "Rede Ethernet industrial do ecossistema PROFIBUS & PROFINET International, aplicada a controle e comunicação de dispositivos.", href: "/tecnologias/siemens-redes-industriais/" },
+  { term: "Intertravamento", definition: "Condição lógica que impede ou força uma ação para preservar processo, equipamento, produto ou segurança conforme a análise aplicável.", href: "/tecnologias/intertravamentos-sequencias/" },
+  { term: "PID", definition: "Algoritmo de controle proporcional, integral e derivativo usado para manter uma variável de processo próxima ao valor desejado.", href: "/tecnologias/controle-regulatorio-pid/" },
+  { term: "FAT", definition: "Teste de aceitação em fábrica ou ambiente controlado, realizado antes da implantação em campo contra casos e critérios acordados." },
+  { term: "SAT", definition: "Teste de aceitação no local, com o sistema integrado ao processo e à infraestrutura real após instalação e comissionamento." },
+  { term: "As-built", definition: "Conjunto documental atualizado para representar o sistema como efetivamente instalado, configurado e entregue.", href: "/tecnologias/documentacao-handover-treinamento/" },
+  { term: "ISA-88", definition: "Família de modelos e terminologia para controle de bateladas, receitas, equipamentos, procedimentos e integração associada.", href: "/tecnologias/factorytalk-batch/" },
+  { term: "ISA-95", definition: "Modelos para integração entre controle e sistemas empresariais, com níveis funcionais e objetos de informação de manufatura." },
+  { term: "ISA-18.2", definition: "Referência para gestão do ciclo de vida de sistemas de alarmes em indústrias de processo." },
+  { term: "IEC 62443", definition: "Série de normas para cibersegurança de sistemas de automação e controle industrial, cobrindo ativos, componentes e prestadores.", href: "/tecnologias/iec-62443-nist-ot/" },
+  { term: "IDMZ", definition: "Zona desmilitarizada industrial que intermedeia fluxos entre redes corporativas e industriais conforme a arquitetura e o risco.", href: "/solucoes/redes-iec-62443/" },
+  { term: "Brownfield", definition: "Projeto realizado sobre uma planta existente, com legado, produção em curso, restrições físicas e janelas de intervenção." },
+  { term: "Greenfield", definition: "Projeto de planta nova, no qual requisitos e arquitetura podem ser definidos antes de existirem dependências legadas.", href: "/blog/automacao-projetos-greenfield/" },
+  { term: "RTO e RPO", definition: "Objetivos de tempo de recuperação e de perda de dados aceitável usados para desenhar backup e recuperação de desastres.", href: "/tecnologias/backup-recuperacao-desastres/" },
+];
+
+const faq = [
+  {
+    q: "O que é automação industrial?",
+    a: "Automação industrial é a aplicação de tecnologias para monitorar e controlar processos, máquinas e sistemas de produção. Ela combina instrumentação, controladores, software, redes e métodos de engenharia para atingir objetivos como estabilidade, segurança, rastreabilidade, disponibilidade e produtividade.",
+  },
+  {
+    q: "Como funciona um sistema de automação industrial?",
+    a: "Sensores medem o processo; controladores executam a estratégia de controle; atuadores alteram o processo; IHM ou SCADA permitem operação; historian, batelada e sistemas de produção contextualizam dados; redes industriais conectam as camadas com requisitos de tempo, disponibilidade e segurança.",
+  },
+  {
+    q: "Quais são os principais equipamentos de automação industrial?",
+    a: "A lista depende do processo, mas normalmente inclui sensores, instrumentos, remotas de I/O, CLPs ou controladores DCS, IHMs, servidores SCADA, switches industriais, inversores, partidas, válvulas, sistemas de segurança, estações de engenharia e infraestrutura de dados.",
+  },
+  {
+    q: "Qual é a diferença entre CLP, DCS e SCADA?",
+    a: "O CLP executa a lógica de controle; o DCS organiza controle distribuído, engenharia e operação de processos em uma arquitetura integrada; o SCADA supervisiona e adquire dados. Em projetos reais, essas funções podem se sobrepor, por isso a escolha deve considerar escala, criticidade, disponibilidade e manutenção.",
+  },
+  {
+    q: "Automação industrial e Indústria 4.0 são a mesma coisa?",
+    a: "Não. A automação controla e monitora o processo. Indústria 4.0 amplia a integração de dados, modelos digitais, conectividade, análise e decisão ao longo do negócio. Uma planta pode ser automatizada sem ter dados contextualizados ou integração suficiente para iniciativas de Indústria 4.0.",
+  },
+  {
+    q: "Quanto custa um projeto de automação industrial?",
+    a: "Não existe preço responsável sem escopo. O custo depende de quantidade de sinais, criticidade, hardware e licenças, rede, servidores, documentação existente, desenvolvimento, testes, mobilização, janela de parada, comissionamento, treinamento e suporte. A comparação correta exige premissas e critérios de aceite equivalentes.",
+  },
+  {
+    q: "Quando modernizar ou fazer retrofit da automação?",
+    a: "Sinais comuns são obsolescência formal, indisponibilidade de peças, falhas recorrentes, dependência de profissionais específicos, ausência de backups, sistemas operacionais sem suporte, dificuldade de integração e risco crescente de parada. O diagnóstico deve separar urgência comercial de risco técnico real.",
+  },
+  {
+    q: "Como escolher uma empresa de automação industrial?",
+    a: "Verifique experiência no processo, equipe designada, certificações aplicáveis, referências, método de engenharia, padrões de software, estratégia FAT/SAT, cibersegurança, documentação, suporte e exclusões de escopo. Propostas só são comparáveis quando responsabilidades e critérios de aceite estão claros.",
+  },
+];
+
+const references = [
+  {
+    name: "ISA · What is Automation?",
+    href: "https://www.isa.org/about-isa/what-is-automation",
+    note: "Definição da profissão e da aplicação de tecnologia para monitorar e controlar produção e serviços.",
+  },
+  {
+    name: "NIST SP 800-82 Rev. 3",
+    href: "https://csrc.nist.gov/pubs/sp/800/82/r3/final",
+    note: "Guia de segurança de tecnologia operacional, topologias e requisitos próprios de desempenho, confiabilidade e segurança.",
+  },
+  {
+    name: "OPC UA · Overview and Concepts",
+    href: "https://reference.opcfoundation.org/specs/OPC-10000-1/4",
+    note: "Modelo de interoperabilidade para sensores, controle, MES, ERP, IIoT e integração entre plataformas.",
+  },
+];
+
+const glossarySchema = {
+  "@context": "https://schema.org",
+  "@type": "DefinedTermSet",
+  "@id": `${pageUrl}#glossario`,
+  name: "Glossário de automação industrial",
+  url: `${pageUrl}#glossario`,
+  inLanguage: "pt-BR",
+  hasDefinedTerm: glossary.map((item) => ({
+    "@type": "DefinedTerm",
+    name: item.term,
+    description: item.definition,
+    ...(item.href ? { url: new URL(item.href, SITE.url).toString() } : {}),
+  })),
+};
+---
+
+<BaseLayout
+  title="Automação industrial: guia completo"
+  description={description}
+  breadcrumbLeaf="Guia de automação industrial"
+  ogImage="/og/solucoes.png"
+  jsonLd={[
+    techArticleSchema({
+      title: "Automação industrial: guia completo",
+      description,
+      url: pageUrl,
+      image: new URL("/og/solucoes.png", SITE.url).toString(),
+      datePublished: "2026-07-12",
+      dateModified: "2026-07-12",
+      authorName: "Equipe técnica Integra",
+      authorUrl: new URL("/equipe/", SITE.url).toString(),
+    }),
+    faqSchema(faq),
+    glossarySchema,
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Guia técnico · do sensor ao ERP
+        </p>
+        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação industrial: o mapa completo para entender, projetar e modernizar sistemas.
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação industrial é a aplicação de tecnologias para monitorar e
+          controlar processos, máquinas e sistemas de produção. Na prática,
+          ela conecta sensores, controladores, software, redes, operação e
+          dados corporativos em uma arquitetura que precisa funcionar com
+          segurança, previsibilidade e manutenção possível ao longo dos anos.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#arquitetura" class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white hover:bg-integra-red-700">
+            Entender a arquitetura <span aria-hidden="true">↓</span>
+          </a>
+          <a href="/contato/?assunto=guia-automacao-industrial" class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 hover:border-integra-gray-900">
+            Falar sobre uma planta <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="mt-7 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
+          Publicado e revisado pela equipe técnica Integra · 12 de julho de 2026
+        </p>
+      </div>
+
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 lg:p-8" aria-label="Nesta página">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">Nesta página</p>
+        <nav class="mt-5 grid gap-3 text-sm">
+          <a href="#como-funciona" class="font-medium text-integra-gray-900 hover:text-integra-red-700">1. Como funciona</a>
+          <a href="#arquitetura" class="font-medium text-integra-gray-900 hover:text-integra-red-700">2. Camadas da arquitetura</a>
+          <a href="#tipos" class="font-medium text-integra-gray-900 hover:text-integra-red-700">3. Tipos de automação</a>
+          <a href="#projeto" class="font-medium text-integra-gray-900 hover:text-integra-red-700">4. Etapas de um projeto</a>
+          <a href="#decisao" class="font-medium text-integra-gray-900 hover:text-integra-red-700">5. Caminhos por problema</a>
+          <a href="#glossario" class="font-medium text-integra-gray-900 hover:text-integra-red-700">6. Glossário técnico</a>
+          <a href="#perguntas" class="font-medium text-integra-gray-900 hover:text-integra-red-700">7. Perguntas frequentes</a>
+          <a href="#fontes" class="font-medium text-integra-gray-900 hover:text-integra-red-700">8. Fontes primárias</a>
+        </nav>
+      </aside>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Visão de sistema"
+        title="Como a automação industrial funciona"
+        description="Um sistema útil não é uma coleção de equipamentos. É uma cadeia de medição, decisão, ação, supervisão e informação, organizada para o processo real."
+        accent={true}
+      />
+      <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-5">
+        {[
+          ["01", "Medir", "Sensores e instrumentos convertem o processo físico em sinais confiáveis."],
+          ["02", "Decidir", "Controladores executam lógicas, sequências, intertravamentos e malhas."],
+          ["03", "Atuar", "Motores, válvulas e demais atuadores alteram o processo de forma controlada."],
+          ["04", "Operar", "IHM e SCADA oferecem contexto, comando, alarmes, tendências e eventos."],
+          ["05", "Aprender", "Dados históricos e de produção apoiam análise, rastreabilidade e evolução."],
+        ].map(([number, title, text]) => (
+          <article class="bg-integra-white p-6">
+            <p class="font-mono text-xs font-semibold text-integra-red-700">{number}</p>
+            <h2 class="mt-3 text-lg font-semibold text-integra-gray-900">{title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-8 rounded-lg border-l-4 border-integra-red bg-integra-white p-6">
+        <p class="text-base leading-relaxed text-integra-gray-700">
+          Automação não elimina a necessidade de operação e manutenção. Ela
+          muda o trabalho: decisões repetitivas passam para o sistema, enquanto
+          exceções, estratégia, segurança e melhoria continuam dependendo de
+          pessoas, procedimentos e responsabilidades bem definidas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="arquitetura" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Arquitetura industrial"
+        title="Do processo físico aos sistemas corporativos"
+        description="As camadas ajudam a organizar funções e dependências. Elas não autorizam conectividade irrestrita: fluxos entre zonas devem refletir necessidade operacional e risco."
+        accent={true}
+      />
+      <div class="grid gap-5">
+        {architectureLayers.map((layer) => (
+          <article class="grid gap-6 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 lg:grid-cols-[13rem_1fr_auto] lg:items-center">
+            <div>
+              <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
+                <Icon name={layer.icon} class="size-5" aria-hidden="true" />
+              </div>
+              <p class="mt-3 font-mono text-[11px] uppercase tracking-widest text-integra-red-700">{layer.level}</p>
+            </div>
+            <div>
+              <h2 class="text-xl font-semibold text-integra-gray-900">{layer.title}</h2>
+              <p class="mt-3 max-w-3xl text-sm leading-relaxed text-integra-gray-700">{layer.description}</p>
+            </div>
+            <ul class="grid gap-2 lg:w-64">
+              {layer.links.map((link) => (
+                <li><a href={link.href} class="text-sm font-semibold text-integra-red-700 hover:underline">{link.label} →</a></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="tipos" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Aplicação"
+        title="Três tipos de automação que exigem decisões diferentes"
+        description="A mesma plataforma pode participar de contextos distintos. O processo, a criticidade e a forma de operar definem o padrão de engenharia."
+        accent={true}
+      />
+      <div class="grid gap-6 lg:grid-cols-3">
+        {automationTypes.map((type) => (
+          <article class="flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-7">
+            <h2 class="text-2xl font-semibold text-integra-gray-900">{type.title}</h2>
+            <p class="mt-4 text-sm leading-relaxed text-integra-gray-700"><strong>Exemplos:</strong> {type.examples}</p>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700"><strong>Foco de engenharia:</strong> {type.focus}</p>
+            <ul class="mt-auto grid gap-2 pt-6">
+              {type.links.map((link) => (
+                <li><a href={link.href} class="text-sm font-semibold text-integra-red-700 hover:underline">{link.label} →</a></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="projeto" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Ciclo de vida"
+        title="O que existe em um projeto de automação industrial completo"
+        description="Hardware e programação são partes da entrega. Requisitos, arquitetura, testes, documentação e sustentação determinam se o sistema continuará confiável depois da partida."
+        accent={true}
+      />
+      <ol class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2 lg:grid-cols-3">
+        {projectPhases.map(([number, title, text]) => (
+          <li class="bg-integra-gray-50 p-7">
+            <p class="font-mono text-xs font-semibold text-integra-red-700">{number}</p>
+            <h2 class="mt-3 text-xl font-semibold text-integra-gray-900">{title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="/blog/automacao-projetos-greenfield/" class="text-sm font-semibold text-integra-red-700 hover:underline">Automação em projetos greenfield →</a>
+        <a href="/blog/o-que-faz-integrador-de-sistemas-automacao/" class="text-sm font-semibold text-integra-red-700 hover:underline">O que um integrador entrega →</a>
+        <a href="/tecnologias/documentacao-handover-treinamento/" class="text-sm font-semibold text-integra-red-700 hover:underline">Documentação e handover →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="decisao" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Comece pelo problema"
+        title="Qual caminho técnico faz sentido para sua planta?"
+        description="A intenção de busca costuma nascer de um sintoma. Estes caminhos conectam o problema às páginas que aprofundam diagnóstico, arquitetura e execução."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {decisionPaths.map((item) => (
+          <article class="flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h2 class="text-lg font-semibold leading-snug text-integra-gray-900">{item.question}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{item.answer}</p>
+            <a href={item.href} class="mt-auto pt-6 text-sm font-semibold text-integra-red-700 hover:underline">{item.label} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="glossario" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Referência rápida"
+        title="Glossário de automação industrial"
+        description="Definições curtas para termos que aparecem em projetos, propostas, reuniões de engenharia e pesquisas técnicas."
+        accent={true}
+      />
+      <dl class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2 lg:grid-cols-3">
+        {glossary.map((item) => (
+          <div class="bg-integra-gray-50 p-6">
+            <dt class="text-base font-semibold text-integra-gray-900">{item.term}</dt>
+            <dd class="mt-2 text-sm leading-relaxed text-integra-gray-700">{item.definition}</dd>
+            {item.href && <a href={item.href} class="mt-4 inline-flex text-sm font-semibold text-integra-red-700 hover:underline">Aprofundar →</a>}
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section id="perguntas" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <div class="max-w-4xl">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">Respostas diretas</p>
+        <h2 class="mt-3 text-3xl font-semibold text-integra-gray-900 sm:text-4xl">Perguntas frequentes sobre automação industrial</h2>
+        <FAQAccordion items={faq} title="Dúvidas essenciais" />
+      </div>
+    </div>
+  </section>
+
+  <section id="fontes" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Base editorial"
+        title="Fontes primárias para continuar estudando"
+        description="O guia organiza conceitos para decisão. Normas, especificações e documentação oficial permanecem como referência para requisitos de projeto."
+        accent={true}
+      />
+      <div class="grid gap-5 lg:grid-cols-3">
+        {references.map((reference) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+            <h2 class="text-lg font-semibold text-integra-gray-900">{reference.name}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{reference.note}</p>
+            <a href={reference.href} rel="noopener noreferrer" class="mt-5 inline-flex text-sm font-semibold text-integra-red-700 hover:underline">Consultar fonte oficial ↗</a>
+          </article>
+        ))}
+      </div>
+      <p class="mt-8 max-w-4xl text-sm leading-relaxed text-integra-gray-600">
+        Conteúdo educativo. A aplicação de normas, requisitos legais, níveis de
+        segurança, disponibilidade e critérios de aceite depende do processo,
+        da jurisdição, da análise de risco e do escopo contratado.
+      </p>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer transformar esse mapa em uma decisão para sua planta?"
+    description="A triagem técnica identifica o problema, a base instalada e o nível de diagnóstico necessário antes de recomendar plataforma, arquitetura ou cronograma."
+    primaryCta={{ href: "/contato/?assunto=guia-automacao-industrial", label: "Solicitar triagem técnica" }}
+    secondaryCta={{ href: "/solucoes/", label: "Ver soluções de engenharia" }}
+  />
+</BaseLayout>

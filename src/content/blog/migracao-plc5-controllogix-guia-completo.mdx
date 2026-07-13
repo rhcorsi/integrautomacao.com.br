@@ -31,7 +31,7 @@ Quem opera PLC-5 precisa, portanto, inventariar peças, reparabilidade, licença
 mídias e suporte disponível — não presumir que todos os itens têm o mesmo
 status.
 
-Este guia descreve a [migração PLC-5/SLC 500](/tecnologias/migracao-plc5-slc500)
+Este guia descreve a [migração PLC-5/SLC 500](/tecnologias/migracao-plc5-slc500/)
 em seis fases — levantamento, engenharia, conversão, FAT, cutover e suporte — do
 ponto de vista de quem precisa entregar a planta rodando no fim.
 
@@ -57,7 +57,7 @@ e a janela de "deixar como está" fechou. Cada falha de módulo agora é uma
 caçada por peça no mercado secundário, com tempo de parada imprevisível. Vale
 verificar o status de ciclo de vida (Product Lifecycle Status) de cada catálogo
 direto na Rockwell antes de decidir; veja como tratamos a
-[migração PLC-5/SLC 500](/solucoes/migracao-plc).
+[migração PLC-5/SLC 500](/solucoes/migracao-plc/).
 
 <TechnicalCallout variant="warning" title="O risco silencioso é a engenharia, não o hardware">
   Muita planta foca em estocar módulos 1771 sobressalentes e esquece que, sem
@@ -115,7 +115,7 @@ A engenharia traduz o levantamento em uma arquitetura ControlLogix dimensionada:
 controlador, chassi, módulos de I/O, rede e estratégia de comunicação. É aqui
 que se define o que é troca direta e o que exige reprojeto. A plataforma de
 destino padrão para o PLC-5 é
-[ControlLogix](/tecnologias/controllogix-compactlogix) — o porte do PLC-5
+[ControlLogix](/tecnologias/controllogix-compactlogix/) — o porte do PLC-5
 costuma pedir o chassi 1756 pela densidade de I/O e pela necessidade de redes
 redundantes; o SLC 500 normalmente migra para CompactLogix 5380.
 
@@ -129,7 +129,7 @@ As decisões estruturais da fase de engenharia:
   convivência entre o legado e o novo (ver seção de rede).
 - **HMI/SCADA**: a migração de controlador quase sempre arrasta a camada de
   supervisão. Vale alinhar desde já com
-  [FactoryTalk View SE](/tecnologias/factorytalk-view-se) ou a plataforma de
+  [FactoryTalk View SE](/tecnologias/factorytalk-view-se/) ou a plataforma de
   visualização existente para não descobrir incompatibilidade no cutover.
 
 Aqui não falamos em números de custo — eles dependem de fatores como contagem de
@@ -234,7 +234,7 @@ Na prática, isso permite migrar área por área: os controladores ControlLogix
 novos já nascem em EtherNet/IP, enquanto o gateway mantém a comunicação com os
 PLC-5 e SLC 500 que ainda não foram migrados. Quando o último nó legado sai, o
 gateway DH+ é removido. Modernizar a rede também é a porta de entrada para
-arquitetura [CPwE / EtherNet/IP](/tecnologias/ethernet-ip-cpwe) e para a camada
+arquitetura [CPwE / EtherNet/IP](/tecnologias/ethernet-ip-cpwe/) e para a camada
 de cibersegurança industrial — assunto que o DH+ simplesmente não endereça.
 
 ## Fase 4 — Por que o FAT é a fase que mais reduz risco?
@@ -336,9 +336,9 @@ previsíveis, são mitigáveis com método. Os principais:
 A Integra Automação Industrial — integradora Silver System Integrator Rockwell,
 de Maringá-PR, com atuação nacional em setores de processo contínuo como açúcar
 e etanol, grãos, alimentos, papel e celulose e saneamento — conduz
-[migração PLC-5/SLC 500 para Logix](/solucoes/migracao-plc) seguindo exatamente
+[migração PLC-5/SLC 500 para Logix](/solucoes/migracao-plc/) seguindo exatamente
 esse faseamento, com FAT e cutover planejados para planta em operação. Veja os
-[setores atendidos](/setores) ou [fale com a engenharia](/contato?assunto=migracao-plc)
+[setores atendidos](/setores/) ou [fale com a engenharia](/contato/?assunto=migracao-plc)
 antes de fechar escopo.
 
 ## Perguntas frequentes
@@ -392,8 +392,8 @@ anunciados para 31 de março de 2024), mas o destino recomendado pela Rockwell �
 CompactLogix 5380 com I/O Compact 5000, não ControlLogix. A mesma ferramenta de
 tradução e a mesma lógica de fases (levantamento, engenharia, conversão, FAT,
 cutover, suporte) se aplicam à
-[migração de SLC 500](/tecnologias/migracao-plc5-slc500).
+[migração de SLC 500](/tecnologias/migracao-plc5-slc500/).
 
 ---
 
-Tem um parque PLC-5 ou SLC 500 para modernizar? [Conversamos antes da proposta](/contato?assunto=migracao-plc).
+Tem um parque PLC-5 ou SLC 500 para modernizar? [Conversamos antes da proposta](/contato/?assunto=migracao-plc).

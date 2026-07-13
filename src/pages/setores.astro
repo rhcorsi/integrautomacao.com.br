@@ -13,7 +13,7 @@ const sectors = [
     description:
       "Setor onde os fundadores começaram suas carreiras. Conhecemos as particularidades de safra, paradas planejadas, intertravamentos NFPA e operação 24/7 de caldeira, moenda e fermentação.",
     pains: ["Janela de safra estreita", "Paradas têm custo altíssimo", "Sistemas heterogêneos legados"],
-    href: "/setores/acucar-e-etanol",
+    href: "/setores/acucar-e-etanol/",
   },
   {
     icon: "lucide:droplet",
@@ -21,7 +21,7 @@ const sectors = [
     description:
       "Plantas mais recentes, com tecnologia moderna e exigências de eficiência energética e rastreabilidade desde o projeto.",
     pains: ["Eficiência energética", "Rastreabilidade de receitas", "Modernização de controle de processo"],
-    href: "/contato?assunto=setor-etanol-milho",
+    href: "/contato/?assunto=setor-etanol-milho",
   },
   {
     icon: "lucide:tractor",
@@ -29,7 +29,7 @@ const sectors = [
     description:
       "Silos, terminais, secadores. Sistemas com sazonalidade crítica e janelas de operação estreitas.",
     pains: ["Sazonalidade", "Confiabilidade em pico de safra", "Integração de múltiplos fornecedores"],
-    href: "/contato?assunto=setor-agronegocio",
+    href: "/contato/?assunto=setor-agronegocio",
   },
   {
     icon: "lucide:flask-conical",
@@ -37,7 +37,7 @@ const sectors = [
     description:
       "Operações 24/7 com alta complexidade de processo, requisitos rigorosos de segurança e compliance.",
     pains: ["Cibersegurança OT crítica", "Sistemas redundantes", "Conformidade regulatória"],
-    href: "/contato?assunto=setor-quimica-fertilizantes",
+    href: "/contato/?assunto=setor-quimica-fertilizantes",
   },
   {
     icon: "lucide:utensils",
@@ -45,7 +45,7 @@ const sectors = [
     description:
       "Processos contínuos com exigências de segurança alimentar, rastreabilidade e integração de sistemas heterogêneos.",
     pains: ["Paradas de linha", "Rastreabilidade", "Integração de sistemas"],
-    href: "/contato?assunto=setor-alimentos-bebidas",
+    href: "/contato/?assunto=setor-alimentos-bebidas",
   },
   {
     icon: "lucide:beef",
@@ -53,7 +53,7 @@ const sectors = [
     description:
       "Linhas com alta variabilidade, controle de receita por lote e exigências de rastreabilidade do animal ao produto final.",
     pains: ["Rastreabilidade", "Controle de receita por lote", "Auditoria de processo"],
-    href: "/contato?assunto=setor-frigorificos",
+    href: "/contato/?assunto=setor-frigorificos",
   },
   {
     icon: "lucide:scale",
@@ -61,7 +61,7 @@ const sectors = [
     description:
       "Processos de dosagem e pesagem críticos, controle de receita preciso, automação de mistura.",
     pains: ["Precisão de dosagem", "Receitas e batelada", "Automação de mistura"],
-    href: "/contato?assunto=setor-racao",
+    href: "/contato/?assunto=setor-racao",
   },
   {
     icon: "lucide:trees",
@@ -69,7 +69,7 @@ const sectors = [
     description:
       "Processos contínuos de alta criticidade. Caldeiras, digestores, máquinas de papel.",
     pains: ["Continuidade operacional", "Controle multivariável", "Eficiência energética"],
-    href: "/contato?assunto=setor-papel-celulose",
+    href: "/contato/?assunto=setor-papel-celulose",
   },
   {
     icon: "lucide:droplets",
@@ -77,7 +77,7 @@ const sectors = [
     description:
       "Operação crítica de infraestrutura pública. Confiabilidade, monitoramento remoto, SCADA distribuído.",
     pains: ["SCADA distribuído", "Monitoramento remoto", "Confiabilidade 24/7"],
-    href: "/contato?assunto=setor-saneamento",
+    href: "/contato/?assunto=setor-saneamento",
   },
 ];
 
@@ -94,7 +94,7 @@ const solucoesContexto = [
     title: "PlantPAx para indústria de processo",
     description:
       "Açúcar, química, papel, saneamento e farmacêutica operam DCS plant-wide com controle regulatório, batelada e governança de alarmes ISA-18.2.",
-    href: "/solucoes/plantpax",
+    href: "/solucoes/plantpax/",
     sectors: ["Açúcar e Etanol", "Química", "Papel e Celulose", "Saneamento"],
   },
   {
@@ -102,7 +102,7 @@ const solucoesContexto = [
     title: "FactoryTalk para indústria discreta e híbrida",
     description:
       "Frigoríficos, ração, alimentos e linhas de produção exigem View SE, Optix, Batch e ThinManager com padronização visual e governança de mudanças.",
-    href: "/solucoes/factorytalk",
+    href: "/solucoes/factorytalk/",
     sectors: ["Frigoríficos", "Fábricas de Ração", "Alimentos e Bebidas"],
   },
   {
@@ -110,7 +110,7 @@ const solucoesContexto = [
     title: "Cibersegurança OT em diferentes setores",
     description:
       "A análise de risco define zonas, conduítes e controles. Segmentação e IDMZ entram quando a arquitetura e os fluxos entre TI e OT exigem essa proteção.",
-    href: "/solucoes/redes-iec-62443",
+    href: "/solucoes/redes-iec-62443/",
     sectors: ["Aplicação transversal, conforme risco"],
   },
   {
@@ -118,7 +118,7 @@ const solucoesContexto = [
     title: "Modernização de legado",
     description:
       "PLC-5 e SLC 500 legados aparecem em diversos setores. A migração para Logix exige plano de cutover por área e estratégia de continuidade compatível com a planta.",
-    href: "/solucoes/migracao-plc",
+    href: "/solucoes/migracao-plc/",
     sectors: ["Aplicação transversal, conforme legado"],
   },
 ];
@@ -269,7 +269,7 @@ const solucoesContexto = [
   <CtaBlock
     title="Seu setor não está listado?"
     description="Atuamos em outras indústrias quando o desafio técnico se encaixa em nossa expertise (PlantPAx, FactoryTalk, redes industriais, IEC 62443). Conversamos para avaliar."
-    primaryCta={{ href: "/contato?assunto=diagnostico", label: "Conversar sobre meu setor" }}
-    secondaryCta={{ href: "/cases", label: "Ver cases publicados" }}
+    primaryCta={{ href: "/contato/?assunto=diagnostico", label: "Conversar sobre meu setor" }}
+    secondaryCta={{ href: "/cases/", label: "Ver cases publicados" }}
   />
 </BaseLayout>

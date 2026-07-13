@@ -1,0 +1,207 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import { SITE } from "@/utils/site";
+
+const stages = [
+  {
+    term: "FAT",
+    name: "Teste de aceitação antes do campo",
+    text: "Verifica funções acordadas em ambiente controlado, com casos de teste, versões identificadas, evidências e pendências classificadas antes de consumir a janela de planta.",
+  },
+  {
+    term: "Pré-comissionamento",
+    name: "Prontidão de instalação e energização",
+    text: "Confirma montagem, identificação, alimentação, aterramento, cabos, redes, painéis, instrumentos, documentação e condições de segurança conforme as responsabilidades definidas.",
+  },
+  {
+    term: "SAT",
+    name: "Aceitação no ambiente real",
+    text: "Valida o sistema integrado à infraestrutura e aos equipamentos reais: I/O, escalas, comandos, permissivos, intertravamentos, alarmes, tendências e interfaces.",
+  },
+  {
+    term: "Startup",
+    name: "Partida do processo",
+    text: "Coloca sistemas e áreas em operação na sequência planejada, acompanha resposta do processo e registra desvios sem transformar ajuste operacional em alteração sem controle.",
+  },
+  {
+    term: "Estabilização",
+    name: "Acompanhamento pós-partida",
+    text: "Trata pendências priorizadas, confirma desempenho dentro das condições testadas e entrega conhecimento, versões e documentação para a sustentação.",
+  },
+];
+
+const deliverables = [
+  "Plano de comissionamento por sistema, área, disciplina e janela",
+  "Matriz de responsabilidades e interfaces entre cliente, integrador, OEMs, elétrica, instrumentação, processo e segurança",
+  "Pré-requisitos de energização, rede, servidores, utilidades, instrumentação, mecânica e permissões de trabalho",
+  "Roteiros FAT/SAT com caso, condição inicial, ação, resultado esperado, evidência e aprovador",
+  "Gestão de versões e baseline de software, firmware, parâmetros e documentação",
+  "Lista de pendências com criticidade, responsável, prazo, impacto e condição para aceite",
+  "Plano de cutover, critérios de go/no-go, contingência e rollback para intervenções brownfield",
+  "Registros de teste, relatórios de turno, as-built, backups e handover conforme o escopo",
+];
+
+const failureModes = [
+  ["Sinal invertido ou escala incorreta", "Loop check, unidades, faixa, tipo elétrico, direção de falha e comparação entre campo, controlador e supervisão."],
+  ["Equipamento não parte", "Separação entre permissivo de processo, intertravamento, segurança, comando, feedback, comunicação e condição mecânica."],
+  ["Rede intermitente", "Topologia, alimentação, fibra/cobre, redundância, configuração, diagnóstico de portas, perda de pacotes e correlação temporal."],
+  ["Sequência trava em uma etapa", "Estado inicial, transições, temporizações, exceções, retomada, comando manual e informação apresentada ao operador."],
+  ["Alarmes em excesso", "Prioridade, causa, consequência, ação do operador, supressão válida, atraso, deadband e condições de partida/parada."],
+  ["Ajuste sem rastreabilidade", "Baseline, autorização, registro da mudança, cópia de segurança, teste afetado e atualização da documentação."],
+];
+
+const faq = [
+  {
+    q: "Qual é a diferença entre FAT, SAT, comissionamento e startup?",
+    a: "Neste modelo de projeto, FAT é a aceitação funcional antes do campo; SAT é a aceitação no local com interfaces reais; comissionamento organiza a verificação e a prontidão dos sistemas instalados; startup é a entrada planejada em operação. O contrato deve definir os termos, fronteiras e assinaturas porque empresas podem usar nomenclaturas diferentes.",
+  },
+  {
+    q: "Quem deve aprovar os testes?",
+    a: "Cada teste precisa de responsável pela execução e autoridade de aceite compatível com o risco e a disciplina. Automação não deve aprovar isoladamente condições de processo, segurança, mecânica ou qualidade que pertencem a outras funções. A matriz de responsabilidades evita aceite por ausência de objeção.",
+  },
+  {
+    q: "É possível comissionar uma modernização em uma parada curta?",
+    a: "É possível quando grande parte da incerteza foi retirada antes da janela: inventário, engenharia, simulação, FAT, pré-montagem, plano de cabos, versões, contingência, recursos e critérios de go/no-go. A duração responsável depende da fronteira, dependências e condição real da planta.",
+  },
+  {
+    q: "O que precisa estar pronto antes da chegada da equipe de automação?",
+    a: "Normalmente são necessários acesso autorizado, documentos vigentes, painéis liberados, energia e rede disponíveis, instrumentos calibrados conforme responsabilidade, equipamentos mecanicamente prontos, licenças, backups, recursos do cliente e condições de segurança. O plano de mobilização deve tornar a lista específica.",
+  },
+  {
+    q: "Como são tratadas alterações durante a partida?",
+    a: "A mudança deve registrar motivo, risco, versão anterior, aprovador, efeito esperado e teste de regressão proporcional. Em situação operacional urgente, o fluxo pode ser mais curto, mas não deve eliminar backup, autoridade e rastreabilidade.",
+  },
+  {
+    q: "Comissionamento inclui treinamento e documentação?",
+    a: "Pode incluir quando estiver no escopo. Treinamento, as-built, backups, matriz de versões, relatórios, pendências e critérios de encerramento devem aparecer como entregáveis com responsáveis e datas.",
+  },
+];
+
+const pageUrl = new URL("/servicos/comissionamento-industrial/", SITE.url).toString();
+---
+
+<BaseLayout
+  title="Comissionamento Industrial, FAT e SAT"
+  description="Comissionamento industrial de automação: planejamento, FAT, pré-comissionamento, SAT, startup, estabilização, rollback, evidências e handover."
+  breadcrumbLeaf="Comissionamento industrial"
+  jsonLd={[
+    serviceSchema({
+      name: "Comissionamento industrial de sistemas de automação",
+      description: "Planejamento e execução de FAT, pré-comissionamento, SAT, startup, estabilização e handover de sistemas de automação industrial.",
+      url: pageUrl,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">Serviço · FAT, SAT e startup</p>
+        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Comissionamento industrial para transformar engenharia em operação comprovada.
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Comissionar automação não é apenas testar I/O nem acompanhar a
+          primeira partida. É demonstrar, com versões, responsáveis e
+          evidências, que cada sistema está pronto para a próxima etapa — e
+          que a planta sabe como interromper, retornar e sustentar a operação.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-red-200 bg-integra-red-50 p-7">
+        <p class="font-mono text-xs uppercase tracking-widest text-integra-red-700">Princípio de controle</p>
+        <h2 class="mt-3 text-xl font-semibold text-integra-gray-900">Sem critério de aceite, teste vira demonstração.</h2>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Um roteiro verificável declara condição inicial, ação, resultado
+          esperado, tolerância, evidência, responsável e tratamento da falha.
+          A assinatura confirma um critério, não apenas a presença no teste.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader eyebrow="Vocabulário do projeto" title="FAT, SAT, startup e comissionamento não são a mesma etapa" description="Os nomes variam entre empresas. O importante é definir fronteiras, pré-requisitos, evidências e autoridade de avanço no plano e no contrato." accent={true} />
+      <div class="grid gap-5">
+        {stages.map((stage) => (
+          <article class="grid gap-4 rounded-lg border border-integra-gray-200 bg-integra-white p-6 lg:grid-cols-[10rem_18rem_1fr] lg:items-start">
+            <p class="font-mono text-sm font-semibold text-integra-red-700">{stage.term}</p>
+            <h2 class="text-lg font-semibold text-integra-gray-900">{stage.name}</h2>
+            <p class="text-sm leading-relaxed text-integra-gray-700">{stage.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader eyebrow="Entregáveis" title="O que precisa existir para controlar a partida" description="A lista é ajustada ao porte, criticidade e fronteira do projeto. Ela ajuda a separar atividade de campo de evidência de engenharia." accent={true} />
+      <ul class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2">
+        {deliverables.map((item, index) => (
+          <li class="flex gap-4 bg-integra-gray-50 p-6 text-sm leading-relaxed text-integra-gray-700">
+            <span class="font-mono text-xs font-semibold text-integra-red-700">{String(index + 1).padStart(2, "0")}</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader eyebrow="Diagnóstico em campo" title="Falhas comuns precisam de uma trilha de separação" description="A primeira hipótese raramente deve virar a primeira alteração. Evidência temporal e fronteiras técnicas reduzem correções no componente errado." accent={true} />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {failureModes.map(([problem, method]) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h2 class="text-lg font-semibold text-integra-gray-900">{problem}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{method}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="/automacao-industrial/#projeto" class="text-sm font-semibold text-integra-red-700 hover:underline">Ciclo de vida da automação →</a>
+        <a href="/tecnologias/monitoramento-redes-industriais/" class="text-sm font-semibold text-integra-red-700 hover:underline">Diagnóstico de redes industriais →</a>
+        <a href="/tecnologias/documentacao-handover-treinamento/" class="text-sm font-semibold text-integra-red-700 hover:underline">Documentação e handover →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid max-w-4xl py-20">
+      <h2 class="text-3xl font-semibold text-integra-gray-900">Perguntas frequentes sobre comissionamento industrial</h2>
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-16">
+      <SectionHeader eyebrow="Próximo passo" title="Antes de mobilizar, confirme a prontidão" description="Cronograma, fronteira, documentos, acesso, segurança, fornecedores e autoridade de aceite precisam ser conhecidos antes de ocupar a janela operacional." accent={true} />
+      <div class="grid gap-6 lg:grid-cols-3">
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h2 class="text-lg font-semibold text-integra-gray-900">Projeto novo</h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">Envie arquitetura, lista de sistemas, cronograma integrado, matriz de interfaces e estratégia de testes já prevista.</p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h2 class="text-lg font-semibold text-integra-gray-900">Modernização brownfield</h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">Inclua base instalada, backups, janela, dependências, condição de painéis e processo, contingência e responsáveis pela operação.</p>
+        </article>
+        <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+          <h2 class="text-lg font-semibold text-integra-gray-900">Partida em dificuldade</h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">Preserve logs, versões, alarmes, horários, alterações e sintomas. A correlação dessas evidências acelera a separação entre processo, campo, rede e software.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Tem uma partida, parada ou modernização em planejamento?"
+    description="Envie local, datas, sistemas envolvidos, estágio da engenharia e fronteira esperada. A triagem verifica prontidão e define se o próximo passo é proposta de execução ou diagnóstico documentado."
+    primaryCta={{ href: "/contato/?assunto=comissionamento-industrial", label: "Solicitar triagem de comissionamento" }}
+    secondaryCta={{ href: "/servicos/", label: "Ver todos os serviços" }}
+  />
+</BaseLayout>

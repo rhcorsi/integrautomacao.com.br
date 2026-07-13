@@ -1,0 +1,230 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import { SITE } from "@/utils/site";
+
+const deliverables = [
+  "Levantamento de requisitos, modos de operação, permissivos, intertravamentos e estados seguros",
+  "Arquitetura de software, convenção de tags, estruturas reutilizáveis e critérios de diagnóstico",
+  "Desenvolvimento ou revisão de lógica Ladder, Structured Text, FBD e demais linguagens compatíveis com a plataforma",
+  "Integração de I/O, inversores, instrumentos, redes, IHM/SCADA, historian e sistemas de nível superior",
+  "Gestão de versões, lista de alterações, backups verificáveis e estratégia de retorno",
+  "Plano de testes, simulação, FAT, correções rastreáveis e evidências de aceite",
+  "Apoio ao SAT, startup e estabilização conforme a fronteira definida no contrato",
+  "Código comentado, documentação funcional, as-built e transferência de conhecimento",
+];
+
+const platforms = [
+  {
+    title: "Rockwell Automation",
+    text: "ControlLogix, CompactLogix, Studio 5000, FactoryTalk, PlantPAx e integração EtherNet/IP para máquinas, linhas e processos.",
+    links: [
+      ["ControlLogix e CompactLogix", "/tecnologias/controllogix-compactlogix/"],
+      ["PlantPAx 5.x", "/tecnologias/plantpax-5x/"],
+    ],
+  },
+  {
+    title: "Siemens",
+    text: "TIA Portal, SIMATIC S7-1200/S7-1500, STEP 7 legado, WinCC e redes PROFINET conforme a base instalada e o escopo.",
+    links: [
+      ["Siemens TIA Portal", "/tecnologias/tia-portal/"],
+      ["SIMATIC Manager e STEP 7", "/tecnologias/simatic-manager-step7/"],
+    ],
+  },
+  {
+    title: "Schneider e multivendor",
+    text: "Control Expert, Machine Expert e integração com plataformas de supervisão e comunicação existentes na planta.",
+    links: [
+      ["Schneider Control Expert", "/tecnologias/schneider-control-expert/"],
+      ["Protocolos industriais", "/tecnologias/protocolos-industriais/"],
+    ],
+  },
+];
+
+const workflow = [
+  ["01", "Entender o processo", "A lógica não começa no editor do PLC. Modos, estados, exceções, riscos, interfaces e autoridade de comando precisam ser definidos com operação, manutenção e processo."],
+  ["02", "Definir o padrão", "Tags, unidades, módulos, equipamentos, alarmes, permissões, diagnósticos e tratamento de falha formam uma arquitetura de software que a equipe conseguirá manter."],
+  ["03", "Desenvolver com rastreabilidade", "Cada alteração deve ter requisito, versão, autor, revisão e efeito esperado. Em brownfield, a comparação com o comportamento legado faz parte da engenharia."],
+  ["04", "Testar antes do campo", "Simulação e FAT exercitam operação normal, exceções, perda de comunicação, falhas de instrumentos, retomada e limites do escopo antes da janela de parada."],
+  ["05", "Validar no processo real", "No SAT e startup, sinais, escalas, sentido de atuação, sequências, intertravamentos e desempenho são conferidos com as interfaces reais."],
+  ["06", "Entregar para manutenção", "Backup, fonte editável, comentários, as-built, matriz de versões, treinamento e pendências controladas encerram a dependência do programador."],
+];
+
+const faq = [
+  {
+    q: "Quanto custa a programação de um CLP?",
+    a: "A estimativa depende de quantidade e tipo de I/O, equipamentos, modos, sequências, malhas, safety, redes, telas, integrações, documentação disponível, padrão exigido, testes e mobilização. Contar apenas pontos de I/O costuma ignorar a complexidade funcional. A proposta deve declarar premissas, exclusões e critério de aceite.",
+  },
+  {
+    q: "Vocês programam CLP Rockwell, Siemens e Schneider?",
+    a: "A Integra trabalha com plataformas Rockwell e atende ambientes multivendor que incluem tecnologias Siemens, Schneider e Elipse. A confirmação depende de família, versão, licenças, acesso ao código-fonte e escopo. Parceria formal e tecnologia atendida são apresentadas separadamente na página de certificações.",
+  },
+  {
+    q: "É possível revisar um programa existente sem reescrever tudo?",
+    a: "Sim. Uma revisão pode mapear riscos, código morto, tags sem descrição, falhas de diagnóstico, intertravamentos frágeis, comunicação, versões e dependências. A recomendação pode ser correção localizada, refatoração gradual ou reengenharia; não se presume uma reescrita completa antes do diagnóstico.",
+  },
+  {
+    q: "Ladder ou Structured Text: qual linguagem usar?",
+    a: "A escolha depende do problema, plataforma, competência da manutenção e padrão da planta. Ladder favorece leitura de lógica booleana e troubleshooting em muitos ambientes; Structured Text pode tornar algoritmos e manipulação de dados mais claros. Um projeto pode combinar linguagens sem perder governança.",
+  },
+  {
+    q: "A programação inclui IHM ou SCADA?",
+    a: "Pode incluir, desde que esteja na fronteira contratada. Tags, comandos, alarmes, tendências e permissões precisam de contrato de interface com o controlador. Desenvolvimento de telas, servidores, drivers e historian deve aparecer como entregável, não como expectativa implícita.",
+  },
+  {
+    q: "Como vocês evitam parar a planta por uma alteração de software?",
+    a: "O risco é reduzido com backup verificado, comparação de versões, análise de impacto, simulação proporcional, aprovação, janela definida, monitoramento, critérios de interrupção e rollback. Nenhuma metodologia elimina todo risco; ela torna decisões e responsabilidades verificáveis.",
+  },
+];
+
+const references = [
+  {
+    name: "IEC 61131-3",
+    href: "https://webstore.iec.ch/en/publication/68533",
+    note: "Referência internacional para linguagens de programação de controladores programáveis.",
+  },
+  {
+    name: "Rockwell Automation · Studio 5000 Logix Designer",
+    href: "https://www.rockwellautomation.com/en-us/docs/studio-5000-logix-designer/37-00/contents-ditamap.html",
+    note: "Documentação oficial da plataforma Logix Designer.",
+  },
+  {
+    name: "Siemens · Programming guideline S7-1200/S7-1500",
+    href: "https://support.industry.siemens.com/cs/document/81318674/",
+    note: "Guia oficial de programação e estilo para controladores SIMATIC atuais.",
+  },
+];
+
+const pageUrl = new URL("/servicos/programacao-clp/", SITE.url).toString();
+---
+
+<BaseLayout
+  title="Programação de CLP e PLC Industrial"
+  description="Serviço de programação de CLP Rockwell, Siemens e Schneider: arquitetura de software, Ladder/ST, integração, FAT, SAT, versionamento e documentação."
+  breadcrumbLeaf="Programação de CLP"
+  jsonLd={[
+    serviceSchema({
+      name: "Programação de CLP e PLC industrial",
+      description: "Desenvolvimento, revisão e modernização de software de controladores industriais com testes, versionamento, documentação e suporte de campo.",
+      url: pageUrl,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">Serviço · software de controle</p>
+        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Programação de CLP para sistemas que precisam ser operáveis, testáveis e mantidos.
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Programar um PLC industrial é traduzir processo, modos de operação,
+          sequências, intertravamentos e falhas em software previsível. A
+          Integra desenvolve e revisa aplicações de controle com arquitetura,
+          versionamento, testes e documentação — tanto em projetos novos
+          quanto em sistemas brownfield.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7">
+        <p class="font-mono text-xs uppercase tracking-widest text-integra-red-700">Quando contratar</p>
+        <ul class="mt-5 grid gap-3 text-sm leading-relaxed text-integra-gray-700">
+          <li>• Máquina, linha ou processo novo precisa de software de controle.</li>
+          <li>• O programa atual é difícil de diagnosticar, alterar ou auditar.</li>
+          <li>• PLC e SCADA serão migrados durante uma janela de parada.</li>
+          <li>• Múltiplos fornecedores precisam seguir um padrão plant-wide.</li>
+          <li>• A planta precisa recuperar documentação, fonte e governança.</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader eyebrow="Entregáveis" title="O que um serviço de programação de CLP pode incluir" description="A fronteira final depende do contrato. Esta lista torna visível o que precisa ser confirmado antes de comparar propostas." accent={true} />
+      <ul class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2">
+        {deliverables.map((item, index) => (
+          <li class="flex gap-4 bg-integra-white p-6 text-sm leading-relaxed text-integra-gray-700">
+            <span class="font-mono text-xs font-semibold text-integra-red-700">{String(index + 1).padStart(2, "0")}</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader eyebrow="Plataformas" title="Engenharia Rockwell e integração multivendor" description="A plataforma é parte da decisão. Processo, base instalada, licenças, equipe de manutenção e ciclo de vida definem como o software deve ser estruturado." accent={true} />
+      <div class="grid gap-6 lg:grid-cols-3">
+        {platforms.map((platform) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7">
+            <h2 class="text-xl font-semibold text-integra-gray-900">{platform.title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{platform.text}</p>
+            <ul class="mt-5 grid gap-2">
+              {platform.links.map(([label, href]) => (
+                <li><a href={href} class="text-sm font-semibold text-integra-red-700 hover:underline">{label} →</a></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <p class="mt-7 max-w-4xl text-sm leading-relaxed text-integra-gray-600">
+        A página de <a href="/certificacoes/" class="font-semibold text-integra-red-700 hover:underline">certificações e parcerias</a>
+        diferencia credenciais formais de tecnologias atendidas. Família, versão e disponibilidade de ambiente de engenharia são validadas na triagem.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader eyebrow="Método de execução" title="Do requisito ao handover em seis etapas" description="O objetivo não é apenas colocar o controlador em RUN; é deixar uma aplicação validada e sustentável dentro da fronteira acordada." accent={true} />
+      <ol class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2 lg:grid-cols-3">
+        {workflow.map(([number, title, text]) => (
+          <li class="bg-integra-white p-7">
+            <p class="font-mono text-xs font-semibold text-integra-red-700">{number}</p>
+            <h2 class="mt-3 text-xl font-semibold text-integra-gray-900">{title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="/servicos/comissionamento-industrial/" class="text-sm font-semibold text-integra-red-700 hover:underline">Comissionamento, FAT e SAT →</a>
+        <a href="/solucoes/migracao-plc/" class="text-sm font-semibold text-integra-red-700 hover:underline">Migração de PLC legado →</a>
+        <a href="/tecnologias/documentacao-handover-treinamento/" class="text-sm font-semibold text-integra-red-700 hover:underline">Documentação e handover →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid max-w-4xl py-20">
+      <h2 class="text-3xl font-semibold text-integra-gray-900">Perguntas frequentes sobre programação de CLP</h2>
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-16">
+      <SectionHeader eyebrow="Referências" title="Documentação primária para especificação e desenvolvimento" description="A aplicação depende da edição, plataforma e requisitos do projeto. Documentação oficial e normas contratualmente aplicáveis prevalecem." accent={true} />
+      <div class="grid gap-5 lg:grid-cols-3">
+        {references.map((reference) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h2 class="text-lg font-semibold text-integra-gray-900">{reference.name}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{reference.note}</p>
+            <a href={reference.href} rel="noopener noreferrer" class="mt-5 inline-flex text-sm font-semibold text-integra-red-700 hover:underline">Consultar fonte oficial ↗</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Tem um CLP novo, legado ou difícil de manter?"
+    description="Envie família e versão do controlador, backup disponível, lista de I/O, arquitetura de rede e objetivo da alteração. A triagem identifica os dados que faltam antes de estimar a execução."
+    primaryCta={{ href: "/contato/?assunto=programacao-clp", label: "Solicitar triagem de programação" }}
+    secondaryCta={{ href: "/servicos/", label: "Ver todos os serviços" }}
+  />
+</BaseLayout>

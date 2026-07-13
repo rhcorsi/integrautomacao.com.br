@@ -38,6 +38,7 @@ const pageTitle = title ? `${title} | ${SITE.shortName}` : SITE.defaultTitle;
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
 const ogImageBySection: Record<string, string> = {
   blog: "/og/blog.png",
+  "automacao-industrial": "/og/solucoes.png",
   cases: "/og/cases.png",
   certificacoes: "/og/certificacoes.png",
   contato: "/og/contato.png",
@@ -46,6 +47,7 @@ const ogImageBySection: Record<string, string> = {
   eventos: "/og/eventos.png",
   "integra-acao": "/og/integra-acao.png",
   setores: "/og/setores.png",
+  servicos: "/og/solucoes.png",
   solucoes: "/og/solucoes.png",
   tecnologias: "/og/tecnologias.png",
 };
@@ -102,7 +104,10 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <meta
+      name="robots"
+      content={noindex ? "noindex,nofollow" : "max-image-preview:large"}
+    />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content={SITE.name} />
@@ -145,5 +150,6 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
       <slot />
     </main>
     <Footer />
+    <script is:inline src="/scripts/contact-context.js" defer></script>
   </body>
 </html>

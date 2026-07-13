@@ -16,6 +16,9 @@ const subjectLabels = new Map([
   ["acucar-e-etanol", "Automação para Açúcar e Etanol"],
   ["automacao-maringa", "Automação Industrial em Maringá"],
   ["automacao-parana", "Automação Industrial no Paraná"],
+  ["servicos-automacao", "Serviços de automação industrial"],
+  ["programacao-clp", "Programação de CLP"],
+  ["comissionamento-industrial", "Comissionamento industrial"],
   ["catalogo-tecnico", "Catálogo técnico"],
   ["tecnologias-multivendor", "Tecnologias multivendor"],
   ["certificacoes", "Certificações e parcerias"],
@@ -29,6 +32,17 @@ const subjectLabels = new Map([
 ]);
 
 const limit = (value, max) => (value ?? "").trim().slice(0, max);
+
+const storedContactContext = () => {
+  try {
+    const value = sessionStorage.getItem("integra:contact-context");
+    if (!value) return {};
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+};
 
 const labelFromSlug = (value) =>
   value
@@ -87,6 +101,7 @@ for (const form of contactForms) {
   const applyContactContext = () => {
     const params = new URL(window.location.href).searchParams;
     const referrer = referrerContext();
+    const stored = storedContactContext();
     const requestedSubject = limit(params.get("assunto"), 50)
       .toLowerCase()
       .replace(/[^a-z0-9-]/g, "");
@@ -108,13 +123,13 @@ for (const form of contactForms) {
     }
 
     if (sourcePageInput) {
-      sourcePageInput.value = limit(params.get("sourcePage") || referrer.page, 300);
+      sourcePageInput.value = limit(params.get("sourcePage") || stored.page || referrer.page, 300);
     }
     if (sourceLabelInput) {
-      sourceLabelInput.value = limit(params.get("sourceLabel") || referrer.label, 160);
+      sourceLabelInput.value = limit(params.get("sourceLabel") || stored.label || referrer.label, 160);
     }
     if (ctaInput) {
-      ctaInput.value = limit(params.get("cta"), 160);
+      ctaInput.value = limit(params.get("cta") || stored.cta, 160);
     }
   };
 

@@ -72,17 +72,17 @@ const evidence = [
 ---
 
 <BaseLayout
-  title="Engenharia de Sistemas Industriais"
-  description="Engenharia de sistemas industriais para plantas críticas: PlantPAx, FactoryTalk, redes industriais e cibersegurança OT, com método e documentação."
+  title="Automação Industrial e Integração de Sistemas"
+  description="Empresa de automação industrial e integração de sistemas para plantas críticas: engenharia, CLP, DCS, SCADA, redes OT, dados e modernização."
   jsonLd={[websiteSchema()]}
 >
   <HeroIntegridade
     eyebrow="Engenharia com Integridade · Especialista Rockwell"
-    title="Engenharia para plantas"
+    title="Automação industrial para plantas"
     highlight="em que parar não é opção."
     description="Projetamos, modernizamos e sustentamos sistemas Rockwell e multivendor com arquitetura documentada, cutover validado e continuidade técnica do diagnóstico ao pós-partida."
-    primaryCta={{ href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" }}
-    secondaryCta={{ href: "/solucoes", label: "Ver soluções" }}
+    primaryCta={{ href: "/contato/?assunto=triagem", label: "Solicitar triagem técnica" }}
+    secondaryCta={{ href: "/solucoes/", label: "Ver soluções" }}
     statusLine="Maringá-PR · atuação nacional · Silver System Integrator"
   >
     <AnimatedPlantDiagram slot="media" />
@@ -92,7 +92,7 @@ const evidence = [
   <section class="border-y border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-12 lg:py-14">
       <a
-        href="/certificacoes/silver-system-integrator"
+        href="/certificacoes/silver-system-integrator/"
         class="group grid gap-8 items-center lg:grid-cols-[auto_1fr_auto]"
       >
         <div class="flex justify-center lg:justify-start">
@@ -145,12 +145,19 @@ const evidence = [
           atendemos tecnologias Siemens, Elipse E3 e Schneider quando a base da
           planta pede integração multi-vendor.
         </p>
+        <a
+          href="/automacao-industrial/"
+          class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-integra-red-700 hover:underline"
+        >
+          Consultar o guia completo de automação industrial
+          <span aria-hidden="true">→</span>
+        </a>
         <div class="mt-7 flex flex-wrap gap-3">
           {[
-            { href: "/tecnologias/tc-devicewise", label: "TC deviceWISE" },
-            { href: "/tecnologias/tia-portal", label: "Siemens" },
-            { href: "/tecnologias/elipse-e3", label: "Elipse E3" },
-            { href: "/tecnologias/schneider-control-expert", label: "Schneider" },
+            { href: "/tecnologias/tc-devicewise/", label: "TC deviceWISE" },
+            { href: "/tecnologias/tia-portal/", label: "Siemens" },
+            { href: "/tecnologias/elipse-e3/", label: "Elipse E3" },
+            { href: "/tecnologias/schneider-control-expert/", label: "Schneider" },
           ].map((item) => (
             <a
               href={item.href}
@@ -336,7 +343,7 @@ const evidence = [
               Ler case completo <span aria-hidden="true">→</span>
             </a>
             <a
-              href="/contato?assunto=portfolio&sourcePage=%2F&sourceLabel=Case%20em%20destaque&cta=Solicitar%20portf%C3%B3lio%20sob%20NDA"
+              href="/contato/?assunto=portfolio"
               class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
             >
               Solicitar portfólio sob NDA
@@ -360,8 +367,8 @@ const evidence = [
     image={plantpaxReference}
     imageAlt="Arquitetura média PlantPAx com PASS e estações"
     imagePosition="right"
-    primaryCta={{ href: "/solucoes/plantpax", label: "Conhecer PlantPAx" }}
-    secondaryCta={{ href: "/contato?assunto=plantpax", label: "Falar sobre projeto" }}
+    primaryCta={{ href: "/solucoes/plantpax/", label: "Conhecer PlantPAx" }}
+    secondaryCta={{ href: "/contato/?assunto=plantpax", label: "Falar sobre projeto" }}
     variant="light"
   />
 
@@ -378,7 +385,7 @@ const evidence = [
     image={factorytalkReference}
     imageAlt="Arquitetura distribuída FactoryTalk View SE"
     imagePosition="left"
-    primaryCta={{ href: "/solucoes/factorytalk", label: "Conhecer FactoryTalk" }}
+    primaryCta={{ href: "/solucoes/factorytalk/", label: "Conhecer FactoryTalk" }}
     variant="light"
   />
 
@@ -395,8 +402,8 @@ const evidence = [
     image={cpweReference}
     imageAlt="Arquitetura CPwE mostrando integração OT e IT"
     imagePosition="right"
-    primaryCta={{ href: "/solucoes/redes-iec-62443", label: "Ver cibersegurança OT" }}
-    secondaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar triagem OT" }}
+    primaryCta={{ href: "/solucoes/redes-iec-62443/", label: "Ver cibersegurança OT" }}
+    secondaryCta={{ href: "/contato/?assunto=redes-cyber", label: "Solicitar triagem OT" }}
     variant="ot"
   />
 
@@ -417,7 +424,7 @@ const evidence = [
           Batch, integração com MES/ERP, backup, virtualização e governança OT.
         </p>
         <a
-          href="/solucoes/pi-system"
+          href="/solucoes/pi-system/"
           class="mt-7 inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
         >
           Ver dados industriais

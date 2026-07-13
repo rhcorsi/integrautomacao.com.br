@@ -35,7 +35,7 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
           Ver cases publicados <span aria-hidden="true">↓</span>
         </a>
         <a
-          href="/contato?assunto=portfolio&sourcePage=%2Fcases&sourceLabel=Hero%20de%20cases&cta=Solicitar%20portf%C3%B3lio%20sob%20NDA"
+          href="/contato/?assunto=portfolio"
           class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
         >
           Solicitar portfólio sob NDA
@@ -51,7 +51,7 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
           <p class="text-base text-integra-gray-700 max-w-md mx-auto">
             Cases sendo publicados gradualmente. Para um portfólio detalhado
             sob NDA,
-            <a href="/contato" class="text-integra-red-700 hover:underline">
+            <a href="/contato/" class="text-integra-red-700 hover:underline">
               entre em contato</a>.
           </p>
         </div>
@@ -109,6 +109,6 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
   <CtaBlock
     title="Quer detalhes de cases sob NDA?"
     description="Informe setor, desafio e tecnologia instalada. Selecionamos referências comparáveis para uma conversa e formalizamos NDA quando o nível de detalhe exigir."
-    primaryCta={{ href: "/contato?assunto=portfolio", label: "Solicitar portfólio sob NDA" }}
+    primaryCta={{ href: "/contato/?assunto=portfolio", label: "Solicitar portfólio sob NDA" }}
   />
 </BaseLayout>

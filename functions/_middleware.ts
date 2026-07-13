@@ -19,6 +19,16 @@ const API_SECURITY_HEADERS: Record<string, string> = {
 export const onRequest: PagesFunction = async (context) => {
   const url = new URL(context.request.url);
 
+  // Consolidate every public production hostname on the canonical apex.
+  // Keep path and query intact so backlinks and campaign parameters survive.
+  if (
+    url.hostname === "www.integrautomacao.com.br" ||
+    url.hostname === "integrautomacao-com-br.pages.dev"
+  ) {
+    const canonicalUrl = new URL(`${url.pathname}${url.search}`, "https://integrautomacao.com.br");
+    return Response.redirect(canonicalUrl.toString(), 301);
+  }
+
   const target = resolveLegacyRedirect(url);
   if (target) {
     return redirectTo(context.request.url, target);

@@ -7,21 +7,17 @@
 # warns about reduced performance.
 
 # Internal slug rename (May 2026): split PID/intertravamentos/sequenciamento
-/tecnologias/pid-intertravamentos-sequenciamento  /tecnologias/intertravamentos-sequencias  301
-/tecnologias/pid-intertravamentos-sequenciamento/ /tecnologias/intertravamentos-sequencias  301
+/tecnologias/pid-intertravamentos-sequenciamento  /tecnologias/intertravamentos-sequencias/  301
+/tecnologias/pid-intertravamentos-sequenciamento/ /tecnologias/intertravamentos-sequencias/  301
 
 # Integra Ação umbrella brand: /integra-acao/eventos is an alias for /eventos
-/integra-acao/eventos    /eventos    301
-/integra-acao/eventos/   /eventos    301
-/integra-acao/eventos/*  /eventos/:splat   301
+/integra-acao/eventos    /eventos/    301
+/integra-acao/eventos/   /eventos/    301
+/integra-acao/eventos/*  /eventos/:splat/   301
 
 # WP exact paths
 /home-2                /                                    301
 /home-2/               /                                    301
-/wp-admin              /                                    301
-/wp-login.php          /                                    301
-/xmlrpc.php            /                                    301
-/wp-json               /                                    301
 /sitemap.xml           /sitemap-index.xml                   301
 /wp-sitemap.xml        /sitemap-index.xml                   301
 /feed                  /rss.xml                             301
@@ -31,71 +27,45 @@
 
 # Paths em inglês que assistentes de IA chutam (vistos nos Demand Signals
 # do AI Crawl Control) — entregar a página certa em vez de 404.
-/company               /empresa                             301
-/company/              /empresa                             301
-/about                 /empresa                             301
-/about/                /empresa                             301
-/about-us              /empresa                             301
-/aboutus               /empresa                             301
-/team                  /equipe                             301
-/services              /solucoes                            301
-/services/             /solucoes                            301
-/solutions             /solucoes                            301
-/products              /tecnologias                         301
-/technologies          /tecnologias                         301
-/case-studies          /cases                               301
-/news                  /blog                                301
+/company               /empresa/                             301
+/company/              /empresa/                             301
+/about                 /empresa/                             301
+/about/                /empresa/                             301
+/about-us              /empresa/                             301
+/aboutus               /empresa/                             301
+/team                  /equipe/                             301
+/services              /servicos/                            301
+/services/             /servicos/                            301
+/solutions             /solucoes/                            301
+/products              /tecnologias/                         301
+/technologies          /tecnologias/                         301
+/case-studies          /cases/                               301
+/news                  /blog/                                301
 
-# WP splats (taxonomies, archives, admin subpaths)
+# WP content paths with a relevant current destination
 /wp-sitemap-*          /sitemap-index.xml                   301
-/category/*            /blog                                301
-/tag/*                 /blog                                301
-/author/*              /blog                                301
-/20*/*                 /blog                                301
-/portfolio-item/*      /cases                               301
-/portfolio/*           /cases                               301
-/wp-admin/*            /                                    301
-/wp-login.php*         /                                    301
-/wp-includes/*         /                                    301
-/wp-content/uploads/*  /                                    301
-/wp-content/themes/*   /                                    301
-/wp-content/plugins/*  /                                    301
-/wp-content/cache/*    /                                    301
-/wp-content/*          /                                    301
-/wp-json/*             /                                    301
-/wp-config.php         /                                    301
-/readme.html           /                                    301
-/license.txt           /                                    301
+/category/*            /blog/                                301
+/tag/*                 /blog/                                301
+/author/*              /blog/                                301
+/20*/*                 /blog/                                301
+/portfolio-item/*      /cases/                               301
+/portfolio/*           /cases/                               301
 
-# Common bot probes (return 301 to home; cheaper than 404 + slightly better SEO than letting them rot).
-/.env                  /                                    301
-/.git/*                /                                    301
+# Current aliases with a real semantic replacement. Bot probes and removed
+# system paths intentionally fall through to 404 instead of becoming soft 404s.
 /security.txt          /.well-known/security.txt            301
-/wp                    /                                    301
-/wp/                   /                                    301
-/wp/*                  /                                    301
-/blog/wp-login.php     /                                    301
-/old/*                 /                                    301
-/backup/*              /                                    301
-/admin/*               /contato                             301
-/admin                 /contato                             301
-/login                 /contato                             301
-/loja/*                /                                    301
-/produto/*             /tecnologias                         301
-/produtos/*            /tecnologias                         301
-/servicos/*            /solucoes                            301
-/sobre/*               /empresa                             301
-/sobre                 /empresa                             301
-/sobre-nos             /empresa                             301
-/quem-somos            /empresa                             301
+/sobre/*               /empresa/                             301
+/sobre                 /empresa/                             301
+/sobre-nos             /empresa/                             301
+/quem-somos            /empresa/                             301
 
 # Common WP page paths from old site (folders without trailing slash)
-/contact               /contato                             301
-/contact/              /contato                             301
-/contacto              /contato                             301
-/contacto/             /contato                             301
-/clientes              /cases                               301
-/clientes/             /cases                               301
-/projetos              /cases                               301
-/projetos/             /cases                               301
-/portfolio             /cases                               301
+/contact               /contato/                             301
+/contact/              /contato/                             301
+/contacto              /contato/                             301
+/contacto/             /contato/                             301
+/clientes              /cases/                               301
+/clientes/             /cases/                               301
+/projetos              /cases/                               301
+/projetos/             /cases/                               301
+/portfolio             /cases/                               301

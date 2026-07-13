@@ -59,13 +59,13 @@ export const COMPANY = {
 
 /** Primary navigation. Order = display order in header. */
 export const NAV = [
-  { href: "/solucoes", label: "Soluções" },
-  { href: "/setores", label: "Setores" },
-  { href: "/cases", label: "Cases" },
-  { href: "/tecnologias", label: "Tecnologias" },
-  { href: "/blog", label: "Conteúdo" },
-  { href: "/empresa", label: "Empresa" },
-  { href: "/certificacoes", label: "Certificações" },
+  { href: "/solucoes/", label: "Soluções" },
+  { href: "/setores/", label: "Setores" },
+  { href: "/cases/", label: "Cases" },
+  { href: "/tecnologias/", label: "Tecnologias" },
+  { href: "/blog/", label: "Conteúdo" },
+  { href: "/empresa/", label: "Empresa" },
+  { href: "/certificacoes/", label: "Certificações" },
 ] as const;
 
 /**
@@ -97,27 +97,27 @@ export interface MegaMenu {
 }
 
 export const MEGA_MENUS: Record<string, MegaMenu> = {
-  "/solucoes": {
+  "/solucoes/": {
     intro: {
       title: "Conheça todas as soluções",
-      href: "/solucoes",
+      href: "/solucoes/",
     },
     columns: [
       {
         title: "Plataforma de controle e dados",
         links: [
           {
-            href: "/solucoes/plantpax",
+            href: "/solucoes/plantpax/",
             label: "PlantPAx",
             description: "DCS moderno com biblioteca de processo e arquitetura dimensionada",
           },
           {
-            href: "/solucoes/factorytalk",
+            href: "/solucoes/factorytalk/",
             label: "FactoryTalk Suite",
             description: "View SE, Optix, Batch, Historian, AssetCentre, ThinManager",
           },
           {
-            href: "/solucoes/pi-system",
+            href: "/solucoes/pi-system/",
             label: "PI System / AVEVA",
             description: "Dados industriais, AF Templates, integração corporativa",
           },
@@ -127,22 +127,22 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Redes e cibersegurança OT",
         links: [
           {
-            href: "/solucoes/redes-iec-62443",
+            href: "/solucoes/redes-iec-62443/",
             label: "Redes industriais e IEC 62443",
             description: "CPwE, IDMZ, segmentação Purdue, defense-in-depth",
           },
           {
-            href: "/tecnologias/iec-62443-nist-ot",
+            href: "/tecnologias/iec-62443-nist-ot/",
             label: "Diagnóstico IEC 62443 / NIST OT",
             description: "Gap analysis, zonas e conduítes, roadmap progressivo",
           },
           {
-            href: "/tecnologias/hardening-industrial",
+            href: "/tecnologias/hardening-industrial/",
             label: "Hardening industrial",
             description: "Endurecimento de servidores, switches e estações OT",
           },
           {
-            href: "/tecnologias/monitoramento-redes-industriais",
+            href: "/tecnologias/monitoramento-redes-industriais/",
             label: "Monitoramento OT",
             description: "Visibilidade contínua de rede, anomalias e ativos",
           },
@@ -152,27 +152,27 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Infraestrutura e modernização",
         links: [
           {
-            href: "/solucoes/data-centers",
+            href: "/solucoes/data-centers/",
             label: "Data Centers Industriais",
             description: "Servidores OT, virtualização, redundância e DR",
           },
           {
-            href: "/solucoes/migracao-plc",
+            href: "/solucoes/migracao-plc/",
             label: "Migração PLC-5 / SLC 500",
             description: "Modernização para ControlLogix com plano de cutover",
           },
           {
-            href: "/solucoes/modernizacao-scada",
+            href: "/solucoes/modernizacao-scada/",
             label: "Modernização de SCADA",
             description: "Supervisório legado para View SE/Optix com cutover controlado",
           },
           {
-            href: "/tecnologias/virtualizacao-ot",
+            href: "/tecnologias/virtualizacao-ot/",
             label: "Virtualização OT",
             description: "VMware/Hyper-V para FactoryTalk e PlantPAx",
           },
           {
-            href: "/tecnologias/backup-recuperacao-desastres",
+            href: "/tecnologias/backup-recuperacao-desastres/",
             label: "Backup e Disaster Recovery",
             description: "RTO/RPO definidos, restore validado",
           },
@@ -182,27 +182,27 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Por desafio",
         links: [
           {
-            href: "/solucoes/migracao-plc",
+            href: "/solucoes/migracao-plc/",
             label: "Modernizar PLC legado",
             description: "PLC-5 e SLC 500 obsoletos sem paralisar a planta",
           },
           {
-            href: "/solucoes/redes-iec-62443",
+            href: "/solucoes/redes-iec-62443/",
             label: "Prevenir incidentes cyber",
             description: "IDMZ, segmentação e governança de identidade OT",
           },
           {
-            href: "/solucoes/plantpax",
+            href: "/solucoes/plantpax/",
             label: "Padronizar engenharia",
             description: "Biblioteca PlantPAx, AF Templates e padrão plant-wide",
           },
           {
-            href: "/tecnologias/auditoria-conformidade",
+            href: "/tecnologias/auditoria-conformidade/",
             label: "Validar arquitetura existente",
             description: "Auditoria técnica de stack OT e gap contra IEC 62443",
           },
           {
-            href: "/tecnologias/manutencao-corretiva-preventiva",
+            href: "/tecnologias/manutencao-corretiva-preventiva/",
             label: "Reduzir paradas não planejadas",
             description: "Manutenção preventiva, evolutiva e analytics",
           },
@@ -214,62 +214,64 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       title: "Arquitetura → Engenharia → Implantação → Validação → Suporte",
       description:
         "Cada solução passa pelas mesmas cinco fases. Documentação completa, padronização e governança em cada entrega.",
-      cta: { href: "/solucoes#metodo-integra", label: "Ver método Integra" },
+      cta: { href: "/solucoes/#metodo-integra", label: "Ver método Integra" },
     },
     quickLinks: [
-      { href: "/setores", label: "Por setor industrial" },
-      { href: "/tecnologias", label: "Catálogo técnico completo" },
-      { href: "/cases", label: "Cases publicados" },
-      { href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" },
+      { href: "/automacao-industrial/", label: "Guia de automação industrial" },
+      { href: "/servicos/", label: "Serviços de automação industrial" },
+      { href: "/setores/", label: "Por setor industrial" },
+      { href: "/tecnologias/", label: "Catálogo técnico completo" },
+      { href: "/cases/", label: "Cases publicados" },
+      { href: "/contato/?assunto=triagem", label: "Solicitar triagem técnica" },
     ],
   },
 
-  "/tecnologias": {
+  "/tecnologias/": {
     intro: {
       title: "Ver catálogo técnico completo",
-      href: "/tecnologias",
+      href: "/tecnologias/",
     },
     columns: [
       {
         title: "Controle & DCS",
         links: [
-          { href: "/tecnologias/plantpax-5x", label: "PlantPAx 5.x" },
-          { href: "/tecnologias/plantpax-library", label: "PlantPAx Library" },
-          { href: "/tecnologias/controllogix-compactlogix", label: "ControlLogix / CompactLogix" },
-          { href: "/tecnologias/controle-regulatorio-pid", label: "Controle regulatório (PID)" },
-          { href: "/tecnologias/intertravamentos-sequencias", label: "Intertravamentos e sequências" },
-          { href: "/tecnologias/tia-portal", label: "Siemens TIA Portal" },
-          { href: "/tecnologias/simatic-manager-step7", label: "SIMATIC Manager / STEP 7" },
+          { href: "/tecnologias/plantpax-5x/", label: "PlantPAx 5.x" },
+          { href: "/tecnologias/plantpax-library/", label: "PlantPAx Library" },
+          { href: "/tecnologias/controllogix-compactlogix/", label: "ControlLogix / CompactLogix" },
+          { href: "/tecnologias/controle-regulatorio-pid/", label: "Controle regulatório (PID)" },
+          { href: "/tecnologias/intertravamentos-sequencias/", label: "Intertravamentos e sequências" },
+          { href: "/tecnologias/tia-portal/", label: "Siemens TIA Portal" },
+          { href: "/tecnologias/simatic-manager-step7/", label: "SIMATIC Manager / STEP 7" },
         ],
       },
       {
         title: "FactoryTalk & Dados",
         links: [
-          { href: "/tecnologias/factorytalk-view-se", label: "FactoryTalk View SE" },
-          { href: "/tecnologias/factorytalk-batch", label: "FactoryTalk Batch" },
-          { href: "/tecnologias/factorytalk-historian", label: "FactoryTalk Historian" },
-          { href: "/tecnologias/factorytalk-datamosaix", label: "DataMosaix" },
-          { href: "/tecnologias/tc-devicewise", label: "TC deviceWISE" },
+          { href: "/tecnologias/factorytalk-view-se/", label: "FactoryTalk View SE" },
+          { href: "/tecnologias/factorytalk-batch/", label: "FactoryTalk Batch" },
+          { href: "/tecnologias/factorytalk-historian/", label: "FactoryTalk Historian" },
+          { href: "/tecnologias/factorytalk-datamosaix/", label: "DataMosaix" },
+          { href: "/tecnologias/tc-devicewise/", label: "TC deviceWISE" },
         ],
       },
       {
         title: "Multi-vendor",
         links: [
-          { href: "/tecnologias/elipse-e3", label: "Elipse E3" },
-          { href: "/tecnologias/siemens-wincc-pcs7", label: "SIMATIC WinCC / PCS 7" },
-          { href: "/tecnologias/schneider-control-expert", label: "Schneider Control Expert" },
-          { href: "/tecnologias/schneider-machine-expert", label: "Schneider Machine Expert" },
-          { href: "/tecnologias/schneider-machine-scada-expert", label: "Schneider Machine SCADA" },
+          { href: "/tecnologias/elipse-e3/", label: "Elipse E3" },
+          { href: "/tecnologias/siemens-wincc-pcs7/", label: "SIMATIC WinCC / PCS 7" },
+          { href: "/tecnologias/schneider-control-expert/", label: "Schneider Control Expert" },
+          { href: "/tecnologias/schneider-machine-expert/", label: "Schneider Machine Expert" },
+          { href: "/tecnologias/schneider-machine-scada-expert/", label: "Schneider Machine SCADA" },
         ],
       },
       {
         title: "OT, Redes & Serviços",
         links: [
-          { href: "/tecnologias/ethernet-ip-cpwe", label: "EtherNet/IP e CPwE" },
-          { href: "/tecnologias/iec-62443-nist-ot", label: "IEC 62443 / NIST OT" },
-          { href: "/tecnologias/siemens-redes-industriais", label: "Siemens Redes / Startdrive" },
-          { href: "/tecnologias/data-centers-industriais", label: "Data Centers OT" },
-          { href: "/tecnologias/backup-recuperacao-desastres", label: "Backup e DR OT" },
+          { href: "/tecnologias/ethernet-ip-cpwe/", label: "EtherNet/IP e CPwE" },
+          { href: "/tecnologias/iec-62443-nist-ot/", label: "IEC 62443 / NIST OT" },
+          { href: "/tecnologias/siemens-redes-industriais/", label: "Siemens Redes / Startdrive" },
+          { href: "/tecnologias/data-centers-industriais/", label: "Data Centers OT" },
+          { href: "/tecnologias/backup-recuperacao-desastres/", label: "Backup e DR OT" },
         ],
       },
     ],
@@ -278,34 +280,36 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       title: "Uma página para cada software, tecnologia e serviço",
       description:
         "O catálogo técnico aprofunda entregáveis, normas, referências visuais públicas e critérios de aplicação por tema.",
-      cta: { href: "/tecnologias", label: "Abrir catálogo" },
+      cta: { href: "/tecnologias/", label: "Abrir catálogo" },
     },
     quickLinks: [
-      { href: "/solucoes", label: "Ver soluções" },
-      { href: "/setores", label: "Por setor industrial" },
-      { href: "/certificacoes", label: "Parcerias e certificações" },
-      { href: "/contato?assunto=tecnologias-multivendor", label: "Conversar sobre o stack existente" },
+      { href: "/automacao-industrial/", label: "Guia de automação industrial" },
+      { href: "/servicos/", label: "Programação, comissionamento e suporte" },
+      { href: "/solucoes/", label: "Ver soluções" },
+      { href: "/setores/", label: "Por setor industrial" },
+      { href: "/certificacoes/", label: "Parcerias e certificações" },
+      { href: "/contato/?assunto=tecnologias-multivendor", label: "Conversar sobre o stack existente" },
     ],
   },
 
-  "/setores": {
-    intro: { title: "Ver todos os setores", href: "/setores" },
+  "/setores/": {
+    intro: { title: "Ver todos os setores", href: "/setores/" },
     columns: [
       {
         title: "Agronegócio e grãos",
         links: [
           {
-            href: "/setores/acucar-e-etanol",
+            href: "/setores/acucar-e-etanol/",
             label: "Açúcar e Etanol",
             description: "Safra 24/7, NFPA, moenda, fermentação, caldeira",
           },
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Etanol de Milho",
             description: "Plantas modernas, eficiência, rastreabilidade",
           },
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Armazenagem de Grãos",
             description: "Silos, terminais, secadores, sazonalidade",
           },
@@ -315,17 +319,17 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Alimentos e bebidas",
         links: [
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Alimentos e Bebidas",
             description: "Linhas contínuas, rastreabilidade, segurança alimentar",
           },
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Frigoríficos",
             description: "Receita por lote, rastreabilidade animal-produto",
           },
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Fábricas de Ração",
             description: "Dosagem, pesagem, batelada, mistura automatizada",
           },
@@ -335,17 +339,17 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Indústria de processo",
         links: [
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Química e Fertilizantes",
             description: "24/7, intertravamentos, redundância, IEC 62443",
           },
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Papel e Celulose",
             description: "Caldeiras, digestores, controle multivariável",
           },
           {
-            href: "/setores",
+            href: "/setores/",
             label: "Saneamento",
             description: "SCADA distribuído, monitoramento remoto, infra crítica",
           },
@@ -355,22 +359,22 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Soluções por contexto setorial",
         links: [
           {
-            href: "/solucoes/plantpax",
+            href: "/solucoes/plantpax/",
             label: "PlantPAx para processo",
             description: "DCS plant-wide para açúcar, química, papel",
           },
           {
-            href: "/solucoes/factorytalk",
+            href: "/solucoes/factorytalk/",
             label: "FactoryTalk para discreto",
             description: "Linhas de produção, frigoríficos, ração",
           },
           {
-            href: "/solucoes/redes-iec-62443",
+            href: "/solucoes/redes-iec-62443/",
             label: "Cibersegurança OT",
             description: "Aplicável a diferentes setores em modernização",
           },
           {
-            href: "/solucoes/migracao-plc",
+            href: "/solucoes/migracao-plc/",
             label: "Modernização legado",
             description: "PLC-5 e SLC 500 → ControlLogix, conforme a aplicação",
           },
@@ -382,32 +386,32 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       title: "Indústrias de médio e grande porte com processos críticos",
       description:
         "Atendemos plantas que operam 24/7 e exigem padronização, segurança e documentação para auditoria. Cada setor reflete experiência real da equipe.",
-      cta: { href: "/setores", label: "Ver todos os setores" },
+      cta: { href: "/setores/", label: "Ver todos os setores" },
     },
     quickLinks: [
-      { href: "/solucoes", label: "Por solução" },
-      { href: "/cases", label: "Cases por setor" },
-      { href: "/contato?assunto=triagem", label: "Conversar sobre meu setor" },
+      { href: "/solucoes/", label: "Por solução" },
+      { href: "/cases/", label: "Cases por setor" },
+      { href: "/contato/?assunto=triagem", label: "Conversar sobre meu setor" },
     ],
   },
 
-  "/certificacoes": {
+  "/certificacoes/": {
     columns: [
       {
         title: "Parcerias formais",
         links: [
           {
-            href: "/certificacoes/silver-system-integrator",
+            href: "/certificacoes/silver-system-integrator/",
             label: "Silver System Integrator",
             description: "Rockwell Automation",
           },
           {
-            href: "/certificacoes#plantpax-dcs",
+            href: "/certificacoes/#plantpax-dcs",
             label: "Capacidade PlantPAx DCS Certified",
             description: "Rockwell Automation",
           },
           {
-            href: "/certificacoes#telit-devicewise",
+            href: "/certificacoes/#telit-devicewise",
             label: "TC deviceWISE Integrator",
             description: "Telit Cinterion",
           },
@@ -417,17 +421,17 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Capacitação e entidades",
         links: [
           {
-            href: "/certificacoes#cisco",
+            href: "/certificacoes/#cisco",
             label: "Cisco Networking Academy",
             description: "Industrial IoT",
           },
           {
-            href: "/certificacoes#siemens",
+            href: "/certificacoes/#siemens",
             label: "Siemens PCS 7 / CPIN",
             description: "Tecnologias atendidas",
           },
           {
-            href: "/certificacoes#isa",
+            href: "/certificacoes/#isa",
             label: "ISA Senior Member",
           },
         ],
@@ -435,9 +439,9 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       {
         title: "Tecnologias atendidas",
         links: [
-          { href: "/tecnologias/tia-portal", label: "Siemens TIA Portal" },
-          { href: "/tecnologias/elipse-e3", label: "Elipse E3" },
-          { href: "/tecnologias/schneider-control-expert", label: "Schneider Electric" },
+          { href: "/tecnologias/tia-portal/", label: "Siemens TIA Portal" },
+          { href: "/tecnologias/elipse-e3/", label: "Elipse E3" },
+          { href: "/tecnologias/schneider-control-expert/", label: "Schneider Electric" },
         ],
       },
     ],
@@ -447,16 +451,16 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       description:
         "A Integra diferencia parceria formal de tecnologia atendida e assume o papel de guiar o cliente entre fabricantes, redes, softwares e ciclo de vida.",
       cta: {
-        href: "/certificacoes",
+        href: "/certificacoes/",
         label: "Ver credenciais",
       },
       imageSrc: "/images/rockwell-si-silver.png",
     },
     quickLinks: [
-      { href: "/solucoes", label: "Ver soluções" },
-      { href: "/tecnologias", label: "Catálogo técnico" },
-      { href: "/cases", label: "Cases publicados" },
-      { href: "/contato?assunto=certificacoes", label: "Solicitar verificação" },
+      { href: "/solucoes/", label: "Ver soluções" },
+      { href: "/tecnologias/", label: "Catálogo técnico" },
+      { href: "/cases/", label: "Cases publicados" },
+      { href: "/contato/?assunto=certificacoes", label: "Solicitar verificação" },
     ],
   },
 };

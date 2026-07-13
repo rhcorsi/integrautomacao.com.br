@@ -5,25 +5,23 @@ import logoColorido from "@/assets/logos/Colorido.png";
 import EmailLink from "@/components/EmailLink.astro";
 import { NAV, MEGA_MENUS, COMPANY, type MegaMenu } from "@/utils/site";
 
-const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+const normalizeRoutePath = (value: string) =>
+  value === "/" ? "/" : value.replace(/\/+$/, "");
+const path = normalizeRoutePath(Astro.url.pathname);
+const isActive = (href: string) => {
+  const target = normalizeRoutePath(href);
+  return target === "/"
+    ? path === "/"
+    : path === target || path.startsWith(`${target}/`);
+};
 
 const phoneCommercial = COMPANY.phones[0];
 
 const withContactContext = (
   href: string,
-  label: string,
-  sourceLabel = "Cabeçalho",
-) => {
-  if (!href.startsWith("/contato")) return href;
-
-  const url = new URL(href, Astro.url);
-  url.searchParams.set("sourcePage", path.slice(0, 300));
-  url.searchParams.set("sourceLabel", sourceLabel.slice(0, 160));
-  url.searchParams.set("cta", label.slice(0, 160));
-  return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
-};
+  _label?: string,
+  _sourceLabel?: string,
+) => href;
 
 // Build dynamic mega-menus for Cases and Blog from content collections.
 // Static list-based, so the header re-renders on every page (Astro caches
@@ -40,8 +38,8 @@ const allEventos = (await getCollection("eventos", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const dynamicMegas: Record<string, MegaMenu> = {
-  "/cases": {
-    intro: { title: "Ver todos os cases", href: "/cases" },
+  "/cases/": {
+    intro: { title: "Ver todos os cases", href: "/cases/" },
     columns: [
       {
         title: "Cases publicados",
@@ -51,7 +49,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
               label: c.data.title,
               description: c.data.sector,
             }))
-          : [{ href: "/cases", label: "Cases sendo publicados gradualmente" }],
+          : [{ href: "/cases/", label: "Cases sendo publicados gradualmente" }],
       },
       {
         title: "Setores com cases",
@@ -60,7 +58,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
         )
           .slice(0, 5)
           .map((s) => ({
-            href: "/setores",
+            href: "/setores/",
             label: s,
           })),
       },
@@ -70,18 +68,18 @@ const dynamicMegas: Record<string, MegaMenu> = {
       title: "Portfólio detalhado em reunião técnica",
       description:
         "Apresentamos cases não publicados em reunião, mediante acordo de confidencialidade quando o projeto exigir.",
-      cta: { href: "/contato?assunto=portfolio", label: "Solicitar portfólio" },
+      cta: { href: "/contato/?assunto=portfolio", label: "Solicitar portfólio" },
     },
     quickLinks: [
-      { href: "/solucoes", label: "Ver soluções" },
-      { href: "/setores", label: "Por setor industrial" },
-      { href: "/certificacoes", label: "Certificações" },
-      { href: "/contato?assunto=portfolio", label: "Solicitar portfólio sob NDA" },
+      { href: "/solucoes/", label: "Ver soluções" },
+      { href: "/setores/", label: "Por setor industrial" },
+      { href: "/certificacoes/", label: "Certificações" },
+      { href: "/contato/?assunto=portfolio", label: "Solicitar portfólio sob NDA" },
     ],
   },
 
-  "/blog": {
-    intro: { title: "Ver todos os artigos", href: "/blog" },
+  "/blog/": {
+    intro: { title: "Ver todos os artigos", href: "/blog/" },
     columns: [
       {
         title: "Artigos recentes",
@@ -91,7 +89,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
               label: p.data.title,
               description: p.data.tags.slice(0, 2).join(" · "),
             }))
-          : [{ href: "/blog", label: "Em breve" }],
+          : [{ href: "/blog/", label: "Em breve" }],
       },
       {
         title: "Integra Ação",
@@ -127,9 +125,9 @@ const dynamicMegas: Record<string, MegaMenu> = {
                 label: e.data.title,
                 description: e.data.dateLabel,
               })),
-              { href: "/eventos", label: "Ver todos os eventos →" },
+              { href: "/eventos/", label: "Ver todos os eventos →" },
             ]
-          : [{ href: "/eventos", label: "Ver todos os eventos" }],
+          : [{ href: "/eventos/", label: "Ver todos os eventos" }],
       },
     ],
     promo: {
@@ -137,12 +135,12 @@ const dynamicMegas: Record<string, MegaMenu> = {
       title: "Tem uma dúvida técnica de planta?",
       description:
         "Sugestões de artigos vindas de quem está em campo são bem-vindas, frequentemente viram pauta.",
-      cta: { href: "/contato?assunto=blog", label: "Sugerir tema" },
+      cta: { href: "/contato/?assunto=blog", label: "Sugerir tema" },
     },
     quickLinks: [
       { href: "/integra-acao/newsletter/", label: "Inscrever-se na newsletter" },
       { href: "/integra-acao/", label: "Hub Integra Ação" },
-      { href: "/eventos", label: "Ver eventos presenciais" },
+      { href: "/eventos/", label: "Ver eventos presenciais" },
       { href: "/rss.xml", label: "RSS feed" },
     ],
   },
@@ -166,7 +164,7 @@ const allMegas: Record<string, MegaMenu> = {
         <span class="font-mono uppercase tracking-wider text-[11px]">Maringá-PR · Atuação nacional</span>
       </div>
       <nav aria-label="Links secundários" class="flex items-center divide-x divide-integra-gray-300">
-        <a href="/empresa#timeline" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">Sobre</a>
+        <a href="/empresa/#timeline" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">Sobre</a>
         <a href={COMPANY.social.linkedin} rel="noopener noreferrer" class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">LinkedIn</a>
         <EmailLink email={COMPANY.email} class="px-3 text-integra-gray-700 hover:text-integra-gray-900 transition-colors">{COMPANY.email}</EmailLink>
         <a href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`} class="pl-3 text-integra-gray-900 font-medium hover:text-integra-red-700 transition-colors">{phoneCommercial.display}</a>
@@ -361,7 +359,7 @@ const allMegas: Record<string, MegaMenu> = {
 
       <a
         href={withContactContext(
-          "/contato?assunto=triagem",
+          "/contato/?assunto=triagem",
           "Solicitar triagem técnica",
         )}
         class="hidden lg:inline-flex ml-auto min-[1440px]:ml-0 items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
@@ -462,7 +460,7 @@ const allMegas: Record<string, MegaMenu> = {
       })}
       <a
         href={withContactContext(
-          "/contato?assunto=triagem",
+          "/contato/?assunto=triagem",
           "Solicitar triagem técnica",
           "Menu mobile",
         )}

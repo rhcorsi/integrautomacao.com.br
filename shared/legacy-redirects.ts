@@ -12,13 +12,13 @@
  */
 
 export const LEGACY_POST_REDIRECTS: Record<string, string> = {
-  "245": "/empresa",
-  "577": "/blog",
-  "637": "/cases/projeto-moinho",
+  "245": "/empresa/",
+  "577": "/blog/",
+  "637": "/cases/projeto-moinho/",
   "699": "/",
   "700": "/",
   "701": "/",
-  "911": "/uso-de-cookies",
+  "911": "/uso-de-cookies/",
   "956": "/",
 };
 
@@ -27,7 +27,7 @@ export function resolveLegacyRedirect(url: URL): string | null {
   const p = url.searchParams.get("p");
   if (p && LEGACY_POST_REDIRECTS[p]) return LEGACY_POST_REDIRECTS[p];
 
-  if (url.searchParams.get("page_id") === "640") return "/blog";
+  if (url.searchParams.get("page_id") === "640") return "/blog/";
 
   if (url.searchParams.get("post_type") === "avia_framework_post") return "/";
 

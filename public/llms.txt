@@ -17,6 +17,10 @@ frigoríficos, ração, papel e celulose, saneamento).
 
 ## Páginas principais
 
+- [Guia de Automação Industrial](https://integrautomacao.com.br/automacao-industrial/): arquitetura do sensor ao ERP, tipos de automação, ciclo de projeto, caminhos por problema, FAQs e glossário técnico.
+- [Serviços de Automação Industrial](https://integrautomacao.com.br/servicos/): programação, comissionamento, diagnóstico, migração, auditoria e suporte.
+- [Programação de CLP](https://integrautomacao.com.br/servicos/programacao-clp/): desenvolvimento e revisão de software de controle com testes e documentação.
+- [Comissionamento Industrial](https://integrautomacao.com.br/servicos/comissionamento-industrial/): FAT, SAT, startup, estabilização e handover.
 - [Empresa](https://integrautomacao.com.br/empresa/): história, propósito, valores e timeline desde 2016.
 - [Soluções](https://integrautomacao.com.br/solucoes/): visão geral das frentes de engenharia.
 - [PlantPAx](https://integrautomacao.com.br/solucoes/plantpax/): DCS moderno da Rockwell, versões 3.x a 5.x.

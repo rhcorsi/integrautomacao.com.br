@@ -93,7 +93,7 @@ const jsonLdBlocks =
             </a>
           ))}
           <a
-            href={`/contato?assunto=${item.slug}`}
+            href={`/contato/?assunto=${item.slug}`}
             class="inline-flex items-center rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-integra-red-700"
           >
             Pedir contato técnico
@@ -226,7 +226,7 @@ const jsonLdBlocks =
   <CtaBlock
     title={`Quer avaliar ${item.shortTitle} na sua planta?`}
     description="Começamos pelo contexto real: arquitetura existente, risco operacional, janelas de parada, equipe de manutenção e entregáveis necessários para sustentar o sistema."
-    primaryCta={{ href: `/contato?assunto=${item.slug}`, label: "Pedir contato técnico" }}
-    secondaryCta={{ href: "/tecnologias", label: "Voltar ao catálogo técnico" }}
+    primaryCta={{ href: `/contato/?assunto=${item.slug}`, label: "Pedir contato técnico" }}
+    secondaryCta={{ href: "/tecnologias/", label: "Voltar ao catálogo técnico" }}
   />
 </BaseLayout>

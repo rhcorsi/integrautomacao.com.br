@@ -156,38 +156,38 @@ const cipSecurityCvdSource = "Cisco + Rockwell Automation - Deploying CIP Securi
 
 
 const plantpaxRelated = [
-  { href: "/solucoes/plantpax", label: "Solução PlantPAx" },
-  { href: "/solucoes/factorytalk", label: "FactoryTalk Suite" },
+  { href: "/solucoes/plantpax/", label: "Solução PlantPAx" },
+  { href: "/solucoes/factorytalk/", label: "FactoryTalk Suite" },
 ];
 
 const factorytalkRelated = [
-  { href: "/solucoes/factorytalk", label: "Solução FactoryTalk" },
-  { href: "/solucoes/plantpax", label: "PlantPAx" },
+  { href: "/solucoes/factorytalk/", label: "Solução FactoryTalk" },
+  { href: "/solucoes/plantpax/", label: "PlantPAx" },
 ];
 
 const dataRelated = [
-  { href: "/solucoes/pi-system", label: "Dados Industriais" },
-  { href: "/solucoes/factorytalk", label: "FactoryTalk Suite" },
+  { href: "/solucoes/pi-system/", label: "Dados Industriais" },
+  { href: "/solucoes/factorytalk/", label: "FactoryTalk Suite" },
 ];
 
 const infraRelated = [
-  { href: "/solucoes/data-centers", label: "Data Centers Industriais" },
-  { href: "/solucoes/redes-iec-62443", label: "Redes e IEC 62443" },
+  { href: "/solucoes/data-centers/", label: "Data Centers Industriais" },
+  { href: "/solucoes/redes-iec-62443/", label: "Redes e IEC 62443" },
 ];
 
 const cyberRelated = [
-  { href: "/solucoes/redes-iec-62443", label: "Redes e IEC 62443" },
-  { href: "/solucoes/data-centers", label: "Infraestrutura OT" },
+  { href: "/solucoes/redes-iec-62443/", label: "Redes e IEC 62443" },
+  { href: "/solucoes/data-centers/", label: "Infraestrutura OT" },
 ];
 
 const serviceRelated = [
-  { href: "/solucoes", label: "Todas as soluções" },
-  { href: "/contato", label: "Falar com especialista" },
+  { href: "/solucoes/", label: "Todas as soluções" },
+  { href: "/contato/", label: "Falar com especialista" },
 ];
 
 const multiVendorRelated = [
-  { href: "/tecnologias", label: "Catálogo técnico" },
-  { href: "/contato?assunto=tecnologias-multivendor", label: "Avaliar stack existente" },
+  { href: "/tecnologias/", label: "Catálogo técnico" },
+  { href: "/contato/?assunto=tecnologias-multivendor", label: "Avaliar stack existente" },
 ];
 
 const commonEngineering = [
@@ -408,8 +408,8 @@ export const techCatalog: TechPage[] = [
       },
     ],
     relatedSolutions: [
-      { href: "/solucoes/migracao-plc", label: "Migração PLC-5 e SLC 500" },
-      { href: "/solucoes/plantpax", label: "PlantPAx" },
+      { href: "/solucoes/migracao-plc/", label: "Migração PLC-5 e SLC 500" },
+      { href: "/solucoes/plantpax/", label: "PlantPAx" },
     ],
     relatedTech: ["migracao-plc5-slc500", "ethernet-ip-cpwe", "intertravamentos-sequencias"],
   },
@@ -2432,8 +2432,8 @@ export const techCatalog: TechPage[] = [
       },
     ],
     relatedSolutions: [
-      { href: "/solucoes/migracao-plc", label: "Solução Migração PLC" },
-      { href: "/solucoes/redes-iec-62443", label: "Redes Industriais" },
+      { href: "/solucoes/migracao-plc/", label: "Solução Migração PLC" },
+      { href: "/solucoes/redes-iec-62443/", label: "Redes Industriais" },
     ],
     relatedTech: ["controllogix-compactlogix", "controle-regulatorio-pid", "factorytalk-view-se"],
   },

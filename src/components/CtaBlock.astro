@@ -10,37 +10,17 @@ interface Props {
 const {
   title = "Quer avaliar o próximo passo com a engenharia?",
   description = "A triagem inicial verifica contexto, aderência e próximo passo. Quando o caso exige levantamento ou diagnóstico documentado, o escopo é definido separadamente antes do início.",
-  primaryCta = { href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" },
-  secondaryCta = { href: "/cases", label: "Ver cases" },
+  primaryCta = { href: "/contato/?assunto=triagem", label: "Solicitar triagem técnica" },
+  secondaryCta = { href: "/cases/", label: "Ver cases" },
   variant = "dark",
 } = Astro.props;
 
 const isDark = variant === "dark";
 
-const withContactContext = (
-  item: { href: string; label: string },
-  sourceLabel: string,
-) => {
-  if (!item.href.startsWith("/contato")) return item.href;
-
-  const url = new URL(item.href, Astro.url);
-  if (!url.searchParams.has("sourcePage")) {
-    url.searchParams.set("sourcePage", Astro.url.pathname.slice(0, 300));
-  }
-  if (!url.searchParams.has("sourceLabel")) {
-    url.searchParams.set("sourceLabel", sourceLabel.slice(0, 160));
-  }
-  if (!url.searchParams.has("cta")) {
-    url.searchParams.set("cta", item.label.slice(0, 160));
-  }
-
-  return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
-};
-
-const primaryHref = withContactContext(primaryCta, title);
-const secondaryHref = secondaryCta
-  ? withContactContext(secondaryCta, title)
-  : undefined;
+// Keep crawlable contact URLs stable. Click context is captured client-side
+// in contact-context.js and restored by contact-form.js.
+const primaryHref = primaryCta.href;
+const secondaryHref = secondaryCta?.href;
 ---
 
 <section

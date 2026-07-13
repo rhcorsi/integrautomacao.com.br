@@ -2,9 +2,9 @@
  * Helpers de JSON-LD (schema.org). Funções puras que retornam objetos prontos
  * para `JSON.stringify` em <script type="application/ld+json">.
  *
- * A entidade da empresa é emitida como `ProfessionalService` (subtipo de
- * LocalBusiness/Organization) com `@id` estável, para que Service, Article e
- * BreadcrumbList possam referenciá-la por `{ "@id": ORG_ID }`.
+ * A entidade da empresa é emitida como `LocalBusiness` com `@id` estável,
+ * para que Service, Article e BreadcrumbList possam referenciá-la por
+ * `{ "@id": ORG_ID }`.
  */
 import { SITE, COMPANY } from "@/utils/site";
 import { COLLECTIVE_AUTHOR } from "@/data/authors";
@@ -14,11 +14,12 @@ export const ORG_ID = `${SITE.url}/#organization`;
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": "LocalBusiness",
     "@id": ORG_ID,
-    name: COMPANY.legalName,
-    alternateName: SITE.name,
-    url: SITE.url,
+    name: SITE.name,
+    legalName: COMPANY.legalName,
+    alternateName: SITE.shortName,
+    url: `${SITE.url}/`,
     logo: `${SITE.url}/logo.png`,
     image: `${SITE.url}/og/default.png`,
     taxID: COMPANY.taxId,
@@ -108,11 +109,15 @@ export function websiteSchema() {
 const SEGMENT_LABELS: Record<string, string> = {
   empresa: "Empresa",
   solucoes: "Soluções",
+  servicos: "Serviços",
   tecnologias: "Tecnologias",
   setores: "Setores",
   "integrador-rockwell": "Integrador Rockwell",
   "automacao-industrial-maringa": "Automação Industrial em Maringá",
   "automacao-industrial-parana": "Automação Industrial no Paraná",
+  "automacao-industrial": "Guia de Automação Industrial",
+  "programacao-clp": "Programação de CLP",
+  "comissionamento-industrial": "Comissionamento Industrial",
   "acucar-e-etanol": "Açúcar e Etanol",
   certificacoes: "Certificações",
   cases: "Cases",
@@ -247,6 +252,28 @@ export function faqSchema(items: { q: string; a: string }[]) {
   };
 }
 
+/** ItemList para hubs que organizam rotas editoriais ou comerciais reais. */
+export function itemListSchema(opts: {
+  name: string;
+  url: string;
+  items: { name: string; url: string; description?: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: opts.name,
+    url: opts.url,
+    numberOfItems: opts.items.length,
+    itemListElement: opts.items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: item.url,
+      ...(item.description ? { description: item.description } : {}),
+    })),
+  };
+}
+
 /** Event para o registro de eventos e treinamentos em que a Integra participou. */
 export function eventSchema(opts: {
   name: string;
@@ -261,10 +288,26 @@ export function eventSchema(opts: {
 }) {
   const statusMap = {
     scheduled: "https://schema.org/EventScheduled",
-    completed: "https://schema.org/EventCompleted",
     cancelled: "https://schema.org/EventCancelled",
     postponed: "https://schema.org/EventPostponed",
   } as const;
+
+  const [localityPart, venuePart] = opts.location
+    .split("·")
+    .map((part) => part.trim());
+  const cityState = localityPart?.match(/^(.+?),\s*([A-Z]{2})$/);
+  const address = cityState
+    ? {
+        "@type": "PostalAddress",
+        addressLocality: cityState[1],
+        addressRegion: cityState[2],
+        addressCountry: "BR",
+      }
+    : localityPart === "Brasil"
+      ? { "@type": "PostalAddress", addressCountry: "BR" }
+      : { "@type": "PostalAddress", name: opts.location };
+  const eventStatus =
+    opts.status && opts.status !== "completed" ? statusMap[opts.status] : undefined;
 
   return {
     "@context": "https://schema.org",
@@ -275,10 +318,12 @@ export function eventSchema(opts: {
     startDate: opts.startDate.toISOString().slice(0, 10),
     ...(opts.endDate ? { endDate: opts.endDate.toISOString().slice(0, 10) } : {}),
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    eventStatus: statusMap[opts.status ?? "completed"],
-    // address como texto e valido em schema.org e evita o warning de
-    // "location sem address" no Google Rich Results Test.
-    location: { "@type": "Place", name: opts.location, address: opts.location },
+    ...(eventStatus ? { eventStatus } : {}),
+    location: {
+      "@type": "Place",
+      name: venuePart && cityState ? venuePart : opts.location,
+      address,
+    },
     organizer: { "@type": "Organization", name: opts.organizer },
     ...(opts.image ? { image: opts.image } : {}),
     inLanguage: "pt-BR",
