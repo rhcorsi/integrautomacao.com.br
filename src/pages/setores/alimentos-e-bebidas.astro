@@ -1,0 +1,368 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+/*
+ * Governança de fatos — claims mutáveis desta página.
+ * Última verificação: 13 jul. 2026 · Próxima revisão: jul. 2027 (anual).
+ * - ABIA, balanço do setor 2024: faturamento de R$ 1,277 trilhão (+9,98%), ~10,8% do PIB;
+ *   Brasil líder mundial em exportação de alimentos industrializados em volume desde 2022.
+ *   Fonte: https://www.abia.org.br/numeros-setor
+ * - RDC nº 655/2022 (ANVISA): recolhimento de alimentos; comunicação imediatamente após a
+ *   ciência (art. 21); revogou a RDC 24/2015 (art. 38). Fonte oficial linkada no callout
+ *   (AnvisaLegis).
+ * - Portaria SVS/MS nº 326/1997 (BPF):
+ *   https://bvsms.saude.gov.br/bvs/saudelegis/svs1/1997/prt0326_30_07_1997.html
+ * - RDC nº 275/2002 (POPs):
+ *   https://bvsms.saude.gov.br/bvs/saudelegis/anvisa/2002/rdc0275_21_10_2002.html
+ * - ISA-88 Parte 1 adotada pela IEC como IEC 61512-1:1997 (modelos e terminologia):
+ *   webstore.iec.ch
+ */
+
+const processAreas = [
+  {
+    title: "Linhas contínuas",
+    description:
+      "Pasteurização, tratamento UHT (ultra-alta temperatura), evaporação e envase operam em regime contínuo. Pedem malhas regulatórias PID (proporcional-integral-derivativo) estáveis de temperatura, vazão e pressão, porque o desvio de setpoint compromete o binômio tempo-temperatura que sustenta a segurança do produto.",
+  },
+  {
+    title: "Bateladas e receitas",
+    description:
+      "Mistura, cozimento, fermentação, maturação e dosagem operam em batelada ou batelada alimentada. É a etapa em que o modelo de receita da norma ISA-88 faz diferença: trocar um produto passa a ser trocar uma receita, não reescrever lógica de chão de fábrica.",
+  },
+  {
+    title: "CIP e higienização",
+    description:
+      "A limpeza CIP (Clean-in-Place, limpeza no local) e a esterilização SIP (Sterilize-in-Place) intercalam-se com a produção. São sequências com fases, tempos, temperatura e condutividade que precisam ser executadas e registradas de forma consistente entre turnos e operadores.",
+  },
+  {
+    title: "Utilidades — frio, vapor e ar",
+    description:
+      "Refrigeração industrial (com frequência a amônia), geração e distribuição de vapor e ar comprimido de processo alimentam a linha e a higienização. Oscilação de utilidade vira desvio de qualidade lá na frente, então entram no mesmo projeto de automação, não como sistema à parte.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por linha e por área (contínuo, batelada, CIP e utilidades)",
+  "Estruturação de receitas em ISA-88 com FactoryTalk Batch ou controle de batelada em DCS (sistema digital de controle distribuído)",
+  "Sequências de CIP/SIP com registro de fases, tempos, temperatura e condutividade",
+  "Malhas regulatórias PID para pasteurização, UHT, cozimento e controle de utilidades",
+  "Rastreabilidade lote a lote com historian e trilha de eventos para apoio a recolhimento",
+  "Integração de dados de processo com MES e ERP pelo modelo ISA-95",
+  "Intertravamentos e funções de segurança de processo documentados por área",
+  "Segmentação de rede TI/OT (tecnologia da informação e tecnologia operacional), adequação à IEC 62443 e comissionamento com FAT e SAT (testes de aceitação em fábrica e em campo)",
+];
+
+const faq = [
+  {
+    q: "ISA-88 vale a pena para uma fábrica com poucas receitas?",
+    a: "Depende de quanta variação e troca de produto a linha absorve. A norma ISA-88 organiza o processo em procedimento, operação e fase, separando a receita da lógica do equipamento. Onde há muitos produtos (SKUs), trocas frequentes ou exigência de reprodutibilidade auditável, estruturar em ISA-88 reduz retrabalho de programação e erro de operação. Numa linha estável de produto único, um sequenciamento mais simples pode bastar — o critério é a taxa de mudança, não o tamanho da planta. A Integra estrutura essa camada com <a href=\"/tecnologias/factorytalk-batch/\">FactoryTalk Batch</a> ou com controle de batelada nativo em DCS.",
+  },
+  {
+    q: "Como a automação apoia a rastreabilidade exigida em um recall?",
+    a: "A automação registra o que aconteceu com cada lote — parâmetros de processo, tempos, alarmes e materiais consumidos — e associa esses dados ao número do lote. Isso encurta a identificação de quais lotes precisam ser recolhidos. A RDC (Resolução da Diretoria Colegiada) nº 655/2022 da ANVISA dispõe sobre o recolhimento de alimentos e sua comunicação à Agência e aos consumidores, e determina que a empresa comunique a necessidade de recolhimento imediatamente após a ciência. A automação não decide o recall nem substitui o plano da empresa; ela fornece o dado rastreável. A Integra consolida essa série com <a href=\"/tecnologias/factorytalk-historian/\">historian</a> e a integra às camadas de gestão.",
+  },
+  {
+    q: "A automação de CIP substitui a validação da limpeza?",
+    a: "Não — são camadas complementares. O que o auditor pede, na prática, é evidência de que cada ciclo executou dentro dos limites validados, e é isso que o registro automático de CIP cobre: data e hora, linha ou tanque higienizado, fases executadas e os valores medidos de tempo, temperatura, vazão e condutividade, com desvios sinalizados. O que o registro não prova é que esses limites limpam de fato o equipamento — essa prova vem do estudo de validação sanitária e do projeto higiênico, e precisa ser refeita quando mudam produto, equipamento ou químico de limpeza. Em resumo: a validação define os parâmetros; a automação garante e comprova que cada ciclo os cumpriu.",
+  },
+  {
+    q: "Preciso de DCS ou dá para usar SCADA (supervisão e aquisição de dados) com PLC na planta de alimentos?",
+    a: "Depende de quanto da planta precisa operar de forma integrada. Linhas discretas e híbridas — envase, embalagem, dosagem — costumam ser bem atendidas por uma arquitetura FactoryTalk com PLC/CLP, batelada e supervisão. Plantas com forte processo contínuo e batelada acoplados podem justificar um DCS como o <a href=\"/solucoes/plantpax/\">PlantPAx</a>, que traz controle regulatório, sequencial e de batelada num só ambiente. O critério é a integração entre áreas e a governança de alarmes e receitas, não a sigla. Veja <a href=\"/solucoes/factorytalk/\">FactoryTalk para indústria discreta e híbrida</a> para o caso das linhas de produção.",
+  },
+  {
+    q: "Como integrar o chão de fábrica com MES e ERP sem digitação manual?",
+    a: "Definindo primeiro quais indicadores a gestão precisa receber — a tecnologia vem depois. Exemplos típicos numa planta de alimentos: produção e rendimento por lote, consumo de insumos e de utilidades (vapor, frio e água de CIP) por ordem de produção, tempo de parada por causa, aderência ao binômio tempo-temperatura e o registro que apoia a liberação de lote pela qualidade. Com os indicadores definidos, cada um é mapeado às tags que o originam no controle, e o <a href=\"/tecnologias/factorytalk-historian/\">historian</a> faz a ponte entre OT e TI — o dado nasce no chão de fábrica e chega ao MES e ao ERP sem redigitação.",
+  },
+];
+---
+
+<BaseLayout
+  title="Automação para Alimentos e Bebidas"
+  description="Automação para a indústria de alimentos e bebidas: linhas contínuas e bateladas com ISA-88, CIP automatizado, rastreabilidade de lote para recall e integração MES/ERP."
+  breadcrumbLeaf="Alimentos e Bebidas"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Alimentos e Bebidas",
+      description:
+        "Engenharia de automação para a indústria de alimentos e bebidas: receitas e batelada em ISA-88, CIP/SIP automatizado, rastreabilidade lote a lote, integração MES/ERP pelo modelo ISA-95 e cibersegurança OT.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Alimentos e Bebidas
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Alimentos e Bebidas
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para a indústria de alimentos e bebidas é a engenharia de
+          controle que mantém linhas contínuas e bateladas operando com receita
+          reproduzível, limpeza registrada e rastreabilidade de lote. Na prática,
+          essas três exigências definem se a planta consegue responder a um
+          recolhimento e sustentar auditoria sanitária. A Integra Automação
+          Industrial, fundada em 2016, atua no setor com abordagem multivendor
+          e base Rockwell, e leva segurança alimentar como requisito de projeto
+          — não como camada acrescentada depois.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Segundo a ABIA, a indústria de alimentos faturou R$ 1,277 trilhão em
+          2024 — alta de 9,98% sobre o ano anterior, cerca de 10,8% do PIB — e
+          o Brasil é, desde 2022, líder mundial em exportação de alimentos
+          industrializados em volume. Boa parte dessa produção passa por
+          plantas que combinam processo contínuo, batelada e ciclos de
+          higienização no mesmo turno.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          <a href="https://www.abia.org.br/numeros-setor" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: ABIA · balanço de 2024</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de uma planta de alimentos"
+        title="Quatro regimes de controle convivendo na mesma planta"
+        description="Uma fábrica de alimentos e bebidas raramente é uma linha só: processo contínuo, batelada, higienização e utilidades têm lógicas distintas — e todas precisam conviver com a exigência sanitária."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Receita e batelada"
+        title="Por que ISA-88 encaixa em processo de alimentos e bebidas?"
+        description="Boa parte do valor de uma planta de alimentos está na batelada — mistura, cozimento, fermentação, dosagem. Estruturar essa camada em ISA-88 é o que separa a receita da lógica de equipamento."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A norma ISA-88 organiza o processo de batelada em uma hierarquia de
+        procedimento, operação e fase, associada a um modelo de receita e a um
+        modelo de equipamento. Isso permite alterar uma receita — outro sabor,
+        outra concentração, outro tempo de cozimento — sem reprogramar o chão de
+        fábrica. Num portfólio com muitos produtos e trocas frequentes, essa
+        separação reduz retrabalho de engenharia, encurta a validação de
+        mudanças e diminui a chance de erro de operação na virada de produto.
+      </p>
+
+      <TechnicalCallout variant="note" title="ISA-88 é a base da receita reproduzível">
+        <p>
+          A ISA-88 foi adotada pela IEC como IEC 61512-1 em 1997 (Parte 1:
+          modelos e terminologia) e define os tipos de receita e a decomposição
+          em procedimento, operação e fase. O FactoryTalk Batch, da Rockwell
+          Automation, implementa esse modelo de forma nativa: o Recipe Editor
+          gerencia procedimentos, operações e fases, e o Equipment Editor mapeia
+          a planta física ao modelo ISA-88. É o que torna a receita um dado
+          gerenciável, e não código disperso.
+        </p>
+      </TechnicalCallout>
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A escolha de arquitetura não é dogmática. Linhas discretas e híbridas —
+        envase, embalagem, dosagem, paletização — costumam ser bem servidas por
+        uma arquitetura
+        <a href="/solucoes/factorytalk/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk</a>
+        com controlador programável e batelada. Plantas com forte acoplamento
+        entre processo contínuo e batelada podem justificar um DCS como o
+        <a href="/solucoes/plantpax/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx</a>,
+        que reúne controle regulatório, sequencial e de batelada num só ambiente.
+        A gestão de receitas em si fica em
+        <a href="/tecnologias/factorytalk-batch/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Batch</a>,
+        e as malhas de processo em
+        <a href="/tecnologias/controle-regulatorio-pid/" class="text-integra-red-700 underline hover:text-integra-red">controle regulatório e PID</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="CIP e higienização"
+        title="CIP automatizado é sequência de processo — e prova de que a limpeza aconteceu"
+        description="A limpeza no local se intercala com a produção. Automatizá-la não é só girar válvulas: é executar fases na ordem certa e registrar que os parâmetros de limpeza foram atingidos."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Um ciclo de CIP (Clean-in-Place, limpeza no local) encadeia enxágue,
+        solução alcalina, enxágue intermediário, solução ácida e enxágue final,
+        cada fase com vazão, tempo, temperatura e concentração próprios; a SIP
+        (Sterilize-in-Place) acrescenta a etapa de esterilização. Tratada como
+        sequência automatizada, a limpeza ganha repetibilidade entre turnos e
+        operadores e produz um registro do que foi executado — o que serve tanto
+        à operação quanto à evidência de auditoria. A lógica é a mesma dos
+        <a href="/tecnologias/intertravamentos-sequencias/" class="text-integra-red-700 underline hover:text-integra-red">intertravamentos e sequências</a>
+        aplicados ao processo, com condutividade e temperatura como variáveis de
+        confirmação de fase.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A automação do CIP registra e repete a limpeza, mas não a valida
+        sozinha. A limpabilidade depende também do projeto higiênico do
+        equipamento — superfícies drenáveis e acessíveis, sem pontos de
+        retenção, na linha do que descrevem os guias da EHEDG (European Hygienic
+        Engineering &amp; Design Group) — e dos estudos de validação sanitária. A
+        engenharia de automação sustenta a execução e a evidência; a conformidade
+        depende do conjunto de projeto, procedimento e validação.
+      </p>
+
+      <SectionHeader
+        eyebrow="Rastreabilidade lote a lote"
+        title="Rastreabilidade não é relatório — é pré-condição de recolhimento"
+        description="Quando um lote precisa ser recolhido, a pergunta é operacional: quais lotes, com quais materiais e sob quais parâmetros. A automação é o que transforma essa pergunta em resposta rápida."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Rastreabilidade lote a lote significa associar, a cada número de lote, os
+        materiais consumidos, os parâmetros de processo, os alarmes e os desvios
+        registrados. Essa associação encurta a identificação do escopo de um
+        recolhimento e sustenta a comunicação exigida do produtor. É onde um
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">historian</a>
+        e o registro de batelada se tornam infraestrutura, não relatório
+        opcional: eles guardam a série temporal e a trilha de eventos que a
+        gestão da qualidade consulta sob pressão de tempo.
+      </p>
+
+      <TechnicalCallout variant="warning" title="Recolhimento tem regra e prazo — a RDC 655/2022">
+        <p>
+          A <a href="https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000655&seqAto=000&valorAno=2022&orgao=RDC/DC/ANVISA/MS&cod_modulo=134&cod_menu=1696" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">RDC nº 655, de 24 de março de 2022</a>, da ANVISA (Agência Nacional de
+          Vigilância Sanitária), dispõe sobre o recolhimento de alimentos e sua
+          comunicação à Agência e aos consumidores, e substituiu a RDC 24/2015. A
+          empresa deve comunicar à ANVISA a necessidade de recolhimento de lotes
+          que representem risco imediatamente após a ciência. A automação apoia a
+          identificação e a evidência dos lotes, mas o plano de recolhimento, a
+          decisão e a comunicação são responsabilidade da empresa e devem seguir
+          a resolução vigente.
+        </p>
+      </TechnicalCallout>
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A rastreabilidade completa passa pela integração com a gestão. O controle
+        expõe tags de processo; o historian consolida a série temporal; e as
+        camadas de MES (Manufacturing Execution System) e ERP (Enterprise
+        Resource Planning) consomem esses dados por interfaces padronizadas,
+        alinhadas ao modelo ISA-95 (adotado como IEC 62264) de integração
+        empresa-controle. Estruturar essa pirâmide é o que faz o dado de linha
+        virar indicador de produção, rendimento e registro de lote sem
+        redigitação manual.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega numa planta de alimentos"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Segurança alimentar no projeto"
+        title="Segurança alimentar entra como requisito de projeto, não como ajuste depois"
+        description="As boas práticas de fabricação têm base normativa. Automação, projeto higiênico e documentação precisam ser pensados juntos, desde a arquitetura de controle."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        No Brasil, as BPF (Boas Práticas de Fabricação) para estabelecimentos que
+        produzem e industrializam alimentos têm base na Portaria SVS/MS nº
+        326/1997, sobre condições higiênico-sanitárias e boas práticas de
+        fabricação, e na RDC nº 275/2002 da ANVISA, que trata dos POPs
+        (Procedimentos Operacionais Padronizados) — entre eles higienização,
+        controle de pragas e programa de recolhimento de alimentos. Esses
+        requisitos moldam decisões de automação: registro de higienização,
+        rastreabilidade, controle de parâmetros críticos e trilha de eventos
+        deixam de ser desejáveis e passam a ser parte do escopo.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A automação, por si só, não confere conformidade sanitária. O projeto
+        pode apoiar registro de parâmetros, intertravamentos e trilha de
+        auditoria, mas a conformidade depende do sistema completo — projeto
+        higiênico, procedimentos, validação, documentação e responsabilidades
+        definidas. A edição vigente de cada norma e o enquadramento do
+        estabelecimento devem ser confirmados por profissional habilitado.
+      </p>
+
+      <SectionHeader
+        eyebrow="Utilidades no mesmo projeto"
+        title="Frio, vapor e ar não são sistemas à parte"
+        description="Refrigeração, vapor e ar comprimido alimentam a produção e a higienização. Oscilação de utilidade vira desvio de qualidade adiante, então entram no mesmo projeto de controle."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A refrigeração industrial, a geração e distribuição de vapor e o ar
+        comprimido de processo sustentam tanto a linha quanto os ciclos de CIP
+        e SIP. Variação de temperatura de frio,
+        pressão de vapor ou qualidade de ar se propaga para o produto e para a
+        limpeza. Por isso as utilidades entram na mesma malha de controle,
+        supervisão e registro do processo principal, com governança de alarmes e
+        intertravamentos coerentes com o restante da planta. Quando há
+        controladores legados nessas áreas, a
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>
+        e a
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>
+        são avaliadas por criticidade, sem presumir uma estratégia única para
+        todas as áreas.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A integração entre linha, utilidades e gestão atravessa a fronteira
+        TI/OT. Segmentação de rede e defesa em profundidade orientadas pela
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">série ISA/IEC 62443</a>
+        entram quando a arquitetura e os fluxos de dados entre chão de fábrica e
+        gestão exigem essa proteção. O escopo de execução — programação,
+        comissionamento e partida — é detalhado em
+        <a href="/servicos/programacao-clp/" class="text-integra-red-700 underline hover:text-integra-red">programação de CLP</a>
+        e
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento industrial</a>.
+      </p>
+
+      <StandardsBadges
+        title="Normas e tecnologias aplicadas no setor"
+        standards={[
+          { code: "ISA-88", description: "Receitas e batelada" },
+          { code: "ISA-95", description: "Integração MES/ERP" },
+          { code: "FT Batch", description: "Gestão de receitas" },
+          { code: "CIP/SIP", description: "Limpeza no local" },
+          { code: "RDC 655", description: "Recolhimento (recall)" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer estruturar receita, CIP e rastreabilidade na sua planta?"
+    description="A conversa começa por uma triagem técnica: entender linhas, receitas, exigências sanitárias e como o dado de lote precisa chegar à gestão. O escopo de levantamento ou diagnóstico é definido depois, quando o caso justifica."
+    primaryCta={{ href: "/contato/?assunto=alimentos-e-bebidas", label: "Conversar sobre a planta" }}
+    secondaryCta={{ href: "/solucoes/factorytalk/", label: "Ver FactoryTalk para linhas" }}
+  />
+</BaseLayout>

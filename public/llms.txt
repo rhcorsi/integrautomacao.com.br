@@ -38,6 +38,12 @@ frigoríficos, ração, papel e celulose, saneamento).
 - [Automação Industrial em Maringá](https://integrautomacao.com.br/automacao-industrial-maringa/): sede da Integra e atendimento no Paraná e Brasil.
 - [Automação Industrial no Paraná](https://integrautomacao.com.br/automacao-industrial-parana/): critérios para escolher integradora no estado.
 - [Automação para Açúcar e Etanol](https://integrautomacao.com.br/setores/acucar-e-etanol/): DCS, batelada ISA-88 e modernização em janela de entressafra.
+- [Automação para Etanol de Milho](https://integrautomacao.com.br/setores/etanol-de-milho/): plantas 24/7 sem entressafra, DDG/DDGS e DCS desde o FEED.
+- [Automação para Armazenagem de Grãos](https://integrautomacao.com.br/setores/armazenagem-de-graos/): intertravamento de transportadores, secadores, termometria e aeração.
+- [Automação para Alimentos e Bebidas](https://integrautomacao.com.br/setores/alimentos-e-bebidas/): batelada ISA-88, CIP e rastreabilidade lote a lote.
+- [Automação para Frigoríficos](https://integrautomacao.com.br/setores/frigorificos/): linhas de abate, frio industrial com amônia e rastreabilidade.
+- [Automação para Fábricas de Ração](https://integrautomacao.com.br/setores/fabricas-de-racao/): dosagem, pesagem, batelada e sequência contra contaminação cruzada.
+- [Como elaborar uma RFP de automação industrial](https://integrautomacao.com.br/blog/como-elaborar-rfp-automacao-industrial/): guia de especificação e comparação de propostas.
 
 ## Catálogo técnico — páginas prioritárias
 

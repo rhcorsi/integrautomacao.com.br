@@ -1,0 +1,345 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Abate e desossa",
+    description:
+      "Nórias, esteiras e plataformas operando em velocidade regulada, com sincronismo entre etapas e pontos de inspeção sanitária ao longo da linha. O controle precisa acomodar pausas, rodízios e mudanças de cadência sem desorganizar o fluxo.",
+  },
+  {
+    title: "Frio industrial com amônia (NH3)",
+    description:
+      "Compressores, condensadores, câmaras e túneis de congelamento formam a espinha dorsal da planta. A sala de máquinas de amônia combina controle regulatório contínuo, sequenciamento de compressores e requisitos de segurança próprios.",
+  },
+  {
+    title: "Embutidos e processados",
+    description:
+      "Moagem, mistura, embutimento, cozimento e defumação operam por receita e por lote. É onde a lógica de batelada (ISA-88) organiza dosagem de ingredientes, tempos de processo e registro por lote.",
+  },
+  {
+    title: "Utilidades críticas 24/7",
+    description:
+      "Frio, vapor, ar comprimido e água tratada não desligam no fim do turno: produto em câmara depende de temperatura contínua. Falha de utilidade vira perda de produto e desvio registrado perante a inspeção sanitária.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por área (abate, desossa, frio industrial, processados e utilidades)",
+  "Controle de velocidade de linha com inversores, intertravamentos e sequências de partida e parada documentadas",
+  "Automação de sala de máquinas de amônia: sequenciamento de compressores, controle de capacidade, degelo e alarmes priorizados",
+  "Receitas e batelada em embutidos e processados com modelo ISA-88 (FactoryTalk Batch)",
+  "Historian com contexto de lote para rastreabilidade e atendimento a auditorias",
+  "Padronização de telas de supervisão entre linhas, câmaras e utilidades",
+  "Migração de controladores PLC-5 e SLC 500 legados com cutover em janelas de sanitização",
+  "Segmentação de rede TI/OT e adequação à IEC 62443 para o fluxo de dados de rastreabilidade",
+];
+
+const faq = [
+  {
+    q: "Dá para modernizar a automação de um frigorífico sem parar o abate?",
+    a: "Em geral a modernização é planejada para as janelas que a operação já tem: sanitização diária, fins de semana e paradas programadas de manutenção. Como essas janelas são curtas, o trabalho pesado — inventário de I/O (entradas e saídas), conversão de lógica, simulação e FAT (teste de aceitação em fábrica) — acontece antes, e o cutover é dividido por área: uma linha, uma câmara ou uma utilidade por vez, com plano de rollback testado. A Integra estrutura esse faseamento em <a href=\"/solucoes/migracao-plc/\">migração de PLC</a>, comparando sustentação do legado e migração área a área em vez de assumir uma única estratégia para a planta inteira.",
+  },
+  {
+    q: "Como a automação apoia a rastreabilidade exigida pelo SIF e por mercados externos?",
+    a: "O Decreto 9.013/2017 (RIISPOA) exige controles de rastreabilidade de animais, matérias-primas, insumos e produtos ao longo da cadeia, e somente estabelecimentos sob SIF podem exportar. A automação não substitui o programa de autocontrole da planta, mas fornece a base de dados que o sustenta: temperaturas de câmara, tempos de cozimento e resfriamento e eventos de processo registrados com data, hora e contexto de lote em um <a href=\"/tecnologias/factorytalk-historian/\">historian</a>. Em auditoria, a diferença entre registro manual e série temporal automática costuma aparecer na velocidade e na consistência da resposta.",
+  },
+  {
+    q: "O que a automação faz — e o que não faz — na sala de máquinas de amônia?",
+    a: "Faz: sequenciamento de compressores, controle de capacidade e de pressões, degelo programado, intertravamentos de segurança e tratamento priorizado dos alarmes de detecção de NH3 previstos na ABNT NBR 16069. Não faz: substituir a inspeção de vasos de pressão exigida pela NR-13, o enquadramento por profissional legalmente habilitado nem o plano de resposta a emergências da planta. A automação registra, regula e intertrava; a conformidade depende do conjunto — projeto, inspeção, documentação e responsabilidades definidas nas normas.",
+  },
+  {
+    q: "FactoryTalk Batch faz sentido para embutidos e processados?",
+    a: "Faz sentido quando há variedade de receitas, dosagem de ingredientes com registro por lote e exigência de reproduzir a formulação entre turnos e plantas. O <a href=\"/tecnologias/factorytalk-batch/\">FactoryTalk Batch</a> implementa o modelo de receitas da ISA-88, o que permite alterar formulação sem reescrever lógica de chão de fábrica e gera o registro eletrônico de cada lote. Em linhas com poucas receitas estáveis, um sequenciamento bem estruturado no próprio CLP pode bastar — o critério é a frequência de mudança de receita e o nível de registro exigido, não a sigla.",
+  },
+  {
+    q: "Frigorífico pede DCS ou SCADA?",
+    a: "Frigorífico é uma planta híbrida: controle discreto e de velocidade nas linhas de abate e desossa, regulatório contínuo no frio industrial e batelada nos processados. Esse perfil costuma aderir melhor a uma arquitetura de supervisão SCADA (sistema de supervisão e aquisição de dados) <a href=\"/solucoes/factorytalk/\">FactoryTalk</a> sobre controladores Logix, com Batch onde há receita, do que a um DCS (sistema de controle distribuído) de processo contínuo puro. Em plantas com forte peso de utilidades e processo térmico, vale comparar com uma abordagem <a href=\"/solucoes/plantpax/\">PlantPAx</a> para essas áreas. A resposta certa sai do mapeamento das áreas, não do catálogo.",
+  },
+];
+---
+
+<BaseLayout
+  title="Automação para Frigoríficos"
+  description="Automação para frigoríficos: abate e desossa com ritmo regulado, frio industrial com amônia (NR-13, NBR 16069), rastreabilidade SIF e batelada em embutidos."
+  breadcrumbLeaf="Frigoríficos"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Frigoríficos",
+      description:
+        "Engenharia de automação para frigoríficos: controle de linhas de abate e desossa, sala de máquinas de amônia sob NR-13 e NBR 16069, rastreabilidade com historian, batelada ISA-88 em processados e modernização de controladores em janelas curtas.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Proteína animal
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Frigoríficos
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para frigoríficos é a engenharia de controle que mantém
+          abate, desossa, frio industrial e processados operando em ritmo
+          regulado e com registro auditável — numa planta que responde ao mesmo
+          tempo à inspeção sanitária do SIF (Serviço de Inspeção Federal), à
+          NR-36 na organização das linhas e à NR-13 na sala de máquinas de
+          amônia. Frigoríficos estão entre os setores prioritários da Integra
+          Automação Industrial, com foco em supervisão FactoryTalk, controle de
+          receita por lote e rastreabilidade do animal ao produto final.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Em 2025 o Brasil produziu 15,3 milhões de toneladas de carne de
+          frango e exportou 5,3 milhões de toneladas para 153 países, mantendo
+          a posição de maior exportador mundial que ocupa desde 2004, segundo a
+          ABPA. Cada tonelada exportada passou por uma planta sob SIF, com
+          rastreabilidade e cadeia do frio auditáveis.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          Fonte: ABPA · Relatório Anual 2026 (dados 2025)
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de um frigorífico"
+        title="Quatro áreas com regimes de controle diferentes"
+        description="Um frigorífico combina controle discreto nas linhas, regulatório contínuo no frio, batelada nos processados e utilidades que não podem parar — tudo sob inspeção sanitária permanente."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Ritmo regulado na linha"
+        title="Abate e desossa: velocidade de linha é variável de processo"
+        description="A velocidade das nórias e esteiras define a capacidade de abate, mas precisa conviver com pontos de inspeção sanitária e com a organização do trabalho prevista na NR-36. O controle de linha carrega essas restrições."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Na linha de abate, a nória aérea dita o compasso das etapas —
+        insensibilização, sangria, evisceração, inspeção — e as esteiras de
+        desossa e embalagem seguem esse fluxo. Inversores de frequência
+        coordenados por CLP (controlador lógico programável) regulam a
+        velocidade de cada trecho, e cada mudança de cadência deveria ficar
+        registrada: em uma planta inspecionada, saber quando e por que a linha
+        acelerou ou parou faz parte da resposta a auditorias. Os
+        <a href="/tecnologias/intertravamentos-sequencias/" class="text-integra-red-700 underline hover:text-integra-red">intertravamentos e sequências</a>
+        entre trechos evitam que a parada de uma etapa derrube a linha inteira
+        sem critério — pulmões entre abate e desossa, bloqueios de segurança e
+        sequências de partida e parada documentadas fazem parte do mesmo
+        projeto de <a href="/servicos/programacao-clp/" class="text-integra-red-700 underline hover:text-integra-red">programação de CLP</a>.
+      </p>
+
+      <TechnicalCallout variant="note" title="NR-36 entra no projeto de controle da linha">
+        <p>
+          A <a href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/nr-36-atualizada-2024-1.pdf" target="_blank" rel="noopener noreferrer">NR-36</a>,
+          norma regulamentadora dedicada ao abate e processamento de carnes e
+          derivados, trata de pausas, rodízios e alternância em tarefas com
+          cadência estabelecida por máquinas, esteiras e nórias. Essas medidas
+          são definidas pela gestão e pelo SESMT (Serviço Especializado em
+          Engenharia de Segurança e em Medicina do Trabalho), não pelo sistema
+          de controle — mas o controle precisa acomodá-las: rampas de
+          velocidade suaves, operação estável em cadências diferentes e
+          registro das alterações.
+        </p>
+      </TechnicalCallout>
+
+      <SectionHeader
+        eyebrow="Frio industrial com amônia"
+        title="Sala de máquinas de NH3: controle contínuo com requisitos de segurança próprios"
+        description="A amônia segue sendo o refrigerante dominante no frio industrial de grande porte pela eficiência termodinâmica — e é tóxica, o que coloca a sala de máquinas sob normas específicas."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O sistema de refrigeração costuma ser um dos maiores consumidores de
+        energia da planta e opera de forma contínua, inclusive fora dos turnos
+        de produção. A automação
+        da sala de máquinas cobre sequenciamento e controle de capacidade dos
+        compressores, pressões de sucção e descarga, condensação, degelo
+        programado de evaporadores e o controle de temperatura de câmaras e
+        túneis de congelamento — malhas de
+        <a href="/tecnologias/controle-regulatorio-pid/" class="text-integra-red-700 underline hover:text-integra-red">controle regulatório</a>
+        operando de forma contínua, com o consumo de energia como variável de
+        otimização permanente.
+      </p>
+
+      <TechnicalCallout variant="warning" title="Detecção de amônia e resposta automática">
+        <p>
+          A ABNT NBR 16069:2018 (Segurança em sistemas frigoríficos) estabelece
+          requisitos de segurança para projeto e operação de sistemas de
+          refrigeração, incluindo detectores de amônia em sala de máquinas com
+          acionamento automático de alarmes sonoros e visuais e da ventilação
+          mecânica de emergência. No sistema de supervisão, esses eventos
+          precisam de prioridade máxima de alarme,
+          registro histórico e intertravamentos definidos em conjunto com o
+          responsável pela segurança da instalação.
+        </p>
+      </TechnicalCallout>
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Os vasos de pressão do sistema de amônia — separadores de líquido,
+        recipientes e resfriadores intermediários — são abrangidos pela
+        <a href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-13-nr-13" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">NR-13</a>,
+        que exige inspeções de segurança inicial, periódica e extraordinária
+        sob responsabilidade de profissional legalmente habilitado. Automação
+        não substitui inspeção nem enquadramento: o que o projeto de controle
+        entrega é registro fiel de operação, intertravamentos testados e
+        alarmes que chegam a quem decide. Quando o supervisório da sala de
+        máquinas é antigo e sem sobressalentes, a
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>
+        (sistema de supervisão e aquisição de dados) costuma ser o primeiro
+        passo prático.
+      </p>
+
+      <SectionHeader
+        eyebrow="Do animal ao produto final"
+        title="Rastreabilidade: o dado de processo sustenta o programa de autocontrole"
+        description="O RIISPOA exige rastreabilidade ao longo da cadeia e os mercados externos auditam planta a planta. A automação é a camada que registra o que aconteceu com cada lote, sem depender de digitação."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O Decreto 9.013/2017 (RIISPOA — Regulamento da Inspeção Industrial e
+        Sanitária de Produtos de Origem Animal) define rastreabilidade como a
+        capacidade de identificar a origem e seguir a movimentação do produto
+        ao longo de produção, distribuição e comercialização — e determina que
+        somente estabelecimentos sob SIF realizam comércio internacional.
+        Habilitações de mercados externos são concedidas e auditadas por
+        planta, o que transforma a qualidade do registro em ativo comercial:
+        perder uma habilitação custa mercado, não apenas uma não conformidade.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        O papel da automação nessa cadeia é fornecer a série temporal que o
+        programa de autocontrole consome: temperaturas de câmara e túnel,
+        tempos e temperaturas de cozimento, eventos de linha e dados de
+        batelada, tudo com carimbo de tempo e contexto de lote. Um
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">historian</a>
+        consolida esses dados no chão de fábrica, e plataformas como o
+        <a href="/solucoes/pi-system/" class="text-integra-red-700 underline hover:text-integra-red">PI System</a>
+        levam a série histórica para a camada corporativa — com a rede TI/OT
+        segmentada conforme
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">IEC 62443</a>,
+        porque o fluxo de dados de rastreabilidade não pode virar porta de
+        entrada para a rede de controle.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega num frigorífico"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Embutidos e processados"
+        title="Batelada em processados: receita reproduzível é registro auditável"
+        description="Moagem, mistura, embutimento, cozimento e defumação operam por receita. Estruturar essas etapas como batelada organiza a dosagem, os tempos de processo e o histórico de cada lote."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Na área de processados, o produto nasce de uma formulação: pesagem e
+        dosagem de carnes, ingredientes e aditivos, mistura, embutimento e um
+        perfil térmico de cozimento ou defumação que varia por produto. A
+        ISA-88 — adotada pela IEC como IEC 61512 — define o modelo de receita,
+        procedimento e equipamento que torna essa sequência reproduzível entre
+        turnos e auditável por lote. Com o
+        <a href="/tecnologias/factorytalk-batch/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Batch</a>
+        estruturado sobre esse modelo, alterar uma formulação vira mudança de
+        receita com trilha de auditoria, não reescrita de lógica no CLP — e o
+        registro eletrônico de cada lote alimenta diretamente a
+        rastreabilidade. Os ciclos de limpeza CIP (clean-in-place, limpeza no
+        local) entre lotes entram na mesma lógica sequencial, dentro da
+        arquitetura de supervisão
+        <a href="/solucoes/factorytalk/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="Utilidades e modernização"
+        title="Utilidades 24/7 e legado: modernizar sem interromper a cadeia do frio"
+        description="Frio, vapor, ar comprimido e água tratada sustentam a planta o tempo todo. A janela de parada de um frigorífico é curta — e é nela que a modernização precisa caber."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Diferentemente de setores com entressafra, um frigorífico não tem
+        parada longa no calendário: as janelas disponíveis são a sanitização
+        diária, fins de semana e paradas programadas curtas. Ao mesmo tempo,
+        controladores PLC-5 e SLC 500 seguem operando em linhas e utilidades —
+        a linha PLC-5 foi descontinuada em junho de 2017 e os últimos
+        controladores SLC 500 saíram de venda em 31 de março de 2024, segundo
+        o catálogo de ciclo de vida da Rockwell Automation. Sustentar esses
+        ativos exige conferir reparo, sobressalentes e risco área por área.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        O caminho que cabe nessas janelas é o faseado: inventário, conversão de
+        lógica, simulação e FAT (teste de aceitação em fábrica) concluídos
+        antes da parada, cutover por área com plano de rollback testado e
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento</a>
+        que devolve a área operando dentro da mesma janela. A Integra estrutura
+        essa avaliação em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>,
+        comparando sustentação e migração por criticidade — a cadeia do frio e
+        a caldeira, que também é equipamento NR-13, ficam por último e com
+        redundância de plano. Uma visão geral do método está na página de
+        <a href="/automacao-industrial/" class="text-integra-red-700 underline hover:text-integra-red">automação industrial</a>.
+      </p>
+
+      <StandardsBadges
+        title="Normas e referências aplicadas no setor"
+        standards={[
+          { code: "NR-36", description: "Trabalho em abate e processamento" },
+          { code: "NR-13", description: "Vasos de pressão e caldeiras" },
+          { code: "NBR 16069", description: "Segurança em sistemas frigoríficos" },
+          { code: "ISA-88", description: "Receitas e batelada" },
+          { code: "SIF / RIISPOA", description: "Inspeção e rastreabilidade" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Sua planta roda 24/7 e a janela de parada é curta?"
+    description="O ponto de partida é entender linha, frio, processados e utilidades antes de propor arquitetura. Começamos por uma triagem técnica: contexto, criticidade e janelas reais de intervenção — a proposta de escopo vem depois."
+    primaryCta={{ href: "/contato/?assunto=frigorificos", label: "Conversar sobre a planta" }}
+    secondaryCta={{ href: "/solucoes/factorytalk/", label: "Ver FactoryTalk para supervisão" }}
+  />
+</BaseLayout>

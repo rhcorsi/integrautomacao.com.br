@@ -39,7 +39,7 @@ const deliverables = [
   "Migração de controladores PLC-5 e SLC 500 legados para ControlLogix ou CompactLogix",
   "Segmentação de rede EtherNet/IP, IDMZ e adequação à IEC 62443",
   "Integração de dados de processo com historian e sistemas de gestão agroindustrial",
-  "Plano de cutover por etapas dentro da janela de entressafra, com FAT, SAT e rollback",
+  "Plano de cutover por etapas dentro da janela de entressafra, com FAT e SAT (testes de aceitação em fábrica e em campo) e rollback",
 ];
 
 const faq = [
@@ -60,6 +60,14 @@ const faq = [
     a: "A integração se faz por camadas. O controle (PLC/DCS) expõe tags de processo; um historian consolida a série temporal; e a camada de gestão (PIMS, MES e ERP agroindustrial) consome esses dados por interfaces padronizadas, alinhadas ao modelo ISA-95 de integração empresa-controle. A Integra estrutura essa pirâmide para que indicadores de moagem, ATR, rendimento de fermentação e geração de energia cheguem aos sistemas de gestão sem digitação manual, usando <a href=\"/tecnologias/factorytalk-historian/\">historian</a> como ponte entre o chão de fábrica e a gestão.",
   },
 ];
+
+const REVIEWED = "2026-07-13";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 ---
 
 <BaseLayout
@@ -80,7 +88,7 @@ const faq = [
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
       <div>
         <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Setor · Sucroenergético
+          Setor · Sucroenergético · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
         </p>
         <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           Automação para Açúcar e Etanol
@@ -107,7 +115,7 @@ const faq = [
           meses por ano.
         </p>
         <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
-          Fonte: UNICA · safra 2024/2025
+          <a href="https://unica.com.br/noticias/safra-24-25-e-a-segunda-maior-da-historia-no-cs/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: UNICA · safra 2024/2025</a>
         </p>
       </aside>
     </div>

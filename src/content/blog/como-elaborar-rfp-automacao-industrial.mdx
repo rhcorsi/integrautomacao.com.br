@@ -1,0 +1,359 @@
+---
+title: "Como elaborar uma RFP de automação industrial"
+description: "Guia de RFP de automação industrial: o que incluir — inventário, URS, fronteiras de escopo, critérios FAT/SAT, documentação —, erros clássicos e como comparar propostas."
+pubDate: 2026-07-12
+tags: ["RFP", "Gestão", "Integrador de Sistemas"]
+draft: false
+---
+
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+## O que é uma RFP de automação industrial?
+
+**RFP** (Request for Proposal — solicitação de proposta) é o documento com que a
+contratante descreve o problema, o sistema existente, os requisitos e as regras
+do processo de compra, para que integradores apresentem propostas técnicas e
+comerciais comparáveis. Em [automação industrial](/automacao-industrial/), a RFP
+é o embrião da especificação técnica do projeto: ela transfere para o papel a
+informação que define preço, prazo e risco — inventário, requisitos do usuário,
+fronteiras de escopo, critérios de aceite e janela de parada.
+
+A tese deste guia é direta: **a qualidade das propostas espelha a qualidade da
+RFP**. Quando o documento omite inventário e fronteiras, cada proponente
+preenche as lacunas com premissas próprias — e as propostas chegam
+incomparáveis, infladas de contingência ou, pior, baratas porque quem cotou não
+enxergou o risco. Boa parte das disputas de aditivo em obra nasce meses antes,
+em um parágrafo vago da RFP.
+
+O roteiro a seguir vale para modernização (migração de PLC — controlador
+lógico programável, também grafado CLP — e de SCADA, o sistema de supervisão),
+projetos greenfield (instalações novas) e pacotes de integração. O peso de
+cada seção muda conforme o caso; a lógica, não.
+
+## O que uma RFP de automação precisa conter?
+
+Uma RFP de automação consistente cobre nove blocos técnicos: **(1) contexto da
+planta e objetivo, (2) inventário do sistema existente, (3) URS — requisitos do
+usuário, (4) fronteiras de escopo, (5) normas e padrões exigidos, (6) critérios
+de aceite FAT/SAT, (7) janela de parada, (8) documentação exigida e (9) suporte
+pós-partida** — mais as instruções comerciais que fecham o documento. As seções
+abaixo detalham cada bloco.
+
+### 1. Contexto da planta e objetivo do projeto
+
+O proponente precisa entender onde vai trabalhar antes de dizer como e por
+quanto. O contexto mínimo: setor e produto, regime de operação (contínuo,
+batelada, sazonal), motivação do projeto (obsolescência, expansão, gargalo de
+processo, exigência de cliente) e o que a contratante considera sucesso. Um
+objetivo mensurável em uma frase — "substituir o supervisório fora de suporte
+mantendo a operação por área" — orienta mais que dez páginas de generalidades.
+
+### 2. Inventário do sistema existente
+
+Em projeto brownfield (intervenção em planta existente), o inventário é a base
+de um preço sério: controladores (fabricante, modelo, firmware), contagem de
+pontos de I/O (entradas e saídas) por tipo, HMI (interface de operação)/SCADA
+e versões de software, licenças e ativações, redes e protocolos em uso, estado
+dos painéis e da fiação, instrumentação afetada e a documentação existente —
+dizendo, com honestidade, o quanto ela é confiável. Quem já levantou um parque
+para [migração de PLC](/solucoes/migracao-plc/) ou
+[modernização de SCADA](/solucoes/modernizacao-scada/) sabe: a distância entre
+o as-built (documentação conforme construído) e o campo é, por si só, uma
+informação de precificação.
+
+Se o inventário completo não existe, a RFP deve dizer isso e prever visita
+técnica obrigatória — não deixar que cada proponente descubra sozinho.
+
+### 3. URS — o que o sistema precisa fazer
+
+A **URS** (User Requirements Specification — especificação de requisitos do
+usuário) é o coração técnico da RFP: a lista do que o sistema precisa fazer,
+escrita na linguagem do processo e da operação, não na linguagem de um
+fornecedor específico. O termo se consolidou nos setores regulados — o guia
+[ISPE GAMP 5, 2ª edição (2022)](https://ispe.org/publications/guidance-documents/gamp-5-guide-2nd-edition)
+trata a especificação de requisitos como responsabilidade da contratante, ainda
+que possa ser redigida com apoio de terceiros —, mas a prática se aplica bem
+além do farmacêutico.
+
+Uma URS de automação tipicamente cobre:
+
+- **modos de operação**: automático, manual, degradado, intertravamentos que
+  não podem ser violados em nenhum modo;
+- **sequências e receitas**: partida, parada, CIP (Clean-in-Place — limpeza no
+  local), troca de produto;
+- **supervisão**: telas, relatórios, históricos, gestão de alarmes;
+- **integrações**: MES (Manufacturing Execution System — execução da
+  manufatura), ERP (gestão empresarial), historiador, laboratório, sistemas
+  legados que permanecem;
+- **restrições**: plataformas homologadas pela planta, requisitos de
+  sobressalentes, idioma da aplicação.
+
+<TechnicalCallout variant="note" title="Requisito bom é requisito verificável">
+  Cada frase da URS deve poder virar uma linha de checklist no FAT ou no SAT.
+  "O sistema deve ser amigável" não é testável; "o operador deve conseguir
+  partir a linha a partir de uma única tela, com os intertravamentos visíveis"
+  é. Requisito que não se consegue testar no aceite vira opinião em reunião de
+  entrega.
+</TechnicalCallout>
+
+### 4. Fronteiras de escopo
+
+Fronteira de escopo é a resposta escrita à pergunta "onde termina a
+responsabilidade de cada parte". A forma prática é uma matriz de
+responsabilidades cobrindo: fornecimento de hardware e licenças, montagem de
+painéis, instalação elétrica e de rede, intervenção em instrumentos, obras
+civis, infraestrutura de TI (servidores, virtualização, backup), treinamento e
+documentação. Mesmo um contrato "chave na mão" precisa dessa matriz — chave na
+mão define quem coordena, não elimina interfaces com utilidades, TI corporativa
+e operação da planta.
+
+Tão importante quanto o que entra é a **lista de exclusões explícita**. Escopo
+que "ficou subentendido" é a matéria-prima do aditivo. O catálogo de
+[serviços de integração](/servicos/) da contratada ajuda a nomear cada bloco,
+mas é a RFP que decide de quem é cada um.
+
+### 5. Normas e padrões exigidos
+
+A RFP deve listar o que as propostas precisam declarar conformidade — não
+presumir que "todo mundo sabe":
+
+- **Normas regulamentadoras brasileiras** aplicáveis ao escopo, tipicamente a
+  [NR-10](https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-10-nr-10)
+  (segurança em instalações e serviços em eletricidade) e a
+  [NR-12](https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-12-nr-12)
+  (segurança no trabalho em máquinas e equipamentos), sempre na redação
+  vigente publicada nas páginas oficiais do Ministério do Trabalho e Emprego.
+  Atenção à transição da NR-10: a Portaria MTE nº 737/2026 (DOU de 01/06/2026)
+  publicou a nova redação da norma, com vigência a partir de 01/06/2027 — a
+  RFP deve declarar qual redação o projeto atenderá, em especial quando a
+  execução avança além dessa data.
+  {/* claim mutável: nova NR-10 (Portaria MTE nº 737/2026) vige a partir de
+      01/06/2027 — revisar esta seção na entrada em vigor. */}
+- **Padrões da planta**: biblioteca de programação, nomenclatura de tags,
+  padrão de telas e de documentação. Se a planta tem um padrão de
+  [programação de CLP](/servicos/programacao-clp/), a RFP é o lugar de exigi-lo.
+- **Gestão de alarmes**: a
+  [ANSI/ISA-18.2-2016](https://www.isa.org/products/ansi-isa-18-2-2016-management-of-alarm-systems-for)
+  define o ciclo de vida de sistemas de alarme para indústrias de processo e é
+  a referência usual para exigir filosofia de alarmes como entregável.
+- **Cibersegurança OT** (tecnologia de operação): a série
+  [ISA/IEC 62443](https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards)
+  cobre segurança de sistemas de automação e controle industrial — a parte
+  62443-3-3 define requisitos técnicos de sistema e níveis de segurança, e a
+  62443-2-4, os requisitos de programa de segurança para provedores de serviço,
+  grupo que inclui integradores. Exigir aderência declarada já na proposta
+  evita descobrir no comissionamento que a [rede industrial](/solucoes/redes-iec-62443/)
+  ficou fora do escopo de segurança.
+
+### 6. Critérios de aceite: FAT e SAT
+
+**FAT** (Factory Acceptance Test — teste de aceitação em fábrica) e **SAT**
+(Site Acceptance Test — teste de aceitação em campo) são os portões formais de
+aceite do sistema. A referência internacional é a
+[IEC 62381:2024](https://webstore.iec.ch/en/publication/67572) (edição 3.0),
+que define requisitos e checklists para FAT, FIT (teste de integração em
+fábrica), SAT e SIT (teste de integração em campo) e serve exatamente para
+contratante e fornecedor acordarem escopo e responsabilidades desses testes.
+
+Na RFP, o mínimo é definir: o que será testado em cada portão, com que
+profundidade (simulação de I/O, integração com HMI, cenários de falha), quem
+presencia e aprova, o que bloqueia o embarque ou o aceite, e como desvios são
+registrados e fechados. Sem critério de aceite escrito, a discussão sobre "está
+pronto" acontece no pior momento — durante o
+[comissionamento](/servicos/comissionamento-industrial/), com a planta parada.
+
+### 7. Janela de parada e restrições de execução
+
+A janela de parada define o método — e o método define boa parte do custo. Uma
+mesma migração muda de figura se pode usar uma parada geral de dez dias ou
+apenas janelas parciais com a planta rodando. Em setores sazonais, como
+[açúcar e etanol](/setores/acucar-e-etanol/), a entressafra concentra as
+intervenções e transforma o calendário em requisito de projeto.
+
+A RFP deve declarar: janelas disponíveis (datas e duração), o que pode ser
+executado com a planta em operação, exigência de plano de cutover (a virada do
+sistema antigo para o novo) faseado e de plano de rollback (retorno ao sistema
+anterior) por etapa, e restrições de campo — turnos, permissões de trabalho,
+áreas classificadas, acesso remoto.
+
+### 8. Documentação exigida: FDS, as-built e data book
+
+Documentação não é cortesia do fornecedor; é entregável de engenharia e deve
+ser listada com nome e formato:
+
+- **FDS** (Functional Design Specification — especificação funcional de
+  projeto): traduz a URS em solução concreta e deve ser aprovada pela
+  contratante antes da programação em massa;
+- **as-built**: diagramas elétricos e de rede conforme construído, listas de
+  I/O finais e programa de aplicação comentado;
+- **data book**: o dossiê final consolidado — certificados, relatórios de
+  FAT/SAT assinados, manuais, folhas de dados, plano de backup;
+- **backups e versões**: projeto final versionado, com procedimento de
+  restauração demonstrado.
+
+Vale definir também formato (editável ou PDF), idioma e prazo de entrega em
+relação à partida — as-built entregue seis meses depois perde boa parte do
+valor.
+
+### 9. Suporte pós-partida
+
+A RFP deve pedir preço e condições para o período entre a energização e a
+operação estabilizada: partida assistida (presença de engenharia nos primeiros
+turnos), plantão ou atendimento remoto, prazo e abrangência de garantia do
+sistema aplicativo, treinamento de operação e manutenção, e o mecanismo de
+acionamento. Projetos terminam no aceite; operações começam nele — quem compara
+propostas sem essa seção compara metades de escopo.
+
+## Quais erros tornam uma RFP de automação difícil de responder?
+
+Os erros abaixo aparecem com frequência em RFPs reais e têm o mesmo efeito:
+propostas incomparáveis e risco precificado às cegas.
+
+- **Pedir preço sem inventário.** Sem contagem de I/O, versões e estado do
+  parque, cada proponente inventa a própria base. O resultado típico: o menor
+  preço vem de quem menos entendeu o risco — e a diferença aparece depois, como
+  aditivo.
+- **Escopo "chave na mão" sem fronteira.** Turnkey sem matriz de
+  responsabilidades não transfere risco; só o esconde. Elétrica de campo,
+  infraestrutura de TI, instrumentos e treinamento precisam de dono declarado
+  mesmo no contrato mais integrado.
+- **Ignorar rede, infraestrutura e cibersegurança OT.** Switches industriais,
+  cabeamento, sala de rede, nobreak, servidores e a fronteira TI/OT costumam
+  ficar fora do texto — e são descobertos na obra. Requisitos de segurança
+  alinhados à ISA/IEC 62443 devem entrar na RFP, não no comissionamento.
+- **Janela de parada tratada como rodapé.** Se a estratégia de cutover muda o
+  preço e o método, ela precisa estar na RFP com datas e restrições, não ser
+  "alinhada depois da contratação".
+- **Documentação implícita.** As-built, data book e backups que não foram
+  listados tendem a não ser cotados — e cobrá-los depois vira negociação.
+- **Prazo de resposta desproporcional.** Duas semanas para cotar a modernização
+  de uma planta inteira, sem visita técnica, selecionam contra quem estuda o
+  escopo com seriedade.
+
+<TechnicalCallout variant="warning" title="O aditivo nasce na RFP">
+  Boa parte das disputas de escopo em projetos de automação se decide no texto
+  da RFP, meses antes da obra. Cada lacuna do documento é uma premissa que
+  alguém vai assumir — e premissas divergentes entre contratante e contratada
+  se resolvem, na prática, em aditivo, atraso ou atrito. Investir uma semana a
+  mais na RFP costuma ser a hora de engenharia mais barata do projeto.
+</TechnicalCallout>
+
+## Como comparar propostas de automação além do preço?
+
+Preço só é comparável entre propostas que respondem à mesma pergunta. Antes de
+olhar o valor, vale pontuar cada proposta nos critérios que preveem o
+comportamento do fornecedor em projeto:
+
+1. **Aderência à URS com desvios declarados.** Proposta que lista desvios e
+   alternativas leu o documento; proposta com "atendimento integral" e nenhuma
+   ressalva merece desconfiança.
+2. **Exclusões e premissas explícitas.** Quanto mais claras as exclusões, menor
+   a chance de surpresa. Exclusão declarada se negocia antes do contrato;
+   exclusão descoberta se paga durante.
+3. **Método de execução.** Fases, FAT, estratégia de cutover e rollback
+   descritos para o seu caso — não texto genérico de portfólio.
+4. **Equipe nomeada.** Quem executa, com que senioridade e dedicação. Projeto
+   de automação é serviço de engenharia: a equipe é o produto.
+5. **Credenciais verificáveis.** Experiência na plataforma e no setor,
+   participação em programas de parceria do fabricante — como o PartnerNetwork
+   da Rockwell, no caso de um [integrador Rockwell](/integrador-rockwell/) — e
+   certificações de gestão como a
+   [CSIA (Control System Integrators Association)](https://controlsys.org/certification/),
+   que audita práticas de negócio de integradores.
+6. **Cronograma compatível com a janela declarada**, com folgas visíveis, não
+   otimismo uniforme.
+7. **Suporte pós-partida concreto**: dias de partida assistida, canal de
+   plantão, garantia e treinamento com carga horária.
+8. **Tratamento de rede e cibersegurança OT já na proposta**, com
+   responsabilidades separadas entre fornecedor e TI da planta.
+
+Um sinal de alerta transversal: o menor preço combinado com o menor número de
+perguntas durante a concorrência. Quem vai executar bem normalmente pergunta —
+e as respostas devem circular por escrito para todos os proponentes.
+
+## Modelo de estrutura de RFP seção a seção
+
+Um esqueleto que funciona para a maioria dos projetos de automação:
+
+1. **Introdução e objetivo** — o problema, o resultado esperado e o critério de
+   sucesso em poucas frases.
+2. **Contexto da planta** — setor, regime de operação, restrições gerais.
+3. **Sistema existente** — inventário com anexos (listas de I/O, arquiteturas,
+   fotos de painéis), grau de confiança da documentação.
+4. **URS** — requisitos do usuário, numerados e verificáveis.
+5. **Escopo do fornecimento** — matriz de responsabilidades por disciplina.
+6. **Exclusões** — lista explícita do que está fora.
+7. **Normas e padrões** — NRs aplicáveis, padrões da planta, gestão de alarmes,
+   requisitos ISA/IEC 62443.
+8. **Testes e aceite** — escopo de FAT e SAT, presenças, critérios de
+   aprovação e tratamento de desvios.
+9. **Janela de parada e execução em campo** — datas, restrições, exigência de
+   plano de cutover e rollback.
+10. **Documentação e entregáveis** — FDS, as-built, data book, backups, formato
+    e prazos.
+11. **Suporte pós-partida** — partida assistida, garantia, treinamento.
+12. **Instruções comerciais** — formato da proposta, critérios de avaliação com
+    pesos, visita técnica, canal de perguntas e respostas, prazos e validade.
+
+Numerar requisitos e seções tem um efeito prático: obriga as propostas a
+responder ponto a ponto, o que torna a comparação uma tabela — e não uma
+leitura de trinta páginas de prosa por proponente.
+
+A Integra Automação Industrial — integradora Silver System Integrator da
+Rockwell Automation, fundada em 2016, de Maringá-PR e com atuação nacional e
+multivendor — conhece os dois lados dessa mesa: responde RFPs como proponente
+e, antes da emissão, aponta em conversa técnica o que falta no documento para
+que as propostas sejam comparáveis. Se você está montando uma RFP de
+modernização ou integração,
+[fale com a engenharia](/contato/?assunto=rfp-automacao) antes de fechar o
+texto.
+
+## Perguntas frequentes
+
+### Qual a diferença entre RFP, RFI e RFQ?
+
+RFI (Request for Information — solicitação de informação) mapeia o mercado:
+pergunta quem faz o quê, sem pedir preço firme. RFP (Request for Proposal) pede
+proposta técnica e comercial contra requisitos definidos, admitindo soluções
+diferentes. RFQ (Request for Quotation — solicitação de cotação) pede preço
+para um escopo já completamente especificado. Em automação, o caminho comum é
+RFI para triagem, RFP para seleção e RFQ apenas quando a especificação técnica
+já está fechada.
+
+### Preciso ter a URS pronta antes de emitir a RFP?
+
+O ideal é que a RFP contenha a URS, mesmo enxuta — sem requisitos do usuário,
+os proponentes cotam soluções diferentes para problemas diferentes. Se a equipe
+interna não tem braço para escrevê-la, uma alternativa é contratar a
+especificação como fase separada (com um integrador ou consultoria) e emitir a
+RFP de implantação depois, deixando o vínculo entre as etapas transparente para
+o mercado.
+
+### Quanto tempo dar para os proponentes responderem?
+
+Depende do porte, mas a régua qualitativa é: prazo proporcional ao esforço de
+estudo que a própria RFP exige, com visita técnica viável dentro dele e uma
+rodada formal de perguntas e respostas cujas respostas circulem para todos.
+Prazos curtos demais não aceleram o projeto — só reduzem a qualidade média das
+propostas que chegam.
+
+### Como tratar propostas com preços muito diferentes entre si?
+
+Diferenças grandes de preço costumam indicar diferenças de escopo
+entendido, não de eficiência. Antes de descartar a mais cara ou premiar a mais
+barata, compare exclusões, premissas, horas de engenharia e o que cada uma
+prevê de FAT, documentação e suporte. Se a dispersão persistir, o problema
+provavelmente está na RFP — e vale esclarecer por adendo a todos os
+proponentes.
+
+### Vale exigir certificações do integrador na RFP?
+
+Como critério de pontuação, sim; como eliminatória, depende do risco do
+projeto. Programas de parceria de fabricante (como o PartnerNetwork da
+Rockwell) e a certificação CSIA são verificáveis publicamente e dizem algo
+sobre método e saúde de gestão — mas não substituem a avaliação da equipe
+nomeada, das referências no seu setor e da qualidade da própria proposta.
+
+---
+
+Vai emitir uma RFP de automação ou modernização? [Conversamos antes de o texto fechar](/contato/?assunto=rfp-automacao).

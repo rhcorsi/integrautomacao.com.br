@@ -304,12 +304,12 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
             description: "Safra 24/7, NFPA, moenda, fermentação, caldeira",
           },
           {
-            href: "/setores/",
+            href: "/setores/etanol-de-milho/",
             label: "Etanol de Milho",
             description: "Plantas modernas, eficiência, rastreabilidade",
           },
           {
-            href: "/setores/",
+            href: "/setores/armazenagem-de-graos/",
             label: "Armazenagem de Grãos",
             description: "Silos, terminais, secadores, sazonalidade",
           },
@@ -319,17 +319,17 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Alimentos e bebidas",
         links: [
           {
-            href: "/setores/",
+            href: "/setores/alimentos-e-bebidas/",
             label: "Alimentos e Bebidas",
             description: "Linhas contínuas, rastreabilidade, segurança alimentar",
           },
           {
-            href: "/setores/",
+            href: "/setores/frigorificos/",
             label: "Frigoríficos",
             description: "Receita por lote, rastreabilidade animal-produto",
           },
           {
-            href: "/setores/",
+            href: "/setores/fabricas-de-racao/",
             label: "Fábricas de Ração",
             description: "Dosagem, pesagem, batelada, mistura automatizada",
           },

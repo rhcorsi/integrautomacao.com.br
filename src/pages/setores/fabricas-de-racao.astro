@@ -1,0 +1,351 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Dosagem e pesagem",
+    description:
+      "Balanças de macroingredientes, dosadores de micro e adições manuais assistidas. O controle precisa compensar o material em queda, aplicar tolerância por ingrediente e registrar o peso real de cada dosagem — é aqui que a fórmula de mínimo custo se sustenta ou se perde.",
+  },
+  {
+    title: "Batelada e mistura",
+    description:
+      "A fábrica troca de fórmula várias vezes por dia. Gestão de receitas, tempo de mistura e ordem de adição pedem lógica de batelada estruturada (ISA-88), com registro por lote e sequenciamento que respeita a compatibilidade entre rações.",
+  },
+  {
+    title: "Peletização",
+    description:
+      "Condicionador a vapor, prensa e resfriador operam como um trecho contínuo dentro de uma planta de batelada. Malhas de temperatura, alimentação e carga da prensa definem qualidade do pelete, capacidade e consumo de energia.",
+  },
+  {
+    title: "Expedição a granel e ensacada",
+    description:
+      "Silos de produto acabado, carregamento de caminhões a granel e linhas de ensaque. O desafio é amarrar o lote produzido ao destino: seleção correta do silo, pesagem de expedição e rastreabilidade até a granja ou o cliente.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por etapa (recebimento, moagem, dosagem, mistura, peletização e expedição)",
+  "Controle de dosagem com corte em queda, tolerância por ingrediente e registro de peso real",
+  "Gestão de receitas e sequenciamento de batelada estruturados em ISA-88",
+  "Matriz de sequenciamento e flushing para apoiar o programa de prevenção de contaminação cruzada",
+  "Rastreabilidade de lote do insumo ao produto expedido, com historian e relatórios por batelada",
+  "Supervisão FactoryTalk com telas padronizadas entre dosagem, mistura e peletização",
+  "Migração de controladores PLC-5 e SLC 500 legados para ControlLogix ou CompactLogix",
+  "Comissionamento com FAT e SAT (testes de aceitação em fábrica e em campo) e partida assistida junto à operação e à qualidade",
+];
+
+const faq = [
+  {
+    q: "Qual é a diferença entre dosar macroingredientes e microingredientes?",
+    a: "A ordem de grandeza e o risco são diferentes. Macroingredientes como milho e farelo de soja passam por balanças de maior capacidade, em que o desafio central é o corte em queda: compensar o material que continua caindo depois que a rosca dosadora para. Microingredientes — vitaminas, minerais, aminoácidos e aditivos — pedem balanças dedicadas de alta resolução, tolerâncias mais apertadas e, quando a adição é manual, conferência assistida com registro do operador. O sistema de controle aplica tolerância por ingrediente, decide entre repesagem e correção e grava o peso real de cada dosagem no histórico do lote. A lógica que coordena tudo isso é sequenciamento clássico de <a href=\"/servicos/programacao-clp/\">programação de CLP</a>.",
+  },
+  {
+    q: "O que a fiscalização do MAPA pede ver como evidência de prevenção de contaminação cruzada?",
+    a: "As regras vêm da IN nº 4/2007 (Boas Práticas de Fabricação em alimentação animal) e da IN nº 8/2004, que proíbe proteínas e gorduras de origem animal na alimentação de ruminantes, com exceções previstas na própria norma (como leite e produtos lácteos). O que a fiscalização quer é evidência de cumprimento — e é isso que a automação produz: o registro de que a matriz de sequenciamento bloqueou ordens de produção incompatíveis, o comprovante de cada flushing executado entre receitas, com data, hora e batelada associada, e o histórico por lote pronto para auditoria. Em vez de reconstruir planilhas na visita do fiscal, a qualidade responde com relatórios do próprio sistema de controle, sustentados por <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos e sequências</a> testáveis.",
+  },
+  {
+    q: "O que a ISA-88 muda na prática numa fábrica de ração?",
+    a: "Muda quem consegue alterar o quê. Com receitas estruturadas em ISA-88, fórmula, tempo de mistura e ordem de adição viram parâmetros que o nutricionista e a produção gerenciam no dia a dia; a lógica de equipamento no CLP permanece estável e testada. Sem essa separação, cada fórmula nova vira alteração de código — com risco, teste e fila de engenharia. Em plataforma Rockwell, o modelo pode ser implementado com o <a href=\"/tecnologias/factorytalk-batch/\">FactoryTalk Batch</a>, integrado à supervisão da planta.",
+  },
+  {
+    q: "Dá para modernizar o controle sem parar a fábrica por semanas?",
+    a: "Na maioria dos casos a migração pode ser faseada por etapa de processo — recebimento, dosagem, mistura, peletização, expedição — usando janelas curtas de parada programada, com plano de rollback testado antes de cada cutover. O ponto de partida é o inventário: a linha PLC-5 foi descontinuada em 30 de junho de 2017 e os últimos controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o ciclo de vida da Rockwell Automation, então sustentação, sobressalentes e risco precisam ser comparados área a área. A Integra estrutura essa avaliação em <a href=\"/solucoes/migracao-plc/\">migração de PLC</a> e executa a virada com <a href=\"/servicos/comissionamento-industrial/\">comissionamento</a> planejado junto à operação.",
+  },
+  {
+    q: "Como integrar a fábrica de ração com o restante da agroindústria?",
+    a: "Por camadas. O CLP e o supervisório expõem os dados de processo; um historian consolida a série temporal e o registro por batelada; o ERP (sistema de gestão empresarial), o software de formulação e os sistemas da integração consomem esses dados por interfaces padronizadas. Para integrações de aves e suínos, isso significa consumo real de insumo por lote, custo por fórmula e o vínculo entre o lote de ração e a granja de destino sem digitação manual. A Integra usa <a href=\"/tecnologias/factorytalk-historian/\">FactoryTalk Historian</a> ou <a href=\"/solucoes/pi-system/\">PI System</a> como ponte entre o chão de fábrica e a gestão, com a segmentação TI/OT tratada em <a href=\"/solucoes/redes-iec-62443/\">redes industriais e IEC 62443</a>.",
+  },
+];
+
+const REVIEWED = "2026-07-13";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Automação para Fábricas de Ração"
+  description="Automação para fábricas de ração: dosagem e pesagem de precisão, batelada ISA-88, sequenciamento contra contaminação cruzada, peletização, rastreabilidade e expedição."
+  breadcrumbLeaf="Fábricas de Ração"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Fábricas de Ração",
+      description:
+        "Engenharia de automação para fábricas de ração: dosagem e pesagem de precisão, gestão de receitas e batelada ISA-88, sequenciamento contra contaminação cruzada, peletização, rastreabilidade de insumos e expedição a granel e ensacada.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Alimentação Animal · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Fábricas de Ração
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para fábrica de ração é a engenharia de controle que
+          transforma a fórmula do nutricionista em bateladas dosadas,
+          misturadas, peletizadas e expedidas com repetibilidade: pesagem de
+          macro e microingredientes dentro da tolerância, sequenciamento que
+          respeita as regras de contaminação cruzada e registro que liga cada
+          lote de insumo ao caminhão que saiu da fábrica. Fábricas de ração
+          estão entre os setores prioritários da Integra Automação Industrial,
+          com foco em precisão de dosagem, receitas e batelada e automação de
+          mistura.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          O Sindirações projetou 90 milhões de toneladas de ração produzidas no
+          Brasil em 2025, avanço de 2,8% sobre o ano anterior — só a avicultura
+          de corte deve responder por cerca de 37,9 milhões de toneladas. A
+          maior parte desse volume sai de fábricas que dosam, misturam e
+          expedem em ciclos de batelada repetidos ao longo de todo o turno.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          <a href="https://sindiracoes.org.br/sem-alimentacao-animal-nao-ha-proteina-animal/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: Sindirações · balanço 2025</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de uma fábrica de ração"
+        title="Quatro etapas com exigências de controle diferentes"
+        description="Uma fábrica de ração é uma planta de batelada com um trecho contínuo no meio: dosagem e mistura trabalham por lote, a peletização opera em regime contínuo e a expedição amarra tudo ao cliente."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Precisão de fórmula"
+        title="Dosagem e pesagem: onde a fórmula encontra o custo"
+        description="A fórmula de mínimo custo é calculada no software de formulação — mas quem a realiza é a balança. Desvio sistemático de dosagem vira sobreconsumo de ingrediente caro ou ração fora de especificação."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Cada família de ingrediente pede uma estratégia de pesagem. Milho e
+        farelos passam por balanças de macroingredientes, em que o controle
+        precisa dominar o corte em queda: parar a rosca dosadora antes do
+        setpoint, compensando o material que ainda está no ar, e ajustar essa
+        antecipação conforme a densidade do insumo varia entre lotes.
+        Microingredientes — núcleos, vitaminas, minerais e aditivos — exigem
+        balanças dedicadas de alta resolução, dosagem fina em pulsos e
+        tolerâncias por ingrediente definidas junto à qualidade. Adições
+        manuais entram no mesmo fluxo com conferência assistida e registro de
+        quem adicionou o quê. Essa coordenação é lógica sequencial de
+        <a href="/servicos/programacao-clp/" class="text-integra-red-700 underline hover:text-integra-red">programação de CLP (controlador lógico programável)</a>,
+        estruturada com
+        <a href="/tecnologias/intertravamentos-sequencias/" class="text-integra-red-700 underline hover:text-integra-red">intertravamentos e sequências</a>
+        testáveis.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        O peso real de cada dosagem — não o teórico da fórmula — é gravado no
+        registro da batelada. É esse dado que permite acompanhar a tendência
+        de desvio de cada dosador, antecipar manutenção e calibração e
+        responder, com evidência, se um lote específico ficou dentro da
+        tolerância da fórmula.
+      </p>
+
+      <TechnicalCallout variant="note" title="Receita é dado, não código">
+        <p>
+          A norma ISA-88 (adotada pela IEC como IEC 61512-1 em 1997) separa a
+          receita da lógica de equipamento: fórmula, tempo de mistura e ordem
+          de adição viram parâmetros de receita, não linhas de programa. Numa
+          fábrica que troca de produto várias vezes por dia, isso significa
+          alterar fórmula sem reescrever lógica de chão de fábrica — e cada
+          batelada nasce com registro estruturado para rastreabilidade.
+        </p>
+      </TechnicalCallout>
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Em plataforma Rockwell, esse modelo pode ser implementado com o
+        <a href="/tecnologias/factorytalk-batch/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Batch</a>
+        sobre controladores Logix, com a supervisão unificada da suíte
+        <a href="/solucoes/factorytalk/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk</a>.
+        A Integra estrutura receitas, fases e equipamentos para que a troca de
+        fórmula seja operação de rotina do nutricionista e da produção — não um
+        chamado para a engenharia.
+      </p>
+
+      <SectionHeader
+        eyebrow="Contaminação cruzada"
+        title="Sequência de produção é requisito sanitário, não preferência de programação"
+        description="Em alimentação animal, a ordem das bateladas e a limpeza entre elas são reguladas. O sistema de controle é o lugar onde essa regra deixa de depender da memória do operador."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A Instrução Normativa nº 4/2007 do MAPA (Ministério da Agricultura,
+        Pecuária e Abastecimento) estabelece as Boas Práticas de Fabricação
+        (BPF) para estabelecimentos de alimentação animal: define contaminação
+        cruzada, exige medidas de prevenção em todas as etapas e determina
+        linhas separadas de produção quando, havendo alto risco de contaminação
+        cruzada, os métodos de limpeza forem considerados ineficientes.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A IN
+        nº 8/2004 proíbe proteínas e gorduras de origem animal na alimentação
+        de ruminantes, com exceções previstas na própria norma (como leite e
+        produtos lácteos) — quem produz ração para ruminantes e monogástricos
+        na mesma planta precisa controlar sequência e limpeza de linha. Os
+        textos estão na página de
+        <a href="https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/legislacao-alimentacao-animal" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">legislação de alimentação animal do MAPA</a>,
+        e o enquadramento de cada fábrica deve ser confirmado com o responsável
+        técnico.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A automação torna essas regras executáveis: uma matriz de
+        compatibilidade entre receitas bloqueia sequências não permitidas,
+        dispara flushing (batelada de limpeza com ingrediente neutro) entre
+        produtos incompatíveis e registra cada limpeza com data, hora e
+        batelada associada. O programa de BPF continua sendo da qualidade; o
+        controle o executa da mesma forma em todos os turnos e deixa a trilha
+        de auditoria pronta para a fiscalização.
+      </p>
+
+      <SectionHeader
+        eyebrow="Peletização"
+        title="Peletização pede controle regulatório dentro da planta de batelada"
+        description="Condicionamento, prensagem e resfriamento operam em regime contínuo, com malhas interdependentes — um caso clássico de controle regulatório bem sintonizado."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        No condicionador, a injeção de vapor define temperatura e umidade da
+        massa antes da prensa — variáveis que influenciam a gelatinização do
+        amido, a qualidade sanitária e a durabilidade do pelete. Na prensa, a
+        corrente do motor principal indica a carga e limita a taxa do
+        alimentador: acelerar demais derruba a qualidade ou trava a máquina,
+        acelerar de menos desperdiça capacidade. No resfriador, tempo de
+        residência e fluxo de ar fecham o ciclo. São malhas interdependentes de
+        <a href="/tecnologias/controle-regulatorio-pid/" class="text-integra-red-700 underline hover:text-integra-red">controle regulatório PID</a>
+        que, bem sintonizadas, sustentam capacidade e qualidade sem depender de
+        ajuste manual contínuo — e cujos dados de processo alimentam a análise
+        de consumo de vapor e energia por tonelada.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega numa fábrica de ração"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Rastreabilidade"
+        title="Do lote do insumo ao caminhão: rastreabilidade que a agroindústria consome"
+        description="Registro por batelada só tem valor quando conecta as pontas: qual lote de insumo entrou, em quais bateladas, e para qual granja ou cliente cada uma foi expedida."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O registro estruturado da batelada — pesos reais, silo de origem de
+        cada ingrediente, tempos de mistura, flushing executado — é consolidado
+        num historian como o
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Historian</a>
+        ou o
+        <a href="/solucoes/pi-system/" class="text-integra-red-700 underline hover:text-integra-red">PI System</a>.
+        Numa investigação de recolhimento, a pergunta "quais bateladas usaram
+        este lote de insumo e para onde foram expedidas" passa a ser uma
+        consulta ao sistema, em vez de uma reconstrução manual por planilhas e
+        romaneios. Na expedição, a mesma base amarra a pesagem do carregamento
+        a granel ou do ensaque à ordem e ao destino.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Para fábricas de integrações de aves e suínos, esses dados alimentam o
+        ERP (sistema de gestão empresarial) e o software de formulação: consumo
+        real por fórmula, custo por batelada e vínculo entre lote de ração e
+        lote de animais. Essa integração TI/OT (tecnologia da
+        informação/tecnologia operacional) amplia a superfície de exposição da
+        rede industrial, e por isso anda junto com segmentação e
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">cibersegurança OT alinhada à IEC 62443</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="Legado e expansão"
+        title="Fábricas que cresceram por etapas acumulam gerações de controle"
+        description="Uma linha de ensaque nova aqui, uma peletizadora ampliada ali: é comum encontrar painéis de fabricantes e gerações diferentes convivendo na mesma planta — ambiente multivendor por histórico, não por projeto."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Controladores legados seguem operando em muitas fábricas de ração. A
+        linha PLC-5 foi descontinuada em 30 de junho de 2017 e os últimos
+        controladores SLC 500 saíram de venda em 31 de março de 2024, segundo
+        o
+        <a href="https://www.rockwellautomation.com/en-us/support/product/product-compatibility-migration/product-lifecycle-status.html" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">ciclo de vida publicado pela Rockwell Automation</a>.
+        Isso não encerra automaticamente toda forma de suporte, mas exige
+        inventariar onde cada ativo opera, conferir sobressalentes e comparar
+        sustentação com migração planejada.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Como a fábrica raramente dispõe de semanas de parada, a modernização
+        costuma ser faseada por etapa de processo, com cutover em janelas
+        curtas e rollback testado. A Integra estrutura essa avaliação em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>,
+        moderniza a camada de supervisão em
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>
+        e executa a virada com
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento</a>
+        planejado junto à operação e à qualidade.
+      </p>
+
+      <StandardsBadges
+        title="Normas e tecnologias aplicadas no setor"
+        standards={[
+          { code: "ISA-88", description: "Receitas e batelada" },
+          { code: "IN 4/2007", description: "BPF em alimentação animal (MAPA)" },
+          { code: "IN 8/2004", description: "Alimentação de ruminantes (MAPA)" },
+          { code: "FactoryTalk", description: "Batch, supervisão e historian" },
+          { code: "EtherNet/IP", description: "Rede de controle (CPwE)" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer revisar dosagem, sequenciamento ou rastreabilidade da sua fábrica?"
+    description="O ponto de partida é uma triagem técnica: entender fórmulas, etapas, controladores instalados e requisitos de contaminação cruzada antes de propor arquitetura. Escopo e diagnóstico documentado são definidos depois que a operação valida o impacto."
+    primaryCta={{ href: "/contato/?assunto=fabricas-de-racao", label: "Conversar sobre a fábrica" }}
+    secondaryCta={{ href: "/solucoes/factorytalk/", label: "Ver FactoryTalk para indústria híbrida" }}
+  />
+</BaseLayout>

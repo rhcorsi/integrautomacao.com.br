@@ -1,0 +1,298 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Recepção e moega",
+    description:
+      "No pico da colheita, a fila de caminhões dita o ritmo: pesagem, classificação e descarga na moega precisam fluir sem parada não planejada. Correias, transportadores de corrente e elevadores de canecas levam o grão à pré-limpeza e à secagem, com intertravamento de partida e parada em cascata entre cada equipamento da rota.",
+  },
+  {
+    title: "Secagem",
+    description:
+      "O secador costuma ser o gargalo térmico da unidade. Controlar em conjunto a temperatura da fornalha, a umidade de entrada e saída e a vazão de grão reduz repasse de secagem, consumo de combustível e risco de foco de incêndio — uma malha regulatória bem sintonizada aparece direto no custo por tonelada seca.",
+  },
+  {
+    title: "Termometria e aeração",
+    description:
+      "Cabos de termometria distribuídos na massa de grãos revelam pontos de aquecimento antes que virem perda. A aeração corrige com ar ambiente quando temperatura e umidade externas permitem. Integradas ao supervisório, as duas funções deixam de ser leitura manual e viram rotina automática com histórico auditável.",
+  },
+  {
+    title: "Expedição e terminais",
+    description:
+      "Carregamento de caminhões e vagões, balanças de fluxo e sequenciamento de rotas entre silos. Em terminais, a taxa de embarque contratada pressiona a disponibilidade dos transportadores: uma seleção de rota errada ou um intertravamento mal resolvido param o embarque inteiro.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por área: recepção, secagem, armazenagem e expedição",
+  "Lógica de intertravamento e sequenciamento de transportadores com partida e parada em cascata",
+  "Supervisório SCADA com telas por rota de fluxo e governança de alarmes por ISA-18.2",
+  "Integração de termometria de silos e controle de aeração ao supervisório e ao historian",
+  "Controle regulatório de secadores: temperatura, umidade e vazão de grão",
+  "Telemetria remota para acompanhar unidades distribuídas a partir de uma central",
+  "Migração de controladores PLC-5 e SLC 500 legados com cutover na janela de entressafra",
+  "Segmentação de rede industrial e cibersegurança OT (tecnologia de operação) alinhada à IEC 62443",
+];
+
+const faq = [
+  {
+    q: "Dá para automatizar uma unidade de grãos por etapas?",
+    a: "Sim — e em armazenagem o projeto faseado costuma ser o caminho natural. Um roteiro comum começa pelo intertravamento e sequenciamento dos transportadores, onde estão o risco mecânico e as paradas mais caras; segue para o supervisório com governança de alarmes; e depois integra termometria, aeração e secador. Cada fase entrega valor sozinha e prepara a seguinte. O que costuma dar errado é automatizar ilhas sem padronizar a base de <a href=\"/servicos/programacao-clp/\">programação de CLP</a> (Controlador Lógico Programável): a unidade termina com três padrões de lógica diferentes e nenhum documentado.",
+  },
+  {
+    q: "Termometria de silo precisa estar integrada ao supervisório?",
+    a: "Precisa, se o objetivo é conservação e não apenas registro. Termometria lida em painel local ou planilha depende de alguém olhar na hora certa. Integrada ao supervisório e a um <a href=\"/tecnologias/factorytalk-historian/\">historian</a>, a leitura vira tendência: o sistema mostra a evolução da temperatura de cada cabo ao longo de semanas, alarma por taxa de subida — não só por valor absoluto — e comanda a aeração dentro da janela de ar ambiente favorável. É a diferença entre reagir a um foco de aquecimento e enxergá-lo se formando.",
+  },
+  {
+    q: "Como funciona o intertravamento de transportadores em uma unidade de grãos?",
+    a: "A regra de base é partir a rota de jusante para montante e parar de montante para jusante: o equipamento que recebe o grão liga antes do que envia, e uma falha em um ponto derruba tudo que está a montante para evitar embuchamento. Sobre essa base entram as proteções de campo — sensor de rotação (subvelocidade), desalinhamento de correia, chave de emergência de cabo e sensor de embuchamento — e a seleção de rota, que bloqueia combinações fisicamente impossíveis entre silos, secador e expedição. O padrão de projeto que aplicamos está descrito em <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos e sequências</a>.",
+  },
+  {
+    q: "Automação elimina o risco de explosão de pó em elevadores de canecas?",
+    a: "Não elimina. Poeira de grão em suspensão é combustível, e o elevador de canecas reúne pó confinado e fontes potenciais de ignição, como atrito de correia desalinhada e rolamento superaquecido. A automação contribui monitorando rotação, desalinhamento e temperatura de rolamentos, e parando a rota antes que a condição evolua. A proteção completa, porém, passa por estudo de classificação de áreas conforme a ABNT NBR IEC 60079-10-2, equipamentos adequados às zonas definidas, limpeza sistemática e medidas construtivas — referências como a NFPA 660 tratam o tema de forma sistêmica. Intertravamento é uma camada de proteção; não substitui as demais.",
+  },
+  {
+    q: "Quando modernizar: durante a safra ou na entressafra?",
+    a: "A execução do cutover pede a janela de menor movimento, que varia por região e mix de culturas — em muitas praças, entre a expedição do milho segunda safra e a recepção da soja seguinte. O erro mais comum é começar a discutir o projeto com a janela já aberta: engenharia, FAT e simulação da lógica de rotas precisam estar prontos antes. Controladores PLC-5 e SLC 500, comuns nessas unidades, estão descontinuados pela Rockwell Automation — a linha PLC-5 desde 30 de junho de 2017 e os últimos SLC 500 desde 31 de março de 2024 —, o que torna o planejamento de <a href=\"/solucoes/migracao-plc/\">migração de PLC</a> menos adiável a cada ciclo.",
+  },
+];
+---
+
+<BaseLayout
+  title="Automação para Armazenagem de Grãos"
+  description="Automação de silos e armazenagem de grãos: moega, secadores, termometria, aeração e expedição com supervisório, telemetria remota e intertravamentos."
+  breadcrumbLeaf="Armazenagem de Grãos"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Armazenagem de Grãos",
+      description:
+        "Engenharia de automação para unidades de armazenagem de grãos: intertravamento de transportadores, supervisório SCADA, termometria de silos, controle de secadores, telemetria remota e modernização de controladores legados na entressafra.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Agronegócio e Grãos
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Armazenagem de Grãos
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para armazenagem de grãos é a engenharia de
+          intertravamentos, supervisório e telemetria que mantém recepção,
+          secagem, aeração e expedição coordenadas no pico da colheita — quando
+          fila de caminhão na moega vira custo por hora — e conserva a massa de
+          grãos nos meses seguintes. A Integra Automação Industrial tem o
+          agronegócio entre seus setores prioritários e atende o setor com a
+          disciplina de quem projeta para janela de safra: automação de silos
+          precisa estar pronta e testada antes de o primeiro caminhão chegar.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          A safra 2024/25 fechou em 350,2 milhões de toneladas de grãos — novo
+          recorde da série histórica, segundo o 12º levantamento da Conab —,
+          enquanto a capacidade estática de armazenagem do país está na casa de
+          210 milhões de toneladas, também conforme a Conab. A pressão sobre
+          cada unidade cresce a cada ciclo: secar, armazenar e expedir mais
+          volume com a mesma estrutura.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          Fontes: Conab · 12º levantamento da safra 2024/25 e levantamento de
+          capacidade estática de armazenagem (2025)
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de uma unidade de grãos"
+        title="Quatro frentes com ritmos diferentes — e a safra cobrando todas"
+        description="Uma unidade de armazenagem não é um processo contínuo clássico: é um fluxo sazonal em que recepção, secagem, conservação e expedição disputam os mesmos transportadores."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Supervisório e telemetria remota"
+        title="Por que supervisório central e telemetria remota encaixam em armazenagem?"
+        description="Unidades de grãos crescem por aquisição de equipamentos: secador de um fornecedor, termometria de outro, balança de um terceiro. O resultado típico é operação por ilhas — e ninguém enxerga a unidade inteira."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O primeiro ganho de um supervisório (SCADA — Supervisory Control and
+        Data Acquisition) numa unidade de grãos é unificar essas ilhas
+        multivendor num só ambiente: rotas de transporte, secador, termometria,
+        aeração e balanças na mesma tela, com o mesmo padrão de alarme. Quando
+        a rota para às três da manhã no pico da soja, o operador precisa saber
+        em segundos qual proteção atuou e onde — não percorrer três painéis
+        locais para descobrir. A Integra estrutura esse trabalho em
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>,
+        incluindo governança de alarmes por ISA-18.2 para que o sistema alarme
+        o que exige ação do operador, e não tudo ao mesmo tempo.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A telemetria remota completa o desenho porque cooperativas e
+        cerealistas raramente operam uma unidade só: são redes de unidades
+        distribuídas por vários municípios, com equipe de automação enxuta —
+        quando existe — concentrada na matriz. Levar os dados de cada unidade
+        para uma central via
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">historian</a>
+        permite comparar secadores, acompanhar a termometria de todos os silos
+        e apoiar o operador local sem deslocamento.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Em redes maiores, uma
+        camada como o
+        <a href="/solucoes/pi-system/" class="text-integra-red-700 underline hover:text-integra-red">PI System</a>
+        consolida as séries de todas as unidades para análise de conservação e
+        desempenho. Acesso remoto a unidades distribuídas, por sua vez, só faz
+        sentido sobre uma
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">rede segmentada e alinhada à IEC 62443</a>,
+        tipicamente sobre EtherNet/IP seguindo as arquiteturas de referência
+        CPwE (Converged Plantwide Ethernet), porque cada ponto de telemetria é
+        também uma porta de entrada.
+      </p>
+
+      <TechnicalCallout variant="note" title="Transportador parado é unidade parada">
+        <p>
+          Numa unidade de grãos, o transportador é o processo: se a rota da
+          moega ao secador não anda, a recepção para e a fila cresce na porta.
+          Por isso a partida em cascata, as proteções de campo (rotação,
+          desalinhamento, embuchamento) e a seleção de rota merecem o mesmo
+          rigor de documentação de uma malha de processo — o padrão que
+          aplicamos está em
+          <a href="/tecnologias/intertravamentos-sequencias/">intertravamentos e sequências</a>.
+          O secador, por outro lado, é território de
+          <a href="/tecnologias/controle-regulatorio-pid/">controle regulatório PID</a>
+          (proporcional, integral e derivativo): temperatura e umidade estáveis
+          pesam mais no resultado do que a estética das telas.
+        </p>
+      </TechnicalCallout>
+
+      <SectionHeader
+        eyebrow="Riscos do setor"
+        title="Pó de grão explode e silo é espaço confinado — o projeto precisa assumir isso"
+        description="Os dois riscos mais graves da armazenagem não aparecem no fluxograma de processo: a atmosfera explosiva de poeira e a entrada de pessoas em silos, moegas e poços."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Poeira de grão em suspensão forma atmosfera explosiva, e as áreas onde
+        isso pode ocorrer — poços de elevador de canecas, tombadores, pontos de
+        transferência — são classificadas em zonas 20, 21 e 22 conforme a ABNT
+        NBR IEC 60079-10-2 (classificação de áreas para atmosferas de poeiras
+        explosivas). Essa classificação define quais instrumentos, sensores e
+        motores podem ser instalados em cada zona: o projeto de automação herda
+        a restrição, não a define. Como referência sistêmica de prevenção, a
+        NFPA 61 — tradicional no setor de grãos — foi consolidada na NFPA 660
+        (Standard for Combustible Dusts and Particulate Solids, edição 2025),
+        que mantém a exigência de análise de risco de poeira (DHA, Dust Hazard
+        Analysis).
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Silos, moegas e poços também são espaços confinados típicos: entrada
+        restrita, possibilidade de atmosfera deficiente em oxigênio pela
+        atividade biológica da massa de grãos e risco de soterramento. No
+        Brasil, o trabalho nesses espaços é regulado pela
+        <a href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-33-nr-33" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">NR-33 (Segurança e Saúde nos Trabalhos em Espaços Confinados)</a>.
+        A automação contribui reduzindo a necessidade de entrada — termometria
+        e medição de nível confiáveis diminuem inspeções internas — e apoiando
+        o bloqueio de transportadores durante uma entrada autorizada. A
+        conformidade, porém, depende do programa completo da NR-33: permissão
+        de entrada e trabalho, capacitação, supervisão e responsabilidades
+        definidas por profissional habilitado.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega numa unidade de grãos"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Entressafra como janela de modernização"
+        title="A janela de modernização abre quando o fluxo de grãos diminui"
+        description="O calendário varia por região e mix de culturas. O que não varia é a consequência: quando a colheita chega, a unidade precisa estar rodando — o cutover tem data para acabar."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Boa parte das unidades de grãos ainda opera controladores legados. A
+        linha PLC-5 está descontinuada desde 30 de junho de 2017 e os últimos
+        controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o
+        catálogo de ciclo de vida da Rockwell Automation. Descontinuação não
+        significa parada imediata, mas muda a conta de risco: sobressalente,
+        reparo e conhecimento da plataforma ficam mais escassos a cada ano,
+        enquanto a unidade movimenta volumes crescentes.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Quando existe janela de menor movimento, inventário, engenharia,
+        simulação da lógica de rotas e FAT (teste de aceitação em fábrica)
+        podem ser preparados com antecedência, para que a parada sirva apenas
+        à execução. A Integra
+        estrutura essa avaliação em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>
+        e conduz a virada com
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento assistido</a>
+        — a mesma disciplina de janela curta que aplicamos no setor de
+        <a href="/setores/acucar-e-etanol/" class="text-integra-red-700 underline hover:text-integra-red">açúcar e etanol</a>,
+        onde a entressafra também concentra modernização.
+      </p>
+
+      <StandardsBadges
+        title="Normas e referências aplicadas no setor"
+        standards={[
+          { code: "NR-33", description: "Espaços confinados" },
+          { code: "NBR IEC 60079-10-2", description: "Zonas de poeira combustível" },
+          { code: "NFPA 660", description: "Prevenção de explosão de pó" },
+          { code: "ISA-18.2", description: "Governança de alarmes" },
+          { code: "EtherNet/IP", description: "Rede de controle (CPwE)" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Vai aproveitar a próxima janela para modernizar a unidade?"
+    description="Escopo, lógica de rotas e plano de comissionamento precisam estar prontos antes de a colheita chegar. Começamos pela triagem técnica: entender o fluxo da unidade, o legado instalado e o risco de cada área — a execução vem depois que a operação entende impacto e rollback."
+    primaryCta={{ href: "/contato/?assunto=armazenagem-de-graos", label: "Conversar sobre a unidade" }}
+    secondaryCta={{ href: "/solucoes/modernizacao-scada/", label: "Ver modernização de SCADA" }}
+  />
+</BaseLayout>
