@@ -18,10 +18,10 @@ export const TEAM_MEMBERS = [
     name: "Rafhael Henrique Corsi Feitosa",
     role: "Diretor e cofundador",
     summary:
-      "Iniciou a atuação em automação industrial na Conapi em 2006 e cofundou a Integra com Joldmar Oliveira em 2016.",
+      "Iniciou a atuação em automação industrial na Conapi em 2010 e cofundou a Integra com Joldmar Oliveira em 2016.",
     milestones: [
       {
-        year: 2006,
+        year: 2010,
         description: "Início da atuação em automação industrial na Conapi.",
       },
       {
