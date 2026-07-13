@@ -39,19 +39,19 @@ const disciplines = [
 ];
 
 const benefits = [
-  "Acesso direto à engenharia de produto da Rockwell Automation",
-  "Participação em laboratórios e treinamentos oficiais",
-  "Atualizações antecipadas de roadmap e firmware",
-  "Suporte técnico avançado para projetos complexos",
-  "Documentação técnica de referência (PSRM, CPwE) em primeira mão",
+  "Recursos de capacitação técnica e comercial disponibilizados pelo programa",
+  "Materiais oficiais para desenvolver competências nas tecnologias atendidas",
+  "Colaboração com a Rockwell Automation dentro das regras do PartnerNetwork",
+  "Benefícios do nível Silver conforme a política vigente do programa",
+  "Acesso às referências públicas de arquitetura, como PSRM e guias CPwE",
 ];
 
 const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
 ---
 
 <BaseLayout
-  title="Silver System Integrator Rockwell"
-  description="Integra certificada Silver System Integrator Rockwell, com disciplinas Control, Visualization, Process e Power."
+  title="Integra no nível Silver do PartnerNetwork Rockwell"
+  description="Confira o status Silver da Integra no programa System Integrator da Rockwell, as capacidades registradas e como verificar a credencial atual."
   ogImage="/og/certificacoes-silver.png"
 >
   <!-- Hero with Rockwell Silver lockup -->
@@ -61,17 +61,17 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
       <div class="grid gap-12 items-center lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div>
           <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-4">
-            Certificação · Rockwell Automation Partner Network
+            Parceria · Rockwell Automation PartnerNetwork
           </p>
           <h1 class="text-4xl font-semibold tracking-tight text-integra-gray-900 sm:text-5xl lg:text-6xl">
             Silver System <span class="text-integra-red">Integrator</span>
           </h1>
           <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-2xl lg:text-xl">
-            A Integra é membro oficial do Programa Silver System Integrator
-            da Rockwell Automation, certificação que reconhece integradores
-            com competência técnica comprovada na plataforma. O programa exige
-            comprovação contínua de capacidade técnica, aderência a padrões de
-            projeto e compromisso com o ecossistema Rockwell.
+            A Integra participa do programa System Integrator da Rockwell
+            Automation no nível Silver. Segundo a documentação do programa, o
+            nível considera sucesso comercial, capacidades e colaboração. É
+            uma credencial de parceria verificável, não uma garantia isolada
+            sobre prazo, qualidade ou resultado de um projeto específico.
           </p>
           <div class="mt-10 flex flex-wrap gap-4">
             <a
@@ -89,7 +89,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
               href="/contato?assunto=plantpax"
               class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
             >
-              Falar com especialista
+              Pedir contato técnico
             </a>
           </div>
         </div>
@@ -114,9 +114,9 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">
       <SectionHeader
-        eyebrow="Disciplinas certificadas"
-        title="Quatro disciplinas que dominamos com profundidade"
-        description="A Rockwell Automation organiza o programa em disciplinas técnicas distintas. A Integra é certificada e mantém capacitação ativa em quatro delas."
+        eyebrow="Capacidades registradas"
+        title="Quatro frentes declaradas na credencial da Integra"
+        description="Control, Visualization, Process e Power organizam as competências informadas no documento publicado. A seleção para cada projeto ainda depende do escopo e da equipe designada."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -142,18 +142,18 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
     <div class="container-fluid py-20 max-w-4xl">
       <SectionHeader
         eyebrow="O que isso significa para você"
-        title="Não é selo decorativo. É acesso técnico real."
+        title="O que o nível Silver informa — e o que ele não garante"
         accent={true}
       />
       <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg max-w-3xl mb-8">
-        A obtenção da certificação Silver não é um selo de marketing, é
-        resultado de avaliações técnicas, comerciais e de aderência a
-        padrões de projeto Rockwell. O programa exige comprovação continuada
-        de capacidade de entrega em projetos reais.
+        O nível Silver situa a Integra dentro do programa System Integrator e
+        dos critérios definidos pela Rockwell Automation. Ele ajuda a validar
+        o vínculo com o ecossistema, mas não substitui a análise de escopo,
+        referências, equipe, metodologia, contrato e critérios de aceite.
       </p>
 
       <h3 class="text-xl font-semibold text-integra-gray-900 mb-5 mt-10">
-        O que ganhamos como Silver
+        Recursos associados à participação
       </h3>
       <ul class="space-y-3 mb-10">
         {benefits.map((item) => (
@@ -166,37 +166,38 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
 
       <TechnicalCallout variant="note" title="Como você se beneficia">
         <p>
-          Quando você contrata a Integra para um projeto Rockwell, está
-          contratando uma integradora com canal direto à fábrica. Em
-          situações críticas, uma decisão de arquitetura PlantPAx, uma
-          dúvida sobre firmware ControlLogix, uma compatibilidade de
-          versões FactoryTalk, temos canais oficiais de escalação que
-          empresas sem certificação não têm.
+          A participação no PartnerNetwork oferece recursos e canais próprios
+          do programa. A disponibilidade de suporte ou de escalação para um
+          caso específico depende do produto, do contrato e das regras
+          vigentes; por isso, o plano de suporte deve constar no escopo do
+          projeto, sem pressupor atendimento irrestrito da fabricante.
         </p>
       </TechnicalCallout>
     </div>
   </section>
 
-  <!-- PlantPAx DCS Certified specialty mention -->
+  <!-- PlantPAx capability shown in the published credential -->
   <section id="plantpax-dcs" class="border-b border-integra-gray-200 bg-integra-gray-950 text-integra-white">
     <div class="container-fluid py-20">
       <div class="max-w-3xl">
         <p class="text-xs font-mono uppercase tracking-widest text-integra-red-300 mb-4">
-          Certificação adicional
+          Capacidade registrada
         </p>
         <h2 class="text-3xl font-semibold sm:text-4xl mb-6">
           Especialidade PlantPAx DCS Certified
         </h2>
         <p class="text-base leading-relaxed text-integra-gray-300 lg:text-lg">
-          Além da credencial Silver System Integrator, possuímos a especialidade
-          <strong class="text-integra-white">PlantPAx DCS Certified</strong>, uma certificação técnica altamente restrita dentro do programa de integradores
-          que atesta o domínio completo da plataforma de controle distribuído moderna da Rockwell Automation.
+          O documento publicado pela Integra registra a capacidade
+          <strong class="text-integra-white">PlantPAx DCS Certified</strong>.
+          Essa indicação situa a empresa nessa frente do programa, mas não
+          significa domínio irrestrito de todas as versões, arquiteturas ou
+          aplicações possíveis da plataforma.
         </p>
         <p class="mt-4 text-base leading-relaxed text-integra-gray-300 lg:text-lg">
-          Essa especialidade adicional dá acesso privilegiado a treinamentos
-          PlantPAx, suporte técnico direto com engenheiros de produto e
-          participação em laboratórios oficiais que mantêm nossa equipe
-          atualizada com as versões 3.x, 4.x e 5.x da plataforma.
+          Em cada contratação, a versão instalada, a compatibilidade de
+          firmware e software, o dimensionamento segundo o PSRM e a experiência
+          da equipe designada precisam ser confirmados. A credencial é um dos
+          elementos dessa avaliação, não o único.
         </p>
         <a
           href="/solucoes/plantpax"
@@ -230,7 +231,7 @@ const certPdfPath = "/downloads/rockwell-si-silver-certificado.pdf";
     variant="dark"
     title="Tem um projeto Rockwell para conversar?"
     description="Apresentamos arquitetura, lista de entregáveis e cronograma com base no escopo da planta, antes de qualquer proposta comercial."
-    primaryCta={{ href: "/contato?assunto=plantpax", label: "Falar com especialista" }}
+    primaryCta={{ href: "/contato?assunto=plantpax", label: "Pedir contato sobre PlantPAx" }}
     secondaryCta={{ href: "/certificacoes", label: "Ver outras certificações" }}
   />
 </BaseLayout>

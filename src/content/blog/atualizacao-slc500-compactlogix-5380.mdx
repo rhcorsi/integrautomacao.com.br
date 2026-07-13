@@ -1,75 +1,88 @@
 ---
-title: "Atualização do SLC 500: caminhos para o CompactLogix 5380"
-description: "O SLC 500 saiu de linha em 2024. Veja os caminhos de atualização para o CompactLogix 5380: conversão de I/O 1746, lógica RSLogix 500 e EtherNet/IP."
+title: "SLC 500: migração para CompactLogix 5380"
+description: "Como planejar a atualização de controladores SLC 500 descontinuados para CompactLogix 5380: lifecycle por catálogo, I/O 1746, lógica e rede."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["SLC 500", "CompactLogix", "Migração"]
 draft: false
 ---
 
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 
-A **atualização do SLC 500** é a migração de um controlador que a Rockwell
-Automation já não vende — os últimos processadores SLC saíram de catálogo em
-31 de março de 2024 — para uma plataforma Logix atual. O destino que a própria
-Rockwell recomenda é o **CompactLogix 5380**, e o trabalho se divide em quatro
-frentes: hardware de I/O 1746, conversão da lógica do RSLogix 500 para o
-Studio 5000, mudança do endereçamento por arquivos para tags e substituição
-de DH-485/RS-232 por EtherNet/IP.
+A **atualização do SLC 500** substitui uma base legada por uma plataforma com
+lifecycle e capacidade adequados ao horizonte do projeto. A data de
+descontinuação e a disponibilidade de reparo variam por número de catálogo; o
+SLC 5/05 1747-L553, por exemplo, foi descontinuado em 31 de março de 2024 e
+ainda exibe opções de reparo e suporte em sua
+[página oficial de lifecycle](https://www.rockwellautomation.com/en-us/products/details.1747-l553.html).
+A Rockwell publica uma rota de migração para o **CompactLogix 5380**, mas a
+seleção final depende de I/O, comunicação, desempenho, safety e ciclo de vida.
+O trabalho normalmente envolve I/O 1746, conversão da lógica, mudança de
+endereçamento por arquivos para tags e evolução das redes legadas.
 
 ## O SLC 500 está obsoleto? As datas que importam
 
-Está. O SLC 500, lançado em 1991, aparece como **Discontinued** no Product
-Lifecycle Status da Rockwell Automation. A retirada aconteceu em etapas: os
-processadores SLC 5/01 e 5/02 saíram de venda em janeiro de 2017, e a data
-final anunciada para todos os controladores SLC 500 remanescentes — incluindo
-SLC 5/03, 5/04 e 5/05 — foi **31 de março de 2024**.
+É uma família legada com diversos catálogos em estado **Discontinued**. A
+retirada aconteceu em etapas e não deve ser resumida a uma única data para
+controladores, fontes, I/O e acessórios. A própria Rockwell orienta consultar
+o Product Lifecycle Status por código; o material
+[SLC 500 to CompactLogix 5380, MIGRAT-PP004](https://literature.rockwellautomation.com/idc/groups/literature/documents/pp/migrat-pp004_-en-e.pdf)
+também ressalta que reparo, troca e estoque remanescente podem variar.
 
-"Obsoleto" não significa que a planta para amanhã. Significa que não há mais
-fabricação nova, que o reparo oficial é limitado e que o spare passa a vir de
-estoque próprio ou de mercado paralelo, sem garantia de procedência nem de
-horas de uso acumuladas. Em uma planta com dez ou quinze chassis SLC, cada
-falha de processador ou de fonte deixa de ser manutenção de rotina e vira um
-evento de risco para a produção. É esse o cenário que justifica planejar a
-atualização do SLC 500 antes da falha — e não depois dela.
+"Discontinued" não significa falha iminente nem ausência automática de
+suporte. Significa que o item deixou de ser fabricado ou adquirido pela
+Rockwell; serviços de reparo/troca e estoque de transição podem continuar
+disponíveis. O risco é específico do parque: quantidade de sobressalentes,
+reparabilidade, documentação, licenças, criticidade e tempo de reposição. Esse
+inventário permite planejar a atualização antes de uma falha crítica, sem
+declarar todo SLC igualmente inviável.
 
-## Por que o CompactLogix 5380 é o destino natural?
+## Por que o CompactLogix 5380 é uma rota de migração relevante?
 
-Porque é o caminho oficial. A Rockwell Automation mantém página e perfil de
-migração dedicados "SLC 500 to CompactLogix 5380" (publicação MIGRAT-PP004),
-com ferramentas de hardware e software construídas especificamente para essa
-rota. Não é opinião de integrador — é o posicionamento do fabricante.
+Porque é uma rota oficial documentada pela Rockwell no perfil
+[MIGRAT-PP004](https://literature.rockwellautomation.com/idc/groups/literature/documents/pp/migrat-pp004_-en-e.pdf),
+com ferramentas de conversão de hardware e software. Isso não torna o 5380
+substituto automático de todo SLC: capacidade, motion, safety, redundância,
+redes e integrações podem levar a outro modelo Logix ou a uma arquitetura
+faseada.
 
 Tecnicamente, o [CompactLogix 5380](/tecnologias/controllogix-compactlogix/)
-(família 5069) cobre com folga o espaço do SLC modular:
+(família 5069) oferece recursos superiores aos SLC em muitos cenários, com
+limites dependentes do catálogo:
 
-- Memória de usuário de 0,6 MB a 10 MB, conforme o modelo
+- Memória e capacidade variáveis conforme o modelo e a revisão selecionados
 - Duas portas EtherNet/IP a 10 Mbps/100 Mbps/1 Gbps, em modo Dual-IP (duas
-  redes independentes) ou Linear/DLR (anel com recuperação rápida)
-- Até 31 módulos Compact 5000 I/O (5069) locais a partir do Studio 5000 v30
-- Cartão SD (1784-SD1/SD2) para memória não volátil — fim da dependência de
-  bateria do SLC
+  redes lógicas) ou Linear/DLR, conforme configuração e firmware
+- Quantidade de módulos Compact 5000 I/O locais definida pelo controlador,
+  firmware, alimentação e documentação da release
+- Cartão SD compatível para armazenamento não volátil, conforme o modelo
 - A mesma base Logix do ControlLogix: mesma ferramenta (Studio 5000), mesmas
   instruções, mesma estrutura de tags
 
-Para comparação: o SLC 5/05, topo da linha antiga, tinha uma única porta
-Ethernet de 10 Mbps. E quando a aplicação envolve segurança de máquina, o
-Compact GuardLogix 5380 resolve controle padrão e safety no mesmo
-controlador.
+Os limites devem ser confirmados no
+[manual atual dos controladores 5380, 5069-UM001](https://literature.rockwellautomation.com/idc/groups/literature/documents/um/5069-um001_-en-p.pdf),
+e não copiados de uma tabela antiga de seleção.
+
+Para comparação, o SLC 5/05 possui recursos de comunicação e capacidade de
+uma geração anterior. Quando a aplicação envolve segurança de máquina, há
+modelos Compact GuardLogix 5380 capazes de suportar aplicações até o nível
+declarado no certificado, desde que a função safety seja projetada, validada
+e mantida dentro das condições aplicáveis.
 
 ## Como aproveitar a fiação do I/O 1746?
 
-Este é o ponto que mais reduz horas de parada. O sistema de conversão 1492 da
-Rockwell permite reaproveitar a fiação de campo: o borne removível do módulo
-1746 é desencaixado e plugado em um módulo de conversão 1492-CM1746, que leva
-os sinais por cabo pré-fabricado até o borne do módulo 5069 equivalente.
-Nenhum fio de campo é solto, nenhum sinal precisa ser reidentificado. Exemplo
-de catálogo: o 1492-CM1746-M04 converte um 1746-OW16 (16 saídas a relé) para
-o 5069-OW16.
+O sistema de conversão 1492 pode preservar as conexões de campo em combinações
+aprovadas: o conjunto remove o borne do módulo 1746 e o conecta, por módulo e
+cabo de conversão, ao I/O 5069 correspondente. Isso reduz intervenção na
+fiação, mas não elimina inspeção, identificação, loop check ou diferenças
+elétricas. Exemplo documentado: 1492-CM1746-M04 na rota 1746-OW16 para
+5069-OW16, com ressalvas técnicas próprias do módulo de destino.
 
-Três publicações da Rockwell guiam esse trabalho: o guia de seleção
-1492-SG010 (qual módulo de conversão usar para cada cartão 1746), a instrução
-de instalação 1492-IN132 e o manual de migração de hardware 1746-RM003, que
-mapeia os bulletins 1746/1747 para a família 5069.
+A referência principal é o
+[SLC 500 Hardware Migration, 1746-RM003](https://literature.rockwellautomation.com/idc/groups/literature/documents/rm/1746-rm003_-en-e.pdf),
+que mapeia módulos, explicita casos sem substituto e alerta para diferenças de
+especificação. A instrução do kit e a revisão do cabo/módulo selecionados
+também precisam fazer parte da lista de materiais.
 
 <TechnicalCallout variant="warning" title="Nem todo módulo tem conversão direta">
   Módulos especiais — contadores rápidos, cartões analógicos com configurações
@@ -81,22 +94,23 @@ mapeia os bulletins 1746/1747 para a família 5069.
 
 ## Como converter a lógica do RSLogix 500 para o Studio 5000?
 
-Com ferramenta oficial e revisão de engenharia — nessa ordem. Desde a versão
-12, o RSLogix 500 inclui uma função de exportação que gera um arquivo
-importável diretamente no Studio 5000 Logix Designer, levando junto a lógica
-ladder, os comentários e os símbolos. O processo completo está documentado
-pela Rockwell na publicação 1756-RM085 (*Converting PLC-5 or SLC 500 Logic to
-Logix-Based Logic*).
+Com ferramenta oficial e revisão de engenharia. A rota documentada para o
+RSLogix 500 v12 usa exportação em texto e o RSLogix Project Migrator para
+produzir um arquivo importável no Logix Designer. Consulte
+[SLC to CompactLogix, 5069-AP001](https://literature.rockwellautomation.com/idc/groups/literature/documents/ap/5069-ap001_-en-p.pdf)
+e o manual atualizado
+[1756-RM085](https://literature.rockwellautomation.com/idc/groups/literature/documents/rm/1756-rm085_-en-p.pdf).
 
-O que converte bem: ladder convencional, temporizadores, contadores e a
-documentação associada. O que exige retrabalho manual: instruções MSG,
+O que costuma converter com menos intervenção: ladder convencional,
+temporizadores, contadores e parte da documentação. O que exige análise
+manual inclui instruções MSG,
 endereçamento indireto, rotinas de interrupção (STI), malhas PID — a
 instrução do Logix é diferente da do SLC — e, principalmente, o mapeamento de
-I/O. O conversor cria tags de transferência no lugar dos endereços físicos, e
+I/O. O migrador cria estruturas para representar os dados legados, e
 ligar essas tags aos módulos 5069 reais é trabalho de engenharia, ponto a
 ponto. A própria Rockwell trata a conversão automática como ponto de partida,
-não como solução completa: 100% da lógica convertida precisa ser revisada e
-testada antes do comissionamento.
+não como solução completa: a lógica convertida precisa ser revisada contra a
+intenção funcional e testada antes do comissionamento.
 
 ## O que muda no endereçamento: de N7 e B3 para tags?
 
@@ -108,9 +122,9 @@ arrays, sem endereço fixo de memória.
 
 O conversor preserva o modelo antigo criando arrays homônimos: o arquivo N7
 vira um array de INT chamado N7, e a lógica continua referenciando N7[10].
-Isso funciona — e perpetua, dentro de um controlador atual, a organização de
-dados de 1991. A recomendação prática: aceite os arrays na primeira etapa
-para reduzir o risco de partida, e refatore para tags nomeadas e UDTs nos
+Isso funciona — e preserva, dentro de um controlador atual, a organização de
+dados do legado. A prática que recomendamos é manter os arrays na primeira
+etapa quando isso reduz risco, e refatorar para tags nomeadas e UDTs nos
 pontos de contato com HMI e Historian, onde o ganho em diagnóstico e
 integração aparece primeiro.
 
@@ -118,20 +132,19 @@ integração aparece primeiro.
 
 O parque SLC típico combina três redes: o SLC 5/03 traz DH-485 e uma porta
 RS-232 (DF1 por padrão), o SLC 5/04 usa DH+ e o SLC 5/05 tem Ethernet de
-10 Mbps. No CompactLogix 5380, tudo converge para
+10 Mbps. No CompactLogix 5380, a comunicação principal passa a ser
 [EtherNet/IP](/tecnologias/ethernet-ip-cpwe/): duas portas que operam em modo
 Dual-IP — separando, por exemplo, rede de supervisão e rede de dispositivos —
-ou em anel DLR.
+ou em modo Linear/DLR, conforme configuração suportada.
 
-Dois pontos facilitam a transição. Controladores Logix continuam aceitando
-mensagens PCCC (o protocolo de mensagens do SLC) sobre Ethernet, o que
-permite a convivência com SLCs remanescentes em uma migração faseada. E para
-periféricos presos em DH-485 ou DH+ — PanelView antigos, outros CLPs em rede
-— existem gateways dedicados no mercado; manter o periférico com gateway ou
-migrá-lo junto é decisão caso a caso.
+Algumas integrações legadas podem usar mensagens PCCC encapsuladas em
+EtherNet/IP, desde que os equipamentos, caminhos e instruções sejam
+compatíveis e testados. Para periféricos em DH-485 ou DH+ existem gateways e
+estratégias de substituição, cada uma com lifecycle, capacidade e suporte
+próprios; manter o periférico ou migrá-lo é decisão caso a caso.
 
-<TechnicalCallout variant="ot" title="A nova rede nasce segmentada ou nasce errada">
-  A migração para EtherNet/IP é a melhor janela para corrigir a rede:
+<TechnicalCallout variant="ot" title="A migração abre uma janela para segmentar a rede">
+  A migração para EtherNet/IP é uma oportunidade para revisar a rede:
   segmentação por zonas e conduítes conforme [IEC 62443](/solucoes/redes-iec-62443/),
   inventário de ativos e arquitetura alinhada ao CPwE. Replicar em Ethernet
   industrial a rede plana da era SLC só troca o meio físico do problema.
@@ -139,7 +152,7 @@ migrá-lo junto é decisão caso a caso.
 
 ## O que define o custo e o prazo de uma atualização SLC 500?
 
-Não existe número honesto sem levantamento. Os fatores que mais pesam:
+Uma estimativa defensável exige levantamento. Os fatores que mais pesam:
 
 - **Quantidade de chassis e pontos de I/O** — define as horas de conversão de
   hardware e de teste ponto a ponto
@@ -151,17 +164,17 @@ Não existe número honesto sem levantamento. Os fatores que mais pesam:
 - **Janela de parada disponível** — parada anual versus janelas curtas por área
 - **Validação formal** exigida pelo setor, como em alimentos e química
 
-Esses mesmos fatores definem a estratégia: migração completa em uma única
-parada programada (menos horas totais, risco concentrado) ou faseada por
-chassi e por área, usando o sistema 1492 e I/O remoto para conviver com o
-legado (mais calendário, menos risco por etapa). Os dois caminhos estão
+Esses mesmos fatores definem a estratégia: migração completa em uma parada
+programada ou faseada por chassi e área. Nenhuma das duas garante menor custo
+ou risco por si só; dependências, testes e capacidade de rollback determinam
+o resultado. Os caminhos estão
 detalhados na nossa página de [migração de PLCs legados](/solucoes/migracao-plc/),
 no aprofundamento técnico de [migração PLC-5 e SLC 500](/tecnologias/migracao-plc5-slc500/)
 e no [guia completo de migração para a plataforma Logix](/blog/migracao-plc5-controllogix-guia-completo/).
 
-A Integra Automação Industrial (Maringá-PR, desde 2016, Silver System
-Integrator Rockwell) executa esse ciclo completo — levantamento, conversão,
-FAT e comissionamento — em setores como açúcar e etanol, grãos, alimentos e
+A Integra Automação Industrial (Maringá-PR, desde 2016) participa do programa
+de integradores Rockwell no nível Silver e executa esse ciclo — levantamento,
+conversão, FAT e comissionamento — em setores como açúcar e etanol, grãos, alimentos e
 saneamento. Tem chassis SLC 500 em operação na sua planta?
 [Começamos pelo inventário](/contato?assunto=migracao-slc500).
 
@@ -169,38 +182,38 @@ saneamento. Tem chassis SLC 500 em operação na sua planta?
 
 ### O SLC 500 ainda é fabricado pela Rockwell?
 
-Não. A venda dos últimos controladores SLC 500 encerrou em 31 de março de
-2024, e a família consta como Discontinued no Product Lifecycle Status da
-Rockwell Automation. Reparo oficial e peças novas estão cada vez mais
-restritos, o que aumenta o risco de cada falha em campo.
+Os principais controladores SLC 500 estão descontinuados; o 1747-L553, por
+exemplo, tem data oficial de 31 de março de 2024. Lifecycle, reparo, troca e
+estoque variam por catálogo. Consulte cada código na página da Rockwell antes
+de definir criticidade, sobressalentes e prazo de migração.
 
 ### Qual CLP substitui o SLC 500?
 
-O CompactLogix 5380 (família 5069) é o substituto recomendado pela Rockwell
-Automation, com perfil de migração dedicado e ferramentas de conversão de
-hardware e software. Para aplicações com segurança de máquina, o Compact
-GuardLogix 5380 integra controle padrão e safety no mesmo controlador.
+O CompactLogix 5380 é a rota de migração publicada pela Rockwell para muitas
+aplicações SLC 500. A seleção do catálogo depende de I/O, comunicação,
+desempenho, motion, safety e disponibilidade. Compact GuardLogix pode compor
+aplicações safety dentro dos limites do certificado e do ciclo de validação.
 
 ### É possível converter o programa do RSLogix 500 automaticamente?
 
-Parcialmente. O RSLogix 500, a partir da versão 12, exporta um arquivo que o
-Studio 5000 importa, convertendo ladder, comentários e símbolos. Instruções
+Parcialmente. A rota documentada para o RSLogix 500 v12 exporta o projeto para
+o migrador, que produz arquivo importável no Logix Designer. Instruções
 MSG, PID, endereçamento indireto e o mapeamento de I/O exigem retrabalho
 manual, e toda a lógica convertida precisa ser revisada e testada.
 
 ### Preciso refazer a fiação de campo na migração?
 
-Na maioria dos casos, não. O sistema de conversão 1492 reaproveita o borne
-removível do módulo 1746: ele é plugado em um módulo 1492-CM1746, que conecta
-os sinais ao módulo 5069 por cabo pré-fabricado. Módulos especiais sem
-equivalente direto são a exceção e pedem solução caso a caso.
+Em combinações cobertas pelo sistema 1492, a fiação de campo pode ser
+preservada. O conjunto reaproveita o borne removível do módulo 1746 e o
+conecta ao I/O 5069 por módulo e cabo de conversão. Diferenças elétricas,
+módulos sem equivalente, identificação e loop check continuam no escopo.
 
 ### O CompactLogix 5380 se comunica com equipamentos DH-485 ou DH+?
 
-Não nativamente — as duas portas do controlador são EtherNet/IP. Gateways de
-mercado fazem a ponte com redes DH-485 e DH+ durante a transição, e os
-controladores Logix aceitam mensagens PCCC sobre Ethernet, o que facilita a
-convivência com SLCs remanescentes.
+Não pelas portas Ethernet embarcadas. A transição pode usar gateways ou
+substituição de periféricos; PCCC encapsulado é possível apenas nas combinações
+e caminhos suportados. Gateways também têm lifecycle e precisam ser
+dimensionados e testados.
 
 ### Quanto tempo leva uma atualização de SLC 500 para CompactLogix 5380?
 
@@ -208,3 +221,10 @@ Depende de fatores como quantidade de chassis e pontos de I/O, módulos
 especiais, qualidade da documentação e janela de parada disponível. A
 migração pode ser executada em uma única parada programada ou faseada por
 área — o levantamento de campo é o que permite estimar com seriedade.
+
+## Fontes primárias
+
+- [Rockwell Automation — SLC 500 to CompactLogix 5380, MIGRAT-PP004](https://literature.rockwellautomation.com/idc/groups/literature/documents/pp/migrat-pp004_-en-e.pdf)
+- [Rockwell Automation — SLC 500 Hardware Migration, 1746-RM003](https://literature.rockwellautomation.com/idc/groups/literature/documents/rm/1746-rm003_-en-e.pdf)
+- [Rockwell Automation — SLC to CompactLogix Programming Migration, 5069-AP001](https://literature.rockwellautomation.com/idc/groups/literature/documents/ap/5069-ap001_-en-p.pdf)
+- [Rockwell Automation — CompactLogix 5380 User Manual, 5069-UM001](https://literature.rockwellautomation.com/idc/groups/literature/documents/um/5069-um001_-en-p.pdf)

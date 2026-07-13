@@ -2,6 +2,7 @@
 title: "FactoryTalk View SE: o guia completo em português"
 description: "O que é FactoryTalk View SE, como funciona a arquitetura distribuída, redundância de servidores, FTAE, licenciamento e quando escolher View SE ou Optix."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["FactoryTalk View SE", "SCADA", "Rockwell"]
 draft: false
 ---
@@ -67,13 +68,15 @@ podem (e devem) rodar em máquinas diferentes:
 - **Clientes SE (SE Client)**: as estações de operação e engenharia, que
   consomem telas e dados dos servidores.
 
-Os limites documentados pela Rockwell no manual do usuário do View SE dão a
-escala da plataforma: até **10 servidores HMI (ou pares redundantes)** e até
-**50 clientes simultâneos** por aplicação distribuída — e a própria Rockwell
-recomenda assistência de arquitetura quando o projeto passa de 2 servidores
-e 20 clientes. Em [PlantPAx](/solucoes/plantpax/), essa estrutura aparece
-formalizada no PASS (Process Automation System Server), que consolida
-servidor HMI, servidor de dados e FTAE conforme a arquitetura de referência.
+Os manuais de determinadas versões documentam arquiteturas com até **10
+servidores HMI** — um par redundante consome duas posições — e até **50
+clientes simultâneos** por aplicação distribuída. Esses números são limites de
+referência da versão, não uma receita de sizing: tags, telas, scripts, alarmes,
+taxas de atualização, data servers, redundância e infraestrutura podem reduzir
+a capacidade prática. Em projetos maiores, confirme o manual e a matriz da
+release e valide carga e failover em FAT. Em
+[PlantPAx](/solucoes/plantpax/), essa estrutura aparece formalizada no PASS
+(Process Automation System Server).
 
 Um ponto que merece atenção desde o dia um: aplicações View SE distribuídas
 rodam muito bem **virtualizadas**. Consolidar servidores HMI, de dados e de
@@ -146,7 +149,7 @@ suportá-los, e a partir da 11.00 a funcionalidade foi removida do produto.
 
 ## Qual é a versão atual e o que ela exige?
 
-Na data deste guia (junho de 2026), a versão corrente é o **FactoryTalk
+Na data desta revisão (julho de 2026), a versão corrente é o **FactoryTalk
 View 16.00**, liberado pela Rockwell em outubro de 2025. A versão 15.00,
 de setembro de 2024, foi um marco por trazer recursos que apontam a direção
 da plataforma:
@@ -260,8 +263,9 @@ FactoryTalk View SE (Site Edition) é o software SCADA/HMI da Rockwell
 Automation para supervisão de planta, com arquitetura cliente-servidor
 distribuída, redundância de servidores e integração nativa com
 controladores Logix e com o ecossistema FactoryTalk. Ele atende desde uma
-estação standalone (SE Station) até aplicações distribuídas com até 10
-servidores HMI e 50 clientes simultâneos.
+estação standalone (SE Station) até aplicações distribuídas; os limites de
+servidores e clientes dependem da versão, e o sizing real depende da carga e
+deve ser validado no projeto.
 
 ### Qual a diferença entre FactoryTalk View SE e ME?
 

@@ -1,5 +1,3 @@
-const PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADKRCm67kAoc7SHU";
-
 const PLACEHOLDER_PATTERNS = [
   "<site key",
   "site key pública",
@@ -14,5 +12,5 @@ export function resolveTurnstileSiteKey(configuredKey: string | undefined): stri
     candidate.toLowerCase().includes(pattern),
   );
 
-  return candidate && !looksLikePlaceholder ? candidate : PUBLIC_TURNSTILE_SITE_KEY;
+  return candidate && !looksLikePlaceholder ? candidate : "";
 }

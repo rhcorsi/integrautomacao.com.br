@@ -1,0 +1,108 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EmailLink from "@/components/EmailLink.astro";
+import { COMPANY } from "@/utils/site";
+---
+
+<BaseLayout
+  title="Política editorial de conteúdo técnico"
+  description="Como a Integra produz, revisa, referencia e corrige conteúdo técnico sobre automação industrial."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-narrow py-16 lg:py-20">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+        Método de publicação
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Política editorial
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed text-integra-gray-700">
+        Esta política explica como separamos documentação de fabricante,
+        interpretação de norma, prática da Integra e evidência de projeto.
+      </p>
+      <p class="mt-4 text-sm font-mono text-integra-gray-500">
+        Última atualização: 12 de julho de 2026
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-narrow py-12 lg:py-16">
+      <div class="prose prose-lg max-w-none prose-headings:text-integra-gray-900 prose-a:text-integra-red-700 hover:prose-a:underline prose-strong:text-integra-gray-900">
+        <h2>Finalidade e vínculo comercial</h2>
+        <p>
+          Publicamos conteúdo para apoiar decisões de engenharia, operação,
+          manutenção, TI/OT, gestão industrial e contratação. A Integra também
+          presta serviços relacionados aos temas publicados. Esse vínculo
+          comercial não é ocultado: conteúdo educativo e oferta de serviço têm
+          funções diferentes, mesmo quando estão conectados por um CTA.
+        </p>
+
+        <h2>Tipos de afirmação</h2>
+        <ul>
+          <li><strong>Documentada pelo fabricante:</strong> versão, lifecycle, compatibilidade ou capacidade indicada em fonte oficial.</li>
+          <li><strong>Derivada de norma:</strong> requisito ou conceito ligado à edição identificada de um padrão.</li>
+          <li><strong>Prática Integra:</strong> abordagem de projeto adotada pela equipe, sem ser apresentada como obrigação universal.</li>
+          <li><strong>Observada em projeto:</strong> experiência de campo publicada apenas em nível compatível com autorização e confidencialidade.</li>
+          <li><strong>Projeção:</strong> possibilidade futura explicitamente identificada como hipótese, nunca como fato consumado.</li>
+        </ul>
+
+        <h2>Fontes e versões</h2>
+        <p>
+          Priorizamos manuais, páginas de lifecycle, normas, documentos de
+          organismos responsáveis e publicações oficiais. Conteúdo sobre versão,
+          licença, roadmap, suporte e status de parceiro exige revisão mais
+          frequente que conteúdo conceitual. Links podem deixar de funcionar;
+          por isso também registramos, quando disponível, código e revisão do
+          documento.
+        </p>
+
+        <h2>Autoria e revisão</h2>
+        <p>
+          O nome exibido em cada conteúdo identifica a responsabilidade
+          editorial registrada. Conteúdo coletivo é atribuído à equipe técnica,
+          sem inventar autoria individual. Quando houver autor ou revisor nominal,
+          sua participação deve ser confirmada antes da publicação. Datas de
+          atualização representam revisão substantiva, não simples alteração de
+          layout ou troca automática de data.
+        </p>
+
+        <h2>Normas e recomendações</h2>
+        <p>
+          Arquitetura de referência, benchmark e prática recomendada não são
+          tratados como requisito normativo sem base textual. Expressões como
+          “obrigatório”, “garante”, “sem downtime”, “qualquer” e “nunca” só devem
+          aparecer quando o contexto e a fonte sustentarem o alcance da frase.
+        </p>
+
+        <h2>Cases, imagens e confidencialidade</h2>
+        <p>
+          Não publicamos nome de cliente, arquitetura específica, valor,
+          cronograma ou indicador confidencial sem autorização adequada. Cases
+          anonimizados distinguem data do projeto e data da publicação. Imagens
+          ilustrativas são identificadas; fotografias reais recebem descrição
+          factual, sem transformar participação em evento em certificação ou
+          parceria.
+        </p>
+
+        <h2>Correções</h2>
+        <p>
+          Lifecycle, versões e documentação de produto mudam. Ao identificar
+          erro material, corrigimos o conteúdo, atualizamos a data de revisão e,
+          quando a mudança afeta uma decisão técnica, registramos uma nota no
+          próprio texto. Para apontar erro, fonte mais recente ou atribuição
+          inadequada, escreva para
+          <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
+        </p>
+
+        <h2>Uso de ferramentas</h2>
+        <p>
+          Ferramentas de automação, pesquisa ou apoio à redação podem auxiliar o
+          processo editorial, mas não substituem validação de fonte e
+          responsabilidade humana. Não publicamos métricas, clientes,
+          certificações ou experiências geradas por inferência.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

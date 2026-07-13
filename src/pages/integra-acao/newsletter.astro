@@ -8,16 +8,16 @@ const temas = [
   {
     code: "01",
     titulo: "PlantPAx 5.x, arquitetura DCS moderna",
-    desc: "Quando faz sentido migrar de View SE legado, requisito do controlador série P, biblioteca de objetos, sizing real de PASS-C e PASS distribuído.",
+    desc: "Quando faz sentido migrar de View SE legado, recursos que exigem controladores process compatíveis, biblioteca de objetos e dimensionamento de PASS-C e PASS distribuído.",
   },
   {
     code: "02",
     titulo: "CPwE / IEC 62443, redes industriais seguras",
-    desc: "Zonas e conduítes na prática, IDMZ implementada com firewalls redundantes, RD Gateway, PI-to-PI e o que separa SL-2 de SL-3 no campo.",
+    desc: "Zonas e conduítes na prática, análise de risco, arquiteturas com IDMZ quando aplicáveis e critérios para definir SL-T por zona.",
   },
   {
     code: "03",
-    titulo: "Migração PLC-5 / SLC500, modernização sem improviso",
+    titulo: "Migração PLC-5 / SLC 500, modernização sem improviso",
     desc: "Translation Tool vs reescrita de lógica, reaproveitamento de fiação 1492, janelas de cutover por área, plano de rollback e ambiente espelho.",
   },
   {
@@ -35,30 +35,30 @@ const temas = [
 const faq = [
   {
     q: "Qual a periodicidade da newsletter?",
-    a: "Mensal. Uma edição com curadoria, sem encher caixa de entrada.",
+    a: "Periódica. Enviamos quando houver uma curadoria técnica consistente, sem preencher sua caixa de entrada apenas para cumprir calendário.",
   },
   {
     q: "Vou receber e-mail comercial além da newsletter?",
-    a: "Não. A newsletter Integra Ação é o único e-mail que enviamos a partir desta inscrição. Sem ofertas, sem follow-up de vendas.",
+    a: "A inscrição é usada para a Integra Ação e comunicações diretamente relacionadas ao conteúdo. Não aciona follow-up comercial automático; uma conversa comercial só começa se você solicitar contato.",
   },
   {
     q: "Posso cancelar a inscrição?",
-    a: "Sim. Cada e-mail traz um link de descadastro com um clique. Removemos o endereço da base imediatamente.",
+    a: "Sim. Cada edição inclui um link de descadastro. Os envios são interrompidos e podemos manter apenas o registro mínimo de opt-out necessário para evitar reenvios indevidos.",
   },
   {
     q: "Vocês compartilham meu e-mail com terceiros?",
-    a: "Não. Mantemos a base privada e em conformidade com a LGPD. O endereço fica em ambiente Resend Audiences sob controle exclusivo da Integra.",
+    a: "Não vendemos nem cedemos a base para marketing de terceiros. O endereço é processado pelo Resend, operador usado para gerenciar contatos e envios, conforme a Política de Privacidade.",
   },
   {
     q: "É só para clientes da Integra?",
-    a: "Não. Engenheiros, técnicos, gestores industriais e estudantes são bem-vindos. Conteúdo é técnico e neutro de fornecedor sempre que possível.",
+    a: "Não. Engenheiros, técnicos, gestores industriais e estudantes são bem-vindos. O conteúdo é educativo e deixa explícito quando uma análise parte do ecossistema Rockwell ou de outro fabricante.",
   },
 ];
 ---
 
 <BaseLayout
   title="Newsletter Integra Ação"
-  description="Inscreva-se na newsletter Integra Ação: uma edição mensal de conteúdo técnico sobre PlantPAx, redes industriais, IEC 62443, FactoryTalk e governança de engenharia."
+  description="Inscreva-se na newsletter Integra Ação: curadoria periódica sobre PlantPAx, redes industriais, IEC 62443 e engenharia."
   ogImage="/og/integra-acao-newsletter.png"
   jsonLd={[faqSchema(faq)]}
 >
@@ -67,21 +67,21 @@ const faq = [
       <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
         <div>
           <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-            Integra Ação · Newsletter mensal
+            Integra Ação · Newsletter técnica
           </p>
           <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl mb-6">
-            Conteúdo técnico, uma edição por mês.
+            Conteúdo técnico quando houver algo que valha o envio.
           </h1>
           <p class="text-lg leading-relaxed text-integra-gray-700 lg:text-xl mb-8">
-            Inscreva-se para receber a newsletter Integra Ação. Uma edição
-            mensal com curadoria sobre arquitetura industrial, redes,
-            cibersegurança OT e governança de engenharia. Sem promoção
-            comercial, sem ruído de marketing.
+            Inscreva-se para receber uma curadoria periódica sobre arquitetura
+            industrial, redes, cibersegurança OT e governança de engenharia. A
+            prioridade é conteúdo educativo, com vínculo comercial e recorte de
+            fabricante indicados com transparência.
           </p>
           <ul class="space-y-3 text-sm text-integra-gray-700">
             <li class="flex items-start gap-2">
               <span class="text-integra-red-700 mt-0.5">·</span>
-              Uma edição por mês. Não enchemos caixa de entrada.
+              Envios periódicos, somente quando a curadoria estiver pronta.
             </li>
             <li class="flex items-start gap-2">
               <span class="text-integra-red-700 mt-0.5">·</span>
@@ -93,7 +93,7 @@ const faq = [
             </li>
             <li class="flex items-start gap-2">
               <span class="text-integra-red-700 mt-0.5">·</span>
-              LGPD, base privada, nada compartilhado com terceiros.
+              Dados tratados apenas pela Integra e pelos operadores descritos na política.
             </li>
           </ul>
         </div>
@@ -157,7 +157,7 @@ const faq = [
 
   <CtaBlock
     title="Prefere acompanhar pelo blog?"
-    description="O blog Integra Automação Industrial é o repositório técnico aberto. A newsletter Integra Ação é a curadoria mensal das publicações mais relevantes."
+    description="O blog é o repositório técnico aberto. A newsletter Integra Ação faz uma curadoria periódica das publicações mais relevantes."
     primaryCta={{ href: "/blog", label: "Ir para o blog" }}
     secondaryCta={{ href: "/integra-acao/", label: "Voltar à Integra Ação" }}
   />

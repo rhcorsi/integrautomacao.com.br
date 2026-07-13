@@ -19,7 +19,7 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: `/blog/${post.slug}/`,
+      link: `/blog/${post.id}/`,
       categories: post.data.tags,
       // RSS 2.0 reserva <author> para e-mail; nome de autor vai em dc:creator.
       customData: `<dc:creator><![CDATA[${post.data.author}]]></dc:creator>`,

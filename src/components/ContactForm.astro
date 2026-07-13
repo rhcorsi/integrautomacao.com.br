@@ -85,19 +85,26 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     </div>
     <div class="grid gap-2">
       <label for="cf-subject" class="text-sm font-medium text-integra-gray-900">
-        Assunto
+        Tipo de contato
       </label>
       <select
         id="cf-subject"
         name="subject"
+        data-contact-subject
         class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
       >
-        <option value="geral">Conversa técnica geral</option>
+        <option value="triagem">Triagem técnica inicial</option>
+        <option value="diagnostico">Diagnóstico de engenharia</option>
+        <option value="portfolio">Portfólio técnico sob NDA</option>
         <option value="plantpax">PlantPAx</option>
         <option value="factorytalk">FactoryTalk</option>
         <option value="redes-cyber">Redes Industriais / IEC 62443</option>
-        <option value="diagnostico">Diagnóstico de planta</option>
+        <option value="migracao-plc">Migração de PLC legado</option>
+        <option value="modernizacao-scada">Modernização de SCADA</option>
+        <option value="dados-industriais">Dados industriais / Historian</option>
+        <option value="infraestrutura-ot">Infraestrutura OT</option>
         <option value="parceria">Parceria / fornecedor</option>
+        <option value="conteudo">Conteúdo técnico / evento</option>
         <option value="outro">Outro</option>
       </select>
     </div>
@@ -105,8 +112,11 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 
   <div class="grid gap-2">
     <label for="cf-message" class="text-sm font-medium text-integra-gray-900">
-      Como podemos ajudar? <span class="text-integra-red" aria-hidden="true">*</span>
+      Contexto do contato <span class="text-integra-red" aria-hidden="true">*</span>
     </label>
+    <p id="cf-message-help" class="text-xs leading-relaxed text-integra-gray-500">
+      Se for um projeto, informe planta ou setor, sistema atual, principal risco e janela desejada. Não inclua senhas, backups ou dados sensíveis neste formulário.
+    </p>
     <textarea
       id="cf-message"
       name="message"
@@ -114,11 +124,12 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       rows="5"
       minlength="20"
       maxlength="4000"
+      aria-describedby="cf-message-help"
       class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900 resize-y"
     ></textarea>
   </div>
 
-  <!-- LGPD opt-in -->
+  <!-- Ciência sobre o tratamento descrito na política, não opt-in de marketing. -->
   <label class="flex items-start gap-3 text-sm text-integra-gray-700">
     <input
       type="checkbox"
@@ -128,15 +139,20 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       class="mt-1 size-4 rounded border-integra-gray-300 text-integra-red-700 focus:ring-integra-red"
     />
     <span>
-      Concordo com o tratamento dos meus dados conforme a
+      Li e estou ciente do tratamento dos meus dados descrito na
       <a
         href="/politica-privacidade"
         class="font-semibold text-integra-red-700 underline underline-offset-2 hover:text-integra-red-700"
       >
         Política de Privacidade
-      </a> da Integra. <span class="text-integra-red" aria-hidden="true">*</span>
+      </a> da Integra. Este contato não autoriza comunicações de marketing. <span class="text-integra-red" aria-hidden="true">*</span>
     </span>
   </label>
+
+  <!-- Contexto de origem preservado para qualificar o atendimento. -->
+  <input type="hidden" name="sourcePage" value="" data-contact-source-page />
+  <input type="hidden" name="sourceLabel" value="" data-contact-source-label />
+  <input type="hidden" name="cta" value="" data-contact-cta />
 
   <!-- Honeypot, bots fill this; humans don't see it -->
   <div aria-hidden="true" class="hidden">
@@ -190,7 +206,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       disabled={!hasTurnstile}
       class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
     >
-      Enviar mensagem
+      Enviar contexto
       <span aria-hidden="true">→</span>
     </button>
   </div>

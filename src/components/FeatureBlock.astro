@@ -31,6 +31,19 @@ const {
   variant = "light",
 } = Astro.props;
 
+const withContactContext = (item?: { href: string; label: string }) => {
+  if (!item || !item.href.startsWith("/contato")) return item?.href;
+
+  const url = new URL(item.href, Astro.url);
+  url.searchParams.set("sourcePage", Astro.url.pathname.slice(0, 300));
+  url.searchParams.set("sourceLabel", `Solução em destaque: ${title}`.slice(0, 160));
+  url.searchParams.set("cta", item.label.slice(0, 160));
+  return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
+};
+
+const primaryHref = withContactContext(primaryCta);
+const secondaryHref = withContactContext(secondaryCta);
+
 const variantStyles = {
   light: {
     section: "bg-integra-white",
@@ -122,7 +135,7 @@ const v = variantStyles[variant];
             <div class="flex flex-wrap gap-3">
               {primaryCta && (
                 <a
-                  href={primaryCta.href}
+                  href={primaryHref}
                   class:list={[
                     "inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-md transition-colors",
                     v.primaryBtn,
@@ -134,7 +147,7 @@ const v = variantStyles[variant];
               )}
               {secondaryCta && (
                 <a
-                  href={secondaryCta.href}
+                  href={secondaryHref}
                   class:list={[
                     "inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-md transition-colors",
                     v.secondaryBtn,

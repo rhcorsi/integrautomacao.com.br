@@ -23,7 +23,7 @@ const dateFmt = (d: Date) =>
 const integraAcaoFormatos = [
   {
     icon: "lucide:mail",
-    eyebrow: "Newsletter mensal",
+    eyebrow: "Newsletter técnica",
     title: "Curadoria técnica na caixa de entrada",
     href: "/integra-acao/newsletter/",
     cta: "Inscrever-se",
@@ -31,7 +31,7 @@ const integraAcaoFormatos = [
   {
     icon: "lucide:video",
     eyebrow: "Webinars técnicos",
-    title: "Sessões mensais de 45-60 min com Q&A",
+    title: "Sessões em preparação, com agenda confirmada",
     href: "/integra-acao/webinar/",
     cta: "Ver formato",
   },
@@ -46,7 +46,7 @@ const integraAcaoFormatos = [
 ---
 
 <BaseLayout
-  title="Blog técnico"
+  title="Blog técnico de automação industrial"
   description="Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443, migração de PLC e governança de engenharia industrial."
   ogImage="/og/blog.png"
 >
@@ -56,12 +56,13 @@ const integraAcaoFormatos = [
         Blog técnico
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Engenharia que ensina.
+        Blog de automação industrial.
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Não escrevemos para vender. Escrevemos para esclarecer arquiteturas,
-        normas e decisões técnicas que aparecem no dia a dia das plantas
-        industriais, em linguagem direta, baseada em fatos.
+        Publicamos análises para esclarecer arquiteturas, normas e decisões que
+        aparecem no dia a dia das plantas industriais. O conteúdo é educativo,
+        baseado em fontes e produzido por uma empresa que também presta os
+        serviços relacionados — vínculo que tratamos com transparência.
       </p>
     </div>
   </section>
@@ -77,7 +78,7 @@ const integraAcaoFormatos = [
           {posts.map((post) => (
             <li>
               <a
-                href={`/blog/${post.slug}/`}
+                href={`/blog/${post.id}/`}
                 class="group block bg-integra-white p-7 lg:p-8 hover:bg-integra-gray-50 transition-colors"
               >
                 <div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
@@ -204,7 +205,7 @@ const integraAcaoFormatos = [
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {recentEventos.map((e) => (
             <a
-              href={`/eventos/${e.slug}/`}
+              href={`/eventos/${e.id}/`}
               class="group rounded-lg border border-integra-gray-200 bg-integra-white overflow-hidden hover:border-integra-gray-900 transition-colors"
             >
               <div class="aspect-[16/10] overflow-hidden bg-integra-gray-100">

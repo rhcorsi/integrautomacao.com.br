@@ -1,152 +1,141 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const srcDir = path.join(__dirname, '..', 'src');
-const pagesDir = path.join(srcDir, 'pages');
+const distDir = path.join(__dirname, "..", "dist");
 
-// 1. Gather all slugs from techCatalog.ts
-let catalogSlugs = [];
-try {
-  const catalogContent = fs.readFileSync(path.join(srcDir, 'data', 'techCatalog.ts'), 'utf8');
-  // Simple regex extraction for slugs
-  const slugRegex = /slug:\s*["']([^"']+)["']/g;
-  let match;
-  while ((match = slugRegex.exec(catalogContent)) !== null) {
-    catalogSlugs.push(match[1]);
-  }
-} catch (err) {
-  console.error("Error reading techCatalog.ts slugs:", err.message);
+if (!fs.existsSync(distDir)) {
+  console.error("dist/ não encontrado. Execute `npm run build` antes desta auditoria.");
+  process.exit(2);
 }
 
-// Slugs we expect: e.g. tc-devicewise, TIA Portal (tia-portal), elipse-e3, schneider-control-expert, etc.
-console.log("Extracted Catalog Slugs:", catalogSlugs);
+function walk(dir, files = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const entryPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) walk(entryPath, files);
+    else files.push(entryPath);
+  }
+  return files;
+}
 
-// 2. Map all valid files in src/pages to valid routes
-const validRoutes = new Set();
-validRoutes.add('/');
+function publicPath(file) {
+  return `/${path.relative(distDir, file).replace(/\\/g, "/")}`;
+}
 
-function scanPages(dir, baseRoute = '') {
-  fs.readdirSync(dir).forEach(file => {
-    const fullPath = path.join(dir, file);
-    const isDir = fs.statSync(fullPath).isDirectory();
-    
-    if (isDir) {
-      scanPages(fullPath, `${baseRoute}/${file}`);
-    } else {
-      const ext = path.extname(file);
-      if (ext === '.astro' || ext === '.mdx' || ext === '.md') {
-        const baseName = path.basename(file, ext);
-        let route = `${baseRoute}/${baseName}`;
-        
-        if (baseName === 'index') {
-          route = baseRoute === '' ? '/' : baseRoute;
-        }
-        
-        // Skip dynamic files like [slug].astro
-        if (!route.includes('[')) {
-          validRoutes.add(route);
-        }
+function routeForHtml(file) {
+  const filePath = publicPath(file);
+  if (filePath === "/index.html") return "/";
+  if (filePath.endsWith("/index.html")) return filePath.slice(0, -"index.html".length);
+  return filePath;
+}
+
+const files = walk(distDir);
+const filePaths = new Set(files.map(publicPath));
+const htmlByRoute = new Map(
+  files
+    .filter((file) => file.endsWith(".html"))
+    .map((file) => [routeForHtml(file), file]),
+);
+
+function normalizeRoute(pathname) {
+  if (pathname === "/") return "/";
+  if (pathname.endsWith("/")) return pathname;
+  if (htmlByRoute.has(`${pathname}/`)) return `${pathname}/`;
+  return pathname;
+}
+
+function targetExists(pathname) {
+  const route = normalizeRoute(pathname);
+  if (htmlByRoute.has(route)) return true;
+  if (filePaths.has(pathname)) return true;
+  if (filePaths.has(`${pathname}/index.html`)) return true;
+  const htmlFallback = `${pathname.replace(/\/$/, "")}.html`;
+  if (filePaths.has(htmlFallback)) return true;
+  return pathname.startsWith("/api/");
+}
+
+function idsIn(file) {
+  const html = fs.readFileSync(file, "utf8");
+  const ids = new Set();
+  const regex = /\bid=["']([^"']+)["']/g;
+  let match;
+  while ((match = regex.exec(html)) !== null) ids.add(match[1]);
+  return ids;
+}
+
+function decodeHtmlAttribute(value) {
+  return value
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, decimal) => String.fromCodePoint(Number.parseInt(decimal, 10)))
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'");
+}
+
+const idCache = new Map();
+const problems = [];
+let checked = 0;
+
+for (const [pageRoute, file] of htmlByRoute) {
+  const html = fs.readFileSync(file, "utf8");
+  const linkRegex = /\b(?:href|src)=["']([^"']+)["']/g;
+  let match;
+
+  while ((match = linkRegex.exec(html)) !== null) {
+    const raw = decodeHtmlAttribute(match[1].trim());
+    if (
+      !raw ||
+      raw.startsWith("mailto:") ||
+      raw.startsWith("tel:") ||
+      raw.startsWith("data:") ||
+      raw.startsWith("javascript:") ||
+      raw.startsWith("//")
+    ) {
+      continue;
+    }
+
+    let target;
+    try {
+      target = new URL(raw, `https://integrautomacao.com.br${pageRoute}`);
+    } catch {
+      problems.push({ pageRoute, raw, reason: "URL inválida" });
+      continue;
+    }
+    if (target.origin !== "https://integrautomacao.com.br") continue;
+
+    checked += 1;
+    let pathname;
+    try {
+      pathname = decodeURI(target.pathname);
+    } catch {
+      problems.push({ pageRoute, raw, reason: "caminho com encoding inválido" });
+      continue;
+    }
+
+    if (!targetExists(pathname)) {
+      problems.push({ pageRoute, raw, reason: `destino ausente (${pathname})` });
+      continue;
+    }
+
+    if (target.hash) {
+      const targetRoute = normalizeRoute(pathname);
+      const targetFile = htmlByRoute.get(targetRoute);
+      if (!targetFile) continue;
+      if (!idCache.has(targetFile)) idCache.set(targetFile, idsIn(targetFile));
+      const id = decodeURIComponent(target.hash.slice(1));
+      if (id && !idCache.get(targetFile).has(id)) {
+        problems.push({ pageRoute, raw, reason: `fragmento #${id} ausente` });
       }
     }
-  });
+  }
 }
 
-scanPages(pagesDir);
+console.log("--- Auditoria de rotas no HTML gerado ---");
+console.log(`Páginas HTML: ${htmlByRoute.size}`);
+console.log(`Referências internas verificadas: ${checked}`);
+console.log(`Problemas: ${problems.length}`);
 
-// Add dynamic catalog routes
-catalogSlugs.forEach(slug => {
-  validRoutes.add(`/tecnologias/${slug}`);
-});
-
-// Also there might be a silver-system-integrator route in certificacoes?
-// Wait, the page /certificacoes.astro is mapped to /certificacoes.
-// What about /certificacoes/silver-system-integrator?
-// Let's check if there is a directory or if it is just a subpage or anchor.
-// Let's print all valid routes we gathered.
-console.log("\nValid Site Routes:\n", Array.from(validRoutes).sort());
-
-// 3. Scan all source files for hrefs and cross-check them
-const brokenLinks = [];
-const allHrefsFound = [];
-
-function walkDir(dir, callback) {
-  fs.readdirSync(dir).forEach(f => {
-    let dirPath = path.join(dir, f);
-    let isDirectory = fs.statSync(dirPath).isDirectory();
-    if (isDirectory) {
-      walkDir(dirPath, callback);
-    } else {
-      callback(dirPath);
-    }
-  });
+for (const problem of problems) {
+  console.log(`  ${problem.pageRoute} → ${problem.raw}: ${problem.reason}`);
 }
 
-walkDir(srcDir, filePath => {
-  const ext = path.extname(filePath);
-  if (!['.astro', '.ts', '.mdx', '.md', '.tsx', '.jsx'].includes(ext)) return;
-  if (filePath.includes('scripts')) return; // skip scripts
-
-  const content = fs.readFileSync(filePath, 'utf8');
-  
-  // Find hrefs in HTML/Astro: href="/..." or href={"/..."}
-  // Regex that captures href values starting with /
-  const hrefRegex = /href=["'](\/[^"'\s#?]+)(?:[#?][^"'\s]*)?["']/g;
-  let match;
-  while ((match = hrefRegex.exec(content)) !== null) {
-    const route = match[1];
-    allHrefsFound.push({ filePath, route, line: getLineNumber(content, match.index) });
-  }
-
-  // Also match: href={`/...`} or href={`/...`}
-  const templateHrefRegex = /href=\{\`(\/[^\`\s#?]+)(?:[#?][^\`\s]*)?\`\}/g;
-  while ((match = templateHrefRegex.exec(content)) !== null) {
-    const route = match[1];
-    allHrefsFound.push({ filePath, route, line: getLineNumber(content, match.index) });
-  }
-});
-
-function getLineNumber(content, index) {
-  return content.substring(0, index).split('\n').length;
-}
-
-// 4. Verify all found routes
-allHrefsFound.forEach(item => {
-  // Normalize routes
-  let cleanRoute = item.route;
-  if (cleanRoute.endsWith('/')) {
-    cleanRoute = cleanRoute.slice(0, -1);
-  }
-  if (cleanRoute === '') {
-    cleanRoute = '/';
-  }
-
-  // Check if it is a valid route
-  if (!validRoutes.has(cleanRoute)) {
-    // Wait, is it a dynamic route expression? Like /tecnologias/${slug} in JSX?
-    if (cleanRoute.includes('${') || cleanRoute.includes('/blog/') || cleanRoute.includes('/cases/')) {
-      // ignore dynamic code variables or blog/case routes which are resolved at runtime
-      return;
-    }
-    // Also ignore /certificacoes/silver-system-integrator if it is a real route.
-    // Let's check if this is an issue.
-    brokenLinks.push({
-      file: path.relative(srcDir, item.filePath),
-      line: item.line,
-      route: item.route,
-      cleanRoute
-    });
-  }
-});
-
-console.log(`\n--- Route Cross-Check Results ---`);
-console.log(`Total internal links found: ${allHrefsFound.length}`);
-console.log(`Broken links count: ${brokenLinks.length}`);
-
-if (brokenLinks.length > 0) {
-  console.log(`\nPotential Broken Links:`);
-  brokenLinks.forEach(b => {
-    console.log(`  File: src/${b.file} at Line ${b.line} -> Route: "${b.route}" is NOT a recognized static or dynamic page route!`);
-  });
-} else {
-  console.log(`\nAll internal links are 100% verified and valid!`);
-}
+if (problems.length > 0) process.exitCode = 1;

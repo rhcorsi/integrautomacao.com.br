@@ -2,6 +2,7 @@
 title: "PlantPAx 5.x vs 4.x: o que mudou e quando migrar"
 description: "Comparativo técnico entre PlantPAx 5.x e 4.x: instruções embarcadas no firmware, alarmes no controlador, requisitos de versão e quando migrar."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["PlantPAx", "DCS", "Migração"]
 draft: false
 ---
@@ -38,12 +39,14 @@ embarcada `PPID` na 5.x, no mesmo nível de um `TON` ou `PIDE` genérico.
 Segundo a Rockwell, isso reduz o footprint de memória e melhora a execução,
 porque o código de processo não é mais "adicionado depois" ao projeto.
 
-**2. Controladores de processo dedicados.** As instruções embarcadas existem
-apenas nos controladores com sufixo "P": ControlLogix 5580P (1756-L81EP,
-1756-L83EP, 1756-L85EP) e CompactLogix 5380P (5069-L320ERP, 5069-L340ERP).
-Esses [controladores da família Logix](/tecnologias/controllogix-compactlogix/)
-já saem de fábrica com o modelo de tarefas PlantPAx pré-configurado e com
-relatório de uso de instruções para dimensionamento.
+**2. Controladores de processo dedicados para as instruções embarcadas.**
+Essas instruções existem nos controladores Process compatíveis das famílias
+ControlLogix e CompactLogix. Esses
+[controladores da família Logix](/tecnologias/controllogix-compactlogix/)
+trazem recursos de processo no firmware, modelo de tarefas configurado para a
+aplicação e relatório de uso para dimensionamento. O sistema PlantPAx 5.x,
+porém, também pode incluir controladores Logix padrão, skids e bibliotecas
+anteriores nas combinações documentadas para cada release.
 
 **3. Alarmes no controlador, não no servidor.** Na 5.x, os alarmes dos
 objetos de processo são tag-based, avaliados no próprio controlador e prontos
@@ -68,18 +71,23 @@ A primeira release da linha 5.x estabeleceu um piso claro de software e
 hardware:
 
 - **Studio 5000 Logix Designer v33** ou superior;
-- **FactoryTalk View SE v12** ou superior — a biblioteca 5.x **não suporta
-  FactoryTalk View ME**, conforme a Knowledgebase da Rockwell (ID 1128969);
+- **FactoryTalk View SE v12** ou superior para a biblioteca de sistema da
+  primeira release 5.x. PanelView/View ME precisa ser avaliado pela versão da
+  biblioteca: o guia 5.50, por exemplo, prevê bibliotecas 5.20 ou anteriores
+  para produtos PanelView;
 - **Controladores de processo** ControlLogix 5580P ou CompactLogix 5380P,
   com firmware v33 ou superior;
-- A release de sistema atual é a **PlantPAx 5.50**, documentada no Selection
-  Guide PROCES-SG001 da Rockwell.
+- A release de sistema atual na data desta revisão é a **PlantPAx 5.50**,
+  documentada no
+  [Selection Guide PROCES-SG001](https://literature.rockwellautomation.com/idc/groups/literature/documents/sg/proces-sg001_-en-p.pdf)
+  da Rockwell.
 
-A tradução prática: não existe "instalar a 5.x" sobre um 1756-L75 nem sobre
-um L83E padrão. A migração 4.x→5.x quase sempre inclui troca ou atualização
-do hardware de controle, e isso precisa entrar no planejamento de capex e na
-janela de parada desde o início — não como surpresa no meio do projeto. No
-lado da supervisão, a versão do
+A tradução prática: não existe uma atualização genérica de toda planta para
+5.x sem verificar função por função. Para adotar as instruções embarcadas é
+necessário controlador Process compatível; controladores padrão podem
+permanecer em partes da arquitetura com bibliotecas suportadas. A troca de
+hardware entra no planejamento apenas onde a arquitetura-alvo e o ciclo de
+vida a justificam. No lado da supervisão, a versão do
 [FactoryTalk View SE](/tecnologias/factorytalk-view-se/) instalada na planta
 define se os servidores HMI acompanham a atualização ou se viram uma frente
 de trabalho própria.
@@ -139,9 +147,9 @@ sendo engenharia:
 - **Filosofia de alarmes**: migrar é o momento de racionalizar a base de
   alarmes conforme ISA-18.2, não de copiar a lista antiga para o controlador
   novo;
-- **Hardware e rede**: substituição pelos controladores P, atualização de
-  firmware e, com frequência, revisão da segmentação de rede no mesmo
-  pacote.
+- **Hardware e rede**: confirmação de quais funções exigem controladores
+  Process, atualização de firmware e, quando o risco justificar, revisão da
+  segmentação de rede no mesmo pacote.
 
 <TechnicalCallout variant="warning" title="Biblioteca 4.x modificada? Trate como reengenharia">
   Se a sua instalação 4.x tem AOIs da biblioteca alteradas, faceplates
@@ -151,18 +159,20 @@ sendo engenharia:
   projetos de atualização PlantPAx.
 </TechnicalCallout>
 
-## Quando ainda NÃO migrar para a 5.x?
+## Quando ainda NÃO migrar para as instruções embarcadas da 5.x?
 
 A 4.x não morreu: a biblioteca 4.10 segue disponível no portal da Rockwell
 como previous release e continua operando em milhares de plantas. Esperar é a
 decisão certa quando:
 
 - **O hardware de controle é recente e não é da linha P.** Controladores
-  ControlLogix 5570/5580 padrão instalados há pouco tempo seguem atendendo a
-  4.x; antecipar a troca sem outro driver raramente se justifica;
+  ControlLogix 5570/5580 padrão podem permanecer com a biblioteca compatível,
+  inclusive dentro de uma arquitetura de sistema 5.x que admita essa
+  combinação; antecipar a troca sem outro driver raramente se justifica;
 - **A operação depende de FactoryTalk View ME / PanelView** nos pontos de
-  comando: a biblioteca 5.x não suporta View ME, então essa camada precisa de
-  redesenho antes ou junto da migração;
+  comando: confirme a biblioteca compatível e a estratégia de HMI local no
+  guia da release. Algumas combinações usam bibliotecas 5.20 ou anteriores e
+  podem exigir convivência ou redesenho, em vez de uma proibição genérica;
 - **A biblioteca foi fortemente customizada** e não há driver de negócio
   (expansão, obsolescência, requisito de cliente) que pague a reengenharia
   agora;
@@ -171,14 +181,15 @@ decisão certa quando:
   governança de alarmes, e deixar a 5.x para a próxima janela com troca de
   hardware planejada.
 
-O contraponto: todo o desenvolvimento novo da Rockwell está na linha 5.x —
-da 5.10 à 5.50 atual. Esperar é tática válida; planejar como se a 4.x fosse
-receber novidades não é. E se o seu legado é anterior ao PlantPAx — PLC-5,
+O contraponto: o roadmap e as releases correntes publicadas pela Rockwell estão
+na linha de sistema 5.x, da 5.10 à 5.50 na data desta revisão. Esperar pode ser
+tática válida, mas exige lifecycle e compatibilidade documentados. E se o seu legado é anterior ao PlantPAx — PLC-5,
 SLC 500 ou DCS de outro fabricante — a discussão é outra: veja
 [migração de PLCs e sistemas legados](/solucoes/migracao-plc/).
 
-A Integra Automação Industrial (Maringá-PR, desde 2016) é Silver System
-Integrator da Rockwell Automation com certificação PlantPAx DCS, e executa
+A Integra Automação Industrial (Maringá-PR, desde 2016) participa do programa
+de integradores da Rockwell Automation no nível Silver e possui capacidade
+PlantPAx declarada no programa. Executa
 desde o diagnóstico de aderência 4.x→5.x até a conversão de biblioteca,
 telas e filosofia de alarmes em setores como açúcar e etanol, alimentos e
 papel e celulose.
@@ -187,26 +198,27 @@ papel e celulose.
 
 ### Qual é a principal diferença entre PlantPAx 4.x e 5.x?
 
-Na 5.x as instruções de processo são embarcadas no firmware de controladores
-dedicados (ControlLogix 5580P e CompactLogix 5380P); na 4.x eram Add-On
+Na biblioteca 5.x as instruções de processo são embarcadas no firmware de
+controladores Process compatíveis; na 4.x eram Add-On
 Instructions importadas em cada projeto. Isso reduz memória no controlador,
 leva a detecção de alarmes do servidor para o controlador e centraliza a
 configuração no Studio 5000.
 
 ### Preciso trocar de controlador para usar PlantPAx 5.x?
 
-Sim, se os controladores atuais não forem da linha de processo. As instruções
-embarcadas da 5.x existem apenas nos ControlLogix 5580P (1756-L81EP, L83EP,
-L85EP) e CompactLogix 5380P (5069-L320ERP, L340ERP), com firmware v33 ou
-superior. Um L7x ou um 5580 padrão continua atendendo apenas a biblioteca
-4.x.
+Para usar as instruções de processo embarcadas, o controlador precisa ser um
+modelo Process suportado pela release. Isso não obriga a substituir todos os
+controladores de um sistema: o Selection Guide prevê arquiteturas com Logix
+padrão, controladores de skid e bibliotecas anteriores. A decisão deve cruzar
+função, firmware, biblioteca, lifecycle e benefício operacional.
 
 ### PlantPAx 5.x funciona com FactoryTalk View ME?
 
-Não. A biblioteca 5.x suporta FactoryTalk View SE a partir da v12, e a
-Rockwell confirma na Knowledgebase (ID 1128969) que o View ME não é
-suportado. Plantas que dependem de PanelView com View ME precisam tratar essa
-camada como frente separada do projeto de migração.
+Depende da biblioteca e do papel da HMI. A biblioteca de sistema PlantPAx usa
+FactoryTalk View SE; para PanelView/View ME, o guia 5.50 indica bibliotecas
+PlantPAx 5.20 ou anteriores em combinações suportadas. Plantas com HMI local
+devem tratar essa camada explicitamente no plano de migração e confirmar a
+matriz da release, em vez de presumir compatibilidade ou incompatibilidade.
 
 ### A conversão de PlantPAx 4.x para 5.x é automática?
 

@@ -24,3 +24,21 @@ if (toggle && menu && iconOpen && iconClose) {
     }
   });
 }
+
+// Mantém o estado ARIA dos mega-menus desktop sincronizado com os estados
+// visuais de hover e focus-within definidos no CSS.
+for (const wrapper of document.querySelectorAll("[data-desktop-mega]")) {
+  const trigger = wrapper.querySelector("[data-mega-trigger]");
+  if (!trigger) continue;
+
+  const setExpanded = (expanded) => {
+    trigger.setAttribute("aria-expanded", String(expanded));
+  };
+
+  wrapper.addEventListener("mouseenter", () => setExpanded(true));
+  wrapper.addEventListener("mouseleave", () => setExpanded(false));
+  wrapper.addEventListener("focusin", () => setExpanded(true));
+  wrapper.addEventListener("focusout", (event) => {
+    if (!wrapper.contains(event.relatedTarget)) setExpanded(false);
+  });
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "integrautomacao-com-br",
+  "pages_build_output_dir": "./dist",
+  // Match production for the first preview; advance only after smoke testing.
+  "compatibility_date": "2026-06-10",
+  "compatibility_flags": [],
+  // Preserve encrypted values managed in Cloudflare while this project moves
+  // from dashboard-managed settings to a version-controlled configuration.
+  "keep_vars": true,
+  "vars": {
+    "NODE_VERSION": "22",
+    "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU"
+  }
+}

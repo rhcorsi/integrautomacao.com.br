@@ -2,6 +2,7 @@
 title: "Migração PLC-5 para ControlLogix: o guia completo"
 description: "Guia técnico de migração PLC-5 para ControlLogix: datas de fim de vida, conversão de I/O com Bulletin 1492, tradução de lógica RSLogix 5 e cutover faseado."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["Migração PLC", "ControlLogix", "Rockwell"]
 draft: false
 ---
@@ -18,12 +19,17 @@ destino das centenas de pontos de I/O em campo, modernizar a rede de
 comunicação e fazer tudo isso com o mínimo de parada possível em uma planta que
 não pode ficar desligada.
 
-A urgência tem data. A Rockwell Automation descontinuou o hardware PLC-5 (linhas
-1785 e 1771) em **junho de 2017** — não vende mais nem dá suporte de fábrica. E
-o software de programação **RSLogix 5 chegou à fase final de ciclo de vida em 31
-de dezembro de 2025**: depois dessa data não há novas ativações de licença. Ou
-seja, quem ainda roda PLC-5 hoje opera sobre uma base sem fornecimento de peças
-novas e sem ferramenta de engenharia atualizada.
+A urgência é real, mas o status deve ser verificado por catálogo. A família
+PLC-5/1771 é legada e seus principais itens estão descontinuados; alguns ainda
+podem ter serviço de reparo ou substituição conforme o
+[Product Lifecycle Status da Rockwell](https://www.rockwellautomation.com/en-us/products/details.1785-L80B.html).
+O **RSLogix 5 deixou de receber novas vendas de ativação em 31 de dezembro de
+2025**, enquanto instalações existentes continuam elegíveis a suporte técnico
+conforme contrato e entitlement. A distinção está no
+[comunicado oficial de ciclo de vida do RSLogix 5](https://www.rockwellautomation.com/en-gb/company/news/blogs/rslogix5-eol-status.html).
+Quem opera PLC-5 precisa, portanto, inventariar peças, reparabilidade, licenças,
+mídias e suporte disponível — não presumir que todos os itens têm o mesmo
+status.
 
 Este guia descreve a [migração PLC-5/SLC 500](/tecnologias/migracao-plc5-slc500)
 em seis fases — levantamento, engenharia, conversão, FAT, cutover e suporte — do
@@ -34,16 +40,17 @@ ponto de vista de quem precisa entregar a planta rodando no fim.
 O calendário de obsolescência da Rockwell é o gatilho mais objetivo para
 priorizar a migração PLC-5. Três marcos importam:
 
-- **PLC-5 (hardware 1785 e I/O 1771)** — descontinuado em **junho de 2017**.
-  Sem venda nova nem suporte de fábrica desde então; o mercado restante é peça
-  usada e refurbished, sem garantia de fornecimento.
+- **PLC-5 (hardware 1785 e I/O 1771)** — família descontinuada, com data e
+  condição de reparo/substituição específicas por número de catálogo. Peças do
+  fabricante, reparadas e de mercado secundário podem ter disponibilidades e
+  garantias diferentes.
 - **SLC 500 (controladores e I/O 1746/1747)** — a Rockwell anunciou a
   descontinuação dos controladores remanescentes para **31 de março de 2024**,
   com o suporte encerrando ao longo de 2024. A recomendação oficial de destino
   para o SLC 500 é CompactLogix 5380 com I/O Compact 5000.
-- **RSLogix 5 (software do PLC-5)** — fase de descontinuação em **31 de dezembro
-  de 2025**. Sem novas ativações depois dessa data; só continua quem já tem
-  licença instalada (e, para suporte, contrato Legacy TechConnect).
+- **RSLogix 5 (software do PLC-5)** — sem novas vendas de ativação depois de
+  **31 de dezembro de 2025**. Instalações e licenças existentes não deixam de
+  funcionar por essa data e podem continuar com suporte conforme contrato.
 
 A leitura de engenharia é direta: o PLC-5 está há quase uma década fora de linha
 e a janela de "deixar como está" fechou. Cada falha de módulo agora é uma
@@ -54,10 +61,12 @@ direto na Rockwell antes de decidir; veja como tratamos a
 
 <TechnicalCallout variant="warning" title="O risco silencioso é a engenharia, não o hardware">
   Muita planta foca em estocar módulos 1771 sobressalentes e esquece que, sem
-  RSLogix 5 ativável, uma simples alteração de lógica ou um download de
-  recuperação pode ficar inviável. Backup do projeto, mídia de instalação e
-  chave de ativação do RSLogix 5 fazem parte do inventário crítico tanto quanto
-  o hardware.
+  uma instalação licenciada e recuperável do RSLogix 5, uma alteração de
+  lógica ou download de recuperação pode atrasar. Backup do projeto, mídia,
+  dados de entitlement, procedimento de rehosting e contrato de suporte fazem
+  parte do inventário crítico tanto quanto o hardware. O fim de novas vendas de
+  ativação não deve ser confundido com desativação automática das licenças
+  existentes.
 </TechnicalCallout>
 
 ## Quais são as seis fases de uma migração PLC-5?
@@ -213,13 +222,13 @@ passagem de token que opera em 57,6 / 115,2 / 230,4 kbps — décadas mais lenta
 menos diagnosticável que o EtherNet/IP de destino. A estratégia padrão é
 **conviver antes de cortar**.
 
-O caminho recomendado pela Rockwell para a fase de transição é um **gateway
-ControlLogix**: um chassi 1756 com módulo **1756-DHRIO** (que oferece dois canais
-DH+/RIO independentes, A e B) para falar com o legado, e um módulo
-**1756-EN2T** de EtherNet/IP para a rede nova. Esse gateway desacopla a saúde da
-rede nova do estado de qualquer PLC-5 individual — diferente de simplesmente
-trocar um PLC-5/40 por um PLC-5/40E, em que a porta DH+ vira ponto único de
-falha se o processador entrar em Program ou faltar.
+Uma opção histórica para a fase de transição é um **gateway ControlLogix** com
+o módulo **1756-DHRIO** e uma interface EtherNet/IP. O 1756-DHRIO, porém, foi
+[descontinuado em 31 de dezembro de 2024](https://www.rockwellautomation.com/en-us/products/details.1756-DHRIO.html).
+Ele pode continuar reparável ou disponível em estoque, mas não deve ser
+especificado como ponte padrão sem análise de lifecycle, disponibilidade e
+alternativas suportadas. A arquitetura de convivência deve ser definida para
+o parque real e para o prazo em que o legado permanecerá ativo.
 
 Na prática, isso permite migrar área por área: os controladores ControlLogix
 novos já nascem em EtherNet/IP, enquanto o gateway mantém a comunicação com os
@@ -312,9 +321,9 @@ previsíveis, são mitigáveis com método. Os principais:
 - **Erro de fiação no cutover.** Mitigação: preferir o sistema Bulletin 1492
   swing-arm onde a fiação de campo está sã, reduzindo o número de fios mexidos a
   quase zero.
-- **Rede subestimada.** Mitigação: planejar a convivência DH+ ↔ EtherNet/IP com
-  gateway ControlLogix (1756-DHRIO + 1756-EN2T) desde a engenharia, não no
-  campo.
+- **Rede subestimada.** Mitigação: planejar a convivência DH+ ↔ EtherNet/IP
+  desde a engenharia, avaliando gateway, estoque, suporte e lifecycle; o
+  1756-DHRIO é uma opção legada já descontinuada, não uma escolha automática.
 - **Janela de parada estourada.** Mitigação: cutover faseado por área, com
   pré-montagem e rollback escrito para cada fase.
 - **Documentação e ativação perdidas.** Mitigação: tratar backup do projeto,
@@ -336,11 +345,12 @@ antes de fechar escopo.
 
 ### O PLC-5 ainda tem suporte da Rockwell em 2026?
 
-Não. A Rockwell descontinuou o hardware PLC-5 (linhas 1785 e I/O 1771) em junho
-de 2017 e o software RSLogix 5 chegou à fase final de ciclo de vida em 31 de
-dezembro de 2025, sem novas ativações de licença. Em 2026, manter PLC-5 significa
-depender de peças do mercado secundário e de uma licença de engenharia que não
-pode mais ser reativada.
+A família está descontinuada, mas suporte, reparo e substituição variam por
+catálogo e contrato. A Rockwell informa que não vende novas ativações de
+RSLogix 5 desde 31 de dezembro de 2025, mas instalações existentes continuam
+elegíveis a suporte técnico. Verifique cada código no Product Lifecycle Status
+e confirme entitlement, rehosting, estoque e reparabilidade antes de definir o
+risco.
 
 ### A ferramenta de tradução converte 100% do programa PLC-5 automaticamente?
 
@@ -361,19 +371,19 @@ estado ou o layout do painel vai mudar de qualquer forma.
 
 ### Dá para migrar o PLC-5 sem parar a planta inteira?
 
-Sim, com cutover faseado. A estratégia é migrar por área ou por sistema dentro de
-janelas de parada parciais, usando um gateway ControlLogix (1756-DHRIO +
-1756-EN2T) para manter a comunicação entre o que já migrou para EtherNet/IP e os
-PLC-5/SLC 500 ainda em DH+. Cada fase tem pré-montagem e plano de rollback
-escrito antes de iniciar.
+Em muitos sistemas, sim, com cutover faseado e janelas parciais. A convivência
+entre EtherNet/IP e DH+ pode exigir um gateway, mas o 1756-DHRIO está
+descontinuado e sua disponibilidade deve ser confirmada. Cada fase precisa de
+pré-montagem, teste, critérios de retorno e plano de rollback aprovado.
 
 ### O que acontece com a rede DH+ na migração?
 
-A rede Data Highway Plus (DH+) — token-passing a 57,6 / 115,2 / 230,4 kbps — é
-substituída por EtherNet/IP. Durante a transição, um gateway ControlLogix com
-módulo 1756-DHRIO faz a ponte entre o DH+ legado e a rede nova, permitindo
-convivência até o último nó migrar. O gateway DH+ é removido quando não há mais
-equipamento legado na rede.
+A rede Data Highway Plus (DH+) — token-passing a 57,6 / 115,2 / 230,4 kbps —
+normalmente é substituída por EtherNet/IP. Durante a transição, pode haver uma
+ponte temporária entre a rede legada e a nova. O 1756-DHRIO foi uma solução
+comum, mas está descontinuado; a opção atual deve ser validada com a Rockwell e
+o integrador conforme equipamentos, prazo e disponibilidade. A ponte é removida
+quando não há mais dependência do legado.
 
 ### O SLC 500 segue o mesmo caminho do PLC-5?
 

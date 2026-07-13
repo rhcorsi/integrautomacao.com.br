@@ -6,29 +6,29 @@ const formato = [
   {
     icon: "duração",
     label: "45-60 min",
-    desc: "Tempo justo para abrir um tema com profundidade, sem virar palestra de produto.",
+    desc: "Duração prevista para desenvolver um tema e reservar espaço para perguntas.",
   },
   {
-    icon: "frequência",
-    label: "Mensal",
-    desc: "Uma sessão por mês, divulgada com antecedência via newsletter Integra Ação.",
+    icon: "agenda",
+    label: "Sob confirmação",
+    desc: "Cada sessão será anunciada somente depois de tema, data e apresentador estarem confirmados.",
   },
   {
     icon: "formato",
     label: "Apresentação + Q&A",
-    desc: "Apresentação técnica seguida de perguntas abertas. Sem mediador comercial.",
+    desc: "Formato proposto: apresentação técnica seguida de perguntas abertas.",
   },
   {
     icon: "gravação",
-    label: "Disponível depois",
-    desc: "Gravações ficam acessíveis para inscritos que não puderam estar ao vivo.",
+    label: "Quando autorizada",
+    desc: "A disponibilidade de gravação será informada em cada sessão, conforme conteúdo e autorizações.",
   },
 ];
 
 const temasPropostos = [
-  "PlantPAx 5.x: o que muda no projeto quando o controlador série P entra como pré-requisito",
+  "PlantPAx 5.x: recursos process embarcados, compatibilidade e escolha de controladores",
   "IDMZ na prática: como traduzir CPwE em entregáveis de engenharia",
-  "Migração PLC-5 / SLC500: dos descritivos funcionais ao cutover por área",
+  "Migração PLC-5 / SLC 500: dos descritivos funcionais ao cutover por área",
   "Governança de alarmes ISA-18.2: o que vira lixo na sala de controle e o que vira ação",
   "FactoryTalk View SE: arquitetura distribuída, redundância e padrão de telas",
 ];
@@ -36,7 +36,7 @@ const temasPropostos = [
 
 <BaseLayout
   title="Webinars Integra Ação"
-  description="Webinars técnicos da Integra Ação: sessões mensais de 45-60 minutos com casos reais, Q&A aberto e gravação disponível para inscritos."
+  description="Formato de webinars técnicos da Integra Ação: sessões em preparação, temas propostos e agenda publicada após confirmação."
   ogImage="/og/integra-acao-webinar.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -45,14 +45,13 @@ const temasPropostos = [
         Integra Ação · Webinars técnicos
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl mb-6">
-        Conversas técnicas com casos reais e perguntas abertas.
+        Webinars técnicos em preparação.
       </h1>
       <p class="text-lg leading-relaxed text-integra-gray-700 lg:text-xl max-w-3xl">
-        Os webinars da Integra Ação são sessões ao vivo de 45 a 60 minutos
-        em que abrimos um tema técnico com profundidade, mostramos como
-        ele aparece em projeto real e respondemos perguntas em aberto.
-        A inscrição é feita pela newsletter, assim avisamos da próxima
-        sessão e enviamos a gravação depois.
+        A Integra está estruturando sessões ao vivo de 45 a 60 minutos para
+        desenvolver temas de engenharia e responder perguntas. Datas,
+        apresentadores, exemplos e disponibilidade de gravação serão informados
+        individualmente quando cada sessão estiver confirmada.
       </p>
     </div>
   </section>
@@ -63,7 +62,7 @@ const temasPropostos = [
         Como funciona
       </p>
       <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl mb-12 max-w-3xl">
-        Formato direto, técnico e sem ruído comercial.
+        Formato proposto para as primeiras sessões.
       </h2>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {formato.map((f) => (
@@ -131,9 +130,10 @@ const temasPropostos = [
         Calendário sendo publicado.
       </h2>
       <p class="text-base leading-relaxed text-integra-gray-200 lg:text-lg mb-8">
-        Os primeiros webinars Integra Ação serão divulgados pela newsletter
-        e por aqui assim que a agenda for fechada. Inscreva-se na newsletter
-        para receber o convite com antecedência e a gravação depois.
+        Os primeiros webinars serão divulgados pela newsletter e por aqui
+        quando tema, apresentador e data estiverem confirmados. A inscrição na
+        newsletter permite receber o convite; a existência de gravação será
+        informada em cada edição.
       </p>
       <div class="flex flex-wrap gap-4">
         <a

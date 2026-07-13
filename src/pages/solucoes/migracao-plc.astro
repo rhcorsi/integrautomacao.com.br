@@ -14,7 +14,7 @@ const risks = [
   {
     title: "Obsolescência de hardware",
     description:
-      "PLC5, SLC500, cartões remotos e redes antigas ficam cada vez mais difíceis de manter, comprar e diagnosticar.",
+      "PLC-5, SLC 500, cartões remotos e redes antigas ficam cada vez mais difíceis de manter, comprar e diagnosticar.",
   },
   {
     title: "Conhecimento informal",
@@ -41,7 +41,7 @@ const deliverables = [
 
 const faq = [
   {
-    q: "É possível migrar PLC5/SLC500 sem parar a planta inteira?",
+    q: "É possível migrar PLC-5 ou SLC 500 sem parar a planta inteira?",
     a: "Na maioria dos casos, sim, com estratégia por área, etapas de conversão, painéis intermediários, janelas menores e rollback validado. O diagnóstico define o melhor caminho.",
   },
   {
@@ -53,12 +53,12 @@ const faq = [
     a: "Sim. Migração de controlador sem revisar tags, telas, alarmes e documentação costuma deixar a operação com metade do problema resolvido.",
   },
   {
-    q: "Por que migrar PLC-5/SLC500 agora?",
-    a: "A linha PLC-5 entrou em status discontinued em junho de 2017. A SLC500 foi descontinuada em fases: SLC 5/01 e 5/02 em 2017, SLC 5/03 8K em 2018, e os demais controladores saíram de venda em 31 de março de 2024 (Rockwell Automation Lifecycle Status). Spare fica mais caro e raro a cada ano, e quanto mais a planta espera, maior a chance de a migração ser feita em regime de emergência (parada não planejada, prazo apertado, escopo comprimido). Migrar de forma planejada custa menos em horas, em risco e em janela de parada do que migrar sob pressão de uma falha em produção.",
+    q: "Por que planejar a migração de PLC-5 ou SLC 500?",
+    a: "A linha PLC-5 entrou em status discontinued em junho de 2017. A família SLC 500 foi descontinuada em fases: SLC 5/01 e 5/02 em 2017, SLC 5/03 8K em 2018, e os demais controladores saíram de venda em 31 de março de 2024, segundo o catálogo de ciclo de vida da Rockwell. Disponibilidade e preço de sobressalentes variam; um inventário permite decidir se é melhor sustentar, estocar ou migrar antes que uma falha comprima prazo e escopo.",
   },
   {
     q: "Qual hardware substituto: ControlLogix ou CompactLogix?",
-    a: "Depende do tamanho original. PLC-5 grande tipicamente vai para ControlLogix 5580. SLC500 pequeno vai para CompactLogix 5380. Critério: contagem de I/O, requisitos de comunicação, integração futura com PlantPAx ou FactoryTalk.",
+    a: "Depende da contagem de I/O, memória, comunicação, motion, safety, redundância e integrações previstas. ControlLogix 5580 ou CompactLogix 5380 podem ser candidatos, mas não existe correspondência automática baseada apenas no tamanho do PLC-5 ou SLC 500.",
   },
   {
     q: "Posso reaproveitar I/O cards antigos?",
@@ -80,14 +80,14 @@ const faq = [
 ---
 
 <BaseLayout
-  title="Migração PLC5/SLC500 para ControlLogix"
-  description="Modernização de controladores PLC5 e SLC500 para ControlLogix/CompactLogix com inventário, simulação, cutover controlado e documentação."
+  title="Migração de PLC-5 e SLC 500 para Logix"
+  description="Modernização de PLC-5 e SLC 500 para ControlLogix ou CompactLogix com inventário, simulação, cutover controlado, rollback e documentação."
   ogImage="/og/solucoes-migracao-plc.png"
   jsonLd={[
     serviceSchema({
-      name: "Migração PLC5/SLC500 para ControlLogix",
+      name: "Migração de PLC-5 e SLC 500 para ControlLogix",
       description:
-        "Modernização de controladores PLC5 e SLC500 para ControlLogix/CompactLogix com inventário, simulação, cutover controlado e documentação.",
+        "Modernização de controladores PLC-5 e SLC 500 para ControlLogix ou CompactLogix com inventário, simulação, cutover controlado e documentação.",
       url: Astro.url.href,
     }),
     faqSchema(faq),
@@ -100,7 +100,7 @@ const faq = [
           Solução · Modernização de Controladores
         </p>
         <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-          Migração PLC5 / SLC500 → ControlLogix
+          Migração PLC-5 / SLC 500 → ControlLogix
         </h1>
         <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
           Modernizar controlador legado não é trocar CPU. É entender lógica,
@@ -260,7 +260,7 @@ const faq = [
       <StandardsBadges
         title="Tecnologias e práticas relacionadas"
         standards={[
-          { code: "PLC5 / SLC500", description: "Inventário legado" },
+          { code: "PLC-5 / SLC 500", description: "Inventário legado" },
           { code: "ControlLogix", description: "Arquitetura alvo" },
           { code: "CompactLogix", description: "Aplicações menores" },
           { code: "EtherNet/IP", description: "Rede de controle" },
@@ -276,7 +276,7 @@ const faq = [
   <CtaBlock
     title="Tem controladores legados sustentando uma área crítica?"
     description="Envie backup do projeto, fotos do painel e lista de I/O para uma estimativa técnica por área. A migração só vem depois que a operação entende janela, impacto e plano de rollback."
-    primaryCta={{ href: "/contato?assunto=migracao-plc", label: "Avaliar migração" }}
+    primaryCta={{ href: "/contato?assunto=migracao-plc", label: "Solicitar triagem de migração" }}
     secondaryCta={{ href: "/blog/migracao-plc5-controllogix-guia-completo/", label: "Ler o guia completo de migração" }}
   />
 </BaseLayout>

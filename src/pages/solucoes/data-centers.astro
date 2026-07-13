@@ -61,7 +61,7 @@ const faq = [
   },
   {
     q: "Posso usar servidor TI corporativo como servidor industrial?",
-    a: "Tecnicamente sim, mas a política de mudança, janela de patch e SLA de TI raramente atendem requisitos OT. Em IDC industrial, os servidores são dedicados, com governança alinhada à parada de processo, não ao calendário de TI.",
+    a: "Sim, se a infraestrutura corporativa atender compatibilidade, segmentação, latência, disponibilidade, suporte e governança de mudanças da aplicação OT. Em outros casos, infraestrutura dedicada ou segregada reduz dependências. A decisão é conjunta entre TI e OT e deve ficar registrada em SLA e matriz de responsabilidades.",
   },
   {
     q: "Qual capacidade de storage IDC industrial precisa?",
@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: "Energia redundante é obrigatória em IDC industrial?",
-    a: "Para plantas críticas, sim, UPS dimensionada para 30-60 min de autonomia + grupo gerador de socorro. Sem isso, queda de energia parcial vira parada total de operação. Em planta com janela de manutenção tolerante, UPS curta basta.",
+    a: "Não existe autonomia universal. UPS, caminhos elétricos e gerador são dimensionados a partir da carga, do tempo de partida da fonte de emergência, do shutdown seguro, dos modos de falha e do impacto da indisponibilidade. Em algumas plantas bastam minutos de ride-through; em outras são necessários caminhos e fontes redundantes testados.",
   },
   {
     q: "Quanto tempo leva implantar um IDC industrial pequeno?",
@@ -204,7 +204,7 @@ const faq = [
   <CtaBlock
     title="Sua infraestrutura OT sustenta a operação ou só mantém sistemas ligados?"
     description="Avaliamos servidores, aplicações, licenças, backup, rede e riscos de disponibilidade com olhar de automação industrial."
-    primaryCta={{ href: "/contato?assunto=data-centers-industriais", label: "Avaliar infraestrutura OT" }}
+    primaryCta={{ href: "/contato?assunto=data-centers-industriais", label: "Solicitar triagem de infraestrutura OT" }}
     secondaryCta={{ href: "/solucoes/factorytalk", label: "Ver FactoryTalk" }}
   />
 </BaseLayout>

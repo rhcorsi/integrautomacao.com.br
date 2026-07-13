@@ -5,13 +5,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
+import EventDate from "@/components/EventDate.astro";
 import { SITE } from "@/utils/site";
 import { eventSchema } from "@/utils/schema";
 
 export async function getStaticPaths() {
   const eventos = await getCollection("eventos", ({ data }) => !data.draft);
   return eventos.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 }
@@ -24,7 +25,9 @@ const eventLd = eventSchema({
   name: entry.data.title,
   description: entry.data.summary,
   url: eventUrl,
-  startDate: entry.data.pubDate,
+  startDate: entry.data.startDate,
+  endDate: entry.data.endDate,
+  status: entry.data.eventStatus,
   location: entry.data.location,
   organizer: entry.data.organizer,
   image: new URL(entry.data.coverImage.src, SITE.url).toString(),
@@ -36,6 +39,7 @@ const eventLd = eventSchema({
   description={entry.data.summary}
   ogType="article"
   ogImage={entry.data.coverImage.src}
+  ogImageAlt={entry.data.coverAlt}
   jsonLd={[eventLd]}
 >
   <article>
@@ -43,7 +47,7 @@ const eventLd = eventSchema({
       <div class="container-default py-16 lg:py-20">
         <Breadcrumbs leaf={entry.data.title} />
         <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-          {entry.data.dateLabel} · {entry.data.location}
+          <EventDate startDate={entry.data.startDate} endDate={entry.data.endDate} /> · {entry.data.location}
         </p>
         <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl mb-6">
           {entry.data.title}
@@ -99,7 +103,7 @@ const eventLd = eventSchema({
             {entry.data.gallery.map((img, i) => (
               <Image
                 src={img}
-                alt={`${entry.data.title}, registro ${i + 1} de ${entry.data.gallery.length}`}
+                alt={`Registro ${i + 1} do ${entry.data.title}, em ${entry.data.location}`}
                 widths={[400, 800]}
                 sizes="(min-width: 1024px) 350px, 50vw"
                 loading="lazy"

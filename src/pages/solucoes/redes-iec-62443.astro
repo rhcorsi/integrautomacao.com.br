@@ -49,7 +49,7 @@ const controls = [
   {
     title: "IDMZ industrial",
     description:
-      "A integração com TI, nuvem, historian corporativo e acesso remoto passa por uma zona intermediária, nunca por caminho direto.",
+      "Quando há integração entre TI e OT, uma IDMZ é uma arquitetura de referência para intermediar serviços e evitar caminhos diretos até a zona de controle.",
   },
   {
     title: "Alta disponibilidade",
@@ -79,11 +79,11 @@ const faq = [
   },
   {
     q: "Como vocês fazem segmentação sem parar a planta?",
-    a: "Trabalhamos por fases: primeiro mapeamos tráfego real (port mirror + análise), desenhamos a segmentação alvo, validamos em ambiente de homologação ou laboratório, e fazemos o cutover em janela planejada com plano de rollback. Nunca cego, nunca improvisado.",
+    a: "Trabalhamos por fases: primeiro mapeamos o tráfego real, desenhamos a segmentação alvo, validamos em homologação ou laboratório quando possível e fazemos o cutover em janela planejada com plano de rollback. A necessidade e a duração da parada dependem da topologia e das dependências encontradas.",
   },
   {
     q: "Vocês entregam o equipamento de rede também?",
-    a: "Não fornecemos hardware diretamente. Somos integradores, não revenda. Trabalhamos com a especificação ideal (Stratix, Cisco IE) e indicamos canais de aquisição com a Rockwell ou parceiros, garantindo que o que chega na planta é o que foi projetado.",
+    a: "Não fornecemos hardware diretamente. Como integradores, especificamos opções compatíveis com o projeto, como Stratix ou Cisco IE, e orientamos a aquisição por canais apropriados. Modelo, revisão, licenças e quantidade devem ser conferidos no pedido e no recebimento; a especificação reduz divergências, mas não substitui essa validação.",
   },
   {
     q: "Como CPwE se relaciona com IEC 62443?",
@@ -99,19 +99,19 @@ const faq = [
   },
   {
     q: "Posso ter rede industrial sem IDMZ se a planta for isolada?",
-    a: "Em planta totalmente isolada, é tecnicamente possível. Mas a maioria das plantas precisa integrar dados com TI corporativa (ERP, manutenção predictiva, dashboards executivos), e nesses casos a IDMZ é o controle estrutural recomendado pela CPwE e pela IEC 62443. Não há atalho seguro.",
+    a: "Sim. A IEC 62443 exige que zonas, conduítes e controles sejam definidos pela análise de risco; ela não impõe uma topologia IDMZ pelo nome. Quando existem fluxos entre TI e OT, uma IDMZ é a arquitetura de referência recomendada pelo CPwE para intermediar serviços e reduzir caminhos diretos. Em ambiente realmente isolado, os controles e os riscos de mídia removível, manutenção e acesso local continuam precisando ser tratados.",
   },
   {
     q: "Qual a diferença entre IEC 62443 SL-2 e SL-3?",
-    a: "SL-2 protege contra ataques deliberados com recursos modestos (script kiddies, malware comum). SL-3 protege contra ataques sofisticados com habilidades específicas em ICS (engenharia social, recursos médios). SL-3 exige controles bem mais profundos: segmentação rigorosa, monitoramento ativo e MFA obrigatório.",
+    a: "Os níveis representam capacidades crescentes do adversário e requisitos por fundamento de segurança. O SL-T deve resultar da análise de risco de cada zona e pode ser um vetor, não uma etiqueta única para toda a planta. SL-3 normalmente exige controles mais robustos que SL-2, mas não se resume a uma lista genérica como 'MFA obrigatório'; os requisitos aplicáveis precisam ser avaliados por fundamento e arquitetura.",
   },
   {
     q: "Patch management em OT atrasa a planta?",
-    a: "Atrasa quando improvisado. Bem feito (homologação em ambiente espelho, janela planejada, plano de rollback), o patch management entra na rotina sem impactar produção. O risco é o oposto: não patchar e ser comprometido por CVE conhecido.",
+    a: "Pode exigir janela ou degradação controlada. Um programa maduro combina avaliação de aplicabilidade, homologação, backup, janela e rollback para equilibrar risco cibernético e disponibilidade. Nem todo patch é imediato nem toda postergação é segura; a decisão precisa ser registrada por ativo e vulnerabilidade.",
   },
   {
     q: "Vocês fazem teste de penetração em rede OT?",
-    a: "Não fazemos pentest invasivo em planta de processo. Risco operacional inaceitável. Trabalhamos com red team-as-a-service em parceiros especializados, sempre em ambiente espelho ou em janela controlada com plano de recuperação aprovado.",
+    a: "Não executamos testes intrusivos em produção sem escopo, análise de risco e autorização formal. Quando há necessidade, trabalhamos com parceiros especializados, preferencialmente em ambiente espelho ou em janela controlada, com limites técnicos, monitoramento e plano de recuperação aprovados.",
   },
 ];
 ---
@@ -191,7 +191,7 @@ const faq = [
       <SectionHeader
         eyebrow="Arquitetura de referência Integra"
         title="O desenho que aplicamos na prática"
-        description="Diagrama autoral da Integra: como o modelo Purdue, a IDMZ e as Cell/Area Zones se organizam em uma planta real. Cada conduíte entre camadas tem firewall e regras explícitas por porta e protocolo."
+        description="Diagrama autoral da Integra: uma arquitetura de referência baseada em Purdue, IDMZ e Cell/Area Zones. Os controles de cada conduíte são definidos por risco e podem incluir firewall, ACL, gateway ou outros mecanismos documentados."
         accent={true}
       />
       <figure class="reveal overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-white p-6 shadow-sm lg:p-10">
@@ -210,9 +210,9 @@ const faq = [
       <ManualReference
         image={idmzUntrustedTrusted}
         alt="Figura IDMZ High Level Concepts mostrando zona Untrusted (Enterprise) e Trusted (Industrial) separadas por firewall com regra No Direct IACS Traffic"
-        title="A IDMZ é a fronteira inegociável entre Untrusted e Trusted"
+        title="IDMZ como padrão de referência para a fronteira OT/IT"
         source="Cisco + Rockwell Automation · Securely Traversing IACS Data across the IDMZ (ENET-TD013A-EN-P)"
-        caption="Print público do guia ENET-TD013A-EN-P: nenhum tráfego IACS atravessa direto. A IDMZ replica serviços, registra, inspeciona e desconecta, é o controle estrutural exigido pelo CPwE para atender os requisitos de zonas e conduítes da IEC 62443."
+        caption="Print público do guia ENET-TD013A-EN-P: no desenho CPwE, a IDMZ intermedeia serviços entre TI e OT e evita tráfego IACS direto. A IEC 62443 exige zonas, conduítes e controles definidos por risco, mas não prescreve uma topologia única."
         theme="ot"
       />
       <div>
@@ -220,19 +220,19 @@ const faq = [
           IDMZ · zona-pivô do CPwE
         </p>
         <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
-          Sem IDMZ, não existe IEC 62443 aplicada
+          Quando TI e OT se integram, a IDMZ reduz exposição direta
         </h2>
         <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
-          A IDMZ é o ponto onde a segurança de processo deixa de ser teoria.
-          Servidores replicados, gateways de transferência, RD Gateway,
-          historian em PI-to-PI e WSUS vivem na IDMZ, nunca direto na
-          camada de controle. É essa fronteira que permite manter a planta
-          conectada à TI corporativa sem expor o IACS.
+          Em arquiteturas CPwE, a IDMZ intermedeia serviços como gateways de
+          transferência, acesso remoto, atualização e replicação de dados,
+          evitando sessões diretas entre enterprise e a zona de controle. A
+          seleção dos serviços e dos controles depende dos fluxos, da análise
+          de risco e da operação real da planta.
         </p>
         <ul class="mt-6 grid gap-2 text-sm text-integra-gray-700">
           <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Firewalls redundantes em modo high-availability, com regras documentadas e revisadas por mudança.</span></li>
           <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Serviços replicados (Historian, AD, WSUS, Antivírus) em vez de acesso direto enterprise→industrial.</span></li>
-          <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Acesso remoto sempre via Remote Desktop Gateway com MFA, jump host registrado e gravação de sessão.</span></li>
+          <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Acesso remoto por gateway ou jump host controlado, com autenticação forte, autorização, logs e gravação de sessão quando compatível com o risco.</span></li>
           <li class="flex gap-2"><span class="text-integra-ot mt-1">·</span><span>Pontos de desconexão (Disconnect) explícitos para isolar a planta em incidente de cibersegurança.</span></li>
         </ul>
       </div>
@@ -325,7 +325,7 @@ const faq = [
   <CtaBlock
     title="Sua planta precisa de uma análise de rede e cibersegurança OT?"
     description="Começamos com diagnóstico documentado: o que existe hoje, qual o risco operacional, qual o gap até IEC 62443 SL-T desejado. Sem alarmismo, sem checklist de produto."
-    primaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar diagnóstico OT" }}
+    primaryCta={{ href: "/contato?assunto=redes-cyber", label: "Solicitar triagem OT" }}
     secondaryCta={{ href: "/solucoes/plantpax", label: "Ver PlantPAx" }}
   />
 </BaseLayout>

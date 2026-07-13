@@ -8,6 +8,9 @@ export default defineConfig({
   site: "https://integrautomacao.com.br",
   output: "static",
   trailingSlash: "ignore",
+  // Preserva o espaçamento HTML do Astro 6 e evita regressões visuais em
+  // sequências de elementos inline após a migração para o compilador Rust.
+  compressHTML: true,
   prefetch: {
     // "hover" prefetcha no intento de clique; "viewport" baixava o HTML de
     // centenas de links (mega-menu + grids) conforme o usuário rolava.

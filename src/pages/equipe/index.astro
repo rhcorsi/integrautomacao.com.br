@@ -1,0 +1,183 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import teamPhoto from "@/assets/eventos/ena-2025-belo-horizonte/foto-01.jpg";
+import {
+  COLLECTIVE_AUTHOR,
+  COMPANY_FOUNDING,
+  TEAM_MEMBERS,
+} from "@/data/authors";
+import { ORG_ID } from "@/utils/schema";
+import { SITE } from "@/utils/site";
+
+const teamUrl = new URL(COLLECTIVE_AUTHOR.href, SITE.url).toString();
+const photoAlt =
+  "Rafhael Henrique Corsi Feitosa e Joldmar Oliveira diante do estande da Rockwell Automation no ENA 2025";
+
+const teamLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${teamUrl}#${COLLECTIVE_AUTHOR.schemaId}`,
+  name: COLLECTIVE_AUTHOR.name,
+  description: COLLECTIVE_AUTHOR.description,
+  url: teamUrl,
+  parentOrganization: { "@id": ORG_ID },
+  member: TEAM_MEMBERS.map((member) => ({
+    "@type": "Person",
+    "@id": `${teamUrl}#${member.id}`,
+    name: member.name,
+    jobTitle: member.role,
+    url: `${teamUrl}#${member.id}`,
+    worksFor: { "@id": ORG_ID },
+  })),
+};
+---
+
+<BaseLayout
+  title="Equipe técnica e autoria"
+  description="Conheça a assinatura editorial coletiva da Integra e as trajetórias públicas de seus fundadores e diretores, Rafhael Henrique Corsi Feitosa e Joldmar Oliveira."
+  ogImage={teamPhoto.src}
+  ogImageAlt={photoAlt}
+  jsonLd={[teamLd]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-narrow py-16 lg:py-20">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+        Autoria e responsabilidade editorial
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Equipe técnica Integra.
+      </h1>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+        Os artigos sem autoria individual confirmada recebem uma assinatura
+        coletiva. Ela identifica a responsabilidade editorial da Integra sem
+        atribuir a uma pessoa específica um texto que foi produzido ou
+        revisado em equipe.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/blog/"
+          class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
+        >
+          Ler o blog técnico <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/politica-editorial/"
+          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+        >
+          Consultar a política editorial
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-default py-16 lg:py-20">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+        <figure class="overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-white">
+          <Image
+            src={teamPhoto}
+            alt={photoAlt}
+            widths={[480, 720, 960]}
+            sizes="(min-width: 1024px) 44vw, 100vw"
+            loading="eager"
+            decoding="async"
+            class="h-auto w-full"
+          />
+          <figcaption class="border-t border-integra-gray-200 px-5 py-4 text-sm leading-relaxed text-integra-gray-600">
+            Rafhael Henrique Corsi Feitosa e Joldmar Oliveira, fundadores e
+            diretores da Integra, no ENA 2025 em Belo Horizonte.
+          </figcaption>
+        </figure>
+
+        <div>
+          <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+            Assinatura coletiva
+          </p>
+          <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+            O que “Equipe técnica Integra” significa.
+          </h2>
+          <div class="mt-6 space-y-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+            <p>
+              A assinatura informa quem assume a responsabilidade editorial
+              pelo conteúdo. Ela não afirma que os dois fundadores escreveram
+              ou revisaram individualmente cada artigo.
+            </p>
+            <p>
+              A data de revisão aparece no artigo somente quando houve uma
+              atualização substantiva registrada. Critérios de fontes,
+              correções e transparência comercial estão descritos na
+              <a
+                href="/politica-editorial/"
+                class="font-medium text-integra-red-700 hover:underline"
+              >política editorial</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-default py-16 lg:py-20">
+      <div class="mb-10 max-w-3xl">
+        <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+          Fundadores e diretores
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Trajetórias públicas registradas.
+        </h2>
+        <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          Os marcos abaixo reproduzem informações públicas já apresentadas
+          pela Integra. Eles contextualizam a experiência dos fundadores sem
+          transformar a trajetória profissional em autoria nominal dos
+          artigos.
+        </p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        {TEAM_MEMBERS.map((member) => (
+          <article
+            id={member.id}
+            aria-labelledby={`${member.id}-name`}
+            class="scroll-mt-32 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7 lg:p-8"
+          >
+            <p class="font-mono text-xs uppercase tracking-widest text-integra-red-700">
+              {member.role}
+            </p>
+            <h3
+              id={`${member.id}-name`}
+              class="mt-3 text-2xl font-semibold text-integra-gray-900"
+            >
+              {member.name}
+            </h3>
+            <p class="mt-4 leading-relaxed text-integra-gray-700">
+              {member.summary}
+            </p>
+            <ol class="mt-7 space-y-4 border-t border-integra-gray-200 pt-6">
+              {member.milestones.map((milestone) => (
+                <li class="grid grid-cols-[4rem_1fr] gap-4">
+                  <span class="font-mono text-sm font-semibold text-integra-red-700">
+                    {milestone.year}
+                  </span>
+                  <span class="text-sm leading-relaxed text-integra-gray-700">
+                    {milestone.description}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-8 rounded-lg border-l-4 border-integra-red bg-integra-gray-900 p-7 text-integra-white lg:p-8">
+        <p class="font-mono text-xs uppercase tracking-widest text-integra-red-300">
+          {COMPANY_FOUNDING.year}
+        </p>
+        <p class="mt-3 max-w-3xl text-lg leading-relaxed">
+          {COMPANY_FOUNDING.description}
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

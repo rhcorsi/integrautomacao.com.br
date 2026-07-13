@@ -13,6 +13,7 @@ const sectors = [
     description:
       "Setor onde os fundadores começaram suas carreiras. Conhecemos as particularidades de safra, paradas planejadas, intertravamentos NFPA e operação 24/7 de caldeira, moenda e fermentação.",
     pains: ["Janela de safra estreita", "Paradas têm custo altíssimo", "Sistemas heterogêneos legados"],
+    href: "/setores/acucar-e-etanol",
   },
   {
     icon: "lucide:droplet",
@@ -20,6 +21,7 @@ const sectors = [
     description:
       "Plantas mais recentes, com tecnologia moderna e exigências de eficiência energética e rastreabilidade desde o projeto.",
     pains: ["Eficiência energética", "Rastreabilidade de receitas", "Modernização de controle de processo"],
+    href: "/contato?assunto=setor-etanol-milho",
   },
   {
     icon: "lucide:tractor",
@@ -27,6 +29,7 @@ const sectors = [
     description:
       "Silos, terminais, secadores. Sistemas com sazonalidade crítica e janelas de operação estreitas.",
     pains: ["Sazonalidade", "Confiabilidade em pico de safra", "Integração de múltiplos fornecedores"],
+    href: "/contato?assunto=setor-agronegocio",
   },
   {
     icon: "lucide:flask-conical",
@@ -34,6 +37,7 @@ const sectors = [
     description:
       "Operações 24/7 com alta complexidade de processo, requisitos rigorosos de segurança e compliance.",
     pains: ["Cibersegurança OT crítica", "Sistemas redundantes", "Conformidade regulatória"],
+    href: "/contato?assunto=setor-quimica-fertilizantes",
   },
   {
     icon: "lucide:utensils",
@@ -41,6 +45,7 @@ const sectors = [
     description:
       "Processos contínuos com exigências de segurança alimentar, rastreabilidade e integração de sistemas heterogêneos.",
     pains: ["Paradas de linha", "Rastreabilidade", "Integração de sistemas"],
+    href: "/contato?assunto=setor-alimentos-bebidas",
   },
   {
     icon: "lucide:beef",
@@ -48,6 +53,7 @@ const sectors = [
     description:
       "Linhas com alta variabilidade, controle de receita por lote e exigências de rastreabilidade do animal ao produto final.",
     pains: ["Rastreabilidade", "Controle de receita por lote", "Auditoria de processo"],
+    href: "/contato?assunto=setor-frigorificos",
   },
   {
     icon: "lucide:scale",
@@ -55,6 +61,7 @@ const sectors = [
     description:
       "Processos de dosagem e pesagem críticos, controle de receita preciso, automação de mistura.",
     pains: ["Precisão de dosagem", "Receitas e batelada", "Automação de mistura"],
+    href: "/contato?assunto=setor-racao",
   },
   {
     icon: "lucide:trees",
@@ -62,6 +69,7 @@ const sectors = [
     description:
       "Processos contínuos de alta criticidade. Caldeiras, digestores, máquinas de papel.",
     pains: ["Continuidade operacional", "Controle multivariável", "Eficiência energética"],
+    href: "/contato?assunto=setor-papel-celulose",
   },
   {
     icon: "lucide:droplets",
@@ -69,6 +77,7 @@ const sectors = [
     description:
       "Operação crítica de infraestrutura pública. Confiabilidade, monitoramento remoto, SCADA distribuído.",
     pains: ["SCADA distribuído", "Monitoramento remoto", "Confiabilidade 24/7"],
+    href: "/contato?assunto=setor-saneamento",
   },
 ];
 
@@ -98,25 +107,25 @@ const solucoesContexto = [
   },
   {
     icon: "lucide:shield-check",
-    title: "Cibersegurança OT em qualquer setor",
+    title: "Cibersegurança OT em diferentes setores",
     description:
-      "Toda planta em modernização precisa de IDMZ, segmentação Purdue e governança IEC 62443, independente do produto que sai pela porta.",
+      "A análise de risco define zonas, conduítes e controles. Segmentação e IDMZ entram quando a arquitetura e os fluxos entre TI e OT exigem essa proteção.",
     href: "/solucoes/redes-iec-62443",
-    sectors: ["Aplicável a todos os setores"],
+    sectors: ["Aplicação transversal, conforme risco"],
   },
   {
     icon: "lucide:replace",
     title: "Modernização de legado",
     description:
-      "PLC-5/SLC500 obsoletos vivem em todos os setores. Migração para ControlLogix com plano de cutover por área, mantendo a operação rodando.",
+      "PLC-5 e SLC 500 legados aparecem em diversos setores. A migração para Logix exige plano de cutover por área e estratégia de continuidade compatível com a planta.",
     href: "/solucoes/migracao-plc",
-    sectors: ["Aplicável a todos os setores"],
+    sectors: ["Aplicação transversal, conforme legado"],
   },
 ];
 ---
 
 <BaseLayout
-  title="Setores"
+  title="Setores industriais atendidos"
   description="Setores industriais críticos que atendemos: açúcar e etanol, agronegócio, alimentos, química, frigoríficos, ração, papel e celulose, saneamento."
   ogImage="/og/setores.png"
 >
@@ -181,6 +190,13 @@ const solucoesContexto = [
                 </li>
               ))}
             </ul>
+            <a
+              href={s.href}
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700"
+            >
+              {s.href.startsWith("/setores/") ? `Ver página de ${s.name}` : `Conversar sobre ${s.name}`}
+              <span aria-hidden="true">→</span>
+            </a>
           </article>
         ))}
       </div>
@@ -242,7 +258,7 @@ const solucoesContexto = [
               href={s.href}
               class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700 group-hover:translate-x-0.5 transition-all duration-300"
             >
-              Ver solução <span aria-hidden="true">→</span>
+              Ver {s.title} <span aria-hidden="true">→</span>
             </a>
           </article>
         ))}

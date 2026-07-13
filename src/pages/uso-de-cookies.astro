@@ -3,11 +3,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
-const lastUpdated = "9 de maio de 2026";
+const lastUpdated = "12 de julho de 2026";
 ---
 
 <BaseLayout
-  title="Uso de Cookies"
+  title="Política de uso de cookies"
   description="Política de uso de cookies do site da Integra Automação Industrial. Que cookies usamos, para que e como gerenciá-los."
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -62,8 +62,9 @@ const lastUpdated = "9 de maio de 2026";
             envio automatizado por bots nos formulários de contato e newsletter
           </li>
           <li>
-            <strong>Duração:</strong> sessão (apaga ao fechar o
-            navegador)
+            <strong>Duração:</strong> limitada ao período necessário para a
+            verificação de segurança, conforme a configuração e a política da
+            Cloudflare.
           </li>
           <li>
             <strong>Pode ser desativado?</strong> A verificação anti-bot em
@@ -77,22 +78,22 @@ const lastUpdated = "9 de maio de 2026";
 
         <h3>2. Cloudflare Web Analytics</h3>
         <p>
-          Usamos o Cloudflare Web Analytics para entender o volume de
-          visitas e o desempenho do site. Diferente do Google
-          Analytics, ele
-          <strong>não usa cookies</strong> e
-          <strong>não rastreia visitantes individualmente</strong>:
-          coleta apenas métricas agregadas e anônimas.
+          Se o Cloudflare Web Analytics estiver ativado na infraestrutura,
+          ele será usado para entender o volume de visitas e o desempenho do
+          site. Esse recurso <strong>não usa cookies</strong> e não cria um
+          perfil de navegação entre sites; apresenta métricas agregadas.
         </p>
 
-        <h3>3. Cookies de terceiros: não usamos</h3>
+        <h3>3. Cookies de publicidade e rastreamento de terceiros: não usamos</h3>
         <p>
           Não embarcamos pixels do Facebook, Google Ads, Meta Pixel,
           LinkedIn Insight Tag, TikTok Pixel, Hotjar, Microsoft Clarity
           ou similares. Se você acessar este site a partir de uma rede
-          social, o link pode trazer parâmetros de campanha
-          (<code>utm_*</code>), mas nós descartamos essas informações
-          no servidor. Elas não são armazenadas.
+          social, o endereço acessado pode trazer parâmetros de campanha
+          (<code>utm_*</code>). O site não usa esses parâmetros para criar
+          perfis individuais nem os envia pelo formulário, embora a URL da
+          requisição possa constar temporariamente nos logs técnicos dos
+          provedores de infraestrutura.
         </p>
 
         <h2>Como gerenciar cookies no seu navegador</h2>

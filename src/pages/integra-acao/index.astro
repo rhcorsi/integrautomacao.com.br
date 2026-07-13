@@ -15,28 +15,28 @@ const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft)
 const formatos = [
   {
     icon: "lucide:mail",
-    eyebrow: "Newsletter mensal",
+    eyebrow: "Newsletter técnica",
     title: "Conteúdo escrito, direto na caixa de entrada",
     description:
-      "Pílula técnica mensal com curadoria sobre arquitetura, redes industriais, cibersegurança OT e governança de engenharia. Sem listas de marketing, sem ruído.",
+      "Curadoria periódica sobre arquitetura, redes industriais, cibersegurança OT e governança de engenharia. Inscrição voluntária e descadastro a qualquer momento.",
     href: "/integra-acao/newsletter/",
     cta: "Inscrever-se",
   },
   {
     icon: "lucide:video",
     eyebrow: "Webinars técnicos",
-    title: "Sessões ao vivo, gravadas e indexadas",
+    title: "Sessões técnicas em preparação",
     description:
-      "Conversas técnicas com casos reais, profundidade de engenharia e perguntas abertas. Gravações ficam disponíveis para quem não pôde assistir ao vivo.",
+      "Formato em desenvolvimento para conversas técnicas, demonstrações e perguntas abertas. A agenda será publicada quando houver sessão confirmada.",
     href: "/integra-acao/webinar/",
     cta: "Ver webinars",
   },
   {
     icon: "lucide:calendar-days",
     eyebrow: "Eventos presenciais",
-    title: "Onde a equipe Integra está nesta semana",
+    title: "Onde a equipe Integra esteve recentemente",
     description:
-      "Registro dos eventos, treinamentos e conferências em que a Integra esteve presente, e calendário do que vem pela frente.",
+      "Recaps de eventos, treinamentos e conferências em que a Integra esteve presente.",
     href: "/eventos/",
     cta: "Ver eventos",
   },
@@ -46,7 +46,7 @@ const temas = [
   {
     code: "01",
     titulo: "PlantPAx 5.x, arquitetura DCS moderna",
-    sub: "Quando faz sentido migrar, o que muda no projeto, série P obrigatória",
+    sub: "Quando faz sentido migrar, o que muda no projeto e quais recursos exigem controladores process compatíveis",
   },
   {
     code: "02",
@@ -55,7 +55,7 @@ const temas = [
   },
   {
     code: "03",
-    titulo: "Migração PLC-5 / SLC500, modernização sem improviso",
+    titulo: "Migração PLC-5 / SLC 500, modernização sem improviso",
     sub: "Tradução automática vs reescrita, janelas de cutover, reaproveitamento de fiação",
   },
   {
@@ -72,8 +72,8 @@ const temas = [
 ---
 
 <BaseLayout
-  title="Integra Ação"
-  description="Conteúdo técnico para quem projeta, opera e mantém sistemas industriais: newsletter mensal, webinars e eventos da Integra Automação Industrial."
+  title="Integra Ação: conteúdo técnico"
+  description="Conteúdo para quem projeta, opera e mantém sistemas industriais: newsletter técnica, webinars em preparação e eventos da Integra."
   ogImage="/og/integra-acao.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -88,8 +88,8 @@ const temas = [
       </h1>
       <p class="mt-8 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
         Integra Ação é a marca guarda-chuva da Integra Automação Industrial
-        para conteúdo educativo. Aqui reunimos a newsletter mensal, os
-        webinars técnicos e o registro dos eventos em que a equipe atua.
+        para conteúdo educativo. Aqui reunimos a newsletter técnica, o formato
+        de webinars em preparação e o registro dos eventos em que a equipe atua.
         O foco é o mesmo do nosso trabalho de engenharia: profundidade
         técnica, sem ruído de marketing.
       </p>
@@ -201,7 +201,7 @@ const temas = [
               <ul class="space-y-4">
                 {recentPosts.map((p) => (
                   <li class="border-b border-integra-gray-200 pb-4 last:border-b-0">
-                    <a href={`/blog/${p.slug}/`} class="group">
+                    <a href={`/blog/${p.id}/`} class="group">
                       <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors">
                         {p.data.title}
                       </h4>
@@ -222,7 +222,7 @@ const temas = [
               <ul class="space-y-4">
                 {recentEventos.map((e) => (
                   <li class="border-b border-integra-gray-200 pb-4 last:border-b-0">
-                    <a href={`/eventos/${e.slug}/`} class="group">
+                    <a href={`/eventos/${e.id}/`} class="group">
                       <h4 class="text-base font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors">
                         {e.data.title}
                       </h4>
@@ -242,7 +242,7 @@ const temas = [
 
   <CtaBlock
     title="Quer receber a newsletter Integra Ação?"
-    description="Uma edição por mês, com curadoria técnica, sem promoção comercial. Você sai quando quiser e nunca compartilhamos seu e-mail."
+    description="Curadoria técnica periódica. Não vendemos nem cedemos seu e-mail para marketing de terceiros; usamos apenas os operadores descritos na Política de Privacidade."
     primaryCta={{ href: "/integra-acao/newsletter/", label: "Inscrever-se na newsletter" }}
     secondaryCta={{ href: "/blog", label: "Ver blog técnico" }}
   />

@@ -14,7 +14,7 @@ const sinais = [
   {
     title: "Sistema operacional sem suporte",
     description:
-      "Windows Server 2012 R2 perdeu o suporte estendido da Microsoft em 10 de outubro de 2023; o Windows 10, em 14 de outubro de 2025. Supervisório rodando nesses sistemas opera sem patch de segurança e sem caminho de atualização do próprio software SCADA.",
+      "Windows Server 2012 R2 encerrou o suporte estendido regular em 10 de outubro de 2023; as edições comuns do Windows 10, em 14 de outubro de 2025. ESU e edições LTSC têm ciclos próprios. O risco precisa ser verificado por edição, contrato, versão do SCADA e disponibilidade efetiva de patches.",
   },
   {
     title: "Software descontinuado e licenças órfãs",
@@ -29,7 +29,7 @@ const sinais = [
   {
     title: "Alarmes ruidosos",
     description:
-      "A ISA-18.2 trabalha com meta de 1 a 2 alarmes por 10 minutos por operador. Sistema legado sem racionalização entrega ordens de grandeza acima disso — e o operador aprende a ignorar a banda de alarmes inteira.",
+      "A literatura de gestão de alarmes associada a ISA-18.2 e EEMUA 191 usa benchmarks de carga, incluindo cerca de 1 a 2 alarmes por 10 minutos em operação estável. Não é uma meta universal isolada: contexto, picos, prioridade e capacidade de resposta do operador também precisam ser avaliados.",
   },
   {
     title: "Sem historian",
@@ -122,7 +122,7 @@ const faq = [
   },
   {
     q: "Preciso trocar o PLC junto com o SCADA?",
-    a: "Não necessariamente — supervisório e controlador têm ciclos de vida independentes, e o SCADA novo conversa com o PLC existente pelos drivers atuais. Mas o inventário avalia os dois: se a planta roda PLC-5 ou SLC500 (linhas descontinuadas pela Rockwell, com venda dos últimos SLC encerrada em março de 2024), faz sentido ao menos planejar a migração de controladores no mesmo horizonte, porque tags e telas bem estruturadas agora reduzem o retrabalho depois.",
+    a: "Não necessariamente: supervisório e controlador têm ciclos de vida independentes, e a compatibilidade depende dos drivers disponíveis. O inventário avalia os dois. Se a planta usa PLC-5 ou SLC 500, linhas descontinuadas pela Rockwell, convém comparar sustentação e migração no mesmo horizonte; uma estrutura de tags bem documentada pode reduzir retrabalho futuro.",
   },
   {
     q: "O que acontece com meu histórico de dados?",
@@ -134,7 +134,7 @@ const faq = [
   },
   {
     q: "SCADA na nuvem faz sentido em planta industrial?",
-    a: "Para supervisão e controle em tempo real, o servidor SCADA continua on-premises: latência, disponibilidade e a segmentação exigida pela IEC 62443 mandam nessa decisão. O que faz sentido levar para a nuvem é a camada de dados — historian agregado, dashboards corporativos, analytics — alimentada de forma unidirecional a partir da planta, atravessando a IDMZ. Arquitetura híbrida, com tempo real dentro da cerca e análise fora, é o padrão que recomendamos.",
+    a: "Pode fazer sentido para dados, analytics e alguns casos de supervisão, mas controle e operação crítica exigem análise de latência, autonomia, indisponibilidade da WAN, suporte e risco. Arquiteturas híbridas são comuns: funções críticas permanecem locais e dados seguem para serviços externos por fluxos intermediados e controlados. Comunicação unidirecional é uma opção de alta restrição, não requisito universal da IEC 62443; o desenho depende do caso de uso.",
   },
 ];
 ---
@@ -332,7 +332,7 @@ const faq = [
         <a href="/tecnologias/factorytalk-view-se" class="font-medium text-integra-red-700 hover:underline">FactoryTalk View SE</a>
         e o ecossistema completo em
         <a href="/solucoes/factorytalk" class="font-medium text-integra-red-700 hover:underline">soluções FactoryTalk</a>.
-        Quando a planta também roda PLC-5 ou SLC500, tratamos supervisório e
+        Quando a planta também roda PLC-5 ou SLC 500, tratamos supervisório e
         controlador no mesmo plano de modernização — veja
         <a href="/solucoes/migracao-plc" class="font-medium text-integra-red-700 hover:underline">migração de PLC legado</a>
         e o
@@ -452,11 +452,12 @@ const faq = [
           plataforma de gestão de thin clients da Rockwell com mais de 25 anos
           de mercado, o conteúdo é entregue de servidores centrais para
           terminais sem disco — por função, por localização ou por evento — e
-          o failover entre servidores Remote Desktop está incluído em todas as
-          licenças. Estação que queima é substituída em minutos, sem
-          reinstalação de software; combinada à virtualização dos servidores,
-          essa camada elimina a maior fonte de chamados do supervisório
-          legado: o PC de operação.
+          os recursos de failover e entrega precisam ser confirmados pela
+          edição e pela arquitetura contratadas. Um terminal compatível pode
+          ser substituído com menos reinstalação local, desde que perfil,
+          servidor, rede, periféricos e procedimento de recuperação estejam
+          testados; combinada à virtualização, essa camada reduz dependências
+          do PC de operação, sem eliminar todos os seus modos de falha.
         </p>
       </div>
 
@@ -500,7 +501,7 @@ const faq = [
   <CtaBlock
     title="Seu supervisório ainda depende de um Windows sem suporte?"
     description="Começamos pelo inventário: telas, tags, alarmes, servidores e licenças. Com o retrato na mesa, a discussão de plataforma, fases e janela de cutover deixa de ser opinião e vira engenharia."
-    primaryCta={{ href: "/contato?assunto=modernizacao-scada", label: "Avaliar modernização" }}
+    primaryCta={{ href: "/contato?assunto=modernizacao-scada", label: "Solicitar triagem de modernização" }}
     secondaryCta={{ href: "/solucoes/factorytalk", label: "Ver soluções FactoryTalk" }}
   />
 </BaseLayout>

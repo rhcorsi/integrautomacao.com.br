@@ -1,7 +1,8 @@
 ---
-title: "O que é PlantPAx? O DCS moderno da Rockwell Automation explicado"
+title: "O que é PlantPAx? DCS da Rockwell Automation"
 description: "O que é PlantPAx: guia em português do DCS moderno da Rockwell. Componentes (PASS, biblioteca, controladores de processo), o que mudou na 5.x e quando adotar."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["PlantPAx", "DCS", "Rockwell Automation"]
 draft: false
 ---
@@ -34,13 +35,17 @@ segurança.
 
 A consequência prática dessa tese é o principal argumento de venda do
 PlantPAx até hoje: **uma única plataforma de controle para processo
-contínuo, batelada, intertravamento de segurança, acionamentos e
+contínuo, batelada, intertravamentos de processo, acionamentos e
 utilidades**, com um único ambiente de engenharia (Studio 5000), uma única
 rede ([EtherNet/IP](/tecnologias/ethernet-ip-cpwe/)) e um único ecossistema
 de software (FactoryTalk). Em uma usina de açúcar e etanol ou em um
 frigorífico, onde processo e automação discreta convivem na mesma planta,
 isso elimina a fronteira artificial entre "o DCS da área quente" e "os
 PLCs do resto da fábrica".
+
+Funções instrumentadas de segurança continuam exigindo ciclo de vida,
+independência, validação e hardware certificado conforme a análise de risco;
+compartilhar o ecossistema Logix não torna o BPCS automaticamente um SIS.
 
 A linha do tempo importa para entender a maturidade do sistema: a geração
 5.0 foi lançada em 2020, segundo a Rockwell Automation, e o
@@ -49,6 +54,10 @@ oficial (PROCES-SG001, edição de abril de 2026) já documenta a **release
 5.50** como versão corrente do sistema. Ou seja: quem especifica "PlantPAx
 5.x" hoje está falando de uma plataforma com mais de cinco anos de
 evolução contínua em campo, não de uma aposta recém-lançada.
+Consulte sempre o
+[PlantPAx Selection Guide vigente](https://literature.rockwellautomation.com/idc/groups/literature/documents/sg/proces-sg001_-en-p.pdf),
+porque controladores, bibliotecas e versões suportadas mudam ao longo do
+ciclo de vida.
 
 ## PlantPAx é DCS, SCADA ou PLC com supervisório?
 
@@ -89,12 +98,15 @@ de DCS deveria conseguir apontar cada um deles na lista de materiais.
 
 ### Controladores de processo
 
-Na geração 5.x, o controle roda em **controladores de processo dedicados**:
-ControlLogix 5580P (catálogos como 1756-L81EP, 1756-L83EP e 1756-L85EP) e
-CompactLogix 5380P (como 5069-L320ERP e 5069-L340ERP). O sufixo **"P"**
-não é cosmético: esses controladores trazem as instruções de processo
-embarcadas no firmware, um modelo de tarefas (tasking model) pré-configurado
-para processo e contadores de uso de instruções para dimensionamento.
+As **instruções de processo embarcadas** da geração 5.x rodam em
+controladores Process compatíveis, incluindo famílias ControlLogix e
+CompactLogix indicadas no Selection Guide da release. Esses modelos trazem
+instruções de processo no firmware, modelo de tarefas voltado a processo e
+recursos de dimensionamento. Isso não significa que todo sistema PlantPAx 5.x
+seja exclusivamente composto por controladores Process: o guia também prevê
+controladores Logix padrão, skid controllers e bibliotecas anteriores em
+combinações específicas. A lista de catálogos deve ser confirmada no guia e
+no Product Lifecycle Status na data do projeto.
 
 ### PASS — Process Automation System Server
 
@@ -170,25 +182,28 @@ MOV. As consequências práticas:
   firmware, gerenciada como qualquer atualização de controlador, e não uma
   reimportação de AOIs projeto a projeto.
 
-O requisito de entrada: o PlantPAx 5.0 exige Studio 5000 e firmware a
-partir da **versão 33**. Quem está em ControlLogix 5570 ou anterior não
-roda as instruções embarcadas — esse é um dos critérios objetivos para
-planejar [migração de controladores](/solucoes/migracao-plc/).
+Na release 5.0, o piso foi Studio 5000 e firmware **versão 33**. Releases
+posteriores possuem matrizes próprias. Controladores que não suportam as
+instruções embarcadas podem continuar em uma arquitetura PlantPAx com a
+biblioteca compatível, ou ser migrados quando os benefícios e o ciclo de vida
+justificarem; essa decisão é um dos critérios do plano de
+[migração de controladores](/solucoes/migracao-plc/).
 
 <TechnicalCallout variant="note" title="Como reconhecer um controlador de processo">
-  O sufixo do catálogo diz tudo: 1756-L85EP e 5069-L340ERP terminam em
-  "P" de *Process*. Nas propriedades do controlador no Studio 5000, esses
-  modelos exibem uma aba PlantPAx para configurar o tasking model e
-  acompanhar o contador de instruções de processo. Se a proposta de "DCS
-  PlantPAx 5.x" lista controladores sem o sufixo P, o que está sendo
-  vendido é outra arquitetura.
+  Controladores Process possuem identificação de catálogo e recursos
+  específicos documentados pela Rockwell. No Studio 5000, os modelos
+  compatíveis expõem configurações e métricas de processo. Uma proposta pode
+  combinar controladores Process, Logix padrão e skids; o que precisa ser
+  verificado é se cada função, biblioteca e firmware aparece na arquitetura
+  caracterizada da release, não apenas a presença de uma letra no catálogo.
 </TechnicalCallout>
 
 Além da biblioteca embarcada, a geração 5.x trouxe frameworks de análise
 conectando dados ao vivo e históricos a ferramentas de relatório, HMI
 alinhada à ISA-101 e — ponto relevante para quem responde a auditoria —
-**arquiteturas certificadas pela TÜV conforme a IEC 62443-3-3**, segundo o
-anúncio oficial da Rockwell. A partir da 5.0, o sistema seguiu evoluindo
+**arquiteturas de sistema com certificação TÜV em escopo declarado conforme
+IEC 62443-3-3**, segundo a documentação da Rockwell. Essa certificação não se
+transfere automaticamente para qualquer instalação. A partir da 5.0, o sistema seguiu evoluindo
 em releases incrementais (5.10, 5.20, 5.30, 5.40) até a 5.50 documentada
 no guia de seleção de abril de 2026. O detalhe técnico de cada release
 está na nossa página de [PlantPAx 5.x](/tecnologias/plantpax-5x/).
@@ -215,8 +230,12 @@ O PlantPAx incorpora três normas ISA e uma IEC como fundação:
 <TechnicalCallout variant="ot" title="Norma no papel não protege planta">
   A certificação IEC 62443-3-3 vale para a arquitetura de referência —
   não para qualquer instalação que use os mesmos produtos. Se a
-  implementação achata zonas, pula o IDMZ ou expõe o PASS à rede
-  corporativa, o certificado da Rockwell não socorre. Tratamos disso em
+  implementação não define zonas e conduítes por risco, omite os controles
+  necessários para a integração OT/IT ou expõe o PASS diretamente à rede
+  corporativa, o certificado da Rockwell não socorre. Uma IDMZ é uma
+  arquitetura de referência recomendada quando há troca de serviços entre
+  TI e OT, mas não é uma topologia nominada como requisito universal pela
+  norma. Tratamos disso em
   [redes industriais e IEC 62443](/solucoes/redes-iec-62443/).
 </TechnicalCallout>
 
@@ -265,9 +284,11 @@ perguntas.
 ## Como a Integra implementa PlantPAx
 
 A Integra Automação Industrial, de Maringá-PR e com atuação nacional desde
-2016, é [Silver System Integrator da Rockwell
-Automation](/certificacoes/silver-system-integrator/) com certificação
-PlantPAx DCS. Na prática, isso significa projetos entregues conforme as
+2016, participa do programa de integradores da Rockwell Automation no
+[nível Silver](/certificacoes/silver-system-integrator/) e apresenta
+capacidade PlantPAx no programa. A nomenclatura e o status devem ser conferidos
+no Partner Locator vigente; eles indicam participação e capacidade, não uma
+garantia automática sobre cada projeto. Na prática, buscamos entregar conforme as
 arquiteturas caracterizadas — PASS dimensionado pelo guia de seleção,
 biblioteca de objetos sem customização desnecessária, rede CPwE e governança
 IEC 62443 desde o desenho, não como retrofit.
@@ -299,19 +320,20 @@ releases incrementais (5.10, 5.20, 5.30, 5.40, 5.50).
 
 ### Preciso de controladores especiais para o PlantPAx 5.x?
 
-Sim. O PlantPAx 5.x usa controladores de processo dedicados — ControlLogix
-5580P e CompactLogix 5380P, identificados pelo sufixo "P" no catálogo
-(por exemplo 1756-L85EP, 5069-L340ERP) — que trazem as instruções de
-processo embarcadas no firmware. O requisito mínimo de plataforma é Studio
-5000 e firmware versão 33.
+Para usar as instruções de processo embarcadas, sim: é necessário um
+controlador Process suportado pela release. O sistema PlantPAx 5.x como um
+todo também pode incluir controladores Logix padrão, skids e bibliotecas de
+processo anteriores nas combinações documentadas. Studio 5000 v33 foi o piso
+da release 5.0; a versão requerida deve ser confirmada no Selection Guide da
+release contratada.
 
 ### PlantPAx funciona com os ControlLogix que já tenho na planta?
 
-Em parte. Controladores ControlLogix padrão rodam a biblioteca de objetos
-em formato Add-On Instruction (modelo do PlantPAx 4.x), mas não executam
-as instruções embarcadas da geração 5.x — isso exige os modelos de
-processo 5380P/5580P. Em modernizações, é comum operar arquiteturas mistas
-durante a transição, com migração de controladores planejada por fases.
+Em parte. Controladores Logix padrão podem permanecer em combinações
+suportadas com bibliotecas em formato Add-On Instruction, mas não executam as
+instruções de processo embarcadas reservadas aos modelos Process. Em
+modernizações, é comum operar arquiteturas mistas durante a transição, desde
+que firmware, biblioteca e integração estejam na matriz da release.
 
 ### Quanto custa um sistema PlantPAx?
 

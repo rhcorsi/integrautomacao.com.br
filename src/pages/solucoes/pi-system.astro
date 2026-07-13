@@ -61,23 +61,23 @@ const faq = [
   },
   {
     q: "PI System ou FactoryTalk Historian?",
-    a: "PI System (AVEVA) é forte em volume massivo, AF Templates ricos, ambientes multi-site e analytics avançado. Historian SE atende bem ecossistemas 100% Rockwell de porte médio. O critério de escolha envolve volume de tags, número de sites, quem opera, e integração com ERP/MES.",
+    a: "PI System (AVEVA) oferece recursos para contextualização por AF, ambientes multi-site e integrações analíticas. FactoryTalk Historian pode se encaixar em arquiteturas concentradas no ecossistema Rockwell. A escolha exige dimensionar tags, cadência, retenção, disponibilidade, sites, operação, licenciamento e integrações com ERP ou MES.",
   },
   {
     q: "PI to PI replication é seguro pela IDMZ?",
-    a: "Sim, é o padrão. PI servidor industrial replica para PI servidor corporativo na IDMZ usando porta única (TCP 5450), com autenticação Windows integrada (WIS) via PI Mappings, sem caminho direto enterprise→industrial. Modelo recomendado pela própria OSIsoft/AVEVA.",
+    a: "Pode compor uma arquitetura segura quando interfaces, buffering, direção dos fluxos, identidades, firewall e versões são configurados conforme a documentação AVEVA. TCP 5450 é associado ao PI Data Archive, mas não representa sozinho todos os fluxos necessários. A IDMZ é uma arquitetura de referência; portas, autenticação e PI Mappings devem ser validados para cada componente e release, sem caminho direto da rede corporativa até a zona de controle.",
   },
   {
     q: "Posso conectar Power BI direto ao PI?",
-    a: "Sim, via PI Web API ou ODBC. Em planta multi-departamento, comum: planejamento usa Power BI, processo usa PI Vision, manutenção usa AVEVA Asset Performance Management. Mesma fonte, ferramentas diferentes.",
+    a: "É possível integrar por APIs, conectores ou camadas de dados suportadas, conforme licenciamento e versão. Em ambiente OT, o Power BI corporativo não deve abrir acesso direto ao servidor industrial: usamos serviço intermediário, identidade mínima, modelo de dados governado e fluxo controlado entre zonas.",
   },
   {
     q: "Como funciona o licenciamento PI System?",
-    a: "Modelo AVEVA por contagem de pontos (PIPoints), conexão de cliente e módulos contratados (Asset Framework, Vision, Integrator, Connectors). A cotação é feita diretamente pelo canal AVEVA conforme volume, perfil de uso e contrato.",
+    a: "O modelo depende da oferta AVEVA, região, contrato, capacidade e módulos selecionados; não deve ser resumido a uma única fórmula de pontos e clientes. A arquitetura técnica e o direito de uso de AF, Vision, APIs, conectores e integrações precisam ser confirmados na proposta comercial vigente.",
   },
   {
     q: "Vale migrar de Historian para PI System?",
-    a: "A decisão envolve volume de tags atual e projetado, número de sites a unificar e necessidade de AF Templates avançados. Para planta única e volume médio, manter Historian costuma fazer sentido. Para planta multi-site com analytics avançado, PI System é o caminho.",
+    a: "A decisão envolve funções, volume e cadência de tags, sites, AF, analytics, integrações, suporte, licenciamento e custo de migração. Planta única não obriga manter Historian, e ambiente multi-site não obriga PI System: comparamos requisitos e matriz de compatibilidade antes de recomendar evolução, coexistência ou migração.",
   },
 ];
 ---
@@ -214,7 +214,7 @@ const faq = [
   <CtaBlock
     title="Quer transformar dados industriais em infraestrutura confiável?"
     description="A conversa começa por inventário de fontes, qualidade de tags e objetivos operacionais. Dashboard vem depois."
-    primaryCta={{ href: "/contato?assunto=pi-system", label: "Conversar sobre dados industriais" }}
+    primaryCta={{ href: "/contato?assunto=pi-system", label: "Pedir contato sobre dados industriais" }}
     secondaryCta={{ href: "/solucoes/plantpax", label: "Ver PlantPAx" }}
   />
 </BaseLayout>

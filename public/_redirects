@@ -37,7 +37,7 @@
 /about/                /empresa                             301
 /about-us              /empresa                             301
 /aboutus               /empresa                             301
-/team                  /empresa                             301
+/team                  /equipe                             301
 /services              /solucoes                            301
 /services/             /solucoes                            301
 /solutions             /solucoes                            301
@@ -88,7 +88,6 @@
 /sobre                 /empresa                             301
 /sobre-nos             /empresa                             301
 /quem-somos            /empresa                             301
-/equipe                /empresa#equipe                      301
 
 # Common WP page paths from old site (folders without trailing slash)
 /contact               /contato                             301

@@ -8,27 +8,27 @@ import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 
 const silverRequisitos = [
-  "Marcos comerciais anuais sobre a plataforma Rockwell, verificados pela fabricante",
-  "Competências técnicas validadas nas Technology Disciplines do programa — no caso da Integra: Control, Visualization, Process e Power",
-  "Engenheiros capacitados no currículo oficial de cada disciplina, com atualização contínua",
-  "Processo formal de avaliação e aprovação, com renovação periódica do status",
+  "Sucesso comercial, medido pelos critérios e marcos definidos para o nível",
+  "Capacidades nas disciplinas tecnológicas atendidas pelo integrador",
+  "Colaboração e investimento no relacionamento com a Rockwell Automation",
+  "Benefícios diferenciados por nível, sujeitos às regras vigentes do programa",
 ];
 
 const diferenciais = [
   {
-    title: "Canal direto com a engenharia Rockwell",
+    title: "Recursos do ecossistema Rockwell",
     description:
-      "Integradores do PartnerNetwork têm canais oficiais de escalação técnica, acesso antecipado a roadmap e participação em laboratórios da fabricante. Dúvida de compatibilidade de firmware ControlLogix ou de versão FactoryTalk não vira pesquisa em fórum: vira chamado tratado com a engenharia de produto.",
+      "A participação no PartnerNetwork oferece capacitação, materiais e recursos de colaboração definidos pelo programa. Suporte de produto e escalações dependem do contrato, do entitlement e das regras aplicáveis ao caso; precisam ser previstos no escopo, não presumidos.",
   },
   {
     title: "Projeto no padrão de referência",
     description:
-      "Arquitetura dimensionada pelo PSRM (PlantPAx System Reference Manual) e pelos guias CPwE de rede industrial, não pela intuição de quem está no teclado. Padrão de referência reduz retrabalho em FAT, surpresa de startup e dívida técnica que aparece anos depois.",
+      "PSRM, guias CPwE e documentação de ciclo de vida dão uma base verificável para decisões de arquitetura. A aplicação dessas referências pode reduzir incerteza, desde que premissas, desvios e critérios de aceite sejam documentados para o projeto.",
   },
   {
-    title: "Competência auditada, não autodeclarada",
+    title: "Status verificável, não garantia de projeto",
     description:
-      "O status Silver resulta de avaliação formal da Rockwell Automation — competência técnica, desempenho comercial e capacitação contínua — e precisa ser mantido. Quem deixa de cumprir os critérios sai do programa e deixa de aparecer no Partner Locator.",
+      "O nível Silver é atribuído dentro do programa segundo critérios de vendas, capacidades e colaboração. O Partner Locator e o documento vigente ajudam a verificar o vínculo, mas o cliente ainda deve avaliar referências, equipe, método, contrato e aderência ao próprio escopo.",
   },
 ];
 
@@ -36,7 +36,7 @@ const frentes = [
   {
     title: "PlantPAx DCS",
     description:
-      "Especificação, implantação e modernização do DCS moderno da Rockwell Automation. Trabalhamos com PlantPAx 3.x, 4.x e 5.x — a Rockwell documenta releases de sistema da 5.00 à 5.50 — usando a biblioteca de objetos de processo, dimensionamento conforme o PSRM e gestão de alarmes ISA-18.2. A especialidade PlantPAx DCS Certified da Integra cobre exatamente essa frente.",
+      "Especificação, implantação e modernização do DCS da Rockwell Automation, com versões 3.x, 4.x e 5.x quando compatíveis com a base instalada. O trabalho considera biblioteca de processo, dimensionamento segundo o PSRM e gestão de alarmes. A credencial publicada registra a capacidade PlantPAx DCS Certified.",
     href: "/solucoes/plantpax",
     label: "Ver atuação em PlantPAx",
   },
@@ -88,24 +88,24 @@ const etapas = [
 
 const faq = [
   {
-    q: "Como verificar se um integrador é certificado pela Rockwell Automation?",
-    a: "Use o Partner Locator, o diretório público da Rockwell Automation em locator.rockwellautomation.com, que lista os System Integrators do PartnerNetwork por país, disciplina e nível do programa. Peça também o certificado emitido pelo programa — a Integra publica o dela, com PDF para download, na página de certificações deste site. Desconfie de quem se apresenta como parceiro e não aparece no diretório.",
+    q: "Como verificar se uma empresa participa do programa System Integrator?",
+    a: "Consulte o Partner Locator oficial da Rockwell Automation e filtre por país e tipo de parceiro. Confira também o documento de credencial apresentado pela empresa, sua validade e o nível indicado. Diretórios e status podem mudar; se houver divergência ou ausência de resultado, peça confirmação atual à Rockwell antes de decidir.",
   },
   {
     q: "Qual a diferença entre integrador Silver e Gold?",
-    a: "São níveis do mesmo programa System Integrator do PartnerNetwork, que vai de Bronze a Platinum. O Silver exige competências técnicas validadas, marcos comerciais anuais e capacitação contínua. O Gold acrescenta exigências maiores, como três ou mais disciplinas tecnológicas certificadas e desempenho comercial superior. Para o cliente, ambos têm competência auditada pela Rockwell; a diferença está na amplitude de disciplinas e no volume de negócios com a plataforma, não na qualidade mínima exigida.",
+    a: "Silver e Gold são níveis do programa, com critérios e benefícios diferenciados ligados a sucesso comercial, capacidades e colaboração. Um nível superior não garante, por si só, maior qualidade para todo projeto. A comparação útil considera a capacidade relevante, a experiência da equipe designada e a aderência do método ao escopo específico.",
   },
   {
     q: "A Rockwell Automation indica integradores para projetos?",
-    a: "A Rockwell tem um braço próprio de serviços (Lifecycle Services), mas o modelo dominante para projetos de integração é a entrega por meio do PartnerNetwork. As indicações chegam pelos distribuidores autorizados e pelas equipes comerciais da Rockwell, que direcionam o cliente a integradores do programa conforme disciplina, setor e região. Estar certificado é condição para entrar nesse fluxo de indicação; o nível e as especialidades definem para quais projetos o integrador é indicado.",
+    a: "A Rockwell disponibiliza o Partner Locator para localizar parceiros por tipo, nível, capacidade e região. Equipes comerciais e distribuidores também podem apoiar a busca conforme suas políticas, mas não há garantia pública de indicação para uma empresa específica. A seleção e a contratação permanecem sob responsabilidade das partes.",
   },
   {
     q: "Um integrador Rockwell atende outras marcas?",
-    a: "Depende do integrador. A Integra é multi-vendor: além da plataforma Rockwell, trabalhamos com Siemens (TIA Portal e PCS 7), Schneider Electric, Elipse E3 e Telit deviceWISE. Isso importa em plantas com parque misto, onde a integração entre plataformas de fabricantes diferentes costuma ser o problema mais caro de resolver — e onde um integrador monomarca tende a propor a troca de tudo.",
+    a: "Depende da experiência e do escopo de cada empresa. A Integra também trabalha com Siemens (TIA Portal e PCS 7), Schneider Electric, Elipse E3 e Telit deviceWISE. Em plantas multivendor, a proposta deve deixar claro o que será integrado, preservado ou substituído e quais limitações existem entre plataformas.",
   },
   {
-    q: "Integrador certificado custa mais caro que um não certificado?",
-    a: "A comparação correta é por custo total do projeto, não por taxa horária. Os fatores que dominam o custo são retrabalho de engenharia, horas de parada não planejada, suporte pós-startup e adequação de licenciamento — e é exatamente nesses pontos que padrão de referência e canal de escalação com a fabricante fazem diferença. Proposta mais barata com arquitetura errada é a forma mais cara de comprar automação.",
+    q: "O nível no PartnerNetwork determina o preço do projeto?",
+    a: "Não. O preço depende do escopo, risco, documentação existente, licenciamento, janela de parada, mobilização e modelo de suporte. O nível do programa é apenas um elemento de qualificação. Compare propostas pelo escopo e pelos critérios de aceite, além do valor e da taxa horária.",
   },
   {
     q: "O integrador substitui o distribuidor autorizado?",
@@ -114,7 +114,7 @@ const faq = [
 ];
 
 const description =
-  "Integradora Silver System Integrator do Rockwell PartnerNetwork, com atuação nacional: PlantPAx, FactoryTalk, migração para Logix e redes CPwE, com diagnóstico técnico antes da proposta.";
+  "Integra participa do programa System Integrator do Rockwell PartnerNetwork no nível Silver e atua com PlantPAx, FactoryTalk, Logix e redes CPwE.";
 ---
 
 <BaseLayout
@@ -144,8 +144,9 @@ const description =
           programa, testa e sustenta sistemas de automação sobre a plataforma
           Rockwell — ControlLogix, PlantPAx, FactoryTalk e redes EtherNet/IP —
           dentro do programa oficial PartnerNetwork. A Integra Automação
-          Industrial, de Maringá-PR, exerce esse papel desde 2016: somos Silver
-          System Integrator e PlantPAx DCS Certified, com projetos em todo o
+          Industrial, de Maringá-PR, exerce esse papel desde 2016 e participa
+          do programa no nível Silver. A credencial publicada registra a
+          capacidade PlantPAx DCS Certified. A atuação inclui projetos no
           Brasil em açúcar e etanol, agroindústria, alimentos, frigoríficos,
           química, papel e celulose e saneamento.
         </p>
@@ -161,13 +162,13 @@ const description =
             href="/certificacoes/silver-system-integrator"
             class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-6 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
           >
-            Ver certificação Silver
+            Ver credencial Silver
           </a>
         </div>
       </div>
       <div class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-8">
         <p class="mb-5 text-xs font-mono uppercase tracking-widest text-integra-gray-500">
-          Credenciais no PartnerNetwork
+          Status e capacidades declaradas
         </p>
         <ul class="space-y-4">
           <li class="flex items-start gap-3">
@@ -180,8 +181,8 @@ const description =
           <li class="flex items-start gap-3">
             <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
             <span class="text-base text-integra-gray-900">
-              <strong>PlantPAx DCS Certified</strong> — especialidade restrita
-              em sistema de controle distribuído
+              <strong>PlantPAx DCS Certified</strong> — capacidade indicada
+              no documento publicado
             </span>
           </li>
           <li class="flex items-start gap-3">
@@ -193,10 +194,11 @@ const description =
           </li>
         </ul>
         <p class="mt-6 text-sm leading-relaxed text-integra-gray-700">
-          Credenciais verificáveis no Partner Locator público da Rockwell
+          O vínculo deve ser conferido no Partner Locator da Rockwell
           Automation e na nossa
-          <a href="/certificacoes/silver-system-integrator" class="font-semibold text-integra-red-700 hover:text-integra-red">página de certificações</a>,
-          com certificado em PDF.
+          <a href="/certificacoes/silver-system-integrator" class="font-semibold text-integra-red-700 hover:text-integra-red">página de credencial</a>.
+          Como status e diretórios podem mudar, use a informação vigente na
+          data da contratação.
         </p>
       </div>
     </div>
@@ -213,13 +215,12 @@ const description =
       <p class="max-w-3xl text-base leading-relaxed text-integra-gray-700 lg:text-lg">
         No programa atual de System Integrators, a Rockwell Automation organiza
         os integradores em quatro níveis — Bronze, Silver, Gold e Platinum —
-        conforme três eixos: competência técnica validada nas Technology
-        Disciplines do programa, desempenho comercial recorrente sobre a
-        plataforma e alinhamento com o roadmap da fabricante. O nível não é
-        comprado nem vitalício: é avaliado e renovado pela própria Rockwell.
+        conforme critérios de sucesso comercial, capacidades e colaboração
+        com a fabricante. Os requisitos e benefícios variam por nível e podem
+        ser atualizados pelo programa; a fonte vigente deve prevalecer.
       </p>
       <h3 class="mb-5 mt-10 text-xl font-semibold text-integra-gray-900">
-        O que o status Silver exige na prática
+        Como a Rockwell descreve os critérios do programa
       </h3>
       <ul class="space-y-3">
         {silverRequisitos.map((item) => (
@@ -229,12 +230,12 @@ const description =
           </li>
         ))}
       </ul>
-      <TechnicalCallout variant="note" title="Certificação se verifica, não se acredita">
+      <TechnicalCallout variant="note" title="Verifique o status na fonte vigente">
         <p>
-          O Partner Locator (locator.rockwellautomation.com) é público e lista
-          os integradores do PartnerNetwork por país, disciplina e nível. Antes
-          de contratar qualquer empresa que se apresente como parceira Rockwell,
-          consulte o diretório. O detalhe da credencial da Integra está em
+          O Partner Locator da Rockwell Automation permite buscar parceiros por
+          tipo, região, nível e outros filtros. Consulte o resultado atual e
+          confira a validade do documento apresentado. Se houver divergência,
+          peça confirmação à fabricante. O detalhe publicado pela Integra está em
           <a href="/certificacoes/silver-system-integrator">certificações → Silver System Integrator</a>.
         </p>
       </TechnicalCallout>
@@ -244,9 +245,9 @@ const description =
   <section class="border-b border-integra-gray-200">
     <div class="container-fluid py-20">
       <SectionHeader
-        eyebrow="Certificado vs. não certificado"
-        title="Por que contratar um integrador certificado?"
-        description="Empresas sem certificação podem ter bons profissionais — a questão não é essa. A questão é o que acontece quando o projeto sai do trivial: uma incompatibilidade de firmware em produção, uma arquitetura PlantPAx no limite de dimensionamento, uma rede que derruba I/O em rajada de broadcast. Sem canal com a fabricante, a resposta vira tentativa e erro na sua planta."
+        eyebrow="Qualificação do fornecedor"
+        title="Como usar o status do programa na decisão?"
+        description="O vínculo com o PartnerNetwork é um sinal verificável de participação no ecossistema, mas não decide sozinho. Combine a credencial com experiência comparável, equipe nominal, método, documentação, suporte contratado e critérios de aceite."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-3">
@@ -262,12 +263,11 @@ const description =
         ))}
       </div>
       <p class="mt-10 max-w-3xl text-base leading-relaxed text-integra-gray-700">
-        Há ainda um efeito de longo prazo: integrador certificado entrega
-        projeto documentado dentro dos padrões que outros integradores do
-        PartnerNetwork reconhecem. Se daqui a alguns anos a planta precisar
-        expandir o sistema com outra equipe, a base instalada conversa com o
-        padrão de mercado — em vez de depender de uma solução proprietária que
-        só quem fez entende.
+        A continuidade futura depende do que for contratado e entregue:
+        código-fonte, backups testados, lista de versões e licenças, arquitetura,
+        as-built e critérios de manutenção. O nível no programa não garante
+        esses artefatos; inclua-os explicitamente no escopo para reduzir
+        dependência da equipe que implantou o sistema.
       </p>
     </div>
   </section>
@@ -365,9 +365,9 @@ const description =
   </section>
 
   <CtaBlock
-    title="Procurando um integrador Rockwell certificado para o seu projeto?"
-    description="Conte o contexto da planta para um engenheiro da Integra. Começamos pelo diagnóstico técnico — inventário, arquitetura e risco — antes de qualquer proposta comercial."
-    primaryCta={{ href: "/contato", label: "Iniciar diagnóstico" }}
-    secondaryCta={{ href: "/certificacoes/silver-system-integrator", label: "Ver certificação Silver" }}
+    title="Avaliando uma integradora Rockwell para o seu projeto?"
+    description="Conte o contexto da planta para uma triagem técnica. Se o caso exigir inventário, arquitetura e análise de risco, o diagnóstico é combinado em escopo próprio antes da proposta de implantação."
+    primaryCta={{ href: "/contato", label: "Pedir contato técnico" }}
+    secondaryCta={{ href: "/certificacoes/silver-system-integrator", label: "Ver credencial Silver" }}
   />
 </BaseLayout>

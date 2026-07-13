@@ -37,7 +37,7 @@ site/
 │   └── robots.txt
 ├── functions/api/           # Cloudflare Pages Functions
 │   ├── contact.ts           # POST /api/contact (Turnstile + Resend)
-│   └── newsletter.ts        # POST /api/newsletter (Turnstile + Resend Audience)
+│   └── newsletter.ts        # POST /api/newsletter (Turnstile + Resend Contacts/Segments)
 ├── workers/
 │   ├── legacy-redirects.ts  # Worker para ?p=N (deploy via wrangler)
 │   └── wrangler.toml        # config do Worker (NÃO do Pages)
@@ -145,21 +145,26 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
    TURNSTILE_SECRET_KEY      = <secret>       # encrypted
    RESEND_API_KEY            = <API key>      # encrypted
-   RESEND_AUDIENCE_ID        = <Audience ID>  # encrypted — newsletter Integra Ação
+   RESEND_SEGMENT_ID         = <Segment ID>   # encrypted — newsletter Integra Ação
+   RESEND_TOPIC_ID           = <Topic ID>     # encrypted — preferência explícita da newsletter
    CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
    CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com.br
    ```
 
    Marque todas as variáveis server-side como **Encrypted** para não vazarem nos logs:
-   `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `RESEND_AUDIENCE_ID`,
+   `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`,
    `CONTACT_EMAIL_TO` e `CONTACT_EMAIL_FROM`.
    `PUBLIC_TURNSTILE_SITE_KEY` precisa existir no ambiente de build; se faltar,
    o formulário aparece como indisponível e não cai mais em `mailto:` automático.
    Não use placeholders como `<site key pública do Turnstile>`; a site key
    pública atual é `0x4AAAAAADKRCm67kAoc7SHU`.
-   `RESEND_AUDIENCE_ID` é o modo preferencial para a newsletter. Se ele ainda
-   não estiver configurado, `/api/newsletter` faz fallback e envia a inscrição
-   por e-mail para `CONTACT_EMAIL_TO`.
+   `RESEND_SEGMENT_ID` e `RESEND_TOPIC_ID` são obrigatórios e usam o modelo
+   atual de Contacts + Segments + Topics do Resend. Crie o Topic com padrão
+   `opt_out` e selecione esse Topic em todo Broadcast da Integra Ação. Crie
+   também quatro Contact Properties do tipo texto: `newsletter_consent_at`,
+   `newsletter_policy_version`, `newsletter_consent_source` e
+   `newsletter_consent_text`. A API devolve indisponibilidade se Segment ou
+   Topic não estiver configurado e nunca confirma inscrição não registrada.
 
 5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
    `integrautomacao.com.br`, `www.integrautomacao.com.br` e, se usados,
@@ -185,7 +190,7 @@ URL postada como comentário. Em pushes para `main` deploya para produção.
 | `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare → Turnstile → Site → Public site key |
 
 Os secrets server-side (`TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`,
-`RESEND_AUDIENCE_ID`, `CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
+`RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`, `CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
 porque eles são consumidos pela Pages Function em runtime, não pelo
 build.
 
@@ -276,17 +281,18 @@ DMARC inicial (apenas após criar `dmarc@integrautomacao.com.br`):
 _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 ```
 
-## Tarefas pendentes (Fase 2 — pós-launch)
+## Backlog editorial e operacional
 
-- [ ] Adicionar páginas individuais para cada setor (`/setores/[slug]`)
-      — quando houver conteúdo único de ≥800 palavras com normas e cases
-      específicos por setor
-- [ ] Solução: PI System / AVEVA, Data Centers Industriais, Migração PLC
-- [ ] Página `/equipe` com bios e fotos profissionais
-- [ ] Mais cases (1-2/mês), todos sanitizados
-- [ ] Mais posts no blog (1-2/mês)
-- [ ] Pagefind quando volume de blog/cases ≥ 20-30 itens
-- [ ] HSTS preload + DMARC `p=reject` após 6 meses estáveis
+- [ ] Adicionar páginas setoriais somente quando houver conteúdo próprio,
+      fontes primárias e evidências publicáveis para o segmento.
+- [ ] Publicar novos cases apenas com autorização, anonimização e distinção
+      explícita entre imagem real e ilustração.
+- [ ] Publicar artigos quando a revisão técnica e as fontes estiverem prontas;
+      a qualidade editorial prevalece sobre uma cadência fixa.
+- [ ] Avaliar busca interna quando o volume e os dados de navegação demonstrarem
+      necessidade, sem adotar um limite arbitrário de itens.
+- [ ] Avaliar HSTS preload e DMARC `p=reject` após validar todos os subdomínios,
+      remetentes e fluxos de recuperação envolvidos.
 - [ ] Versão em inglês (`/en/`) se mirar multinacionais
 
 ## Mais detalhes

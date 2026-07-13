@@ -11,7 +11,7 @@ const desafios = [
     icon: "lucide:replace",
     label: "Modernizar PLC legado",
     description:
-      "PLC-5/SLC500 obsoleto, spare difícil, integração nova exigida. Migração planejada com janela de cutover e plano de rollback.",
+      "PLC-5 ou SLC 500 obsoleto, sobressalente difícil e nova integração exigida. Migração planejada com janela de cutover e plano de rollback.",
     href: "/solucoes/migracao-plc",
     cta: "Ver migração PLC",
   },
@@ -111,11 +111,11 @@ const mvpSolutions = [
   },
   {
     href: "/solucoes/migracao-plc",
-    title: "Migração PLC5 / SLC500 → ControlLogix",
+    title: "Migração PLC-5 / SLC 500 → ControlLogix",
     summary:
       "Modernização de controladores legados sem comprometer a operação.",
     icon: "lucide:replace",
-    tags: ["PLC5", "SLC500", "ControlLogix", "Cutover"],
+    tags: ["PLC-5", "SLC 500", "ControlLogix", "Cutover"],
   },
   {
     href: "/solucoes/modernizacao-scada",
@@ -129,57 +129,52 @@ const mvpSolutions = [
 ---
 
 <BaseLayout
-  title="Soluções"
-  description="Soluções de engenharia e integração industrial: PlantPAx, FactoryTalk Suite, redes industriais e cibersegurança OT, virtualização, PI System e migração de controladores legados."
+  title="Soluções de automação industrial"
+  description="Soluções de engenharia industrial com PlantPAx, FactoryTalk, redes e cibersegurança OT, virtualização, PI System e migração de controladores."
   ogImage="/og/solucoes.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
       <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Soluções Integra
+        Soluções por desafio
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Tecnologias que entendemos por dentro.
+        Engenharia para modernizar sem concentrar risco.
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Não atuamos como revenda nem como consultoria genérica. Cada solução é
-        entregue com arquitetura, padronização, documentação e suporte
-        contínuo, pelos mesmos engenheiros que projetaram o sistema.
+        Organizamos cada frente a partir do problema da planta: risco de parada,
+        obsolescência, segurança, dados ou padronização. A entrega conecta
+        arquitetura, implantação, validação e sustentação com continuidade
+        técnica entre as fases.
       </p>
-      <a
-        href="/tecnologias"
-        class="mt-8 inline-flex rounded-md border border-integra-gray-300 px-4 py-2 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
-      >
-        Ver catálogo completo de softwares, tecnologias e serviços
-      </a>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="/contato?assunto=triagem&sourcePage=%2Fsolucoes&sourceLabel=Hero%20de%20solu%C3%A7%C3%B5es&cta=Solicitar%20triagem%20t%C3%A9cnica"
+          class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
+        >
+          Solicitar triagem técnica <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/cases"
+          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+        >
+          Ver cases e entregáveis
+        </a>
+      </div>
     </div>
   </section>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">
       <SectionHeader
-        eyebrow="Disponíveis hoje"
-        title="Áreas com profundidade comprovada"
-        description="Cada solução tem página dedicada com problemas que resolve, método de implementação, entregáveis, normas e decisões de arquitetura."
-        accent={true}
-      />
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {mvpSolutions.map((sol) => <SolutionCard {...sol} />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20">
-      <SectionHeader
         eyebrow="Por desafio"
         title="O que costuma trazer o cliente até nós"
-        description="Cada solução acima resolve um problema. Aqui mostramos os desafios mais comuns e qual caminho técnico eles tendem a seguir."
+        description="Comece pelo problema. Cada caminho abaixo mostra a solução técnica mais provável, os riscos tratados e os entregáveis esperados."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {desafios.map((d) => (
-          <article class="group rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 flex flex-col gap-3 hover:-translate-y-1 hover:shadow-lg hover:shadow-integra-red/[0.02] hover:border-integra-red/60 transition-all duration-300 ease-out">
+          <article class="group rounded-lg border border-integra-gray-200 bg-integra-white p-6 flex flex-col gap-3 hover:-translate-y-1 hover:shadow-lg hover:shadow-integra-red/[0.02] hover:border-integra-red/60 transition-all duration-300 ease-out">
             <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white group-hover:bg-integra-red group-hover:scale-105 transition-all duration-300 ease-out">
               <Icon name={d.icon} class="size-5" aria-hidden="true" />
             </div>
@@ -197,6 +192,20 @@ const mvpSolutions = [
             </a>
           </article>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Frentes de engenharia"
+        title="Soluções com escopo e entregáveis claros"
+        description="Depois de enquadrar o desafio, aprofunde a plataforma, o método de implementação, as normas aplicáveis e as decisões de arquitetura."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {mvpSolutions.map((sol) => <SolutionCard {...sol} />)}
       </div>
     </div>
   </section>
@@ -246,9 +255,9 @@ const mvpSolutions = [
   />
 
   <CtaBlock
-    title="Tem um caso técnico para conversar?"
-    description="Independentemente da solução, começamos conversando sobre o problema, a planta e os riscos. A arquitetura vem depois."
-    primaryCta={{ href: "/contato?assunto=diagnostico", label: "Solicitar diagnóstico" }}
+    title="Qual é o próximo passo para o seu caso?"
+    description="A triagem inicial enquadra o problema e verifica aderência. Se a decisão exigir inventário, visita ou diagnóstico documentado, esse trabalho recebe escopo próprio antes de começar."
+    primaryCta={{ href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" }}
     secondaryCta={{ href: "/setores", label: "Ver por setor industrial" }}
   />
 </BaseLayout>

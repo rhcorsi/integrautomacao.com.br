@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { publicSourceFor } from "@/data/sourceRegistry";
 
 interface Props {
   image: ImageMetadata;
@@ -26,6 +27,7 @@ const {
 
 const dark = theme === "dark";
 const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red-700";
+const publicSource = publicSourceFor(source);
 ---
 
 <figure
@@ -45,9 +47,9 @@ const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red-700"
     >
       {eyebrow}
     </p>
-    <h3 class:list={["text-base font-semibold leading-snug", dark ? "text-white" : "text-integra-gray-900"]}>
+    <p class:list={["text-base font-semibold leading-snug", dark ? "text-white" : "text-integra-gray-900"]}>
       {title}
-    </h3>
+    </p>
   </div>
 
   <div class:list={[
@@ -77,6 +79,20 @@ const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red-700"
     <p>{caption}</p>
     <p class:list={["font-mono uppercase tracking-wider", dark ? "text-white/80" : "text-integra-gray-700"]}>
       Fonte: {source}
+      {publicSource && (
+        <>
+          {" · "}
+          <a
+            href={publicSource.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline underline-offset-2 hover:no-underline"
+          >
+            abrir fonte primária
+          </a>
+          {` · acesso em ${publicSource.accessedAt}`}
+        </>
+      )}
     </p>
   </figcaption>
 </figure>

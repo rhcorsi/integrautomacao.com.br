@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
-const lastUpdated = "10 de junho de 2026";
+const lastUpdated = "12 de julho de 2026";
 ---
 
 <BaseLayout
@@ -45,9 +45,10 @@ const lastUpdated = "10 de junho de 2026";
         </p>
         <ul>
           <li>Nome completo</li>
-          <li>E-mail corporativo</li>
+          <li>E-mail</li>
           <li>Telefone (opcional)</li>
           <li>Empresa (opcional)</li>
+          <li>Assunto selecionado e contexto de origem do formulário (página, bloco e chamada para ação)</li>
           <li>Conteúdo da mensagem que você nos enviou</li>
         </ul>
         <p>
@@ -56,31 +57,30 @@ const lastUpdated = "10 de junho de 2026";
         </p>
         <ul>
           <li>Nome</li>
-          <li>E-mail corporativo</li>
-          <li>Empresa (opcional)</li>
-          <li>Cargo ou função (opcional)</li>
-          <li>Registro do consentimento para receber comunicações técnicas</li>
+          <li>E-mail</li>
+          <li>Estado da inscrição e histórico de interações de marketing mantido pelo operador de e-mail</li>
         </ul>
 
         <h3>2.2 Dados técnicos coletados automaticamente</h3>
         <p>
-          Para garantir a segurança do site e prevenir abuso, coletamos
-          temporariamente:
+          Para garantir a segurança do site, prevenir abuso e diagnosticar
+          falhas, os seguintes dados podem ser tratados durante a requisição:
         </p>
         <ul>
           <li>
-            Endereço IP da requisição (apenas no momento do envio do
-            formulário de contato ou newsletter, para verificação de Turnstile / proteção
-            anti-bot)
+            Endereço IP da requisição, que pode ser processado pela Cloudflare
+            para hospedar e proteger o site, aplicar limites de requisição,
+            diagnosticar falhas e validar o Turnstile. O site não o inclui na
+            mensagem de contato nem no cadastro da newsletter.
           </li>
           <li>
-            User agent (informação do seu navegador, para diagnóstico
-            técnico)
+            User agent (informação do navegador), que pode constar em logs
+            técnicos temporários da infraestrutura em caso de erro ou abuso,
+            mas não é incluído nos e-mails enviados pelo site.
           </li>
           <li>
-            Métricas agregadas e anonimizadas de visitação (via
-            Cloudflare Web Analytics, sem cookies, sem rastreamento
-            entre sites)
+            Se o Cloudflare Web Analytics estiver ativado, métricas agregadas
+            de visitação, sem cookies e sem rastreamento entre sites.
           </li>
         </ul>
 
@@ -113,11 +113,11 @@ const lastUpdated = "10 de junho de 2026";
 
         <h2>4. Por quanto tempo guardamos os dados</h2>
         <p>
-          Mensagens de contato são mantidas pelo prazo necessário ao
-          atendimento da solicitação e, posteriormente, até 5 (cinco)
-          anos para fins de histórico comercial e cumprimento de
-          obrigações legais. Após esse período, os dados são
-          anonimizados ou excluídos.
+          Mensagens de contato são mantidas durante o atendimento e pelo período
+          necessário para acompanhar a relação comercial, exercer direitos ou
+          cumprir obrigações legais. O prazo varia conforme o conteúdo e a
+          existência de relação contratual. Quando não houver necessidade ou
+          obrigação de conservação, os dados são eliminados ou anonimizados.
         </p>
         <p>
           Dados de inscrição na newsletter são mantidos enquanto a inscrição
@@ -144,6 +144,13 @@ const lastUpdated = "10 de junho de 2026";
             por lei ou ordem judicial.
           </li>
         </ul>
+        <p>
+          Esses operadores podem processar dados em outros países, conforme a
+          localização de sua infraestrutura e os mecanismos contratuais
+          aplicáveis. Limitamos o compartilhamento ao necessário para cada
+          serviço e mantemos a Integra responsável pelas decisões sobre o
+          tratamento.
+        </p>
 
         <h2>6. Cookies</h2>
         <p>
@@ -185,8 +192,12 @@ const lastUpdated = "10 de junho de 2026";
         <p>
           Para exercer qualquer dos direitos acima, escreva para
           <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
-          Responderemos em até 15 (quinze) dias corridos, conforme o
-          art. 19 da LGPD.
+          Confirmaremos o recebimento e adotaremos as providências cabíveis sem
+          demora injustificada. Pedidos de confirmação e acesso em formato
+          simplificado são atendidos imediatamente quando possível; a declaração
+          completa prevista no art. 19, II, da LGPD é fornecida em até 15
+          (quinze) dias. Outros pedidos seguem os prazos e condições aplicáveis
+          ao caso.
         </p>
         <p>
           Você também pode cancelar a newsletter a qualquer momento pelo link
@@ -196,26 +207,25 @@ const lastUpdated = "10 de junho de 2026";
 
         <h2>9. Segurança</h2>
         <p>
-          Adotamos medidas técnicas e organizacionais para proteger
-          seus dados, incluindo: TLS 1.2+ em todas as comunicações,
-          armazenamento em provedores com certificações de segurança
-          internacionais, controle de acesso por credenciais nominais,
-          e princípios de privacidade desde a concepção (privacy by
-          design) na arquitetura do site.
+          Adotamos medidas técnicas e organizacionais proporcionais para proteger
+          seus dados, incluindo comunicação criptografada, provedores
+          especializados, validação anti-bot, minimização de dados e controle de
+          acesso aos serviços utilizados. Nenhum mecanismo elimina integralmente
+          os riscos inerentes ao tratamento em ambiente digital.
         </p>
 
         <h2>10. Alterações nesta política</h2>
         <p>
           Esta política pode ser atualizada periodicamente. A data da
           última atualização sempre constará no topo do documento.
-          Mudanças materiais serão comunicadas em destaque na home do
-          site.
+          Quando apropriado, mudanças materiais também serão comunicadas
+          em destaque no site ou pelos canais de contato disponíveis.
         </p>
 
-        <h2>11. Contato do encarregado pelos dados pessoais</h2>
+        <h2>11. Canal de privacidade</h2>
         <p>
-          Para tratativas relacionadas à proteção de dados pessoais,
-          entre em contato pelo e-mail
+          Para dúvidas, solicitações ou tratativas relacionadas à proteção de
+          dados pessoais, entre em contato pelo e-mail
           <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
         </p>
       </div>

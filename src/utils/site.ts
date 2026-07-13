@@ -5,9 +5,9 @@
 export const SITE = {
   name: "Integra Automação Industrial",
   shortName: "Integra",
-  tagline: "Tecnologia e Engenharia de Sistemas Industriais",
+  tagline: "Engenharia com Integridade",
   url: "https://integrautomacao.com.br",
-  defaultTitle: "Integra Automação Industrial | Tecnologia e Engenharia de Sistemas Industriais",
+  defaultTitle: "Integra Automação Industrial | Engenharia e Integração de Sistemas Industriais",
   defaultDescription:
     "Engenharia e integração de sistemas industriais para plantas críticas: arquitetura, padronização, segurança operacional e governança técnica de longo prazo.",
   locale: "pt-BR",
@@ -59,14 +59,13 @@ export const COMPANY = {
 
 /** Primary navigation. Order = display order in header. */
 export const NAV = [
-  { href: "/empresa", label: "Empresa" },
   { href: "/solucoes", label: "Soluções" },
-  { href: "/tecnologias", label: "Tecnologias" },
   { href: "/setores", label: "Setores" },
-  { href: "/certificacoes", label: "Certificações" },
   { href: "/cases", label: "Cases" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contato", label: "Contato" },
+  { href: "/tecnologias", label: "Tecnologias" },
+  { href: "/blog", label: "Conteúdo" },
+  { href: "/empresa", label: "Empresa" },
+  { href: "/certificacoes", label: "Certificações" },
 ] as const;
 
 /**
@@ -110,7 +109,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           {
             href: "/solucoes/plantpax",
             label: "PlantPAx",
-            description: "DCS moderno com biblioteca padronizada (5.x série P)",
+            description: "DCS moderno com biblioteca de processo e arquitetura dimensionada",
           },
           {
             href: "/solucoes/factorytalk",
@@ -159,7 +158,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           },
           {
             href: "/solucoes/migracao-plc",
-            label: "Migração PLC-5 / SLC500",
+            label: "Migração PLC-5 / SLC 500",
             description: "Modernização para ControlLogix com plano de cutover",
           },
           {
@@ -185,7 +184,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           {
             href: "/solucoes/migracao-plc",
             label: "Modernizar PLC legado",
-            description: "PLC-5/SLC500 obsoleto sem virar paralisia de planta",
+            description: "PLC-5 e SLC 500 obsoletos sem paralisar a planta",
           },
           {
             href: "/solucoes/redes-iec-62443",
@@ -221,7 +220,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       { href: "/setores", label: "Por setor industrial" },
       { href: "/tecnologias", label: "Catálogo técnico completo" },
       { href: "/cases", label: "Cases publicados" },
-      { href: "/contato?assunto=diagnostico", label: "Solicitar diagnóstico" },
+      { href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" },
     ],
   },
 
@@ -285,7 +284,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       { href: "/solucoes", label: "Ver soluções" },
       { href: "/setores", label: "Por setor industrial" },
       { href: "/certificacoes", label: "Parcerias e certificações" },
-      { href: "/contato?assunto=tecnologias-multivendor", label: "Avaliar stack existente" },
+      { href: "/contato?assunto=tecnologias-multivendor", label: "Conversar sobre o stack existente" },
     ],
   },
 
@@ -368,12 +367,12 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           {
             href: "/solucoes/redes-iec-62443",
             label: "Cibersegurança OT",
-            description: "Aplicável a todos os setores em modernização",
+            description: "Aplicável a diferentes setores em modernização",
           },
           {
             href: "/solucoes/migracao-plc",
             label: "Modernização legado",
-            description: "PLC-5/SLC500 → ControlLogix em qualquer setor",
+            description: "PLC-5 e SLC 500 → ControlLogix, conforme a aplicação",
           },
         ],
       },
@@ -388,7 +387,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
     quickLinks: [
       { href: "/solucoes", label: "Por solução" },
       { href: "/cases", label: "Cases por setor" },
-      { href: "/contato?assunto=diagnostico", label: "Conversar sobre meu setor" },
+      { href: "/contato?assunto=triagem", label: "Conversar sobre meu setor" },
     ],
   },
 
@@ -404,7 +403,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
           },
           {
             href: "/certificacoes#plantpax-dcs",
-            label: "Especialidade PlantPAx DCS Certified",
+            label: "Capacidade PlantPAx DCS Certified",
             description: "Rockwell Automation",
           },
           {
@@ -457,7 +456,7 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
       { href: "/solucoes", label: "Ver soluções" },
       { href: "/tecnologias", label: "Catálogo técnico" },
       { href: "/cases", label: "Cases publicados" },
-      { href: "/contato?assunto=certificacoes", label: "Solicitar comprovação" },
+      { href: "/contato?assunto=certificacoes", label: "Solicitar verificação" },
     ],
   },
 };

@@ -11,7 +11,6 @@ try {
   // title: "...",
   // faq: [ { q: "...", a: "..." }, ... ]
   
-  const blocks = [];
   const lines = content.split('\n');
   let currentTech = '';
   let currentFaq = [];
@@ -28,7 +27,8 @@ try {
     }
   });
 
-  console.log(`=== Extracted FAQs from techCatalog.ts (Found ${currentFaq.length} questions) ===`);
+  const verbose = process.argv.includes('--verbose');
+  console.log(`=== FAQs extraídas do catálogo: ${currentFaq.length} ===`);
   
   // Group by technology
   const grouped = {};
@@ -37,12 +37,14 @@ try {
     grouped[f.tech].push(f);
   });
   
-  Object.keys(grouped).forEach(tech => {
-    console.log(`\nTechnology: "${tech}"`);
-    grouped[tech].forEach((f, idx) => {
-      console.log(`  ${idx + 1}. [Line ${f.line}] "${f.q}"`);
+  if (verbose) {
+    Object.keys(grouped).forEach(tech => {
+      console.log(`\nTecnologia: "${tech}"`);
+      grouped[tech].forEach((f, idx) => {
+        console.log(`  ${idx + 1}. [Linha ${f.line}] "${f.q}"`);
+      });
     });
-  });
+  }
   
   // Find any duplicates across the entire catalog
   console.log("\n=== Checking for Duplicate FAQs ===");
@@ -68,6 +70,7 @@ try {
     console.log("\nZero duplicate FAQs found! The catalog is completely unique.");
   } else {
     console.log(`\nFound ${duplicateCount} duplicate questions.`);
+    process.exitCode = 1;
   }
 
 } catch (err) {

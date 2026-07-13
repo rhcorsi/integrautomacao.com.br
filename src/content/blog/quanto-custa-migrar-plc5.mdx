@@ -1,7 +1,8 @@
 ---
-title: "Quanto custa migrar um PLC-5? Os fatores que definem o orçamento"
+title: "Quanto custa migrar PLC-5? Fatores de orçamento"
 description: "Entenda os fatores que definem o orçamento de uma migração PLC-5: contagem de I/O, fiação 1492, complexidade da lógica, HMI, redes DH+/RIO e janela de parada."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["Migração", "PLC-5", "ControlLogix"]
 draft: false
 ---
@@ -17,12 +18,15 @@ projetos com o mesmo processador 1785 podem ter orçamentos com ordem de
 grandeza de diferença.
 
 O contexto que pressiona a decisão é conhecido. A plataforma PLC-5,
-lançada em 1986, teve processadores 1785 e I/O 1771 descontinuados pela
-Rockwell em junho de 2017, e o RSLogix 5, software de programação da
-família, foi descontinuado em 31 de dezembro de 2025. Quem ainda opera
-PLC-5 depende de mercado secundário para peças e de licenças legadas
-para manter o software. A pergunta deixou de ser *se* migrar e passou a
-ser *como* — e o orçamento do "como" depende dos fatores abaixo.
+lançada em 1986, é uma família descontinuada, com status de reparo e
+substituição que varia por catálogo no
+[Product Lifecycle Status da Rockwell](https://www.rockwellautomation.com/en-us/products/details.1785-L80B.html).
+Para o RSLogix 5, novas vendas de ativação terminaram em 31 de dezembro de
+2025; instalações existentes continuam elegíveis a suporte técnico conforme
+contrato, como esclarece o
+[comunicado oficial da Rockwell](https://www.rockwellautomation.com/en-gb/company/news/blogs/rslogix5-eol-status.html).
+Em aplicações críticas, a pergunta passa a ser como reduzir o risco e em que
+sequência migrar — e o orçamento depende dos fatores abaixo.
 
 ## Por que ninguém sério dá preço sem levantamento?
 
@@ -95,14 +99,14 @@ tomada antes da proposta, não durante a obra.
 
 ### 5. Rede legada: DH+ e Remote I/O
 
-O módulo 1756-DHRIO dá ao ControlLogix dois canais configuráveis para
-DH+ (57,6, 115,2 ou 230,4 kbit/s, conforme o comprimento do tronco) ou
-para Remote I/O em modo scanner, varrendo racks 1771 remotos sem
-trocá-los. Isso habilita migração faseada: primeiro o processador,
-depois os racks remotos, janela a janela. Uma migração big bang
-concentra risco e custo em uma parada; a faseada dilui ambos, ao preço
-de conviver com a ponte por mais tempo. O perfil de desembolso muda
-completamente entre as duas estratégias.
+O módulo 1756-DHRIO foi uma ponte comum para oferecer ao ControlLogix dois
+canais DH+/Remote I/O e viabilizar migração faseada. Ele, porém, foi
+[descontinuado em 31 de dezembro de 2024](https://www.rockwellautomation.com/en-us/products/details.1756-DHRIO.html).
+Pode ainda existir como item reparável ou em estoque, mas disponibilidade,
+suporte e alternativa precisam ser confirmados antes de incluí-lo em uma
+arquitetura que conviverá com o legado por anos. Migração faseada continua
+possível em muitos casos; a tecnologia de ponte é uma decisão específica do
+parque, não uma premissa automática.
 
 ### 6. Janela de parada disponível
 
@@ -175,10 +179,11 @@ antes da proposta.
 
 ### O PLC-5 ainda tem suporte da Rockwell?
 
-Não. Os processadores 1785 e o I/O 1771 foram descontinuados em junho
-de 2017, e o RSLogix 5 foi descontinuado em 31 de dezembro de 2025.
-Peças novas não são mais fabricadas; o que existe é mercado secundário,
-sem garantia de procedência ou de vida útil.
+A família PLC-5 está descontinuada, mas reparo, substituição e suporte variam
+por catálogo e contrato. A Rockwell encerrou novas vendas de ativação do
+RSLogix 5 em 31 de dezembro de 2025, sem desativar instalações existentes e
+mantendo suporte técnico conforme entitlement. O inventário deve registrar o
+status oficial de cada código, estoque, reparabilidade, licença e mídia.
 
 ### Dá para aproveitar a fiação existente na migração?
 
@@ -190,11 +195,11 @@ existente está em condição de permanecer.
 
 ### É possível migrar por etapas, sem parar a planta inteira?
 
-Sim. O módulo 1756-DHRIO conecta o ControlLogix novo às redes DH+ e
-Remote I/O legadas, permitindo trocar o processador primeiro e os racks
-1771 remotos depois, janela a janela. A migração faseada dilui risco e
-desembolso, em troca de conviver com a ponte de comunicação por mais
-tempo.
+Em muitos sistemas, sim. Uma ponte temporária pode permitir trocar o
+processador e migrar racks por janelas. O 1756-DHRIO foi usado nesse papel,
+mas está descontinuado; por isso, a solução precisa considerar estoque,
+reparo, suporte, alternativas e o tempo de convivência. O faseamento só é
+confirmado após levantamento de rede, I/O e dependências.
 
 ### A conversão do programa PLC-5 para Studio 5000 é automática?
 

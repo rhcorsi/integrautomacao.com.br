@@ -17,7 +17,6 @@ function walkDir(dir, callback) {
 
 const doubleSpaceIssues = [];
 const lowercaseStartIssues = [];
-const missingPunctuationIssues = [];
 
 walkDir(srcDir, filePath => {
   const ext = path.extname(filePath);

@@ -1,0 +1,76 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EmailLink from "@/components/EmailLink.astro";
+import { COMPANY } from "@/utils/site";
+---
+
+<BaseLayout
+  title="Avisos legais sobre marcas e conteúdo"
+  description="Avisos sobre marcas, afiliações, referências técnicas, imagens de terceiros e limitações do conteúdo publicado pela Integra."
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-narrow py-16 lg:py-20">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+        Transparência editorial
+      </p>
+      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        Avisos legais
+      </h1>
+      <p class="mt-4 text-sm font-mono text-integra-gray-500">
+        Última atualização: 12 de julho de 2026
+      </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-narrow py-12 lg:py-16">
+      <div class="prose prose-lg max-w-none prose-headings:text-integra-gray-900 prose-a:text-integra-red-700 hover:prose-a:underline prose-strong:text-integra-gray-900">
+        <h2>Marcas e nomes de produtos</h2>
+        <p>
+          Rockwell Automation, Allen-Bradley, PlantPAx, FactoryTalk,
+          ControlLogix, GuardLogix, Siemens, SIMATIC, Schneider Electric,
+          EcoStruxure, AVEVA, PI System, Elipse, Cisco, Telit Cinterion,
+          deviceWISE e demais marcas citadas pertencem aos seus respectivos
+          titulares. A citação identifica tecnologias e não implica parceria,
+          certificação, autorização comercial ou endosso, salvo quando a página
+          declara expressamente uma relação formal e apresenta sua base de
+          comprovação.
+        </p>
+
+        <h2>Referências técnicas e imagens de terceiros</h2>
+        <p>
+          Diagramas, telas e trechos identificados como referências de
+          fabricante são usados para comentário e contextualização técnica. A
+          legenda informa a origem e, quando disponível, oferece acesso à fonte
+          primária. Esses materiais não representam a arquitetura específica de
+          um cliente nem devem ser reutilizados como projeto executivo.
+        </p>
+        <p>
+          Os direitos sobre materiais de terceiros permanecem com seus
+          titulares. Se você representa um titular e identifica atribuição
+          incorreta, conteúdo desatualizado ou uso que deva ser revisto, escreva
+          para <EmailLink email={COMPANY.emailPrivacy}>{COMPANY.emailPrivacy}</EmailLink>.
+        </p>
+
+        <h2>Conteúdo de engenharia</h2>
+        <p>
+          O conteúdo publicado é informativo e registra versões, arquiteturas de
+          referência e práticas de engenharia válidas no contexto indicado. Ele
+          não substitui levantamento de campo, análise de risco, documentação do
+          fabricante, requisitos contratuais ou validação por profissional
+          habilitado. Limites, licenças, lifecycle e compatibilidade podem mudar;
+          confirme a documentação vigente antes de especificar ou implementar.
+        </p>
+
+        <h2>Cases e confidencialidade</h2>
+        <p>
+          Cases podem ser anonimizados para preservar contratos e informações
+          industriais. Imagens ilustrativas são identificadas como tal. Dados de
+          desempenho, escopo e resultado só são publicados quando houver base
+          documental e autorização compatível com os compromissos de
+          confidencialidade da Integra.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

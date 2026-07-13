@@ -2,9 +2,10 @@
 title: "CPwE: redes industriais convergentes"
 description: "CPwE organiza redes industriais convergentes com segmentação, zonas, IDMZ e defesa em profundidade."
 pubDate: 2026-04-22
+updatedDate: 2026-07-12
 tags: ["Redes", "CPwE", "Cibersegurança"]
 heroImage: "../../assets/manuals/cpwe-ot-it-bridging.jpg"
-heroAlt: "CPwE Industrial IT and OT bridging showing structural layout and standard industrial networking levels"
+heroAlt: "Arquitetura CPwE integrando TI e OT com zonas e níveis de rede industrial"
 ogImage: "/og/blog-cpwe-rede-converged.png"
 draft: false
 ---
@@ -25,10 +26,11 @@ informação. O sintoma típico é:
 - Atualização de Windows derruba uma linha de produção
 - Auditoria de seguro/compliance gera lista de não-conformidades
 
-[CPwE, Converged Plantwide Ethernet](/tecnologias/ethernet-ip-cpwe/), é a arquitetura de referência
-desenvolvida em conjunto pela Rockwell, Cisco e Panduit para resolver
-isso de forma estrutural, alinhada ao modelo Purdue e às práticas da
-norma IEC 62443.
+[CPwE, Converged Plantwide Ethernet](/tecnologias/ethernet-ip-cpwe/), é uma
+arquitetura de referência desenvolvida pela Rockwell e Cisco com contribuições
+do ecossistema industrial. CPwE não é norma: usa o modelo Purdue e implementa
+padrões de segmentação e defesa em profundidade que podem apoiar um projeto
+alinhado à IEC 62443.
 
 ## As camadas, do chão de fábrica ao escritório
 
@@ -54,29 +56,33 @@ não passa de slogan.
   caption="Referência visual pública CPwE para mostrar onde a Integra define fronteiras, conduítes e responsabilidades."
 />
 
-<TechnicalCallout variant="ot" title="Por que IDMZ é inegociável">
-  O IDMZ é a única região onde o ambiente industrial e o corporativo se
-  encontram. Ele é a porta de saída de dados (Historian → ERP) e a porta
-  de entrada controlada (manutenção remota, atualizações). Sem IDMZ,
-  qualquer compromisso de segurança no corporativo vira risco
-  operacional na planta.
+<TechnicalCallout variant="ot" title="Quando uma IDMZ é a referência correta">
+  Quando há serviços e fluxos entre TI e OT, a IDMZ é o padrão CPwE para
+  intermediar dados, manutenção remota e atualizações sem abrir caminho direto
+  até a zona de controle. A IEC 62443 exige zonas, conduítes e controles
+  definidos por risco, mas não impõe uma topologia IDMZ pelo nome. Plantas sem
+  integração corporativa ainda precisam tratar acessos locais, mídia removível
+  e manutenção.
 </TechnicalCallout>
 
 ## DLR, PRP e a redundância que você pode pagar
 
 Redundância de rede industrial vem em sabores:
 
-- **STP/RSTP**, barato, mas convergência lenta. Não é redundância
-  industrial real, é redundância de TI.
+- **STP/RSTP**, mecanismos padronizados de prevenção de loop e reconvergência.
+  Podem ser adequados em trechos cuja tolerância à interrupção aceite seus
+  tempos de recuperação; versão, configuração e topologia precisam ser
+  medidas.
 - **DLR (Device Level Ring)**, redundância em anel L2, convergência em
-  ms. Suportado nativamente em hardware Stratix e por dispositivos
-  EtherNet/IP modernos. Boa relação custo-benefício para rings de
-  controle.
+  milissegundos nas topologias e quantidades de nós caracterizadas. É
+  suportado por modelos compatíveis EtherNet/IP e costuma oferecer boa
+  relação custo-benefício em anéis de controle.
 - **PRP (Parallel Redundancy Protocol)**, duas redes paralelas
-  independentes. Failover é instantâneo (zero pacote perdido) porque
-  os dois caminhos estão sempre ativos. Mais cara, mas indispensável
-  em aplicações onde uma janela de convergência de 10ms é inaceitável
-  (subestações, processos contínuos críticos).
+  independentes. Equipamentos compatíveis enviam cópias pelos dois caminhos,
+  o que pode manter a comunicação sem reconvergência diante de uma falha única
+  coberta pelo projeto. Exige duas LANs realmente independentes e validação de
+  capacidade e interoperabilidade; é uma opção, não requisito universal de
+  processo crítico.
 
 A escolha não é "qual é melhor", é **qual cabe no risco operacional**
 do trecho específico da rede.
@@ -95,10 +101,11 @@ projeto:
 - Logs centralizados em um SIEM/syslog para detecção de anomalias
 
 <TechnicalCallout variant="note" title="Boa prática: começar pelo diagnóstico">
-  Antes de redesenhar uma rede em produção, faça port mirror em alguns
-  pontos críticos por 1-2 semanas para entender o tráfego real. Você
-  vai descobrir coisas que ninguém documentou, e isso vai poupar
-  surpresas no cutover.
+  Antes de redesenhar uma rede em produção, capture tráfego em pontos
+  representativos e por tempo suficiente para abranger ciclos operacionais,
+  partidas, trocas de turno e manutenção. O período pode ser horas, dias ou
+  semanas conforme o processo; port mirror, TAP e capacidade de captura devem
+  ser escolhidos sem degradar a rede.
 </TechnicalCallout>
 
 ## Como migrar uma planta legada
@@ -112,13 +119,16 @@ Migração de rede em planta em produção pode ser feita por fases:
 3. **Plano de cutover por área.** Cada área é migrada em janela
    curta, com plano de rollback testado em laboratório/ambiente
    espelho.
-4. **Validação.** Cada área cutover é monitorada por 1-2 semanas antes
-   da próxima, para capturar problemas que só aparecem em produção.
+4. **Validação.** Cada área migrada é monitorada por um período definido pelo
+   ciclo operacional e pelos critérios de aceite antes da próxima fase, para
+   capturar problemas que só aparecem em produção.
 5. **Hardening progressivo.** Depois do cutover físico, aplicar
    port-security, ACLs e logs centralizados de forma incremental.
 
-Não é projeto de fim de semana. É projeto de meses, mas que se paga
-em anos de operação estável e auditorias que passam sem fricção.
+Não é projeto para improvisar. O cronograma depende do porte, das janelas e da
+documentação disponível. Os benefícios precisam ser demonstrados por redução
+de exposição, melhor diagnóstico, testes de recuperação e evidências de
+governança — sem prometer disponibilidade ou aprovação de auditoria.
 
 ---
 

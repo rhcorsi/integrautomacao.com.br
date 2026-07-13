@@ -87,11 +87,10 @@ for (const form of newsletterForms) {
       if (response.ok) {
         setStatus(
           status,
-          "Inscrição confirmada. A próxima edição chega em breve.",
+          "Inscrição confirmada. Você receberá as próximas edições publicadas.",
           "success",
         );
         form.reset();
-        window.turnstile?.reset();
         return;
       }
 
@@ -111,6 +110,8 @@ for (const form of newsletterForms) {
       );
     } finally {
       submitBtn?.removeAttribute("disabled");
+      // Tokens do Turnstile são de uso único, inclusive quando o Resend falha.
+      window.turnstile?.reset();
     }
   });
 }

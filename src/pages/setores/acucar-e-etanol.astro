@@ -36,7 +36,7 @@ const deliverables = [
   "Arquitetura PlantPAx / DCS com controle regulatório, sequencial e batelada (ISA-88)",
   "Padronização de bibliotecas, malhas PID e telas operacionais entre áreas",
   "Governança de alarmes por ISA-18.2 para reduzir avalanche em partida de safra",
-  "Migração de controladores PLC-5/SLC500 legados para ControlLogix/CompactLogix",
+  "Migração de controladores PLC-5 e SLC 500 legados para ControlLogix ou CompactLogix",
   "Segmentação de rede EtherNet/IP, IDMZ e adequação à IEC 62443",
   "Integração de dados de processo com historian e sistemas de gestão agroindustrial",
   "Plano de cutover por etapas dentro da janela de entressafra, com FAT, SAT e rollback",
@@ -53,7 +53,7 @@ const faq = [
   },
   {
     q: "Como tratar a obsolescência de PLC-5 em usina?",
-    a: "A linha PLC-5 (1785) entrou em status discontinued em 30 de junho de 2017 e os últimos controladores SLC500 saíram de venda em 31 de março de 2024 (Rockwell Automation Lifecycle Status). Em usina, isso significa spare cada vez mais caro e raro sustentando moenda, caldeira ou utilidades. O caminho é inventariar onde esses controladores ainda operam, classificar por criticidade e migrar de forma planejada para <a href=\"/tecnologias/controllogix-compactlogix/\">ControlLogix/CompactLogix</a> durante a entressafra — antes que uma falha force a troca em plena safra, sob pressão de parada não planejada.",
+    a: "A linha PLC-5 (1785) entrou em status discontinued em 30 de junho de 2017 e os últimos controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o catálogo de ciclo de vida da Rockwell. Em usinas, disponibilidade e preço de sobressalentes precisam ser verificados. O caminho é inventariar onde esses controladores operam, classificar criticidade e comparar sustentação, estoque e migração planejada para <a href=\"/tecnologias/controllogix-compactlogix/\">ControlLogix ou CompactLogix</a>.",
   },
   {
     q: "Como integrar a automação com sistemas de gestão agroindustrial?",
@@ -177,8 +177,9 @@ const faq = [
         com a <a href="/tecnologias/plantpax-library/" class="text-integra-red-700 underline hover:text-integra-red">biblioteca de objetos de processo</a>
         sustentando a padronização. Quem quiser entender a arquitetura por
         dentro pode ver a página técnica do <a href="/tecnologias/plantpax-5x/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx 5.x</a>.
-        A Integra é Silver System Integrator e PlantPAx DCS Certified pela
-        Rockwell — ver <a href="/certificacoes/silver-system-integrator/" class="text-integra-red-700 underline hover:text-integra-red">certificações</a>.
+        A Integra participa do programa System Integrator do PartnerNetwork no
+        nível Silver, com a capacidade PlantPAx DCS Certified indicada em sua
+        credencial — ver <a href="/certificacoes/silver-system-integrator/" class="text-integra-red-700 underline hover:text-integra-red">detalhes e forma de verificação</a>.
       </p>
 
       <SectionHeader
@@ -189,18 +190,21 @@ const faq = [
       />
 
       <p class="text-base leading-relaxed text-integra-gray-700">
-        A NR-13 é a norma regulamentadora brasileira de caldeiras, vasos de
-        pressão e tubulações. Para caldeiras, a inspeção de segurança periódica
-        tem prazo máximo de 12 meses, que pode chegar a 24 meses para a categoria
-        A quando se testa a abertura das válvulas de segurança aos 12 meses.
-        Estabelecimentos com Serviço Próprio de Inspeção de Equipamentos (SPIE)
-        certificado podem estender esses prazos — até 30 meses para categoria A —
-        e caldeiras categoria A em operação contínua com Sistema Instrumentado de
-        Segurança (SIS) podem chegar a 48 meses de inspeção interna, desde que
-        atendam aos requisitos da norma. Na prática, isso significa que o projeto
-        de automação da caldeira e da cogeração precisa contemplar
-        intertravamentos de segurança, registro de eventos e a camada SIS que
-        sustenta a extensão de prazo permitida pela NR-13.
+        A <a href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-13-nr-13" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">NR-13 vigente</a>
+        regula a gestão da integridade de caldeiras, vasos de pressão,
+        tubulações e tanques abrangidos. Para caldeiras, o prazo máximo usual
+        da inspeção periódica é de 12 meses. A norma admite condições específicas,
+        como até 24 meses para categoria A com teste das válvulas aos 12 meses e,
+        em estabelecimento com SPIE, até 30 meses para categoria A ou 48 meses
+        quando o SIS atende ao Anexo IV. A edição vigente e o enquadramento do
+        equipamento devem ser confirmados por profissional habilitado.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Automação, por si só, não autoriza extensão de prazo. O projeto pode
+        apoiar intertravamentos, registro de eventos e funções instrumentadas
+        de segurança, mas a conformidade depende do sistema completo, dos
+        estudos, da inspeção, da documentação e das responsabilidades definidas
+        na NR-13.
       </p>
 
       <DeliverableList
@@ -220,12 +224,16 @@ const faq = [
         Numa usina, a rede de controle atravessa ambientes que poucos parques
         industriais reúnem ao mesmo tempo: a vibração contínua da moenda, o calor
         e a umidade da casa de força, a poeira de bagaço e longas distâncias
-        entre extração, fermentação e destilaria. A Integra projeta a rede sobre
-        EtherNet/IP seguindo a arquitetura de referência CPwE, com topologias
-        redundantes (DLR / anel), com recuperação típica abaixo de 3 ms em anel
-        de 50 nós segundo a Rockwell Automation, para que a queda de um trecho
-        não derrube uma área inteira, e com segmentação que separa células de
-        processo, IDMZ e a camada de TI. Os detalhes de projeto estão em
+        entre extração, fermentação e destilaria. O projeto precisa considerar
+        meio físico, proteção ambiental, distâncias, manutenção e modos de
+        falha antes de escolher topologia ou equipamento.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        EtherNet/IP e as referências CPwE podem orientar segmentação, células
+        de processo e integração controlada com TI. DLR, PRP ou outras formas
+        de redundância só devem ser selecionadas depois de calcular o tempo de
+        recuperação e validar as falhas cobertas na topologia real. Os detalhes
+        estão em
         <a href="/tecnologias/ethernet-ip-cpwe/" class="text-integra-red-700 underline hover:text-integra-red">EtherNet/IP e CPwE</a>,
         e a camada de defesa e segmentação em
         <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">redes industriais e IEC 62443</a>.
@@ -233,27 +241,30 @@ const faq = [
 
       <SectionHeader
         eyebrow="Entressafra como janela de modernização"
-        title="A entressafra é a janela curta para modernizar sem perder moagem"
-        description="No Centro-Sul a entressafra costuma ir de dezembro a abril. É o intervalo em que a usina pode trocar controladores obsoletos, comissionar painéis e fazer startup de áreas modernizadas."
+        title="A entressafra pode abrir uma janela para modernização"
+        description="O calendário varia por região, matéria-prima e estratégia operacional. Quando há uma parada sazonal, ela pode concentrar troca de controladores, comissionamento e startup."
         accent={true}
       />
 
       <p class="text-base leading-relaxed text-integra-gray-700">
-        A maior dívida técnica de muitas usinas são controladores legados que
-        ninguém quer mexer durante a safra. A linha PLC-5 entrou em status
-        discontinued em 30 de junho de 2017 e os últimos controladores SLC500
+        Controladores legados podem sustentar áreas críticas durante a safra.
+        A linha PLC-5 entrou em status
+        discontinued em 30 de junho de 2017 e os últimos controladores SLC 500
         saíram de venda em 31 de março de 2024 (Rockwell Automation Lifecycle
-        Status). Cada ano que passa,
-        o spare fica mais caro e raro sustentando moenda, caldeira ou utilidades.
-        A entressafra é a janela para resolver isso de forma planejada: inventário,
-        engenharia, simulação e FAT prontos antes da janela abrir, cutover por
-        área e plano de rollback validado. A Integra estrutura essas migrações em
+        Status). Isso não encerra automaticamente toda forma de suporte, mas
+        exige conferir reparo, sobressalentes, software e risco de cada ativo.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Quando existe janela de entressafra, inventário, engenharia, simulação
+        e FAT podem ser preparados antes da parada. Cutover por área e rollback
+        dependem da independência do processo e precisam ser testados. A Integra
+        estrutura essas avaliações em
         <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>,
         com a página técnica de
-        <a href="/tecnologias/migracao-plc5-slc500/" class="text-integra-red-700 underline hover:text-integra-red">migração PLC-5/SLC500</a>
-        detalhando a estratégia de conversão. Migrar planejado custa menos em
-        horas, risco e janela do que migrar sob pressão de uma falha no pico de
-        moagem.
+        <a href="/tecnologias/migracao-plc5-slc500/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC-5 e SLC 500</a>
+        detalhando opções de conversão. O diagnóstico compara sustentação,
+        estoque e migração sem presumir que uma única estratégia é melhor para
+        todas as áreas.
       </p>
 
       <StandardsBadges

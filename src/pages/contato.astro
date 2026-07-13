@@ -9,8 +9,8 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
 ---
 
 <BaseLayout
-  title="Contato"
-  description="Fale com a Integra. Conversamos sobre arquitetura, método e referências antes de qualquer proposta. Maringá-PR, atuação nacional."
+  title="Contato técnico para automação industrial"
+  description="Solicite uma triagem técnica com a Integra para enquadrar contexto, risco, base instalada e próximo passo. Maringá-PR, atuação nacional."
   ogImage="/og/contato.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -19,12 +19,47 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
         Contato
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Conversa técnica direta.
+        Comece pela triagem técnica.
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl">
-        Apresentamos arquitetura, método e referências antes de qualquer
-        proposta comercial. Retornamos em até 1 dia útil.
+        A primeira conversa serve para entender o contexto, verificar aderência
+        e definir o próximo passo. Ela não substitui levantamento de campo nem
+        diagnóstico documentado. Nosso prazo-alvo de retorno inicial é de 1 dia útil.
       </p>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-12 lg:py-16">
+      <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-3">
+        <article class="bg-integra-white p-6">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-integra-red-700">01 · Primeiro contato</p>
+          <h2 class="mt-3 text-lg font-semibold text-integra-gray-900">Triagem técnica</h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Conversa inicial para enquadrar problema, criticidade, tecnologia
+            instalada e prazo. O resultado é uma orientação de próximo passo,
+            não uma arquitetura específica.
+          </p>
+        </article>
+        <article class="bg-integra-white p-6">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-integra-red-700">02 · Quando é necessário aprofundar</p>
+          <h2 class="mt-3 text-lg font-semibold text-integra-gray-900">Diagnóstico de engenharia</h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Levantamento, inventário, leitura de risco e entregáveis definidos.
+            Quando o caso exige diagnóstico formal, escopo e condição comercial
+            são apresentados antes do início.
+          </p>
+        </article>
+        <article class="bg-integra-white p-6">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-integra-red-700">03 · Validação de experiência</p>
+          <h2 class="mt-3 text-lg font-semibold text-integra-gray-900">Portfólio sob NDA</h2>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+            Selecionamos referências comparáveis ao contexto informado. Cases
+            confidenciais são apresentados em reunião e, quando necessário,
+            mediante acordo de confidencialidade.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -32,11 +67,12 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
     <div class="container-fluid py-16 lg:py-20 grid gap-12 lg:grid-cols-5">
       <div class="lg:col-span-3">
         <h2 class="text-2xl font-semibold text-integra-gray-900 mb-2">
-          Envie uma mensagem
+          Envie o contexto
         </h2>
         <p class="text-sm text-integra-gray-700 mb-8">
-          Quanto mais detalhes do contexto, melhor a resposta inicial.
-          Confidencialidade preservada (NDA disponível mediante solicitação).
+          Escolha o tipo de contato e compartilhe apenas as informações
+          necessárias para a resposta inicial. Não envie backups, credenciais
+          ou documentos confidenciais por este formulário.
         </p>
         <ContactForm />
       </div>

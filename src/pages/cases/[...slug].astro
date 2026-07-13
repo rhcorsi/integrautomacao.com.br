@@ -11,7 +11,7 @@ import { articleSchema } from "@/utils/schema";
 export async function getStaticPaths() {
   const cases = await getCollection("cases", ({ data }) => !data.draft);
   return cases.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 }
@@ -77,15 +77,30 @@ const caseLd = articleSchema({
     {entry.data.heroImage && (
       <div class="border-b border-integra-gray-200 bg-integra-gray-100">
         <div class="container-default py-8">
-          <Image
-            src={entry.data.heroImage}
-            alt={entry.data.heroAlt ?? entry.data.title}
-            widths={[800, 1200, 1600]}
-            sizes="(min-width: 1024px) 1100px, 100vw"
-            loading="eager"
-            decoding="async"
-            class="w-full rounded-lg shadow-sm"
-          />
+          <figure>
+            <div class="relative overflow-hidden rounded-lg shadow-sm">
+              <Image
+                src={entry.data.heroImage}
+                alt={entry.data.heroAlt ?? entry.data.title}
+                widths={[800, 1200, 1600]}
+                sizes="(min-width: 1024px) 1100px, 100vw"
+                loading="eager"
+                decoding="async"
+                class="w-full"
+              />
+              {entry.data.heroIllustrative && (
+                <span class="absolute bottom-3 right-3 rounded-sm bg-integra-gray-950/85 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-integra-white">
+                  Imagem ilustrativa
+                </span>
+              )}
+            </div>
+            {entry.data.heroIllustrative && (
+              <figcaption class="mt-3 text-xs leading-relaxed text-integra-gray-500">
+                Imagem de apoio. Não representa a instalação, a equipe ou o
+                cliente deste case.
+              </figcaption>
+            )}
+          </figure>
         </div>
       </div>
     )}

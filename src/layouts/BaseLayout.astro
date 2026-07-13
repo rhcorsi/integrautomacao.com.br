@@ -10,6 +10,7 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: "website" | "article";
   noindex?: boolean;
   canonical?: string;
@@ -23,7 +24,8 @@ interface Props {
 const {
   title,
   description = SITE.defaultDescription,
-  ogImage = "/og/default.png",
+  ogImage: requestedOgImage,
+  ogImageAlt,
   ogType = "website",
   noindex = false,
   canonical,
@@ -32,14 +34,32 @@ const {
   breadcrumbLeaf,
 } = Astro.props;
 
-const pageTitle = title ? `${title} | ${SITE.name}` : SITE.defaultTitle;
+const pageTitle = title ? `${title} | ${SITE.shortName}` : SITE.defaultTitle;
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
+const ogImageBySection: Record<string, string> = {
+  blog: "/og/blog.png",
+  cases: "/og/cases.png",
+  certificacoes: "/og/certificacoes.png",
+  contato: "/og/contato.png",
+  empresa: "/og/empresa.png",
+  equipe: "/og/empresa.png",
+  eventos: "/og/eventos.png",
+  "integra-acao": "/og/integra-acao.png",
+  setores: "/og/setores.png",
+  solucoes: "/og/solucoes.png",
+  tecnologias: "/og/tecnologias.png",
+};
+const firstPathSegment = Astro.url.pathname.split("/").filter(Boolean)[0] ?? "";
+const ogImage = requestedOgImage ?? ogImageBySection[firstPathSegment] ?? "/og/default.png";
 const ogImageURL = new URL(ogImage, SITE.url);
+const socialImageAlt = ogImageAlt ?? title ?? SITE.name;
 
 // JSON-LD: Organization (sempre) + breadcrumb (automático, exceto na home) +
 // schema específico da página. Data blocks (application/ld+json) não executam
 // e não são afetados pelo script-src da CSP — dispensam nonce/hash.
-const breadcrumb = breadcrumbSchema(Astro.url.pathname, breadcrumbLeaf ?? title);
+const breadcrumb = noindex
+  ? null
+  : breadcrumbSchema(Astro.url.pathname, breadcrumbLeaf ?? title);
 const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
   (b): b is Record<string, unknown> => Boolean(b),
 );
@@ -76,7 +96,6 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     {/* Performance hints: dns-prefetch barato e sitewide. O preconnect do
         Turnstile fica nos formulários que realmente o carregam. */}
     <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
-    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
 
     {/* Resource hints, let the browser parallelize the layout/critical CSS fetch. */}
     <meta http-equiv="x-dns-prefetch-control" content="on" />
@@ -92,6 +111,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalURL.toString()} />
     <meta property="og:image" content={ogImageURL.toString()} />
+    <meta property="og:image:alt" content={socialImageAlt} />
     <meta property="og:locale" content="pt_BR" />
 
     <!-- Twitter / X -->
@@ -99,6 +119,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL.toString()} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
 
     <!-- JSON-LD: Organization + breadcrumb + schema específico da página -->
     {jsonLdBlocks.map((block) => (

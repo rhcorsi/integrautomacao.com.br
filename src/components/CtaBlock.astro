@@ -8,14 +8,39 @@ interface Props {
 }
 
 const {
-  title = "Pronto para uma conversa técnica?",
-  description = "Apresentamos arquitetura, método e referências antes de qualquer proposta. Conversamos com gerentes de manutenção, produção, projetos e TI/OT, em linguagem clara, sem jargão desnecessário.",
-  primaryCta = { href: "/contato", label: "Falar com especialista" },
+  title = "Quer avaliar o próximo passo com a engenharia?",
+  description = "A triagem inicial verifica contexto, aderência e próximo passo. Quando o caso exige levantamento ou diagnóstico documentado, o escopo é definido separadamente antes do início.",
+  primaryCta = { href: "/contato?assunto=triagem", label: "Solicitar triagem técnica" },
   secondaryCta = { href: "/cases", label: "Ver cases" },
   variant = "dark",
 } = Astro.props;
 
 const isDark = variant === "dark";
+
+const withContactContext = (
+  item: { href: string; label: string },
+  sourceLabel: string,
+) => {
+  if (!item.href.startsWith("/contato")) return item.href;
+
+  const url = new URL(item.href, Astro.url);
+  if (!url.searchParams.has("sourcePage")) {
+    url.searchParams.set("sourcePage", Astro.url.pathname.slice(0, 300));
+  }
+  if (!url.searchParams.has("sourceLabel")) {
+    url.searchParams.set("sourceLabel", sourceLabel.slice(0, 160));
+  }
+  if (!url.searchParams.has("cta")) {
+    url.searchParams.set("cta", item.label.slice(0, 160));
+  }
+
+  return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
+};
+
+const primaryHref = withContactContext(primaryCta, title);
+const secondaryHref = secondaryCta
+  ? withContactContext(secondaryCta, title)
+  : undefined;
 ---
 
 <section
@@ -47,7 +72,7 @@ const isDark = variant === "dark";
     </div>
     <div class="flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end lg:justify-self-end">
       <a
-        href={primaryCta.href}
+        href={primaryHref}
         class="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
       >
         {primaryCta.label}
@@ -55,7 +80,7 @@ const isDark = variant === "dark";
       </a>
       {secondaryCta && (
         <a
-          href={secondaryCta.href}
+          href={secondaryHref}
           class:list={[
             "inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold rounded-md transition-colors",
             isDark

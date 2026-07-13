@@ -7,6 +7,7 @@
  * BreadcrumbList possam referenciá-la por `{ "@id": ORG_ID }`.
  */
 import { SITE, COMPANY } from "@/utils/site";
+import { COLLECTIVE_AUTHOR } from "@/data/authors";
 
 export const ORG_ID = `${SITE.url}/#organization`;
 
@@ -41,17 +42,24 @@ export function organizationSchema() {
     description: SITE.defaultDescription,
     slogan: SITE.tagline,
     sameAs: [COMPANY.social.linkedin].filter(Boolean),
-    // Credenciais formais em formato máquina-legível (entidade p/ grafos de
-    // conhecimento e citações em IA). Detalhes em /certificacoes/.
+    memberOf: {
+      "@type": "Organization",
+      name: "Rockwell Automation PartnerNetwork — System Integrator Program",
+      url: "https://www.rockwellautomation.com/en-us/company/partnernetwork.html",
+    },
+    award: "System Integrator Partner, nível Silver no Rockwell Automation PartnerNetwork",
+    // A capacidade é declarada com sua fonte e categoria; o vínculo Silver é
+    // representado separadamente como participação no programa, não como curso.
     hasCredential: [
       {
         "@type": "EducationalOccupationalCredential",
-        name: "Silver System Integrator — Rockwell Automation PartnerNetwork",
-        url: `${SITE.url}/certificacoes/silver-system-integrator/`,
-      },
-      {
-        "@type": "EducationalOccupationalCredential",
         name: "PlantPAx DCS Certified — Rockwell Automation",
+        credentialCategory: "Capacidade do programa de integradores",
+        recognizedBy: {
+          "@type": "Organization",
+          name: "Rockwell Automation",
+          url: "https://www.rockwellautomation.com/",
+        },
         url: `${SITE.url}/certificacoes/`,
       },
     ],
@@ -82,6 +90,20 @@ export function organizationSchema() {
   };
 }
 
+/** Entidade WebSite da home, sem SearchAction porque o site não possui busca. */
+export function websiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE.url}/#website`,
+    url: `${SITE.url}/`,
+    name: SITE.name,
+    alternateName: SITE.shortName,
+    inLanguage: "pt-BR",
+    publisher: { "@id": ORG_ID },
+  };
+}
+
 /** Rótulos legíveis para os segmentos de path conhecidos (níveis intermediários). */
 const SEGMENT_LABELS: Record<string, string> = {
   empresa: "Empresa",
@@ -98,6 +120,8 @@ const SEGMENT_LABELS: Record<string, string> = {
   contato: "Contato",
   "integra-acao": "Integra Ação",
   eventos: "Eventos",
+  equipe: "Equipe",
+  "politica-editorial": "Política editorial",
   "politica-privacidade": "Política de Privacidade",
   "uso-de-cookies": "Uso de Cookies",
 };
@@ -160,10 +184,11 @@ export function articleSchema(opts: {
   url: string;
   datePublished: Date;
   dateModified?: Date;
-  author?: string;
   tags?: string[];
   image?: string;
 }) {
+  const editorialTeamUrl = new URL(COLLECTIVE_AUTHOR.href, SITE.url).toString();
+
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -173,8 +198,16 @@ export function articleSchema(opts: {
     url: opts.url,
     mainEntityOfPage: opts.url,
     datePublished: opts.datePublished.toISOString(),
-    dateModified: (opts.dateModified ?? opts.datePublished).toISOString(),
-    author: { "@type": "Organization", name: opts.author ?? SITE.name, "@id": ORG_ID },
+    ...(opts.dateModified
+      ? { dateModified: opts.dateModified.toISOString() }
+      : {}),
+    author: {
+      "@type": "Organization",
+      "@id": `${editorialTeamUrl}#${COLLECTIVE_AUTHOR.schemaId}`,
+      name: COLLECTIVE_AUTHOR.name,
+      url: editorialTeamUrl,
+      parentOrganization: { "@id": ORG_ID },
+    },
     publisher: { "@id": ORG_ID },
     image: opts.image ?? `${SITE.url}/og/default.png`,
     inLanguage: "pt-BR",
@@ -220,10 +253,19 @@ export function eventSchema(opts: {
   description: string;
   url: string;
   startDate: Date;
+  endDate?: Date;
+  status?: "scheduled" | "completed" | "cancelled" | "postponed";
   location: string;
   organizer: string;
   image?: string;
 }) {
+  const statusMap = {
+    scheduled: "https://schema.org/EventScheduled",
+    completed: "https://schema.org/EventCompleted",
+    cancelled: "https://schema.org/EventCancelled",
+    postponed: "https://schema.org/EventPostponed",
+  } as const;
+
   return {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -231,13 +273,13 @@ export function eventSchema(opts: {
     description: opts.description,
     url: opts.url,
     startDate: opts.startDate.toISOString().slice(0, 10),
+    ...(opts.endDate ? { endDate: opts.endDate.toISOString().slice(0, 10) } : {}),
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    eventStatus: "https://schema.org/EventScheduled",
+    eventStatus: statusMap[opts.status ?? "completed"],
     // address como texto e valido em schema.org e evita o warning de
     // "location sem address" no Google Rich Results Test.
     location: { "@type": "Place", name: opts.location, address: opts.location },
     organizer: { "@type": "Organization", name: opts.organizer },
-    performer: { "@id": ORG_ID },
     ...(opts.image ? { image: opts.image } : {}),
     inLanguage: "pt-BR",
   };
@@ -249,9 +291,11 @@ export function techArticleSchema(opts: {
   description: string;
   url: string;
   image?: string;
-  /** Datas ISO (YYYY-MM-DD). Freshness pesa em citações de IA (~3,2x). */
+  /** Datas ISO (YYYY-MM-DD), alteradas somente após revisão substantiva. */
   datePublished?: string;
   dateModified?: string;
+  authorName?: string;
+  authorUrl?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -264,6 +308,13 @@ export function techArticleSchema(opts: {
     mainEntityOfPage: opts.url,
     inLanguage: "pt-BR",
     publisher: { "@id": ORG_ID },
+    author: {
+      "@type": "Organization",
+      name: opts.authorName ?? SITE.name,
+      ...(opts.authorUrl
+        ? { "@id": `${opts.authorUrl}#editorial-team`, url: opts.authorUrl }
+        : { "@id": ORG_ID }),
+    },
     ...(opts.datePublished ? { datePublished: opts.datePublished } : {}),
     ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
     ...(opts.image ? { image: opts.image } : {}),

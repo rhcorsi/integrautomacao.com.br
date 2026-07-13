@@ -7,32 +7,34 @@ import { Image } from "astro:assets";
 import integratorManifestoPost from "@/assets/manuals/integra-system-integrator-linkedin.jpg";
 import telitPartnerPost from "@/assets/manuals/telit-devicewise-partner-linkedin.jpg";
 
+const silverCertificatePath = "/downloads/rockwell-si-silver-certificado.pdf";
+
 const programs = [
   {
     id: "rockwell",
-    title: "Rockwell Automation Partner Network",
+    title: "Rockwell Automation PartnerNetwork",
     summary:
-      "Programa oficial da Rockwell para integradores qualificados. É o eixo principal da Integra em automação industrial, com acesso a treinamentos, suporte técnico de produto e canais de coordenação técnica direta.",
+      "Programa oficial da Rockwell Automation para parceiros. A Integra participa como System Integrator no nível Silver; os benefícios e recursos associados seguem as regras vigentes do programa.",
     items: [
       "Silver System Integrator",
-      "Especialidade: PlantPAx DCS Certified",
+      "Capacidade registrada: PlantPAx DCS Certified",
       "Disciplinas: Control · Visualization · Process · Power",
     ],
-    note: "Status atual e nível verificáveis no Rockwell PartnerLocator.",
+    note: "Consulte o status atual no Partner Locator e compare-o com o documento publicado. Divergências devem ser confirmadas com a Rockwell Automation.",
     cta: {
       href: "/certificacoes/silver-system-integrator",
-      label: "Conhecer Silver System Integrator",
+      label: "Entender o nível Silver",
     },
   },
   {
     id: "plantpax-dcs",
-    title: "Especialidade PlantPAx DCS Certified",
+    title: "Capacidade PlantPAx DCS Certified",
     summary:
-      "Especialidade técnica restrita que comprova e valida o domínio avançado na plataforma de controle distribuído moderna da Rockwell Automation.",
+      "Capacidade indicada na credencial publicada pela Integra para atuação com a plataforma PlantPAx. Ela é um elemento de qualificação e não garante, sozinha, aderência a todo projeto ou release.",
     items: [
-      "Acesso direto à engenharia de produto PlantPAx",
-      "Atualização contínua nas versões 3.x, 4.x e 5.x",
-      "Participação em laboratórios oficiais",
+      "Capacidade declarada no documento do programa",
+      "Experiência com versões 3.x, 4.x e 5.x conforme a base instalada",
+      "Dimensionamento e compatibilidade conferidos no PSRM e na documentação vigente",
     ],
     cta: {
       href: "/solucoes/plantpax",
@@ -92,14 +94,14 @@ const programs = [
 ---
 
 <BaseLayout
-  title="Certificações e Parcerias"
-  description="Parcerias, certificações e capacitações da Integra: Rockwell Automation Partner Network, PlantPAx DCS, Telit Cinterion TC deviceWISE, Cisco, Siemens e ISA."
+  title="Credenciais, parcerias e tecnologias"
+  description="Veja como a Integra classifica e comprova parceria, nível de programa, capacidade, capacitação e tecnologia atendida, sem tratar categorias distintas como equivalentes."
   ogImage="/og/certificacoes.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
       <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Certificações e parcerias
+        Credenciais e parcerias
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
         Credibilidade verificável, sem misturar selo com experiência.
@@ -122,6 +124,22 @@ const programs = [
         description="Cada item abaixo indica o que é programa formal, certificação, capacitação ou tecnologia atendida. A transparência evita prometer mais do que a engenharia consegue sustentar."
         accent={true}
       />
+      <div class="mb-10 flex flex-wrap gap-3 rounded-lg border border-integra-gray-200 bg-integra-white p-5">
+        <a
+          href={silverCertificatePath}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-4 py-2.5 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
+        >
+          Baixar certificado Silver (PDF) <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href="/certificacoes/silver-system-integrator"
+          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-4 py-2.5 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+        >
+          Entender escopo da credencial
+        </a>
+      </div>
       <div class="grid gap-6 md:grid-cols-2">
         {programs.map((p) => (
           <article
@@ -167,7 +185,7 @@ const programs = [
       <SectionHeader
         eyebrow="Bandeira Integra"
         title="Integrador de sistemas é quem transforma tecnologia em planta funcionando"
-        description="O valor da Integra não está em repetir brochure de fabricante. Está em guiar o cliente por um ecossistema complexo, escolher o caminho técnico correto, integrar equipamentos diferentes e deixar o sistema operável, documentado e sustentável."
+        description="A Integra traduz capacidades de fabricantes em uma arquitetura adequada ao contexto da planta, integra equipamentos diferentes e deixa o sistema operável, documentado e sustentável."
         accent={true}
       />
 
@@ -238,12 +256,11 @@ const programs = [
     <div class="container-fluid py-20 max-w-4xl">
       <TechnicalCallout variant="note" title="Política de transparência">
         <p>
-          Listamos como certificação ou parceria formal apenas o que pode ser
-          comprovado em programa oficial, documento público ou comunicação
-          validável do fabricante. Siemens, Elipse e Schneider aparecem como
-          tecnologias atendidas, não como selo de integrador certificado.
-          Não usamos logos como decoração: cada claim precisa ter escopo,
-          nível e contexto corretos.
+          Classificamos como parceria, nível de programa, capacidade ou
+          certificação conforme a categoria demonstrada pela fonte. Siemens,
+          Elipse e Schneider aparecem como tecnologias atendidas, não como
+          selo de integrador certificado. Cada alegação deve informar escopo,
+          nível, data e contexto suficientes para verificação.
         </p>
       </TechnicalCallout>
     </div>
@@ -251,8 +268,8 @@ const programs = [
 
   <CtaBlock
     variant="dark"
-    title="Quer validar uma parceria ou tecnologia atendida?"
-    description="Encaminhamos comprovantes oficiais quando aplicável e explicamos o escopo técnico real de cada frente antes de qualquer qualificação."
-    primaryCta={{ href: "/contato?assunto=certificacoes", label: "Solicitar comprovação" }}
+    title="Quer validar uma credencial ou tecnologia atendida?"
+    description="Informe o item que precisa verificar. A Integra encaminha o comprovante disponível e explica a categoria e o escopo declarado, sem confundir vínculo institucional com experiência técnica."
+    primaryCta={{ href: "/contato?assunto=certificacoes", label: "Solicitar verificação" }}
   />
 </BaseLayout>

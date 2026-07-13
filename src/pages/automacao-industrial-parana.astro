@@ -27,23 +27,23 @@ const industryFacts = [
 const supplierTypes = [
   {
     title: "Fabricante",
-    what: "Rockwell Automation, Siemens, Schneider Electric: desenvolvem hardware e software, definem roadmap de produto e homologam parceiros. Não executam o projeto da sua planta.",
-    when: "definição estratégica de plataforma, contratos de suporte de produto e firmware. Para execução, o próprio fabricante encaminha a integradores do seu programa de parceiros.",
+    what: "Rockwell Automation, Siemens e Schneider Electric desenvolvem hardware e software, definem o ciclo de vida de seus produtos e mantêm canais e programas de parceiros. Algumas também oferecem serviços próprios; a cobertura varia por região e contrato.",
+    when: "definição de plataforma, suporte de produto, licenciamento e serviços oferecidos diretamente. Para integração, confirme se a execução será da fabricante, de um parceiro ou de uma composição entre empresas.",
   },
   {
     title: "Distribuidor",
-    what: "Canal comercial autorizado do fabricante: estoque regional, reposição de peças, pequenos serviços e intermediação comercial.",
-    when: "compra de hardware, sobressalentes críticos e prazo de reposição. Distribuidor vende caixa; quem responde pela lógica, pelas telas e pelo startup é o integrador.",
+    what: "Canal autorizado para comercialização, disponibilidade regional, licenciamento e apoio relacionado ao portfólio. Serviços adicionais dependem da estrutura e da autorização de cada distribuidor.",
+    when: "compra de hardware e software, sobressalentes, renovação e suporte comercial. A responsabilidade por lógica, telas e startup precisa estar identificada no contrato, seja do distribuidor, do integrador ou de ambos.",
   },
   {
     title: "Montador de painéis",
-    what: "Fabrica painéis elétricos e de controle conforme projeto recebido: estrutura, barramentos, bornes, cabeamento e ensaios de rotina.",
-    when: "execução de montagem a partir de projeto elétrico pronto. O risco clássico é contratar montador esperando engenharia de software e de processo — escopo que ele não entrega.",
+    what: "Fabrica painéis elétricos e de controle, normalmente com estrutura, barramentos, bornes, cabeamento e ensaios definidos no projeto. Algumas empresas também oferecem engenharia e programação.",
+    when: "fabricação e testes de painéis. Confirme no escopo se projeto elétrico, software, integração de processo, comissionamento e documentação também estão incluídos.",
   },
   {
     title: "Integrador de sistemas",
-    what: "Faz a engenharia que vem antes e depois do painel: arquitetura de controle, programação de PLC/DCS e SCADA, redes industriais, FAT, SAT, comissionamento, startup e suporte.",
-    when: "projetos completos, migrações de legado, DCS, SCADA, redes e cibersegurança OT. É o papel da Integra Automação Industrial — e o foco dos critérios deste guia.",
+    what: "Integra componentes em uma solução operacional: arquitetura de controle, programação de PLC/DCS e SCADA, redes, testes, comissionamento e suporte conforme o escopo contratado.",
+    when: "projetos de integração, migrações de legado, DCS, SCADA, redes e cibersegurança OT. É a categoria em que a Integra atua e o foco dos critérios deste guia.",
   },
 ];
 
@@ -72,16 +72,16 @@ const regions = [
 
 const faq = [
   {
-    q: "Como validar se uma empresa é integradora certificada da Rockwell Automation?",
-    a: "Pelo Partner Locator, o diretório público da Rockwell Automation (locator.rockwellautomation.com). Toda empresa do programa System Integrator do PartnerNetwork aparece lá, com nível (Bronze, Silver, Gold ou Platinum), localização e competências registradas. Se a empresa se apresenta como integradora certificada mas não consta no diretório, a afirmação não tem lastro formal. O mesmo princípio vale para outros fabricantes: Siemens e Schneider Electric mantêm programas de parceiros equivalentes com diretórios públicos. A Integra Automação Industrial é Silver System Integrator e PlantPAx DCS Certified, e publica as credenciais, com certificado em PDF, em integrautomacao.com.br/certificacoes/.",
+    q: "Como validar a participação de uma empresa no PartnerNetwork da Rockwell?",
+    a: "Consulte o Partner Locator oficial e filtre por país e tipo de parceiro. Compare o resultado com o documento apresentado pela empresa, observando nível, capacidades e validade. Como diretórios e status podem mudar, divergências devem ser confirmadas com a Rockwell. A Integra publica sua credencial e a forma de verificação na página de certificações deste site.",
   },
   {
     q: "É melhor contratar um integrador local ou um de fora do estado?",
-    a: "O critério decisivo é método, não CEP. Um integrador com FAT documentado, plano de cutover e suporte estruturado entrega melhor de longe do que um vizinho sem método. Dito isso, a base local pesa em três situações: levantamento de campo detalhado, janelas de parada curtas (mobilização rápida em regime de safra) e suporte presencial pós-partida. O cenário ideal no Paraná é o integrador com base no estado e engenharia remota estruturada: presencial quando a fase do projeto exige, remoto seguro no dia a dia.",
+    a: "Localização é um fator, não o único critério. Método, experiência comparável, FAT documentado, plano de cutover e suporte contratado pesam na decisão. Proximidade pode facilitar levantamentos e mobilizações curtas; engenharia remota pode reduzir deslocamentos quando há acesso seguro. Compare o plano de atendimento, os prazos e os custos efetivamente propostos.",
   },
   {
     q: "Qual a diferença entre integrador de sistemas e montador de painéis?",
-    a: "O montador de painéis fabrica o painel elétrico e de controle conforme um projeto recebido: estrutura, barramentos, bornes, cabeamento e ensaios de rotina. O integrador de sistemas faz a engenharia que vem antes e depois do painel: arquitetura de controle, programação de PLC e SCADA, redes industriais, FAT, SAT, comissionamento e startup. São papéis complementares — projetos completos costumam envolver os dois, e o integrador normalmente especifica ou subcontrata a montagem. O erro caro é contratar um montador esperando engenharia de software e de processo que não faz parte do escopo dele.",
+    a: "Montagem de painéis e integração de sistemas são disciplinas diferentes, embora uma mesma empresa possa oferecer ambas. O montador fabrica e ensaia o conjunto elétrico conforme o escopo; o integrador conecta hardware, software, redes e processo. Verifique quem responde pelo projeto elétrico, lógica, telas, FAT, SAT, startup e as-built.",
   },
   {
     q: "A Integra atende Curitiba, Londrina e o oeste do Paraná?",
@@ -89,14 +89,14 @@ const faq = [
   },
   {
     q: "Quanto custa um projeto de automação industrial?",
-    a: "Depende de fatores que só um diagnóstico técnico define: quantidade de I/O e malhas de controle, estado da documentação existente, idade do legado (migrar PLC sem as-built custa mais), janela de parada disponível, requisitos de validação e rastreabilidade do setor, escopo de telas e relatórios e exigências de cibersegurança OT. Em termos relativos: modernizações com boa documentação e janela flexível ficam no extremo de menor custo; migrações em processo contínuo, sem documentação e com janela única de cutover, no extremo superior. Desconfie de orçamento fechado apresentado sem levantamento de campo.",
+    a: "Depende da quantidade de I/O e malhas, documentação existente, legado, janela de parada, requisitos de validação, telas, relatórios e cibersegurança OT. Uma proposta anterior ao levantamento deve explicitar hipóteses, exclusões e margem de incerteza; o diagnóstico permite reduzir essas premissas antes do preço definitivo.",
   },
 ];
 ---
 
 <BaseLayout
-  title="Automação Industrial no Paraná: Como Escolher a Empresa Certa"
-  description="Guia técnico para escolher empresa de automação industrial no Paraná: tipos de fornecedor, certificações verificáveis, FAT/SAT, cibersegurança OT e suporte pós-partida."
+  title="Como escolher uma empresa de automação no Paraná"
+  description="Guia para avaliar empresas de automação no Paraná: escopo do fornecedor, credenciais, FAT/SAT, cibersegurança OT, documentação e suporte."
   breadcrumbLeaf="Automação Industrial no Paraná"
   jsonLd={[
     serviceSchema({
@@ -121,7 +121,7 @@ const faq = [
         vai projetar, programar e sustentar os sistemas que controlam a sua
         planta: PLCs, DCS, SCADA, redes industriais e cibersegurança OT. Este
         guia apresenta os critérios técnicos dessa escolha — tipos de
-        fornecedor, certificações verificáveis, testes documentados e suporte
+        fornecedor, credenciais verificáveis, testes documentados e suporte
         pós-partida. Ele é mantido pela
         <a
           href="/automacao-industrial-maringa/"
@@ -131,8 +131,9 @@ const faq = [
         <a
           href="/integrador-rockwell/"
           class="font-medium text-integra-red-700 hover:underline"
-          >Silver System Integrator da Rockwell Automation</a
-        > e PlantPAx DCS Certified, com atuação em todo o Paraná e no Brasil.
+          >participante no nível Silver do PartnerNetwork</a
+        >, com a capacidade PlantPAx DCS Certified indicada na credencial e
+        atuação no Paraná e em outros estados.
       </p>
     </div>
   </section>
@@ -142,7 +143,7 @@ const faq = [
       <SectionHeader
         eyebrow="Contexto regional"
         title="Por que o parque industrial do Paraná exige critério na escolha?"
-        description="A indústria paranaense é grande, contínua e concentrada em processos que não perdoam erro de automação. Os números explicam o tamanho da responsabilidade de quem assume um projeto no estado."
+        description="A indústria paranaense reúne operações contínuas e sazonais nas quais falhas de automação podem afetar produção, qualidade e segurança. Os dados ajudam a dimensionar essa responsabilidade."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-3">
@@ -201,11 +202,11 @@ const faq = [
       <TechnicalCallout variant="note" title="Como o fabricante enxerga essa cadeia">
         <p>
           O programa PartnerNetwork da Rockwell Automation formaliza essa
-          divisão: integradores de sistemas são classificados em quatro níveis
-          (Bronze, Silver, Gold e Platinum) conforme competências comprovadas,
-          treinamento e auditoria — e todos aparecem no Partner Locator, o
-          diretório público do fabricante. Quem não está no diretório não faz
-          parte do programa, por mais que o site da empresa diga o contrário.
+          divisão: o programa de System Integrators usa níveis como Bronze,
+          Silver, Gold e Platinum, baseados em critérios de sucesso comercial,
+          capacidades e colaboração. O Partner Locator é a referência pública
+          para buscar parceiros; se uma empresa ou atributo não aparecer,
+          confirme a situação atual com a fabricante antes de concluir.
         </p>
       </TechnicalCallout>
     </div>
@@ -215,7 +216,7 @@ const faq = [
     <div class="container-fluid max-w-4xl py-20">
       <SectionHeader
         eyebrow="Critérios técnicos"
-        title="Quais critérios separam um integrador sério de um genérico?"
+        title="Quais critérios ajudam a comparar integradores?"
         description="Nove pontos objetivos para avaliar qualquer empresa de automação industrial no Paraná — todos verificáveis antes de assinar contrato."
         accent={true}
       />
@@ -223,14 +224,13 @@ const faq = [
       <div class="grid gap-6 md:grid-cols-2">
         <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
           <h3 class="text-base font-semibold text-integra-gray-900">
-            1. Certificação formal de fabricante, verificável
+            1. Participação e credenciais verificáveis
           </h3>
           <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
             Peça o registro no programa do fabricante e confira no diretório
-            público — no caso Rockwell, o Partner Locator. Certificação de
-            programa de parceiros envolve auditoria e treinamento contínuo;
-            "trabalhamos com a marca" não envolve nada. Veja o que isso
-            significa na prática na página
+            público — no caso Rockwell, o Partner Locator. Diferencie nível do
+            programa, capacidade, certificação de pessoa e autorização
+            comercial: são categorias distintas. Veja a explicação na página
             <a
               href="/integrador-rockwell/"
               class="font-medium text-integra-red-700 hover:underline"
@@ -325,9 +325,11 @@ const faq = [
               href="/tecnologias/iec-62443-nist-ot/"
               class="font-medium text-integra-red-700 hover:underline"
               >IEC 62443</a
-            > — a parte 3-2 estrutura a rede em zonas e conduítes e a parte 3-3
-            define os níveis de segurança SL 1 a 4. Acesso remoto por TeamViewer
-            na rede de controle é resposta errada.
+            >. A parte 3-2 trata do projeto de segurança de sistemas e da
+            avaliação de risco; a parte 3-3 define requisitos de segurança e
+            níveis SL. Acesso remoto direto e sem controles compensatórios
+            aumenta o risco, independentemente da ferramenta usada: avalie
+            identidade, autorização, segmentação, registro e revogação.
           </p>
         </article>
         <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
@@ -349,11 +351,11 @@ const faq = [
             9. Equipe nominal, não "corpo técnico qualificado"
           </h3>
           <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
-            Pergunte quem vai executar: nomes, experiência e responsável
-            técnico. Proposta que vende a empresa mas esconde a equipe costuma
-            significar que o projeto será tocado por quem estiver disponível.
-            Em automação, o resultado depende mais do engenheiro que assina a
-            lógica do que do logotipo na capa da proposta.
+            Pergunte quem vai executar, qual a experiência relevante e quem
+            responde tecnicamente. Se a equipe ainda não estiver definida,
+            estabeleça qualificações mínimas, regras de substituição e pontos
+            de aprovação no contrato. O vínculo da empresa com um fabricante
+            não substitui a avaliação dos profissionais designados.
           </p>
         </article>
       </div>
@@ -411,8 +413,8 @@ const faq = [
 
   <CtaBlock
     title="Avaliando empresas de automação industrial no Paraná?"
-    description="Aplique os critérios deste guia à Integra: a primeira conversa é técnica — arquitetura, método, certificações e referências antes de qualquer proposta."
-    primaryCta={{ href: "/contato?assunto=automacao-parana", label: "Agendar conversa técnica" }}
-    secondaryCta={{ href: "/integrador-rockwell/", label: "Ver certificações Rockwell" }}
+    description="Aplique os critérios deste guia à Integra: a primeira conversa cobre contexto, método, credenciais e referências. Levantamento e diagnóstico detalhado são combinados quando necessários."
+    primaryCta={{ href: "/contato?assunto=automacao-parana", label: "Pedir contato técnico" }}
+    secondaryCta={{ href: "/integrador-rockwell/", label: "Ver credenciais Rockwell" }}
   />
 </BaseLayout>

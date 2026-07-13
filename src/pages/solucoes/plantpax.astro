@@ -75,11 +75,11 @@ const faq = [
   },
   {
     q: "PlantPAx 5.x exige hardware específico?",
-    a: "Sim. PlantPAx 5.x roda em CompactLogix 5380 série P (Process) ou ControlLogix 5580 série P (Process). Não há suporte oficial para versões anteriores nessa arquitetura. A migração de plantas com hardware fora dessa linha exige troca de controlador como pré-requisito do projeto.",
+    a: "Depende da função e da release. As instruções de processo embarcadas da geração 5.x exigem controladores Process compatíveis, como CompactLogix 5380P e ControlLogix Process das gerações suportadas. O sistema PlantPAx também admite controladores Logix padrão e bibliotecas anteriores nas combinações documentadas pela Rockwell. Por isso, confirmamos firmware, biblioteca e arquitetura no Selection Guide vigente antes de recomendar troca de hardware.",
   },
   {
     q: "Como vocês integram PlantPAx com PI System / AVEVA?",
-    a: "Via OPC UA ou interface direta, com AF Templates pré-construídos para os objetos de processo. A integração é parte do projeto de engenharia, não um adendo posterior.",
+    a: "Via interfaces suportadas, como OPC UA ou conectores específicos, com AF Templates definidos e validados no projeto para os objetos e ativos da planta. Não presumimos que exista um pacote universal pronto: mapeamento, qualidade, buffering, segurança e ownership fazem parte da engenharia.",
   },
   {
     q: "Vocês trabalham com PlantPAx 3.x e 4.x ou só com 5.x?",
@@ -99,7 +99,7 @@ const faq = [
   },
   {
     q: "Como o PlantPAx lida com requisitos de cibersegurança (IEC 62443)?",
-    a: "O PlantPAx é projetado sob os pilares da norma IEC 62443. A infraestrutura utiliza segmentação de redes alinhada ao modelo CPwE, separando a planta em zonas e conduítes (VLANs e ACLs em switches Stratix, com firewalls industriais como o Cisco Secure Firewall ISA 3000, conforme os CVDs do CPwE). Além disso, integramos o FactoryTalk Security para controle granular de acesso baseado em perfis e assinaturas eletrônicas para ações críticas.",
+    a: "A Rockwell publica arquiteturas PlantPAx avaliadas e certificações com escopo definido conforme IEC 62443. Na instalação real, aplicamos análise de risco, zonas e conduítes, segmentação CPwE quando adequada, hardening e FactoryTalk Security. Produtos ou arquiteturas de referência certificados não tornam automaticamente a planta conforme: configuração, operação, documentação e validação continuam sendo responsabilidade do projeto.",
   },
   {
     q: "O que define o esforço de um projeto PlantPAx?",
@@ -186,7 +186,7 @@ const faq = [
       <SectionHeader
         eyebrow="Como atuamos"
         title="Da arquitetura ao data book"
-        description="Cada projeto PlantPAx segue o método Integra completo. Nada improvisado, nada deixado para depois."
+        description="O escopo define diagnóstico, arquitetura, engenharia, testes e documentação. Entregáveis, exceções e responsabilidades ficam registrados antes da implantação."
         accent={true}
       />
       <div class="prose prose-lg max-w-none">
@@ -200,10 +200,11 @@ const faq = [
         </p>
         <TechnicalCallout variant="note" title="Padrão de engenharia">
           <p>
-            Todos os controladores são programados com a PlantPAx Library of
-            Process Objects, alarmes seguem governança ISA-18.2 e o data
-            book final inclui memorial técnico, narrativas de controle,
-            plano de testes executado e as-built revisado.
+            Controladores e bibliotecas são selecionados conforme a release e
+            a arquitetura aprovada. Quando fazem parte do escopo, a biblioteca
+            PlantPAx, a governança de alarmes e o data book seguem critérios
+            definidos no projeto. Memorial, narrativas, testes e as-built só
+            são considerados entregues após a validação contratada.
           </p>
         </TechnicalCallout>
       </div>
@@ -275,7 +276,7 @@ const faq = [
   <CtaBlock
     title="Tem um projeto PlantPAx para conversar?"
     description="Apresentamos arquitetura de referência, lista de entregáveis e cronograma com base no escopo da planta, antes de qualquer proposta comercial."
-    primaryCta={{ href: "/contato?assunto=plantpax", label: "Falar com especialista" }}
+    primaryCta={{ href: "/contato?assunto=plantpax", label: "Pedir contato sobre PlantPAx" }}
     secondaryCta={{ href: "/solucoes/factorytalk", label: "Ver FactoryTalk Suite" }}
   />
 </BaseLayout>

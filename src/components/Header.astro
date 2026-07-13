@@ -11,6 +11,20 @@ const isActive = (href: string) =>
 
 const phoneCommercial = COMPANY.phones[0];
 
+const withContactContext = (
+  href: string,
+  label: string,
+  sourceLabel = "Cabeçalho",
+) => {
+  if (!href.startsWith("/contato")) return href;
+
+  const url = new URL(href, Astro.url);
+  url.searchParams.set("sourcePage", path.slice(0, 300));
+  url.searchParams.set("sourceLabel", sourceLabel.slice(0, 160));
+  url.searchParams.set("cta", label.slice(0, 160));
+  return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
+};
+
 // Build dynamic mega-menus for Cases and Blog from content collections.
 // Static list-based, so the header re-renders on every page (Astro caches
 // the import); no extra round trips at runtime.
@@ -33,7 +47,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
         title: "Cases publicados",
         links: recentCases.length > 0
           ? recentCases.map((c) => ({
-              href: `/cases/${c.slug}/`,
+              href: `/cases/${c.id}/`,
               label: c.data.title,
               description: c.data.sector,
             }))
@@ -73,7 +87,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
         title: "Artigos recentes",
         links: recentPosts.length > 0
           ? recentPosts.map((p) => ({
-              href: `/blog/${p.slug}/`,
+              href: `/blog/${p.id}/`,
               label: p.data.title,
               description: p.data.tags.slice(0, 2).join(" · "),
             }))
@@ -89,13 +103,13 @@ const dynamicMegas: Record<string, MegaMenu> = {
           },
           {
             href: "/integra-acao/newsletter/",
-            label: "Newsletter mensal",
-            description: "Inscrever-se · curadoria técnica em PT-BR",
+            label: "Newsletter técnica",
+            description: "Inscrever-se · edições em periodicidade variável",
           },
           {
             href: "/integra-acao/webinar/",
             label: "Webinars técnicos",
-            description: "Sessões mensais · 45-60 min · com Q&A",
+            description: "Programação em preparação · formato técnico com Q&A",
           },
           {
             href: "/eventos/",
@@ -109,7 +123,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
         links: allEventos.length > 0
           ? [
               ...allEventos.map((e) => ({
-                href: `/eventos/${e.slug}/`,
+                href: `/eventos/${e.id}/`,
                 label: e.data.title,
                 description: e.data.dateLabel,
               })),
@@ -200,11 +214,12 @@ const allMegas: Record<string, MegaMenu> = {
           }
           // Item with mega-menu
           const menuIntro = {
-            title: label === "Blog" ? "Ver tudo no Blog" : `Ver tudo em ${label}`,
+            title: mega.intro?.title ?? `Ver tudo em ${label}`,
             href: mega.intro?.href ?? href,
           };
+          const megaId = `mega-menu-${href.replace(/^\/+|\/+$/g, "").replace(/[^a-z0-9-]/gi, "-")}`;
           return (
-            <div class="group/menu">
+            <div class="group/menu" data-desktop-mega>
               <a
                 href={href}
                 class:list={[
@@ -215,6 +230,9 @@ const allMegas: Record<string, MegaMenu> = {
                     : "text-integra-gray-900 hover:text-integra-red-700",
                 ]}
                 aria-current={isActive(href) ? "page" : undefined}
+                aria-expanded="false"
+                aria-controls={megaId}
+                data-mega-trigger
               >
                 {label}
                 <svg class="size-3.5 opacity-60 transition-transform group-hover/menu:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -227,6 +245,8 @@ const allMegas: Record<string, MegaMenu> = {
                 aria-hidden="true"
               />
               <div
+                id={megaId}
+                data-mega-panel
                 class:list={[
                   "fixed inset-x-0 top-[9.25rem] z-[60]",
                   "invisible opacity-0 -translate-y-1 pointer-events-none transition-all duration-150",
@@ -256,7 +276,7 @@ const allMegas: Record<string, MegaMenu> = {
                             {col.title}
                           </p>
                           <ul class="space-y-3">
-                            {col.links.map((link) => (
+                            {col.links.slice(0, 4).map((link) => (
                               <li>
                                 <a
                                   href={link.href}
@@ -286,6 +306,8 @@ const allMegas: Record<string, MegaMenu> = {
                           <img
                             src={mega.promo.imageSrc}
                             alt=""
+                            width="880"
+                            height="360"
                             class="h-12 w-auto mb-4"
                             loading="lazy"
                             decoding="async"
@@ -298,7 +320,11 @@ const allMegas: Record<string, MegaMenu> = {
                           {mega.promo.description}
                         </p>
                         <a
-                          href={mega.promo.cta.href}
+                          href={withContactContext(
+                            mega.promo.cta.href,
+                            mega.promo.cta.label,
+                            `Mega-menu: ${label}`,
+                          )}
                           class="inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700"
                         >
                           {mega.promo.cta.label}
@@ -313,7 +339,11 @@ const allMegas: Record<string, MegaMenu> = {
                       <div class="container-wide py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
                         {mega.quickLinks.map((q) => (
                           <a
-                            href={q.href}
+                            href={withContactContext(
+                              q.href,
+                              q.label,
+                              `Atalho do mega-menu: ${label}`,
+                            )}
                             class="text-sm font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors"
                           >
                             {q.label} <span aria-hidden="true">→</span>
@@ -330,16 +360,19 @@ const allMegas: Record<string, MegaMenu> = {
       </nav>
 
       <a
-        href="/contato"
-        class="hidden min-[1440px]:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
+        href={withContactContext(
+          "/contato?assunto=triagem",
+          "Solicitar triagem técnica",
+        )}
+        class="hidden lg:inline-flex ml-auto min-[1440px]:ml-0 items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
       >
-        Falar com especialista
+        Solicitar triagem
         <span aria-hidden="true">→</span>
       </a>
 
       <button
         type="button"
-        class="min-[1440px]:hidden ml-auto p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
+        class="min-[1440px]:hidden ml-auto lg:ml-0 p-2 -mr-2 text-integra-gray-700 hover:text-integra-gray-900"
         aria-label="Abrir menu"
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -416,7 +449,7 @@ const allMegas: Record<string, MegaMenu> = {
                   <p class="px-3 text-xs font-mono uppercase tracking-widest text-integra-gray-500 mt-2 mb-1">
                     {col.title}
                   </p>
-                  {col.links.map((link) => (
+                   {col.links.slice(0, 4).map((link) => (
                     <a href={link.href} class="block px-3 py-1.5 text-sm text-integra-gray-700 hover:text-integra-red-700">
                       {link.label}
                     </a>
@@ -428,10 +461,14 @@ const allMegas: Record<string, MegaMenu> = {
         );
       })}
       <a
-        href="/contato"
+        href={withContactContext(
+          "/contato?assunto=triagem",
+          "Solicitar triagem técnica",
+          "Menu mobile",
+        )}
         class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-3 text-base font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md"
       >
-        Falar com especialista
+        Solicitar triagem técnica
       </a>
     </div>
   </nav>

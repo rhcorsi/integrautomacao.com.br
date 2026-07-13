@@ -1,18 +1,19 @@
 # Integra Automação Industrial
 
 > Empresa brasileira de engenharia e integração de sistemas industriais
-> (Maringá-PR, fundada em 2016, atuação nacional). Silver System Integrator
-> da Rockwell Automation e PlantPAx DCS Certified Partner. Especialidades:
+> (Maringá-PR, fundada em 2016, atuação nacional). Integrador no nível Silver
+> do Rockwell Automation PartnerNetwork, com capacidade PlantPAx declarada
+> nos documentos de credencial publicados pela Integra. Especialidades:
 > PlantPAx (DCS), FactoryTalk Suite, redes industriais CPwE, cibersegurança
 > OT (ISA/IEC 62443), PI System / AVEVA, virtualização OT e migração de
-> PLC-5/SLC500 para ControlLogix.
+> PLC-5/SLC 500 para ControlLogix.
 
 Posicionamento: engenharia com método e governança técnica. A Integra
 projeta, implementa, documenta e sustenta sistemas de automação para
 plantas críticas (açúcar e etanol, agronegócio, alimentos, química,
 frigoríficos, ração, papel e celulose, saneamento).
 
-Última atualização: 2026-06.
+Última atualização: 2026-07-12.
 
 ## Páginas principais
 
@@ -34,7 +35,7 @@ frigoríficos, ração, papel e celulose, saneamento).
 - [Automação Industrial no Paraná](https://integrautomacao.com.br/automacao-industrial-parana/): critérios para escolher integradora no estado.
 - [Automação para Açúcar e Etanol](https://integrautomacao.com.br/setores/acucar-e-etanol/): DCS, batelada ISA-88 e modernização em janela de entressafra.
 
-## Catálogo técnico — páginas mais consultadas
+## Catálogo técnico — páginas prioritárias
 
 Cada página tem FAQ de engenharia com respostas diretas (versões, normas, hardware).
 
@@ -55,12 +56,14 @@ Cada página tem FAQ de engenharia com respostas diretas (versões, normas, hard
 - [Elipse E3](https://integrautomacao.com.br/tecnologias/elipse-e3/): SCADA brasileiro para aplicações distribuídas.
 - [TC deviceWISE](https://integrautomacao.com.br/tecnologias/tc-devicewise/): integração IIoT chão-de-fábrica ↔ sistemas corporativos.
 
-## Optional
+## Conteúdo complementar
 
 - [Eventos e treinamentos](https://integrautomacao.com.br/eventos/): participação técnica em eventos Rockwell, Siemens, Telit e TI Safe.
 - [Cases](https://integrautomacao.com.br/cases/): projetos publicados (sanitizados, sem dados de clientes).
 - [Integra Ação](https://integrautomacao.com.br/integra-acao/): newsletter e webinars técnicos.
 - [Política de privacidade](https://integrautomacao.com.br/politica-privacidade/)
+- [Política editorial](https://integrautomacao.com.br/politica-editorial/)
+- [Avisos legais](https://integrautomacao.com.br/avisos-legais/)
 
 ## Observações
 

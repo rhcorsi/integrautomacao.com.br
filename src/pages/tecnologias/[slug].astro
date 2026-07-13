@@ -10,6 +10,7 @@ import CtaBlock from "@/components/CtaBlock.astro";
 import {
   CATALOG_PUBLISHED,
   CATALOG_REVIEWED,
+  CATALOG_REVIEWED_BY,
   getRelatedTech,
   techCatalog,
   type TechPage,
@@ -41,6 +42,8 @@ const techLd =
         url: pageUrl,
         datePublished: CATALOG_PUBLISHED,
         dateModified: CATALOG_REVIEWED,
+        authorName: CATALOG_REVIEWED_BY,
+        authorUrl: new URL("/equipe/", SITE.url).toString(),
       });
 const reviewedDisplay = new Date(`${CATALOG_REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
   day: "numeric",
@@ -52,9 +55,10 @@ const jsonLdBlocks =
 ---
 
 <BaseLayout
-  title={item.title}
+  title={item.seoTitle ?? item.title}
   description={item.description}
   canonical={`/tecnologias/${item.slug}/`}
+  ogType={item.type === "Serviço" ? "website" : "article"}
   jsonLd={jsonLdBlocks}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -67,7 +71,7 @@ const jsonLdBlocks =
             item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red-700",
           ]}
         >
-          {item.type} · {item.group} · <span class="normal-case">Revisado em {reviewedDisplay}</span>
+          {item.type} · {item.group} · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{CATALOG_REVIEWED_BY}</a></span>
         </p>
         <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           {item.title}
@@ -89,10 +93,10 @@ const jsonLdBlocks =
             </a>
           ))}
           <a
-            href="/contato"
+            href={`/contato?assunto=${item.slug}`}
             class="inline-flex items-center rounded-md bg-integra-red px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-integra-red-700"
           >
-            Conversar sobre este tema
+            Pedir contato técnico
           </a>
         </div>
       </div>
@@ -222,7 +226,7 @@ const jsonLdBlocks =
   <CtaBlock
     title={`Quer avaliar ${item.shortTitle} na sua planta?`}
     description="Começamos pelo contexto real: arquitetura existente, risco operacional, janelas de parada, equipe de manutenção e entregáveis necessários para sustentar o sistema."
-    primaryCta={{ href: `/contato?assunto=${item.slug}`, label: "Falar com especialista" }}
+    primaryCta={{ href: `/contato?assunto=${item.slug}`, label: "Pedir contato técnico" }}
     secondaryCta={{ href: "/tecnologias", label: "Voltar ao catálogo técnico" }}
   />
 </BaseLayout>

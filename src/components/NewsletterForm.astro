@@ -41,7 +41,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 
   <div class="grid gap-2">
     <label for="nl-email" class="text-sm font-medium text-integra-gray-900">
-      E-mail corporativo <span class="text-integra-red" aria-hidden="true">*</span>
+      E-mail <span class="text-integra-red" aria-hidden="true">*</span>
     </label>
     <input
       id="nl-email"
@@ -52,42 +52,6 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       maxlength="180"
       class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
     />
-  </div>
-
-  <div class="grid gap-5 sm:grid-cols-2">
-    <div class="grid gap-2">
-      <label for="nl-company" class="text-sm font-medium text-integra-gray-900">
-        Empresa
-      </label>
-      <input
-        id="nl-company"
-        name="company"
-        type="text"
-        autocomplete="organization"
-        maxlength="120"
-        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
-      />
-    </div>
-    <div class="grid gap-2">
-      <label for="nl-role" class="text-sm font-medium text-integra-gray-900">
-        Sua atuação
-      </label>
-      <select
-        id="nl-role"
-        name="role"
-        class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
-      >
-        <option value="">Selecione…</option>
-        <option value="engenharia">Engenharia / Projetos</option>
-        <option value="manutencao">Manutenção</option>
-        <option value="operacao">Operação</option>
-        <option value="ti-ot">TI / OT</option>
-        <option value="gerencia">Gerência industrial</option>
-        <option value="diretoria">Diretoria</option>
-        <option value="integrador">Integrador / Fornecedor</option>
-        <option value="outro">Outro</option>
-      </select>
-    </div>
   </div>
 
   <!-- LGPD opt-in -->

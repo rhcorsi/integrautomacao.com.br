@@ -10,7 +10,7 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
 ---
 
 <BaseLayout
-  title="Cases"
+  title="Cases de automação industrial"
   description="Cases técnicos da Integra Automação Industrial: arquitetura, tecnologias aplicadas, problema, abordagem e resultados."
   ogImage="/og/cases.png"
 >
@@ -23,14 +23,28 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
         Engenharia em campo, documentada.
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Cada case mostra problema, abordagem técnica, tecnologias aplicadas
-        e resultados. Nomes de clientes preservados conforme acordo de
-        confidencialidade.
+        Publicamos contexto, restrições, abordagem, entregáveis e resultados
+        que podem ser divulgados. Nomes de clientes e detalhes de arquitetura
+        permanecem preservados quando o acordo de confidencialidade exige.
       </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="#cases-publicados"
+          class="inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
+        >
+          Ver cases publicados <span aria-hidden="true">↓</span>
+        </a>
+        <a
+          href="/contato?assunto=portfolio&sourcePage=%2Fcases&sourceLabel=Hero%20de%20cases&cta=Solicitar%20portf%C3%B3lio%20sob%20NDA"
+          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+        >
+          Solicitar portfólio sob NDA
+        </a>
+      </div>
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+  <section id="cases-publicados" class="scroll-mt-32 border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">
       {cases.length === 0 ? (
         <div class="text-center py-16">
@@ -45,9 +59,9 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
         <div class="grid gap-8 md:grid-cols-2">
           {cases.map((c) => (
             <article class="group rounded-lg border border-integra-gray-200 bg-integra-white overflow-hidden hover:border-integra-gray-900 transition-colors">
-              <a href={`/cases/${c.slug}/`} class="block">
+              <a href={`/cases/${c.id}/`} class="block">
                 {c.data.heroImage && (
-                  <div class="aspect-[16/10] overflow-hidden bg-integra-gray-100">
+                  <div class="relative aspect-[16/10] overflow-hidden bg-integra-gray-100">
                     <Image
                       src={c.data.heroImage}
                       alt={c.data.heroAlt ?? c.data.title}
@@ -57,6 +71,11 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
                       decoding="async"
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    {c.data.heroIllustrative && (
+                      <span class="absolute bottom-3 right-3 rounded-sm bg-integra-gray-950/85 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-integra-white">
+                        Imagem ilustrativa
+                      </span>
+                    )}
                   </div>
                 )}
                 <div class="p-6">
@@ -89,7 +108,7 @@ const cases = (await getCollection("cases", ({ data }) => !data.draft)).sort(
 
   <CtaBlock
     title="Quer detalhes de cases sob NDA?"
-    description="Apresentamos portfólio detalhado em reunião técnica, mediante acordo de confidencialidade quando o projeto exigir."
-    primaryCta={{ href: "/contato?assunto=portfolio", label: "Solicitar portfólio" }}
+    description="Informe setor, desafio e tecnologia instalada. Selecionamos referências comparáveis para uma conversa e formalizamos NDA quando o nível de detalhe exigir."
+    primaryCta={{ href: "/contato?assunto=portfolio", label: "Solicitar portfólio sob NDA" }}
   />
 </BaseLayout>

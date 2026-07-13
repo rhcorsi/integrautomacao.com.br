@@ -1,7 +1,8 @@
 ---
-title: "O que faz um integrador de sistemas de automação (e quando contratar)"
+title: "O que faz um integrador de sistemas de automação?"
 description: "Entenda o que um integrador de sistemas de automação entrega, como difere de fabricante e montador de painel e o que avaliar antes de contratar."
 pubDate: 2026-06-10
+updatedDate: 2026-07-12
 tags: ["Integrador de Sistemas", "Rockwell", "Gestão"]
 draft: false
 ---
@@ -15,19 +16,21 @@ projeta, programa, integra e coloca em operação sistemas de controle
 industrial, PLCs, DCS, SCADA, redes industriais e software de planta,
 combinando produtos de fabricantes como Rockwell Automation, Siemens e
 Schneider Electric em uma solução que funciona no processo do cliente. O
-integrador não fabrica o hardware nem vive de revendê-lo: o produto dele é
-engenharia aplicada.
+núcleo do serviço é engenharia aplicada, mas o modelo comercial varia: algumas
+empresas também montam painéis, fornecem hardware, licenças ou suporte. O
+contrato deve separar fornecimento, responsabilidade de projeto e aceite.
 
-O papel é formal o suficiente para ter norma própria. A série ISA/IEC 62443
-dedica um documento inteiro a ele: a **IEC 62443-2-4** define os requisitos
-de programa de segurança para provedores de serviço de IACS, categoria que
-inclui explicitamente integradores de sistemas. E existe associação global
-do setor desde 1994, a CSIA (Control System Integrators Association).
+A série ISA/IEC 62443 dedica a **IEC 62443-2-4** aos requisitos de programa de
+segurança para provedores de serviço de IACS, grupo que inclui integradores e
+outros prestadores. A estrutura completa e as edições publicadas estão na
+[página oficial da ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards).
+A CSIA (Control System Integrators Association) também publica boas práticas
+de gestão específicas para empresas de integração.
 
 A Integra Automação Industrial, de Maringá-PR, é um integrador nesse
 sentido estrito: fundada em 2016, com atuação nacional,
 [Silver System Integrator da Rockwell Automation](/certificacoes/silver-system-integrator/)
-e portfólio multi-vendor (Siemens, Schneider, Elipse, Telit deviceWISE).
+e atuação multi-vendor (Siemens, Schneider, Elipse, Telit deviceWISE).
 Mas a definição vale para o mercado inteiro, e entender o papel é o que
 permite contratar bem.
 
@@ -37,20 +40,20 @@ Os quatro papéis convivem no mesmo projeto e são complementares, não
 concorrentes:
 
 - **Fabricante** (Rockwell, Siemens, Schneider): desenvolve o produto,
-  controla o roadmap, publica as arquiteturas de referência e responde
-  pelo suporte de fábrica. Em geral não executa o projeto de automação na
-  ponta; para isso, credencia parceiros.
-- **Distribuidor**: é o canal comercial do fabricante. Vende hardware e
-  licenças, cuida de logística, prazo e suporte de primeiro nível. No
+  controla o roadmap, publica arquiteturas e responde pelo suporte do
+  portfólio. Também pode prestar serviços diretamente ou por parceiros,
+  conforme região e contrato.
+- **Distribuidor**: é um canal comercial do fabricante. Pode vender hardware e
+  licenças, cuidar de logística e prestar suporte, com escopo variável. No
   PartnerNetwork da Rockwell, distribuidores e integradores são categorias
   distintas de parceiro, com programas separados.
-- **Montador de painel**: fabrica, monta e cabeia os painéis elétricos
-  conforme o projeto que recebe. É etapa essencial, mas montar painel não
-  inclui lógica de controle, telas, redes nem comissionamento, a menos que
-  isso esteja contratado.
-- **Integrador de sistemas**: assume a responsabilidade de o sistema
-  funcionar como especificado, da especificação funcional ao
-  comissionamento, costurando os entregáveis dos outros três.
+- **Montador de painel**: fabrica, monta e cabeia painéis conforme projeto. O
+  escopo pode incluir engenharia, programação ou testes quando contratado;
+  não se deve inferir capacidade apenas pelo rótulo da empresa.
+- **Integrador de sistemas**: coordena engenharia, software, interfaces e
+  testes dentro do escopo contratado, costurando entregáveis dos demais
+  participantes. A responsabilidade pelo desempenho final precisa estar
+  explícita na matriz contratual.
 
 Em um projeto real, a pergunta decisiva não é "qual papel é melhor", e sim
 **"quem responde pelo sistema integrado funcionando"**. Se o contrato não
@@ -58,11 +61,12 @@ deixa essa resposta clara, o risco de integração fica com a contratante.
 
 ## O que um integrador de sistemas entrega em um projeto?
 
-Um escopo completo de integração tem seis blocos de entrega:
+Um escopo de integração pode reunir seis blocos, conforme contrato:
 
 1. **Engenharia**: levantamento de campo, especificação funcional (FDS),
    arquitetura de controle e de rede, listas de I/O, filosofia de alarmes
-   e análise de risco do processo.
+   e requisitos de risco do processo em coordenação com as disciplinas
+   responsáveis.
 2. **Programação**: lógica de PLC/DCS e aplicações de supervisão
    construídas sobre bibliotecas padronizadas. Em projetos de processo
    Rockwell, isso significa instanciar a
@@ -72,65 +76,63 @@ Um escopo completo de integração tem seis blocos de entrega:
    [rede EtherNet/IP segundo as arquiteturas CPwE](/tecnologias/ethernet-ip-cpwe/),
    segmentação em zonas e conduítes e
    [controles alinhados a IEC 62443](/solucoes/redes-iec-62443/).
-4. **Comissionamento**: FAT (teste de aceitação em fábrica, com o sistema
-   simulado), SAT (teste de aceitação na planta) e partida assistida com
-   a operação.
+4. **Testes e comissionamento**: FAT, FIT, SAT, SIT e partida assistida
+   conforme plano, responsabilidades e critérios de aceite. Nem todo escopo
+   inclui todas as etapas.
 5. **Documentação**: as-built de lógica e telas, backups versionados,
    arquitetura final, listas de parametrização e protocolo de testes
    assinado.
-6. **Suporte**: acordo de atendimento pós-partida, acesso remoto com
+6. **Suporte**: quando contratado, acordo pós-partida, acesso remoto com
    governança e plano de evolução do sistema.
 
 <TechnicalCallout variant="note" title="Documentação é entregável, não cortesia">
   FDS aprovada antes de programar, protocolo de FAT/SAT com critérios
   objetivos e as-built no encerramento são o que permite auditar o projeto
-  e manter o sistema por 15 ou 20 anos sem depender da memória de quem
-  programou. Se a proposta não lista documentos com nome e momento de
-  entrega, o escopo está incompleto.
+  e reduzir dependência da memória de quem programou. A lista documental deve
+  ser proporcional ao risco e ao contrato; se a proposta não identifica nome,
+  formato, revisão, responsável e momento de entrega, há uma lacuna a esclarecer.
 </TechnicalCallout>
 
 ## O que é o PartnerNetwork da Rockwell Automation?
 
 O **PartnerNetwork** é o programa global de parceiros da Rockwell
 Automation, e os integradores de sistemas formam uma categoria própria
-dentro dele. Segundo a Rockwell, o programa de System Integrators é
-estruturado em quatro níveis, **Bronze, Silver, Gold e Platinum**, que
-refletem competências técnicas comprovadas, desempenho comercial recorrente
-e alinhamento estratégico com o fabricante. Subir de nível exige
-engenheiros certificados, projetos entregues e metas de competência por
-disciplina de tecnologia.
+dentro dele. O
+[brochure atual do programa de System Integrators](https://literature.rockwellautomation.com/idc/groups/literature/documents/br/sysint-br003_-en-p.pdf)
+descreve quatro níveis — **Bronze, Silver, Gold e Platinum** — avaliados por
+sucesso comercial, competências e colaboração com a Rockwell. Portanto, o
+nível não é sinônimo de certificação técnica isolada nem mede sozinho a
+qualidade de um projeto.
 
-Acima dos níveis existem os **badges de capacidade** por tecnologia. O
-badge de [PlantPAx DCS](/solucoes/plantpax/), por exemplo, exige
-engenheiros credenciados individualmente (treinamento de 24 horas mais
-exame aplicado pela Rockwell) em número proporcional ao nível do parceiro:
-2 engenheiros para Silver, 3 para Gold e 4 para Platinum.
+O programa também reconhece competências/capacidades em disciplinas. Nomes,
+requisitos, benefícios e quantidade de profissionais podem mudar; devem ser
+confirmados no Partner Locator e na documentação vigente, sem repetir números
+de treinamento como regra permanente.
 
-É esse o contexto da credencial da Integra: Silver System Integrator com
-certificação PlantPAx DCS. O que isso muda na prática de um projeto
-Rockwell — acesso a engenharia do fabricante, arquiteturas de referência,
-software de desenvolvimento e responsabilidade técnica auditada — está
-detalhado na página [integrador Rockwell](/integrador-rockwell/).
+É nesse contexto que a Integra declara seu nível Silver e capacidade
+PlantPAx. A credencial ajuda a verificar relacionamento e competências do
+programa, mas não substitui análise de equipe, escopo, referências e critérios
+de aceite do projeto. Veja o posicionamento na página
+[integrador Rockwell](/integrador-rockwell/).
 
 ### Quais são os programas equivalentes de outros fabricantes?
 
-- **Siemens Solution Partner**: certificação técnica uniforme no mundo
-  inteiro, com renovação periódica obrigatória. Exige no mínimo dois
-  profissionais aprovados no exame **Siemens Certified Programmer**
-  ([TIA Portal](/tecnologias/tia-portal/), plataforma S7-1500) para a
-  empresa manter o selo.
-- **Schneider Electric Alliance Partner Program**: três níveis,
-  **Registered, Certified e Master**, com progressão baseada em quatro
-  pilares: desempenho, lealdade, experiência e competência.
-- **CSIA Certified**: certificação independente de fabricante, mantida
-  pela Control System Integrators Association. A auditoria externa cobre
-  79 critérios derivados do manual de melhores práticas da associação
-  (gestão de projetos, qualidade, finanças, RH, ciclo de desenvolvimento)
-  e a recertificação acontece a cada 3 anos.
+- **Siemens Solution Partner**: programa por competências e módulos, com
+  requisitos publicados no
+  [portal oficial de parceiros Siemens](https://partnerportal-industry.extranet.dc.siemens.com/en/landingpage-partner-portal).
+- **Schneider Electric Alliance Partner Program**: ecossistema para
+  integradores e distribuidores; estrutura e especializações devem ser
+  verificadas na
+  [página oficial da Schneider Electric](https://www.se.com/br/pt/partners/alliance-partner-program/).
+- **CSIA Certified**: certificação independente de fabricante baseada no
+  manual de boas práticas da associação, com auditoria de terceira parte e
+  recertificação a cada três anos, conforme as
+  [FAQs oficiais da CSIA](https://controlsys.org/faqs/).
 
-O ponto comum entre todos: **nenhum desses selos se compra**. Todos exigem
-gente certificada nominalmente, projetos entregues e renovação contínua, o
-que os torna um filtro objetivo razoável na pré-seleção de fornecedores.
+Esses programas têm critérios técnicos, comerciais, administrativos e, em
+alguns casos, taxas de participação ou auditoria. São evidências úteis na
+pré-seleção, mas não equivalem entre si e não devem ser apresentados como selo
+puramente técnico ou impossível de obter mediante investimento comercial.
 
 ## Como reconhecer um integrador maduro?
 
@@ -147,19 +149,20 @@ maturidade que aparecem antes mesmo da proposta:
   backup, gestão de mudanças e trilha de auditoria, exatamente o que a
   [IEC 62443-2-4](/tecnologias/iec-62443-nist-ot/) formaliza como
   programa de segurança do provedor de serviço.
-- **Pessoas com credencial nominal**: certificações de fabricante são
-  emitidas por engenheiro, não só por empresa. Pergunte quantos
-  profissionais certificados atuarão no seu projeto.
+- **Equipe identificada**: programas podem credenciar empresas, competências
+  ou profissionais. Peça nomes, papéis, experiência e credenciais realmente
+  aplicáveis à equipe que atuará no projeto.
 - **Lastro no seu processo**: experiência documentada no setor,
   [açúcar e etanol, grãos, alimentos, frigoríficos, química, papel e
   celulose, saneamento](/setores/), com casos verificáveis como o
   [projeto de moinho de trigo](/cases/projeto-moinho/).
 
 <TechnicalCallout variant="warning" title="Selo não substitui due diligence técnica">
-  Peça para ver um protocolo de FAT real (anonimizado) e um as-built de
-  projeto anterior. Integrador maduro mostra na hora, porque esses
-  documentos existem como rotina. Quem hesita provavelmente os produz só
-  quando o cliente cobra, e isso aparece depois, no comissionamento.
+  Solicite modelos anonimizados de FAT, matriz de rastreabilidade e as-built,
+  respeitando confidencialidade e propriedade intelectual. Ausência de
+  compartilhamento pode ter motivo contratual; o importante é verificar por
+  evidências alternativas como o fornecedor controla revisão, aprovação,
+  testes e handover.
 </TechnicalCallout>
 
 ## Quando contratar um integrador de sistemas de automação?
@@ -167,9 +170,11 @@ maturidade que aparecem antes mesmo da proposta:
 Cinco cenários típicos em que o integrador é o caminho racional:
 
 1. **Migração de plataforma legada.** Os controladores SLC 500 foram
-   descontinuados pela Rockwell em 31 de março de 2024, e o RSLogix 5
-   (software do PLC-5) encerrou o ciclo de vida em 31 de dezembro de
-   2025. Plantas nessas plataformas operam sem reposição de fábrica, e
+   descontinuados em datas diferentes por catálogo; o SLC 5/05 1747-L553,
+   por exemplo, tem data de 31 de março de 2024. Para o RSLogix 5, novas
+   vendas de ativação terminaram em 31 de dezembro de 2025, mas instalações
+   existentes podem continuar com suporte conforme entitlement. Reparos e
+   substituições também variam por código. Nesses parques, a
    [migração de PLC legado](/solucoes/migracao-plc/) é projeto de
    engenharia, não troca de peça.
 2. **Projeto novo multidisciplinar**, quando controle de processo, redes,
@@ -178,9 +183,9 @@ Cinco cenários típicos em que o integrador é o caminho racional:
 3. **Padronização entre plantas**, definição de biblioteca, templates e
    governança para que unidades diferentes falem a mesma língua de
    automação.
-4. **Exigência corporativa de cibersegurança OT**, quando auditorias ou
-   matrizes passam a cobrar aderência a IEC 62443 em contratos de
-   fornecimento.
+4. **Requisito corporativo ou contratual de cibersegurança OT**, quando o
+   escopo cita IEC 62443 ou controles equivalentes e pede evidências de
+   implementação.
 5. **Equipe interna absorvida pela rotina**, quando a manutenção segura a
    operação, mas não tem agenda nem ferramental para tocar um projeto de
    capital.
@@ -224,36 +229,48 @@ especificar e testar o que o montador constrói.
 
 Significa estar no programa de System Integrators do PartnerNetwork da
 Rockwell Automation, estruturado nos níveis Bronze, Silver, Gold e
-Platinum. O nível Silver exige competências técnicas comprovadas,
-engenheiros certificados e desempenho recorrente em projetos com a
-plataforma Rockwell, com renovação contínua. Os detalhes da credencial da
-Integra estão em [/certificacoes/silver-system-integrator/](/certificacoes/silver-system-integrator/).
+Platinum. Segundo o brochure vigente, os níveis consideram sucesso comercial,
+competências e colaboração. Silver é um nível de programa, não uma garantia
+automática de desempenho nem, isoladamente, uma certificação técnica. Os
+detalhes declarados pela Integra estão em
+[/certificacoes/silver-system-integrator/](/certificacoes/silver-system-integrator/).
 
 ### Integrador de sistemas trabalha com mais de um fabricante?
 
-Sim, e isso é desejável: a planta típica brasileira mistura plataformas.
-Um integrador multi-vendor mantém certificações em mais de um ecossistema,
-caso da Integra, que atua com Rockwell (Silver System Integrator), Siemens
-(TIA Portal e PCS 7), Schneider e Elipse E3, e escolhe a plataforma a
-partir do processo, não do catálogo.
+Pode trabalhar. Experiência multi-vendor é útil em plantas heterogêneas, mas
+especialização em uma única plataforma também pode ser adequada ao escopo. A
+Integra atua com Rockwell, Siemens, Schneider e Elipse; isso não deve ser
+confundido com status formal de parceiro ou certificação em todos esses
+fabricantes.
 
 ### Quanto custa contratar um integrador de sistemas de automação?
 
 Depende de fatores, não de tabela: quantidade de I/O e de malhas de
 controle, plataforma escolhida, necessidade de migração com planta
 operando, exigências de rede e cibersegurança, escopo de documentação e
-nível de suporte pós-partida. Propostas sérias detalham escopo e
-entregáveis por fase, e a comparação correta é entre escopos equivalentes,
-nunca entre números soltos.
+nível de suporte pós-partida. Para comparar propostas, normalize premissas,
+entregáveis, exclusões, critérios de aceite, impostos, viagens e risco, em vez
+de usar apenas o valor total.
 
 ### Quando vale mais a pena integrador do que equipe própria?
 
 Quando o trabalho é projeto, não rotina: migrações, expansões,
 padronização e adequação de cibersegurança são esforços concentrados que
-exigem método, ferramental e gente certificada que raramente compensa
-manter ociosa no quadro. Equipe própria continua essencial para operação e
-manutenção; o integrador entra para somar capacidade de engenharia nos
-picos de projeto.
+podem exigir método, ferramental e capacidade adicional. A decisão entre
+equipe própria, EPC, fabricante e integrador depende de competência, carga,
+responsabilidade, continuidade e custo total. Equipe própria continua
+essencial para operação e ownership; o integrador pode complementar capacidade
+nos picos de projeto.
+
+## Fontes primárias
+
+- [ISA — série ISA/IEC 62443, incluindo 62443-2-4](https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards)
+- [Rockwell Automation — System Integrator Program](https://literature.rockwellautomation.com/idc/groups/literature/documents/br/sysint-br003_-en-p.pdf)
+- [Rockwell Automation — lifecycle do SLC 5/05 1747-L553](https://www.rockwellautomation.com/en-us/products/details.1747-l553.html)
+- [Rockwell Automation — comunicado de lifecycle do RSLogix 5](https://www.rockwellautomation.com/en-gb/company/news/blogs/rslogix5-eol-status.html)
+- [Siemens — Partner Portal Industry](https://partnerportal-industry.extranet.dc.siemens.com/en/landingpage-partner-portal)
+- [Schneider Electric — Alliance Partner Program](https://www.se.com/br/pt/partners/alliance-partner-program/)
+- [CSIA — Certification FAQs](https://controlsys.org/faqs/)
 
 ---
 

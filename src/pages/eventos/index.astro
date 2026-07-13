@@ -3,15 +3,16 @@ import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
+import EventDate from "@/components/EventDate.astro";
 
 const eventos = (await getCollection("eventos", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+  (a, b) => b.data.startDate.getTime() - a.data.startDate.getTime(),
 );
 ---
 
 <BaseLayout
-  title="Eventos"
-  description="Eventos, treinamentos e conferências em que a Integra Automação Industrial participou, registro técnico de capacitação, parcerias e evolução do ecossistema industrial."
+  title="Eventos e Capacitação Técnica"
+  description="Registros de eventos, treinamentos e conferências acompanhados pela Integra, com temas técnicos, parcerias e aprendizados relevantes para a engenharia industrial."
   ogImage="/og/eventos.png"
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -20,13 +21,12 @@ const eventos = (await getCollection("eventos", ({ data }) => !data.draft)).sort
         Eventos · Treinamentos · Conferências
       </p>
       <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Onde estivemos, o que aprendemos.
+        Eventos e capacitação técnica da Integra.
       </h1>
       <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Capacitação contínua é parte do método. Aqui registramos os eventos
-        e treinamentos em que a equipe Integra esteve presente, para que o
-        cliente saiba que cada projeto entregue tem por trás um time atualizado
-        nas tecnologias, fabricantes e normas que importam.
+        Capacitação contínua é parte do método. Aqui reunimos recaps de eventos,
+        treinamentos e agendas técnicas acompanhados pela equipe, com os temas
+        que ajudam a manter projetos, tecnologias e práticas de engenharia atualizados.
       </p>
     </div>
   </section>
@@ -47,7 +47,7 @@ const eventos = (await getCollection("eventos", ({ data }) => !data.draft)).sort
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {eventos.map((e) => (
             <article class="group rounded-lg border border-integra-gray-200 bg-integra-white overflow-hidden hover:border-integra-gray-900 transition-colors">
-              <a href={`/eventos/${e.slug}/`} class="block">
+              <a href={`/eventos/${e.id}/`} class="block">
                 <div class="aspect-[16/10] overflow-hidden bg-integra-gray-100">
                   <Image
                     src={e.data.coverImage}
@@ -61,7 +61,7 @@ const eventos = (await getCollection("eventos", ({ data }) => !data.draft)).sort
                 </div>
                 <div class="p-6">
                   <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-2">
-                    {e.data.dateLabel}
+                    <EventDate startDate={e.data.startDate} endDate={e.data.endDate} />
                   </p>
                   <h2 class="text-lg font-semibold text-integra-gray-900 mb-2 group-hover:text-integra-red-700 transition-colors leading-snug">
                     {e.data.title}
@@ -91,8 +91,8 @@ const eventos = (await getCollection("eventos", ({ data }) => !data.draft)).sort
   </section>
 
   <CtaBlock
-    title="Quer encontrar a equipe Integra em algum evento?"
-    description="Acompanhamos as principais agendas técnicas brasileiras e da América Latina. Se vamos cruzar caminho em alguma conferência, fale conosco."
+    title="Quer conversar sobre algum tema destes eventos?"
+    description="Relacionamos capacitação técnica à prática de engenharia. Fale com a equipe sobre tecnologias, arquiteturas e desafios da sua planta."
     primaryCta={{ href: "/contato", label: "Falar com a Integra" }}
     secondaryCta={{ href: "/blog", label: "Ver blog técnico" }}
   />
