@@ -339,17 +339,17 @@ export const MEGA_MENUS: Record<string, MegaMenu> = {
         title: "Indústria de processo",
         links: [
           {
-            href: "/setores/",
+            href: "/setores/quimica-e-fertilizantes/",
             label: "Química e Fertilizantes",
             description: "24/7, intertravamentos, redundância, IEC 62443",
           },
           {
-            href: "/setores/",
+            href: "/setores/papel-e-celulose/",
             label: "Papel e Celulose",
             description: "Caldeiras, digestores, controle multivariável",
           },
           {
-            href: "/setores/",
+            href: "/setores/saneamento/",
             label: "Saneamento",
             description: "SCADA distribuído, monitoramento remoto, infra crítica",
           },

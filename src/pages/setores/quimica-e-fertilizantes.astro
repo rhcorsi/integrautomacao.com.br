@@ -1,0 +1,378 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Reatores e processos exotérmicos",
+    description:
+      "Reações que liberam calor pedem malhas de temperatura e pressão em cascata, remoção de calor coordenada com a alimentação de reagentes e resposta definida para falha de utilidades. O controle precisa manter a janela operacional estável em turno após turno — não apenas partir bem.",
+  },
+  {
+    title: "Dosagem de reagentes e razão de mistura",
+    description:
+      "Vazões mássicas, malhas de razão entre correntes, pH e neutralização. Desvio sistemático de dosagem vira produto fora de especificação ou sobreconsumo de matéria-prima cara — e a evidência do que foi dosado precisa ficar registrada por lote ou por período.",
+  },
+  {
+    title: "Granulação, secagem e classificação em fertilizantes",
+    description:
+      "Granulador, secador, peneiras e reciclo formam um circuito com acoplamento forte entre malhas: umidade, temperatura e taxa de reciclo se influenciam mutuamente. Sintonia e intertravamentos de processo definem estabilidade do circuito e granulometria do produto.",
+  },
+  {
+    title: "Estocagem, ensaque e expedição",
+    description:
+      "Silos e armazéns de produto acabado, ensaque, big bags e carregamento a granel. O desafio é amarrar lote, análise de qualidade e destino — com pesagem registrada e movimentação de sólidos que respeita a classificação de áreas onde houver poeira combustível.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por área: reação, dosagem, granulação e secagem, utilidades e expedição",
+  "Controle regulatório de reatores e malhas críticas: temperatura, pressão, vazão e razão de reagentes",
+  "Intertravamentos de processo e alarmes estruturados no BPCS, com documentação e teste funcional",
+  "Interface do BPCS com o SIS existente da planta, respeitando a separação prevista na IEC 61511",
+  "Gestão de receitas e batelada ISA-88 nas etapas em que o processo é por lote",
+  "Rastreabilidade por lote e por período com historian e relatórios de apoio a auditoria",
+  "Segmentação de rede e cibersegurança OT alinhada à ISA/IEC 62443",
+  "Migração de controladores e supervisórios legados com comissionamento em janelas curtas de parada",
+];
+
+const faq = [
+  {
+    q: "A Integra projeta o SIS (sistema instrumentado de segurança) da planta?",
+    a: "Não como entrega isolada, e essa distinção importa. O SIS segue o ciclo de vida de segurança funcional da IEC 61511 — análise de riscos do processo, alocação de funções de segurança, definição de SIL (nível de integridade de segurança), verificação e validação — conduzido pelo time de segurança de processo da planta com os especialistas em segurança funcional que ela designar. A Integra atua no BPCS (sistema básico de controle de processo): controle regulatório, <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos de processo</a>, alarmes, permissivos e a interface do controle com o SIS. Quando o projeto envolve as duas camadas, o escopo de cada uma é qualificado por escrito antes da proposta.",
+  },
+  {
+    q: "O que muda no controle de um reator exotérmico?",
+    a: "A dinâmica trabalha contra o operador: mais temperatura acelera a reação, que libera mais calor. Por isso o controle combina malhas em cascata — temperatura do meio comandando a remoção de calor —, limites de taxa na alimentação de reagentes e uma resposta definida para falha de utilidades como água de resfriamento e vapor. Alarmes com faixas e prioridades revisadas ajudam o operador a agir antes que o desvio cresça, e o intertravamento de processo no BPCS retira a planta da condição anormal pela via normal de controle. A sintonia dessas malhas é tratada em <a href=\"/tecnologias/controle-regulatorio-pid/\">controle regulatório PID</a>.",
+  },
+  {
+    q: "ISA-88 se aplica a uma planta de fertilizantes?",
+    a: "Nas etapas em que o processo é por lote, sim. Granulação e secagem costumam operar em regime contínuo, mas formulação de misturas NPK, preparo de soluções, aditivação e plantas de especialidades trabalham por batelada — e nesses trechos receitas estruturadas em ISA-88 separam a fórmula da lógica de equipamento: o processo altera parâmetros de receita sem reescrever código de chão de fábrica, e cada lote nasce com registro estruturado. Em plataforma Rockwell, o modelo pode ser implementado com o <a href=\"/tecnologias/factorytalk-batch/\">FactoryTalk Batch</a> integrado à supervisão da planta.",
+  },
+  {
+    q: "Dá para modernizar o controle de uma planta que opera 24/7?",
+    a: "Na maioria dos casos, sim — desde que a estratégia seja construída em torno das janelas reais de parada. A migração costuma ser faseada por área de processo, com conversão preparada e testada antes do cutover, paralelismo onde a arquitetura permite e plano de rollback validado para cada janela. O inventário de controladores, redes e supervisórios vem primeiro, porque é ele que mostra onde o risco de sustentação justifica a troca. A Integra estrutura essa avaliação em <a href=\"/solucoes/migracao-plc/\">migração de PLC</a> e <a href=\"/solucoes/modernizacao-scada/\">modernização de SCADA</a>, com a virada executada em <a href=\"/servicos/comissionamento-industrial/\">comissionamento</a> planejado junto à operação.",
+  },
+  {
+    q: "Por que cibersegurança OT pesa tanto em química e fertilizantes?",
+    a: "Porque a consequência de um incidente não é só indisponibilidade de dados: é parada de uma planta contínua e, no limite, perda de controle de um processo com energia química real. A série ISA/IEC 62443 organiza a defesa por zonas e conduítes — agrupar sistemas por requisito de segurança e controlar o que atravessa as fronteiras entre eles —, o que na prática significa segmentar a rede de controle, isolar a interface TI/OT (tecnologia da informação/tecnologia operacional) e gerenciar acessos remotos de fornecedores. A Integra trata esse escopo em <a href=\"/ciberseguranca-ot/\">cibersegurança OT</a> e <a href=\"/solucoes/redes-iec-62443/\">redes industriais e IEC 62443</a>.",
+  },
+];
+
+const REVIEWED = "2026-08-02";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Automação para Química e Fertilizantes"
+  description="Automação para indústria química e fertilizantes: controle regulatório, batelada ISA-88, áreas classificadas e cibersegurança OT. Converse sobre a sua planta."
+  breadcrumbLeaf="Química e Fertilizantes"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Química e Fertilizantes",
+      description:
+        "Engenharia de automação para indústria química e de fertilizantes: controle regulatório de reatores e dosagem, batelada ISA-88, intertravamentos e alarmes no BPCS, instrumentação compatível com áreas classificadas, rastreabilidade por lote e cibersegurança OT em operação contínua.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Indústria de Processo · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Química e Fertilizantes
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para a indústria química e de fertilizantes é a engenharia
+          de controle que mantém uma planta contínua dentro da janela
+          operacional, turno após turno: reatores com processos exotérmicos sob
+          malhas estáveis, dosagem de reagentes na razão certa, granulação e
+          mistura com registro por lote e intertravamentos de processo
+          documentados e testáveis. Para esse escopo, a Integra Automação
+          Industrial atua na camada de controle — o BPCS (sistema básico de
+          controle de processo) — com controle regulatório, batelada,
+          rastreabilidade e cibersegurança OT (tecnologia operacional), dentro
+          da prática de <a href="/automacao-industrial/" class="text-integra-red-700 underline hover:text-integra-red">automação industrial</a> da empresa.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          Segundo a ANDA (Associação Nacional para Difusão de Adubos), as
+          entregas de fertilizantes ao mercado brasileiro somaram 49,11 milhões
+          de toneladas em 2025 — alta de 7,7% sobre as 45,61 milhões de 2024 —,
+          e a produção nacional de intermediários chegou a 7,22 milhões de
+          toneladas. Misturadoras, unidades de granulação e plantas químicas
+          que sustentam esse volume operam em regime contínuo, com paradas
+          caras e janelas curtas de manutenção.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          <a href="https://www.noticiasagricolas.com.br/noticias/agronegocio/416412-entrega-de-fertilizantes-no-brasil-sobe-77-em-2025-para-recorde-de-491-mi-t-diz-anda.html" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: ANDA, via Reuters/Notícias Agrícolas · março de 2026</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de uma planta química"
+        title="Quatro áreas com exigências de controle diferentes"
+        description="Uma planta de química ou fertilizantes combina trechos contínuos — reação, granulação, secagem — com etapas por lote e uma expedição que amarra tudo ao cliente. Cada trecho pede uma estratégia de controle própria."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Segurança de processo"
+        title="BPCS e SIS: camadas separadas por norma — e por projeto"
+        description="Em processo químico, o controle que opera a planta e o sistema que a leva ao estado seguro são camadas distintas de proteção. Confundir as duas compromete as duas."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A IEC 61511 (Functional safety — Safety instrumented systems for the
+        process industry sector), norma de segurança funcional para o setor de
+        processo, trabalha com camadas de proteção independentes. O BPCS é a
+        camada que opera a planta no dia a dia: malhas de controle,
+        intertravamentos de processo, alarmes e permissivos de partida. O SIS
+        (sistema instrumentado de segurança) é a camada que executa as funções
+        instrumentadas de segurança quando o controle normal já não basta — e a
+        norma exige que as duas sejam projetadas separadas e independentes, de
+        modo que uma falha do BPCS não comprometa a integridade funcional do
+        SIS.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Essa divisão define o que a Integra assume. A empresa projeta,
+        programa e documenta a camada de controle:
+        <a href="/servicos/programacao-clp/" class="text-integra-red-700 underline hover:text-integra-red">programação de CLP (controlador lógico programável)</a>,
+        <a href="/tecnologias/intertravamentos-sequencias/" class="text-integra-red-700 underline hover:text-integra-red">intertravamentos e sequências</a>
+        de processo, alarmes e a interface do BPCS com o SIS existente. O ciclo
+        de vida do SIS — análise de riscos do processo, alocação de funções de
+        segurança, definição de SIL (nível de integridade de segurança),
+        verificação e validação — pertence ao time de segurança de processo da
+        planta, com os especialistas em segurança funcional que ela designar. A
+        Integra não vende projeto de SIS certificado como entrega isolada;
+        quando o trabalho toca essa camada, o escopo é qualificado por escrito,
+        função a função, antes da proposta.
+      </p>
+
+      <TechnicalCallout variant="note" title="Intertravamento de processo não substitui função de segurança">
+        <p>
+          Um intertravamento programado no BPCS protege equipamento e
+          estabilidade operacional pela via normal de controle. Uma função
+          instrumentada de segurança, classificada com SIL e implementada no
+          SIS, existe para o cenário em que essa via falha. As duas coisas se
+          complementam — e a decisão de qual risco vai para qual camada nasce
+          da análise de riscos da planta, não da conveniência de programação.
+        </p>
+      </TechnicalCallout>
+
+      <SectionHeader
+        eyebrow="Controle regulatório"
+        title="Reatores e dosagem: estabilidade se constrói malha a malha"
+        description="Processo exotérmico com utilidades compartilhadas é o caso clássico em que sintonia, estratégia de cascata e resposta a falha precisam ser projetadas juntas — não ajustadas na partida."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        No reator, a temperatura do meio comanda a remoção de calor em
+        cascata, a alimentação de reagentes respeita limites de taxa e a
+        pressão fecha o balanço; em neutralização e preparo de soluções,
+        malhas de razão e de pH sustentam a especificação. Na granulação de
+        fertilizantes, umidade do granulado, temperatura do secador e taxa de
+        reciclo formam um circuito acoplado em que uma malha mal sintonizada
+        oscila as demais. É trabalho de
+        <a href="/tecnologias/controle-regulatorio-pid/" class="text-integra-red-700 underline hover:text-integra-red">controle regulatório PID</a>
+        com estratégia — cascata, razão, feedforward onde fizer sentido — e de
+        alarmes racionalizados para que o operador aja no desvio relevante.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Em plantas de processo contínuo sobre plataforma Rockwell, esse escopo
+        pode ser estruturado com o
+        <a href="/solucoes/plantpax/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx</a>,
+        DCS (sistema de controle distribuído) moderno da Rockwell Automation,
+        com biblioteca de objetos de processo e governança de alarmes; em
+        arquiteturas híbridas ou multivendor, a supervisão pode ficar em
+        <a href="/solucoes/factorytalk/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk</a>
+        ou
+        <a href="/tecnologias/elipse-e3/" class="text-integra-red-700 underline hover:text-integra-red">Elipse E3</a>,
+        conforme o instalado na planta.
+      </p>
+
+      <SectionHeader
+        eyebrow="Batelada"
+        title="ISA-88 nas etapas em que o processo é por lote"
+        description="Formulação, aditivação, preparo de soluções e misturas NPK (nitrogênio, fósforo e potássio) trabalham por batelada dentro de uma planta contínua. Receita estruturada separa a fórmula da lógica de equipamento."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A ISA-88 (adotada pela IEC como IEC 61512-1 em 1997) organiza o
+        controle de batelada em modelos de equipamento, procedimento e
+        receita. Na prática, fórmula, ordem de adição e tempos viram
+        parâmetros que o processo gerencia — não linhas de código que a
+        engenharia altera a cada produto novo. Em misturadoras de
+        fertilizantes e plantas de especialidades químicas, isso encurta a
+        troca de produto e faz cada lote nascer com registro estruturado:
+        matérias-primas, quantidades reais, tempos e eventos. Em plataforma
+        Rockwell, o modelo pode ser implementado com o
+        <a href="/tecnologias/factorytalk-batch/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Batch</a>
+        integrado à supervisão e ao historian da planta.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega em química e fertilizantes"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Áreas classificadas"
+        title="Atmosferas explosivas mudam o projeto de instrumentação e painéis"
+        description="Gases e vapores inflamáveis em processo químico, poeira combustível em movimentação de sólidos: a classificação de áreas define o que pode ser instalado onde — e a automação precisa respeitá-la."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        No Brasil, a classificação de áreas segue a série ABNT NBR IEC 60079:
+        a ABNT NBR IEC 60079-10-1 trata da classificação de áreas com
+        atmosferas explosivas de gás e a ABNT NBR IEC 60079-10-2, de
+        atmosferas de poeiras explosivas — caso típico de áreas de ensaque,
+        transporte e estocagem de sólidos em fertilizantes. O estudo de
+        classificação é documento de engenharia da planta, elaborado por
+        profissionais habilitados; o papel da automação é consumi-lo com
+        rigor: especificar instrumentos, painéis e instalações compatíveis
+        com as zonas definidas, aplicar as técnicas de proteção adequadas e
+        manter a documentação coerente para inspeção. Projeto de automação que
+        ignora a classificação de áreas não é economia — é passivo.
+      </p>
+
+      <SectionHeader
+        eyebrow="Rastreabilidade"
+        title="Registro por lote e relatórios que a auditoria consome"
+        description="Cliente industrial, certificação e fiscalização fazem a mesma pergunta de formas diferentes: o que foi produzido, com quê, quando e sob quais condições. A resposta boa é uma consulta, não uma reconstrução."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A base é o registro estruturado: pesos e vazões reais, parâmetros de
+        processo por lote ou por período, eventos de intertravamento e
+        alarmes, tudo consolidado num historian como o
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Historian</a>
+        ou o
+        <a href="/solucoes/pi-system/" class="text-integra-red-700 underline hover:text-integra-red">PI System</a>.
+        Numa não conformidade de qualidade, a pergunta "quais lotes usaram
+        esta matéria-prima e em que condições foram produzidos" passa a ser
+        consulta ao sistema; numa auditoria, os relatórios saem da mesma base
+        que a operação usa todo dia — o que reduz a distância entre o que se
+        declara e o que se registra. É a mesma disciplina de rastreabilidade
+        que a Integra aplica em
+        <a href="/setores/alimentos-e-bebidas/" class="text-integra-red-700 underline hover:text-integra-red">alimentos e bebidas</a>,
+        adaptada ao risco e ao regime contínuo do processo químico.
+      </p>
+
+      <SectionHeader
+        eyebrow="Cibersegurança OT"
+        title="Planta contínua pede rede segmentada por projeto"
+        description="Integrar o chão de fábrica ao ERP (sistema de gestão empresarial) e ao laboratório amplia a superfície de exposição da rede de controle. Em operação 24/7, a segmentação não é acessório — é condição de continuidade."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A série ISA/IEC 62443 organiza a defesa da rede industrial por zonas e
+        conduítes: sistemas agrupados por requisito de segurança, com controle
+        explícito do que atravessa cada fronteira — incluindo a IDMZ (zona
+        desmilitarizada industrial) entre TI (tecnologia da informação) e OT e
+        os acessos remotos de fornecedores e assistência técnica. Numa planta
+        química, o argumento é direto: um incidente que derruba a rede de
+        controle derruba a produção, e a retomada de um processo contínuo tem
+        custo alto. A Integra projeta
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">redes industriais segmentadas alinhadas à IEC 62443</a>
+        e estrutura o programa de
+        <a href="/ciberseguranca-ot/" class="text-integra-red-700 underline hover:text-integra-red">cibersegurança OT</a>
+        com base nas práticas descritas em
+        <a href="/tecnologias/iec-62443-nist-ot/" class="text-integra-red-700 underline hover:text-integra-red">IEC 62443 e NIST para OT</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="Modernização"
+        title="Janelas curtas de parada definem a estratégia — não o contrário"
+        description="Quem opera 24/7 raramente dispõe de semanas de parada. A modernização viável é a que cabe nas janelas reais da planta, com preparação pesada antes e rollback testado para cada virada."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A sequência que a Integra aplica começa pelo inventário de
+        controladores, redes e supervisórios, compara risco de sustentação
+        área a área e fatia a migração por unidade de processo: conversão e
+        testes feitos antes, cutover na janela programada, critérios de
+        aceitação definidos com a operação e plano de retorno validado. É a
+        mesma lógica de virada faseada aplicada em
+        <a href="/setores/acucar-e-etanol/" class="text-integra-red-700 underline hover:text-integra-red">açúcar e etanol</a>,
+        setor em que a janela de entressafra disciplina o cronograma. O escopo
+        se estrutura em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>
+        e
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>,
+        com a execução amarrada em
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento</a>
+        com FAT e SAT (testes de aceitação em fábrica e em campo) junto à
+        operação e à segurança de processo.
+      </p>
+
+      <StandardsBadges
+        title="Normas e tecnologias aplicadas no setor"
+        standards={[
+          { code: "IEC 61511", description: "Segurança funcional: BPCS e SIS" },
+          { code: "ISA-88", description: "Receitas e batelada" },
+          { code: "NBR IEC 60079", description: "Classificação de áreas Ex" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+          { code: "PlantPAx", description: "DCS para processo contínuo" },
+          { code: "EtherNet/IP", description: "Rede de controle (CPwE)" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer revisar controle, intertravamentos ou rede da sua planta?"
+    description="O ponto de partida é uma triagem técnica: entender processo, controladores instalados, camadas de proteção existentes e janelas reais de parada antes de propor arquitetura. Escopo e diagnóstico documentado vêm depois que a operação valida o impacto."
+    primaryCta={{ href: "/contato/?assunto=quimica-e-fertilizantes", label: "Conversar sobre a planta" }}
+    secondaryCta={{ href: "/solucoes/plantpax/", label: "Ver PlantPAx para indústria de processo" }}
+  />
+</BaseLayout>

@@ -13,7 +13,7 @@ projeta, implementa, documenta e sustenta sistemas de automação para
 plantas críticas (açúcar e etanol, agronegócio, alimentos, química,
 frigoríficos, ração, papel e celulose, saneamento).
 
-Última atualização: 2026-07-13.
+Última atualização: 2026-08-02.
 
 ## Páginas principais
 
@@ -44,6 +44,9 @@ frigoríficos, ração, papel e celulose, saneamento).
 - [Automação para Alimentos e Bebidas](https://integrautomacao.com.br/setores/alimentos-e-bebidas/): batelada ISA-88, CIP e rastreabilidade lote a lote.
 - [Automação para Frigoríficos](https://integrautomacao.com.br/setores/frigorificos/): linhas de abate, frio industrial com amônia e rastreabilidade.
 - [Automação para Fábricas de Ração](https://integrautomacao.com.br/setores/fabricas-de-racao/): dosagem, pesagem, batelada e sequência contra contaminação cruzada.
+- [Automação para Química e Fertilizantes](https://integrautomacao.com.br/setores/quimica-e-fertilizantes/): reatores, batelada ISA-88, interface BPCS/SIS (IEC 61511) e áreas classificadas.
+- [Automação para Papel e Celulose](https://integrautomacao.com.br/setores/papel-e-celulose/): digestores, máquina de papel, caldeiras NR-13 e alarmes ISA-18.2.
+- [Automação para Saneamento](https://integrautomacao.com.br/setores/saneamento/): SCADA distribuído, telemetria de ETAs/ETEs e boosters, dosagem com registro.
 - [Como elaborar uma RFP de automação industrial](https://integrautomacao.com.br/blog/como-elaborar-rfp-automacao-industrial/): guia de especificação e comparação de propostas.
 
 ## Catálogo técnico — páginas prioritárias

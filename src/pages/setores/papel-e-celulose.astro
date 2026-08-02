@@ -1,0 +1,368 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Digestores e cozimento",
+    description:
+      "No processo kraft, o digestor cozinha os cavacos com licor branco para dissolver a lignina — e o número kappa da polpa indica quanto restou. A madeira que entra varia em densidade e umidade; temperatura, tempo e carga de álcali precisam compensar essa variabilidade sem sacrificar rendimento.",
+  },
+  {
+    title: "Branqueamento",
+    description:
+      "Estágios sucessivos, cada um com químico, temperatura e pH próprios. A dosagem precisa acompanhar a vazão e a qualidade da polpa que chega de cada estágio anterior: dosar por tabela fixa vira consumo químico desnecessário ou alvura fora do alvo.",
+  },
+  {
+    title: "Máquina de papel",
+    description:
+      "Formação, prensagem e secagem em regime contínuo. Gramatura e umidade são medidas por scanners do QCS (sistema de controle de qualidade da folha) e controladas na direção da máquina e no perfil transversal — um problema multivariável por natureza, em que cada atuador afeta mais de uma variável.",
+  },
+  {
+    title: "Recuperação, utilidades e cogeração",
+    description:
+      "A caldeira de recuperação queima o licor preto para recuperar químicos e gerar vapor; caldeiras de força e turbogeradores completam o balanço energético. É a espinha dorsal da planta — e um conjunto de equipamentos enquadrado na NR-13, a norma regulamentadora de caldeiras e vasos de pressão.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação por área (linha de fibra, branqueamento, máquina de papel, recuperação e utilidades)",
+  "Sintonia e documentação de malhas críticas de vapor, combustão, nível e consistência",
+  "Governança de alarmes conforme ANSI/ISA-18.2: filosofia, racionalização, priorização e métricas",
+  "Intertravamentos e sequências testáveis, com documentação de causa e efeito",
+  "Historian (FactoryTalk Historian ou PI System) para balanço de vapor, consumo específico e investigação de eventos",
+  "Modernização de DCS e supervisório com cutover planejado para a janela de parada geral",
+  "Migração de CLPs legados (PLC-5, SLC 500) para plataformas atuais, com plano de rollback testado",
+  "Segmentação de rede e cibersegurança OT alinhada à série ISA/IEC 62443",
+];
+
+const faq = [
+  {
+    q: "O que a NR-13 exige das caldeiras de uma planta de celulose — e o que a automação resolve?",
+    a: "A <a href=\"https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-13-nr-13\" target=\"_blank\" rel=\"noopener noreferrer\">NR-13 — Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento</a> estabelece requisitos mínimos para a gestão da integridade estrutural desses equipamentos nos aspectos de instalação, inspeção, operação e manutenção. Prontuários, inspeções periódicas e capacitação de operadores são conduzidos pela planta com seu responsável técnico — não são escopo do sistema de controle. A automação entra como apoio: instrumentação confiável das variáveis operacionais, <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos</a> testáveis e documentados e registro histórico que ajuda a demonstrar como caldeiras e vasos operaram entre inspeções. Numa caldeira de recuperação, que combina função química e geração de vapor, essa base de controle e registro tem peso ainda maior.",
+  },
+  {
+    q: "O que é QCS e por que o controle da máquina de papel é multivariável?",
+    a: "QCS (Quality Control System) é o sistema que mede e controla propriedades da folha durante a produção. Scanners percorrem a folha de um lado ao outro medindo variáveis como gramatura e umidade; o sistema atua sobre a média na direção da máquina (MD) e sobre o perfil na direção transversal (CD). O problema é multivariável porque os atuadores interagem: vapor de secagem, fluxo e consistência na caixa de entrada e velocidade afetam mais de uma propriedade ao mesmo tempo. E o QCS não trabalha sozinho — ele pressupõe estabilidade do <a href=\"/tecnologias/controle-regulatorio-pid/\">controle regulatório</a> da parte úmida e das utilidades: vapor instável ou consistência oscilando aparecem na folha antes de qualquer ajuste fino.",
+  },
+  {
+    q: "Como a gestão de alarmes ISA-18.2 ajuda a reduzir paradas e quebras de folha?",
+    a: "A <a href=\"https://www.isa.org/products/ansi-isa-18-2-2016-management-of-alarm-systems-for\" target=\"_blank\" rel=\"noopener noreferrer\">ANSI/ISA-18.2</a> estrutura o ciclo de vida do sistema de alarmes: filosofia, racionalização com a operação, priorização, implementação e monitoramento de desempenho. Num evento como quebra de folha ou trip de caldeira, um sistema não racionalizado despeja alarmes em sequência e esconde a causa no meio do ruído; um sistema governado apresenta menos alarmes, priorizados, cada um com resposta definida. A norma não elimina eventos — ela reduz o tempo entre o desvio e a ação correta do operador, que é onde a disponibilidade se ganha. Em plataformas como o <a href=\"/solucoes/plantpax/\">PlantPAx</a>, a biblioteca de objetos de processo já nasce com atributos de alarme padronizados, o que facilita aplicar essa governança.",
+  },
+  {
+    q: "Dá para migrar DCS e CLPs legados dentro de uma parada geral?",
+    a: "Com engenharia antecipada, sim — na maioria dos casos o que cabe na parada é o cutover, não o projeto. O trabalho começa meses antes: inventário de hardware e lógica, conversão e testes em bancada, FAT (teste de aceitação em fábrica) e plano de rollback por área. Referências de ciclo de vida ajudam a priorizar: a linha PLC-5 foi descontinuada em 30 de junho de 2017 e os últimos controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o <a href=\"https://www.rockwellautomation.com/en-us/support/product/product-compatibility-migration/product-lifecycle-status.html\" target=\"_blank\" rel=\"noopener noreferrer\">ciclo de vida publicado pela Rockwell Automation</a>. A Integra estrutura essa avaliação em <a href=\"/solucoes/migracao-plc/\">migração de PLC</a> e <a href=\"/solucoes/modernizacao-scada/\">modernização de SCADA</a>, e executa a virada com <a href=\"/servicos/comissionamento-industrial/\">comissionamento</a> planejado junto à operação.",
+  },
+  {
+    q: "Por que cibersegurança OT ganhou peso em papel e celulose?",
+    a: "Porque a planta ficou mais conectada: historian alimentando a gestão, acesso remoto de fornecedores de máquina e de QCS, integração com o ERP (sistema de gestão empresarial). Cada ponte entre TI (tecnologia da informação) e OT (tecnologia operacional) amplia a superfície de exposição de um processo contínuo em que cada parada custa produção. A referência técnica é a série <a href=\"/tecnologias/iec-62443-nist-ot/\">ISA/IEC 62443</a>: zonas, conduítes e níveis de segurança definidos a partir de análise de risco, com segmentação implementada em <a href=\"/solucoes/redes-iec-62443/\">projetos de redes industriais</a>. O ponto de partida costuma ser um diagnóstico da arquitetura atual — o que conversa com o quê, por onde e com que controle de acesso — dentro da prática de <a href=\"/ciberseguranca-ot/\">cibersegurança OT</a> da Integra.",
+  },
+];
+
+const REVIEWED = "2026-08-02";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Automação para Papel e Celulose"
+  description="Automação para papel e celulose: digestores, branqueamento, máquina de papel, caldeiras NR-13 e alarmes ISA-18.2. Converse sobre a sua planta."
+  breadcrumbLeaf="Papel e Celulose"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Papel e Celulose",
+      description:
+        "Engenharia de automação para papel e celulose: controle de digestores e branqueamento, máquina de papel, caldeiras e utilidades sob NR-13, governança de alarmes ANSI/ISA-18.2, historian para eficiência energética e modernização de DCS e CLP legado com cibersegurança OT.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Base Florestal · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Papel e Celulose
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para papel e celulose é a engenharia de controle que
+          sustenta um processo contínuo de ponta a ponta: cozimento no
+          digestor, branqueamento, máquina de papel e a ilha de recuperação e
+          utilidades que devolve químicos e energia ao ciclo. O que está em
+          jogo é disponibilidade — quebra de folha e trip de caldeira se medem
+          em toneladas que deixaram de sair — e estabilidade de malhas que se
+          perturbam em cadeia. Para esse escopo, a Integra Automação Industrial
+          oferece engenharia com foco em controle regulatório, governança de
+          alarmes, dados de processo para eficiência e modernização de
+          sistemas legados dentro da janela de parada geral.
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          O boletim Mosaico da IBÁ (Indústria Brasileira de Árvores) registra
+          recorde em 2025: 29,4 milhões de toneladas de celulose produzidas,
+          alta de 6,9% sobre o ano anterior, e 20,7 milhões de toneladas
+          exportadas. Esse volume sai de plantas que operam continuamente —
+          onde cada hora de indisponibilidade tem custo direto em produção.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          <a href="https://iba.org/blog/iba-em-movimento/brasil-bate-recorde-de-producao-e-exportacao-de-celulose-em-2025-2/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: IBÁ · Boletim Mosaico, resultados de 2025 (abril de 2026)</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de papel e celulose"
+        title="Quatro áreas com exigências de controle diferentes"
+        description="Uma planta de celulose e papel é uma cadeia contínua: a linha de fibra transforma cavaco em polpa, o branqueamento ajusta a alvura, a máquina forma e seca a folha, e a recuperação fecha o ciclo de químicos e energia. O que sai instável de uma área vira distúrbio na seguinte."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Processo contínuo"
+        title="Digestor e branqueamento: controle regulatório com matéria-prima variável"
+        description="Ao contrário de uma linha discreta, aqui não existe pausar entre lotes: o processo anda o tempo todo, e a variabilidade da madeira precisa ser absorvida pelas malhas de controle."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        No cozimento, o digestor — contínuo ou em bateladas — trabalha com uma
+        matéria-prima que muda de densidade e umidade a cada carga. Temperatura,
+        tempo e carga de álcali compensam essa variação para entregar polpa com
+        número kappa consistente, sem sacrificar rendimento. É trabalho de
+        <a href="/tecnologias/controle-regulatorio-pid/" class="text-integra-red-700 underline hover:text-integra-red">controle regulatório PID (proporcional-integral-derivativo)</a>
+        bem sintonizado, sustentado por
+        <a href="/tecnologias/intertravamentos-sequencias/" class="text-integra-red-700 underline hover:text-integra-red">intertravamentos e sequências</a>
+        testáveis e por lógica documentada de
+        <a href="/servicos/programacao-clp/" class="text-integra-red-700 underline hover:text-integra-red">CLP (controlador lógico programável)</a>.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        No branqueamento, cada estágio dosa químico em função da vazão e da
+        qualidade da polpa que chega do estágio anterior — a economia de
+        reagente vem de estabilidade, não de setpoint agressivo. Em plantas
+        desse porte, o controle costuma rodar num DCS (sistema digital de
+        controle distribuído); em plataforma Rockwell, o
+        <a href="/solucoes/plantpax/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx</a>
+        cumpre esse papel com biblioteca de objetos de processo, controle
+        regulatório e governança de alarmes integrados — base da prática de
+        <a href="/automacao-industrial/" class="text-integra-red-700 underline hover:text-integra-red">automação industrial</a>
+        da Integra para processo contínuo.
+      </p>
+
+      <SectionHeader
+        eyebrow="Caldeiras e utilidades"
+        title="Recuperação, vapor e cogeração sob NR-13"
+        description="O vapor é a espinha dorsal da planta: alimenta digestor, branqueamento e secagem. Instabilidade na geração se propaga para todas as áreas — e os equipamentos que o produzem têm norma própria."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A caldeira de recuperação queima o licor preto concentrado para
+        recuperar os químicos de cozimento e gerar vapor — é reator químico e
+        geradora de energia ao mesmo tempo, e por isso concentra
+        intertravamentos críticos e malhas de combustão, nível e pressão cuja
+        estabilidade é crítica para a operação. Caldeiras de força e
+        turbogeradores completam o balanço: como no setor de
+        <a href="/setores/acucar-e-etanol/" class="text-integra-red-700 underline hover:text-integra-red">açúcar e etanol</a>,
+        a cogeração faz da energia parte do resultado do negócio, não apenas
+        um insumo.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        No plano regulatório, caldeiras e vasos de pressão da planta são
+        enquadrados na
+        <a href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-13-nr-13" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">NR-13 (Norma Regulamentadora nº 13 — Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento)</a>,
+        que estabelece requisitos mínimos para a gestão da integridade
+        estrutural desses equipamentos em instalação, inspeção, operação e
+        manutenção. O atendimento à norma é responsabilidade da planta e de seu
+        responsável técnico; a automação apoia com instrumentação das variáveis
+        operacionais, intertravamentos testáveis e registro histórico que
+        documenta como cada equipamento operou entre inspeções.
+      </p>
+
+      <SectionHeader
+        eyebrow="Máquina de papel"
+        title="Gramatura e umidade: controle multivariável em folha contínua"
+        description="Da caixa de entrada à enroladeira, a folha se forma, é prensada e seca em regime contínuo. As variáveis centrais de qualidade — gramatura e umidade — são controladas em duas dimensões ao mesmo tempo."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Os scanners do QCS (Quality Control System, o sistema de controle de
+        qualidade da folha) percorrem a folha de um lado ao outro medindo
+        propriedades como gramatura e umidade. Com esses perfis, o sistema atua
+        sobre a média na direção da máquina e sobre o perfil transversal — e
+        cada atuador afeta mais de uma variável: o vapor de secagem mexe na
+        umidade e interage com o perfil; fluxo e consistência na caixa de
+        entrada mexem na gramatura. É um problema multivariável por natureza, e
+        o resultado depende de a camada regulatória da parte úmida e das
+        utilidades entregar estabilidade para o QCS refinar.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        O papel da Integra nessa área está na base de controle que o QCS
+        pressupõe: malhas regulatórias estáveis de vapor e consistência,
+        intertravamentos da máquina e integração dos dados de processo à
+        supervisão e ao historian — para que quebra e variabilidade possam ser
+        investigadas com dados, não com memória de turno.
+      </p>
+
+      <SectionHeader
+        eyebrow="Disponibilidade"
+        title="Quebra de folha, trips e a governança de alarmes ISA-18.2"
+        description="Num processo contínuo, cada interrupção se mede em toneladas que deixaram de sair. Reduzir paradas passa menos por telas novas e mais por alarmes que orientam a ação do operador."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Quando a folha rompe, a produção vira refugo reprocessado até a equipe
+        repassar a folha e estabilizar a máquina; quando uma caldeira desarma,
+        a planta inteira sente. Nos minutos que antecedem esses eventos, muitas
+        vezes havia sinal no processo — a questão é se o operador conseguia
+        enxergá-lo. Sistemas que acumularam anos de configuração sem governança
+        convivem com alarmes permanentemente ativos, prioridades infladas e
+        avalanches de alarmes durante distúrbios.
+      </p>
+
+      <TechnicalCallout variant="note" title="Alarme existe para provocar resposta">
+        <p>
+          A norma ANSI/ISA-18.2 (Management of Alarm Systems for the Process
+          Industries, publicada em 2009 e revisada em 2016) define alarme como
+          uma indicação audível ou visível ao operador de mau funcionamento de
+          equipamento, desvio de processo ou condição anormal que exige
+          resposta — e estrutura o ciclo de vida do sistema de alarmes:
+          filosofia, racionalização, implementação, operação e monitoramento de
+          desempenho. O que não exige resposta do operador não deveria ser
+          alarme.
+        </p>
+      </TechnicalCallout>
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A Integra aplica essa governança sobre o DCS e o supervisório
+        existentes: filosofia de alarmes construída com a operação,
+        racionalização área a área, priorização e acompanhamento de métricas de
+        desempenho no historian. O resultado que interessa é operacional: menos
+        ruído na sala de controle e resposta mais rápida ao desvio real.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega numa planta de papel e celulose"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Dados e eficiência"
+        title="Historian: eficiência energética e química sai da série temporal"
+        description="Consumo de vapor por tonelada, químicos por tonelada de polpa, energia gerada versus comprada: a gestão de eficiência depende de dados contextualizados e de longo prazo, não de leitura instantânea de tela."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Um historian como o
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Historian</a>
+        ou o
+        <a href="/solucoes/pi-system/" class="text-integra-red-700 underline hover:text-integra-red">PI System</a>
+        consolida as variáveis de processo em série temporal longa: dá para
+        comparar campanhas, turnos e produtos, acompanhar o consumo específico
+        de cada área e reconstruir os minutos que antecederam uma quebra ou um
+        trip com os dados de todas as áreas na mesma linha do tempo. Sem essa
+        base, a discussão de eficiência vira troca de impressões entre turnos.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Levar esses dados à gestão e ao ERP (sistema de gestão empresarial)
+        amplia a superfície de exposição da rede industrial. Por isso a
+        integração TI/OT (tecnologia da informação/tecnologia operacional) anda
+        junto com segmentação e
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">arquitetura de redes alinhada à série ISA/IEC 62443</a>,
+        tema tratado na prática de
+        <a href="/ciberseguranca-ot/" class="text-integra-red-700 underline hover:text-integra-red">cibersegurança OT</a>
+        da Integra.
+      </p>
+
+      <SectionHeader
+        eyebrow="Legado e parada geral"
+        title="Modernização de DCS e CLP legado cabe na parada — com engenharia antecipada"
+        description="Plantas de celulose acumulam gerações de controle: DCS de ciclos de investimento anteriores, CLPs em utilidades e áreas anexas, supervisórios diversos. A janela realista de virada costuma ser a parada geral programada."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O ponto de partida é o inventário: onde cada controlador opera, o que
+        ainda tem sobressalente e suporte, o que virou risco de disponibilidade.
+        A linha PLC-5 foi descontinuada em 30 de junho de 2017 e os últimos
+        controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o
+        <a href="https://www.rockwellautomation.com/en-us/support/product/product-compatibility-migration/product-lifecycle-status.html" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">ciclo de vida publicado pela Rockwell Automation</a>
+        — referência útil também para comparar a sustentação de sistemas
+        proprietários de outras origens, área a área.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Como a parada geral não espera projeto atrasado, a engenharia acontece
+        antes: conversão e teste de lógica em bancada, FAT (teste de aceitação
+        em fábrica), plano de cutover por área com rollback testado, SAT (teste
+        de aceitação em campo) e partida assistida. A Integra estrutura essa
+        avaliação em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>,
+        moderniza a camada de supervisão em
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>
+        e executa a virada com
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento</a>
+        planejado junto à operação e à manutenção.
+      </p>
+
+      <StandardsBadges
+        title="Normas e tecnologias aplicadas no setor"
+        standards={[
+          { code: "NR-13", description: "Caldeiras, vasos e tubulações" },
+          { code: "ANSI/ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+          { code: "PlantPAx", description: "DCS para processo contínuo" },
+          { code: "EtherNet/IP", description: "Rede de controle (CPwE)" },
+          { code: "Historian", description: "FactoryTalk Historian e PI System" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer revisar alarmes, caldeiras ou o plano de modernização da sua planta?"
+    description="O ponto de partida é uma triagem técnica: entender áreas, sistemas instalados, janela de parada geral e onde a indisponibilidade dói mais antes de propor arquitetura. Escopo e diagnóstico documentado são definidos depois que a operação valida o impacto."
+    primaryCta={{ href: "/contato/?assunto=papel-e-celulose", label: "Conversar sobre a planta" }}
+    secondaryCta={{ href: "/solucoes/plantpax/", label: "Ver PlantPAx para indústria de processo" }}
+  />
+</BaseLayout>

@@ -1,0 +1,363 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { faqSchema, serviceSchema } from "@/utils/schema";
+import SectionHeader from "@/components/SectionHeader.astro";
+import DeliverableList from "@/components/DeliverableList.astro";
+import StandardsBadges from "@/components/StandardsBadges.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import TechnicalCallout from "@/components/TechnicalCallout.astro";
+
+const processAreas = [
+  {
+    title: "Captação e adução",
+    description:
+      "Poços, captações superficiais e elevatórias de água bruta, quase sempre distantes da sede. O controle local precisa proteger as bombas — nível, pressão, corrente do motor — e operar sozinho quando o link de comunicação cai; a telemetria traz status, medições e alarmes para o centro de controle.",
+  },
+  {
+    title: "ETA — estação de tratamento de água",
+    description:
+      "Coagulação, floculação, decantação, filtração e desinfecção. A automação coordena dosagem química proporcional à vazão, sequência de lavagem de filtros e o registro contínuo de turbidez, cloro residual e pH que sustenta a conformidade com o padrão de potabilidade.",
+  },
+  {
+    title: "Reservatórios e boosters",
+    description:
+      "Dezenas de pontos espalhados pela cidade, com lógica liga/desliga por nível, controle de pressão de rede e janelas tarifárias de bombeamento. É onde a telemetria deixa de ser conveniência e vira condição para operar: sem dado de nível confiável, sobra caminhão e ronda noturna.",
+  },
+  {
+    title: "ETE — estação de tratamento de esgoto",
+    description:
+      "Elevatórias de esgoto ao longo da rede e o processo biológico na estação. A aeração costuma dominar o consumo de energia da ETE: controle de OD (oxigênio dissolvido), sopradores com inversor de frequência e retorno de lodo pedem malhas bem sintonizadas para tratar dentro do licenciamento sem desperdiçar energia.",
+  },
+];
+
+const deliverables = [
+  "Diagnóstico de automação e telemetria por unidade (captação, ETA, reservação, boosters, elevatórias e ETE)",
+  "SCADA distribuído com centro de controle operacional e telas padronizadas entre unidades",
+  "Telemetria de unidades remotas com CLPs e UTRs (unidades terminais remotas), tratamento de falha de comunicação e histórico sem lacunas",
+  "Controle de dosagem química (coagulante, cloro e flúor) com registro contínuo para apoiar a conformidade",
+  "Malhas de pressão, nível e vazão sintonizadas para bombeamento com inversores de frequência",
+  "Historian e relatórios de processo para qualidade da água, perdas e energia por unidade",
+  "Segmentação de rede e cibersegurança OT alinhada à IEC 62443 para telemetria e acesso remoto",
+  "Comissionamento com FAT e SAT (testes de aceitação em fábrica e em campo) e partida sem interromper o abastecimento",
+];
+
+const faq = [
+  {
+    q: "O que a telemetria de saneamento precisa cobrir além de “ver o reservatório”?",
+    a: "Ver o nível é o começo. Uma telemetria útil para operação cobre comando (partida e parada de bombas por nível ou por horário), proteção local que continua valendo sem comunicação, alarmes com prioridade definida, registro histórico sem lacunas — incluindo o período em que o link ficou fora — e diagnóstico do próprio canal de comunicação. Também precisa conviver com meios heterogêneos: rádio, rede celular e fibra costumam coexistir no mesmo sistema. A Integra oferece telemetria para saneamento como serviço estruturado, da UTR (unidade terminal remota) ao supervisório, com a lógica local tratada como <a href=\"/servicos/programacao-clp/\">programação de CLP</a> de pleno direito, não como acessório do rádio.",
+  },
+  {
+    q: "Como a automação ajuda na conformidade com o padrão de potabilidade?",
+    a: "A <a href=\"https://bvsms.saude.gov.br/bvs/saudelegis/gm/2021/prt0888_07_05_2021.html\" target=\"_blank\" rel=\"noopener noreferrer\">Portaria GM/MS nº 888/2021</a> do Ministério da Saúde alterou o Anexo XX da Portaria de Consolidação GM/MS nº 5/2017 para dispor sobre os procedimentos de controle e de vigilância da qualidade da água para consumo humano e seu padrão de potabilidade — é no Anexo XX que o padrão vigente está consolidado. O plano de amostragem, os laudos e a responsabilidade sanitária continuam com o responsável técnico da companhia — a automação não substitui nada disso. O que ela acrescenta é a camada contínua: dosagem proporcional à vazão com correção por analisador, intertravamento que bloqueia cenários indevidos e registro histórico de turbidez, cloro residual e pH consolidado num historian como o <a href=\"/solucoes/pi-system/\">PI System</a>. Quando a vigilância ou a agência reguladora pergunta o que aconteceu num dia específico, a resposta vira consulta, não reconstrução.",
+  },
+  {
+    q: "Dá para reduzir perdas e conta de energia só com automação?",
+    a: "Sozinha, não — perdas dependem também da condição física da rede, da setorização e do programa de manutenção. O que a automação entrega é a parte operacional e a medição: controle de pressão que evita sobrepressão noturna (fator conhecido de rompimentos), bombeamento deslocado para fora do horário de ponta quando a reservação permite, e macromedição por setor consolidada em série histórica para orientar a caça a vazamentos. Malhas de <a href=\"/tecnologias/controle-regulatorio-pid/\">controle regulatório PID</a> bem sintonizadas em bombas com inversor tendem a reduzir tanto o desgaste mecânico quanto o consumo por volume bombeado. O ganho concreto varia por sistema — por isso a conversa começa com diagnóstico, não com promessa.",
+  },
+  {
+    q: "Por que cibersegurança OT virou pauta em saneamento?",
+    a: "Porque o setor combina três fatores: é infraestrutura crítica de saúde pública, opera dezenas de pontos remotos conectados por telemetria e acesso remoto de manutenção, e vem passando por concessões e investimentos que integram cada vez mais a rede de operação (OT, tecnologia operacional) aos sistemas corporativos. Cada link de rádio, cada modem celular e cada acesso de fornecedor é superfície de exposição. A resposta de engenharia é conhecida: inventário de ativos, segmentação em zonas e conduítes, controle de acesso e monitoramento, no modelo da série ISA/IEC 62443 — tratado pela Integra em <a href=\"/solucoes/redes-iec-62443/\">redes industriais e IEC 62443</a> e no guia de <a href=\"/ciberseguranca-ot/\">cibersegurança OT</a>.",
+  },
+  {
+    q: "A Integra trabalha com o supervisório que a companhia já usa, como o Elipse E3?",
+    a: "Sim. O <a href=\"/tecnologias/elipse-e3/\">Elipse E3</a> é um supervisório brasileiro com histórico de aplicações em saneamento e utilities no país, e é comum que a companhia já tenha licenças, telas e equipe habituada a ele — nesse cenário, evoluir a aplicação existente costuma fazer mais sentido do que trocar de plataforma. Em plantas de tratamento maiores ou em modernizações amplas, um DCS como o <a href=\"/solucoes/plantpax/\">PlantPAx</a> pode se justificar. O caminho é definido pelo parque instalado e pelo plano da companhia: a Integra atua nos dois mundos, estrutura <a href=\"/solucoes/migracao-plc/\">migração de PLC</a> por etapas e executa a virada com <a href=\"/servicos/comissionamento-industrial/\">comissionamento</a> planejado, sem interromper o abastecimento.",
+  },
+];
+
+const REVIEWED = "2026-08-02";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Automação para Saneamento"
+  description="Automação para saneamento: SCADA distribuído e telemetria de ETAs, ETEs e boosters, dosagem química e cibersegurança OT. Converse sobre a sua operação."
+  breadcrumbLeaf="Saneamento"
+  jsonLd={[
+    serviceSchema({
+      name: "Automação para Saneamento",
+      description:
+        "Engenharia de automação para saneamento: SCADA distribuído e telemetria de captações, ETAs, reservatórios, boosters e ETEs, controle e registro de dosagem química, eficiência energética de bombeamento e cibersegurança OT para infraestrutura crítica.",
+      url: Astro.url.href,
+    }),
+    faqSchema(faq),
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Setor · Saneamento · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
+        </p>
+        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Automação para Saneamento
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Automação para saneamento é a engenharia de controle que faz um
+          sistema geograficamente distribuído — captação, adução, ETA (estação
+          de tratamento de água), reservatórios, boosters e ETE (estação de
+          tratamento de esgoto) — operar como uma única planta: telemetria que
+          traz cada unidade remota para o centro de controle, dosagem química
+          controlada e registrada dentro do padrão de potabilidade e
+          bombeamento governado por pressão, nível e custo de energia. Para
+          esse escopo, a Integra Automação Industrial oferece engenharia com
+          foco em SCADA (sistema de supervisão e aquisição de dados)
+          distribuído, telemetria para saneamento, controle regulatório de
+          dosagem e cibersegurança OT (tecnologia operacional).
+        </p>
+      </div>
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+          Escala do setor
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+          O marco legal do saneamento (Lei nº 14.026/2020) tomou como
+          referência de universalização o atendimento de 99% da população com
+          água potável e de 90% com coleta e tratamento de esgoto até 31 de
+          dezembro de 2033 — metas que os contratos do setor passaram a
+          incorporar, com prorrogação admitida até, no máximo, 1º de janeiro
+          de 2040 quando os estudos comprovarem inviabilidade
+          econômico-financeira e a agência reguladora aprovar. Cumpri-las
+          exige operar mais unidades, com menos perdas e com dados
+          confiáveis: exatamente o terreno da automação e da telemetria.
+        </p>
+        <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
+          <a href="https://www.gov.br/cidades/pt-br/assuntos/saneamento/marco-legal-do-saneamento" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: Ministério das Cidades · Marco Legal do Saneamento</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="O que muda na automação de saneamento"
+        title="Quatro frentes com exigências de controle diferentes"
+        description="Saneamento não é uma planta: é um conjunto de unidades espalhadas por quilômetros — algumas com processo químico e biológico denso, outras com um par de bombas e um rádio. A automação precisa servir às duas pontas."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {processAreas.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-6">
+            <h3 class="text-lg font-semibold text-integra-gray-900">
+              {item.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200">
+    <div class="container-fluid max-w-4xl py-20">
+      <SectionHeader
+        eyebrow="Sistema distribuído"
+        title="SCADA distribuído e telemetria: a planta tem quilômetros de extensão"
+        description="Numa fábrica, o controlador e o operador estão no mesmo prédio. Em saneamento, a captação pode estar a dezenas de quilômetros da ETA, e cada bairro tem seu reservatório ou booster. O projeto de supervisão começa pelo mapa."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        O centro de controle operacional (CCO) consolida em um único
+        supervisório o que está espalhado pelo território: status e comando das
+        elevatórias, níveis de reservatório, pressões de rede, vazões
+        macromedidas e os alarmes de cada unidade. Entre o CCO e o campo,
+        convivem meios de comunicação heterogêneos — rádio licenciado, rede
+        celular, fibra onde existe — e equipamentos de gerações diferentes.
+        O projeto de telemetria trata isso como requisito, não como exceção:
+        protocolos adequados a link intermitente, marcação de qualidade do
+        dado, armazenamento local com reenvio quando a comunicação volta e
+        diagnóstico do próprio canal. Sem esse cuidado, o histórico nasce cheio
+        de lacunas e a operação volta a confiar no telefone.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        Há também um problema clássico de escala: dezenas de unidades geram
+        milhares de eventos, e um CCO afogado em avisos deixa de enxergar o
+        alarme que importa. Racionalização e priorização de alarmes, na linha
+        da norma ISA-18.2, fazem parte do projeto de supervisão tanto quanto as
+        telas — que a Integra padroniza entre unidades em projetos de
+        <a href="/solucoes/modernizacao-scada/" class="text-integra-red-700 underline hover:text-integra-red">modernização de SCADA</a>,
+        sobre plataformas como o
+        <a href="/tecnologias/elipse-e3/" class="text-integra-red-700 underline hover:text-integra-red">Elipse E3</a>.
+      </p>
+
+      <TechnicalCallout variant="note" title="A unidade remota precisa operar sem o centro">
+        <p>
+          Telemetria boa é a que pode faltar. Quando o link cai, o booster
+          continua partindo e parando por nível, as proteções de bomba seguem
+          ativas e o CLP (controlador lógico programável) local acumula o
+          histórico para reenvio. O centro supervisiona e otimiza; quem
+          sustenta o abastecimento é a lógica embarcada em cada unidade —
+          projetada, testada e documentada como
+          <a href="/tecnologias/intertravamentos-sequencias/" class="text-integra-red-700 underline hover:text-integra-red">intertravamentos e sequências</a>
+          de pleno direito.
+        </p>
+      </TechnicalCallout>
+
+      <SectionHeader
+        eyebrow="Dosagem química"
+        title="Cloro, flúor e coagulante: controle regulatório com registro"
+        description="A dosagem química de uma ETA é um caso de controle regulatório com consequência sanitária: subdosar compromete a desinfecção, sobredosar gera custo e risco. E tudo precisa ficar registrado."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        A estratégia típica combina dosagem proporcional à vazão tratada
+        (feedforward) com correção pela medição em linha — cloro residual,
+        pH, turbidez — em malhas de
+        <a href="/tecnologias/controle-regulatorio-pid/" class="text-integra-red-700 underline hover:text-integra-red">controle regulatório PID</a>
+        sintonizadas para a dinâmica lenta do processo. Intertravamentos
+        completam o quadro: bloquear dosagem sem vazão confirmada, alarmar
+        desvio de analisador, sinalizar nível baixo de produto químico antes
+        que a dosagem pare por falta. A lavagem de filtros entra como
+        sequência automatizada, com critérios de perda de carga e turbidez de
+        saída definidos junto à operação.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        O registro é a outra metade do trabalho. A
+        <a href="https://bvsms.saude.gov.br/bvs/saudelegis/gm/2021/prt0888_07_05_2021.html" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">Portaria GM/MS nº 888, de 4 de maio de 2021</a>,
+        do Ministério da Saúde, alterou o Anexo XX da Portaria de
+        Consolidação GM/MS nº 5/2017 para dispor sobre os procedimentos de
+        controle e de vigilância da qualidade da água para consumo humano e
+        seu padrão de potabilidade — é no Anexo XX que o padrão vigente está
+        consolidado.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        O plano de amostragem, os laudos laboratoriais e a
+        responsabilidade sanitária permanecem com o responsável técnico da
+        companhia; o que a automação acrescenta é a série contínua — dosagens
+        aplicadas, medições em linha, eventos de processo — consolidada num
+        historian como o
+        <a href="/tecnologias/factorytalk-historian/" class="text-integra-red-700 underline hover:text-integra-red">FactoryTalk Historian</a>
+        ou o
+        <a href="/solucoes/pi-system/" class="text-integra-red-700 underline hover:text-integra-red">PI System</a>,
+        pronta para responder a uma pergunta da vigilância ou da agência
+        reguladora com consulta, e não com reconstrução manual.
+      </p>
+
+      <DeliverableList
+        title="O que a Integra entrega em saneamento"
+        items={deliverables}
+        twoColumn={true}
+      />
+
+      <SectionHeader
+        eyebrow="Perdas e energia"
+        title="Bombeamento: onde perdas de água e conta de energia se encontram"
+        description="Boa parte da energia de um sistema de saneamento vira pressão — e pressão em excesso vira vazamento. Controlar uma coisa é controlar a outra."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Rede pressurizada além do necessário — situação comum de madrugada,
+        quando o consumo cai — aumenta tanto as perdas por vazamento quanto a
+        frequência de rompimentos. Bombas com inversor de frequência em malha
+        de pressão mantêm o setpoint que a hidráulica pede em cada faixa
+        horária, no lugar do liga/desliga a plena carga. Onde a reservação
+        permite, a lógica desloca o bombeamento para fora do horário de ponta
+        tarifário.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A macromedição por setor, trazida pela telemetria para a mesma base
+        histórica, permite comparar volume bombeado e volume entregue ao longo
+        do tempo — o dado de partida de qualquer programa de redução de
+        perdas. Indicadores como consumo de energia por volume bombeado,
+        acompanhados por unidade no historian, mostram se a eficiência está
+        melhorando ou apenas mudando de lugar.
+      </p>
+
+      <SectionHeader
+        eyebrow="Infraestrutura crítica"
+        title="Cibersegurança OT: a telemetria amplia a superfície de exposição"
+        description="O mesmo link que traz o nível do reservatório para o CCO é um caminho de entrada. Saneamento básico está entre as áreas estratégicas de infraestrutura crítica na política nacional — o que faz da exposição da telemetria um risco de engenharia, não apenas de TI."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        Um sistema de saneamento moderno soma dezenas de pontos remotos
+        conectados, acessos de manutenção de fornecedores e integração
+        crescente entre a rede de operação e os sistemas corporativos de
+        faturamento e gestão. Cada um desses elos amplia a superfície de
+        exposição de um serviço essencial — e o saneamento básico figura
+        entre as áreas estratégicas de infraestrutura crítica da
+        <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/decreto/d9573.htm" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">Política Nacional de Segurança de Infraestruturas Críticas (Decreto nº 9.573/2018)</a>,
+        que põe continuidade e resiliência do serviço no mesmo plano do risco
+        cibernético.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        A resposta de engenharia é estruturada: inventário de ativos,
+        segmentação da rede em zonas e conduítes, controle de acesso remoto e
+        monitoramento, no modelo da série ISA/IEC 62443. A Integra aplica esse
+        modelo em
+        <a href="/solucoes/redes-iec-62443/" class="text-integra-red-700 underline hover:text-integra-red">redes industriais e IEC 62443</a>,
+        com o referencial normativo detalhado em
+        <a href="/tecnologias/iec-62443-nist-ot/" class="text-integra-red-700 underline hover:text-integra-red">IEC 62443 e NIST para OT</a>
+        e a visão geral em
+        <a href="/ciberseguranca-ot/" class="text-integra-red-700 underline hover:text-integra-red">cibersegurança OT</a>.
+      </p>
+
+      <SectionHeader
+        eyebrow="Multivendor"
+        title="Elipse E3, Rockwell e o parque que a operação herdou"
+        description="Sistemas de saneamento crescem por décadas e por gestões: cada ampliação trouxe o fornecedor da época. Multivendor, aqui, é histórico — e o projeto de automação precisa partir desse fato."
+        accent={true}
+      />
+
+      <p class="text-base leading-relaxed text-integra-gray-700">
+        No supervisório, o
+        <a href="/tecnologias/elipse-e3/" class="text-integra-red-700 underline hover:text-integra-red">Elipse E3</a>
+        tem histórico de aplicações em saneamento e utilities no Brasil, com
+        casos publicados pelo próprio fabricante em companhias do setor, como
+        a
+        <a href="https://www.elipse.com.br/case/aplicacao-do-elipse-e3-no-departamento-municipal-de-agua-e-esgotos-dmae-de-porto-alegre/" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">aplicação do E3 no DMAE de Porto Alegre</a> —
+        e é frequente que a companhia já opere com ele. Nesses casos, evoluir a
+        aplicação existente, padronizar telas e organizar a comunicação com o
+        campo tende a render mais do que trocar de plataforma. Em estações de
+        tratamento maiores ou em programas amplos de modernização, um DCS
+        (sistema digital de controle distribuído) como o
+        <a href="/solucoes/plantpax/" class="text-integra-red-700 underline hover:text-integra-red">PlantPAx</a>
+        pode se justificar pelo controle regulatório denso e pela governança de
+        alarmes.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
+        No chão de fábrica, controladores de gerações e marcas diferentes
+        seguem operando lado a lado. Como o abastecimento não para para a
+        obra, a modernização é faseada por unidade — um booster, uma
+        elevatória, uma etapa da ETA por vez — com cutover em janelas curtas e
+        plano de retorno testado. A Integra estrutura essa avaliação em
+        <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>
+        e executa a virada com
+        <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento</a>
+        planejado junto à operação.
+      </p>
+
+      <StandardsBadges
+        title="Normas e tecnologias aplicadas no setor"
+        standards={[
+          { code: "GM/MS 888/2021", description: "Padrão de potabilidade — Anexo XX da PRC GM/MS nº 5/2017" },
+          { code: "ISA-18.2", description: "Gestão de alarmes" },
+          { code: "ISA/IEC 62443", description: "Cibersegurança OT" },
+          { code: "Elipse E3", description: "Supervisão e telemetria" },
+          { code: "PlantPAx", description: "DCS para processo contínuo" },
+        ]}
+      />
+
+      <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer revisar telemetria, dosagem ou eficiência do seu sistema?"
+    description="O ponto de partida é uma triagem técnica: entender unidades, meios de comunicação, controladores e supervisório instalados antes de propor arquitetura. Escopo e diagnóstico documentado são definidos depois que a operação valida o impacto."
+    primaryCta={{ href: "/contato/?assunto=saneamento", label: "Conversar sobre a operação" }}
+    secondaryCta={{ href: "/solucoes/modernizacao-scada/", label: "Ver modernização de SCADA" }}
+  />
+</BaseLayout>
