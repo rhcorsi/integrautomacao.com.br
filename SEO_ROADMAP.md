@@ -39,11 +39,34 @@ Objetivo: tornar a Integra a referência brasileira mais útil e confiável para
 
 ### Ciclo 1 — arquitetura e conversão
 
-1. Consolidar conflitos de intenção em migração PLC, PlantPAx e data center industrial.
-2. Criar links bidirecionais tecnologia ↔ guia, solução ↔ case e setor ↔ solução.
-3. Publicar páginas setoriais de grãos, alimentos/bebidas, frigoríficos e etanol de milho.
-4. Publicar apenas cases reais: situação, restrição, arquitetura, FAT/SAT, resultado verificável e lições.
-5. Criar guias “quanto custa”, “como elaborar RFP” e “como escolher integrador”.
+Status revisado em 2026-07-13:
+
+- [x] Diferenciar as intenções de migração PLC, PlantPAx e data center industrial por título, introdução e crosslinks, sem `noindex` ou canonical cruzado.
+- [x] Criar links bidirecionais tecnologia ↔ guia e links contextuais case → solução/tecnologia.
+- [x] Adicionar retorno solução/tecnologia → case quando houver case público e sanitizado aplicável.
+- [x] Concluir e auditar a trilha setor ↔ solução em todas as páginas setoriais.
+- [x] Publicar páginas setoriais substantivas de grãos, alimentos/bebidas, frigoríficos e etanol de milho.
+- [ ] Ampliar cases somente com evidência real: situação, restrição, arquitetura, FAT/SAT, resultado verificável e lições.
+- [x] Publicar os guias “quanto custa migrar PLC-5” e “como elaborar RFP”.
+- [ ] Consolidar um guia independente sobre como selecionar e validar um integrador.
+
+#### Proprietário de cada intenção
+
+| Cluster | Intenção | URL proprietária |
+| --- | --- | --- |
+| Migração PLC | Contratar a solução | `/solucoes/migracao-plc/` |
+| Migração PLC | Entender arquitetura, entregáveis e riscos | `/tecnologias/migracao-plc5-slc500/` |
+| Migração PLC | Aprender o processo de execução | `/blog/migracao-plc5-controllogix-guia-completo/` |
+| Migração PLC | Entender fatores de orçamento | `/blog/quanto-custa-migrar-plc5/` |
+| PlantPAx | Contratar implantação ou modernização | `/solucoes/plantpax/` |
+| PlantPAx | Consultar requisitos e arquitetura da versão 5.x | `/tecnologias/plantpax-5x/` |
+| PlantPAx | Entender o que é o sistema | `/blog/o-que-e-plantpax-dcs-rockwell/` |
+| PlantPAx | Projetar a arquitetura DCS | `/blog/plantpax-arquitetura-dcs/` |
+| PlantPAx | Comparar 4.x e 5.x para decidir migração | `/blog/plantpax-5x-vs-4x/` |
+| Data center industrial | Contratar projeto de infraestrutura OT | `/solucoes/data-centers/` |
+| Data center industrial | Consultar arquitetura e critérios técnicos | `/tecnologias/data-centers-industriais/` |
+
+As URLs acima devem responder primeiro à própria intenção e apontar para as demais etapas apenas como continuidade. Não criar uma nova URL para repetir a mesma resposta com variação de palavra-chave.
 
 ### Ciclo 2 — seis hubs técnicos
 
@@ -85,6 +108,8 @@ Cadência é teto operacional, não meta de volume. Se faltar evidência, revis�
 - CTA coerente com o estágio de decisão.
 - Zero afirmações inventadas, stuffing, doorway pages ou blocos redundantes.
 - Build, auditoria editorial, rotas, UTF-8, schema e links sem falhas.
+- Direito de publicação documentado para cada ativo de terceiro; atribuição e
+  link público, isoladamente, não liberam republicação.
 
 ## Medição
 

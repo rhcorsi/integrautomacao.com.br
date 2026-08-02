@@ -1,41 +1,65 @@
 import { resolveLegacyRedirect } from "../shared/legacy-redirects";
 
-const redirectTo = (requestUrl: string, targetPath: string): Response => {
-  const targetUrl = new URL(targetPath, requestUrl);
-  return Response.redirect(targetUrl.toString(), 301);
-};
+const CANONICAL_ORIGIN = "https://integrautomacao.com.br";
+const ALTERNATE_PRODUCTION_HOSTS = new Set([
+  "www.integrautomacao.com.br",
+  "integrautomacao-com-br.pages.dev",
+]);
 
-// O _headers do Pages NÃO se aplica a respostas geradas por Functions, então
-// o middleware é o único ponto onde dá para anexar headers de segurança às
-// rotas /api/*. CSP/COOP/CORP são irrelevantes para JSON — só o essencial.
 const API_SECURITY_HEADERS: Record<string, string> = {
   "Strict-Transport-Security": "max-age=31536000",
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",
   "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Cross-Origin-Resource-Policy": "same-origin",
   "Cache-Control": "no-store",
 };
 
+const isNavigationMethod = (method: string): boolean =>
+  method === "GET" || method === "HEAD";
+
+function resolvePublicRedirect(request: Request, url: URL): URL | null {
+  if (!isNavigationMethod(request.method)) return null;
+
+  const alternateHost = ALTERNATE_PRODUCTION_HOSTS.has(url.hostname);
+  const insecureCanonical =
+    url.hostname === "integrautomacao.com.br" && url.protocol !== "https:";
+  const legacyTarget = resolveLegacyRedirect(url);
+  if (!alternateHost && !insecureCanonical && !legacyTarget) return null;
+
+  if (legacyTarget) return new URL(legacyTarget, CANONICAL_ORIGIN);
+
+  // Nunca passe um pathname controlado pelo request como URL relativa:
+  // `//host` seria interpretado como origem protocol-relative (open redirect).
+  const canonical = new URL(CANONICAL_ORIGIN);
+  canonical.pathname = url.pathname;
+  canonical.search = url.search;
+  return canonical;
+}
+
+function permanentRedirect(target: URL): Response {
+  return new Response(null, {
+    status: 301,
+    headers: {
+      "Cache-Control": "public, max-age=3600",
+      Location: target.toString(),
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "Strict-Transport-Security": "max-age=31536000",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
 export const onRequest: PagesFunction = async (context) => {
   const url = new URL(context.request.url);
-
-  // Consolidate every public production hostname on the canonical apex.
-  // Keep path and query intact so backlinks and campaign parameters survive.
-  if (
-    url.hostname === "www.integrautomacao.com.br" ||
-    url.hostname === "integrautomacao-com-br.pages.dev"
-  ) {
-    const canonicalUrl = new URL(`${url.pathname}${url.search}`, "https://integrautomacao.com.br");
-    return Response.redirect(canonicalUrl.toString(), 301);
-  }
-
-  const target = resolveLegacyRedirect(url);
-  if (target) {
-    return redirectTo(context.request.url, target);
-  }
+  const target = resolvePublicRedirect(context.request, url);
+  if (target) return permanentRedirect(target);
 
   const response = await context.next();
 
+  // `_headers` applies only to static asset responses. Pages Functions need
+  // the equivalent API baseline here, including handler-generated errors.
   if (url.pathname.startsWith("/api/")) {
     const hardened = new Response(response.body, response);
     for (const [name, value] of Object.entries(API_SECURITY_HEADERS)) {

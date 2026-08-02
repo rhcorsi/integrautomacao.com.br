@@ -29,6 +29,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    // A CSP de produção não permite JavaScript executável inline. Força os
+    // scripts processados pelo Astro/Vite a permanecerem como assets externos.
+    build: {
+      assetsInlineLimit: 0,
+    },
   },
   experimental: {},
 });

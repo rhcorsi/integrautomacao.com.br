@@ -2,9 +2,27 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "integrautomacao-com-br",
   "pages_build_output_dir": "./dist",
-  // Match production for the first preview; advance only after smoke testing.
-  "compatibility_date": "2026-06-10",
+  // Keep this aligned with the runtime validated by CI and local Workers tests.
+  "compatibility_date": "2026-07-13",
+  // Runtime code uses Web APIs only; no Node.js compatibility surface needed.
   "compatibility_flags": [],
+  "upload_source_maps": true,
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      // Evita capturar URL/User-Agent de toda visita; o código emite somente
+      // eventos estruturados minimizados quando há condição operacional.
+      "invocation_logs": false
+    },
+    "traces": {
+      // Newsletter provider endpoints identify contacts in the URL. Automatic
+      // fetch spans would retain that PII in url.full, so tracing stays off.
+      "enabled": false,
+      "head_sampling_rate": 0
+    }
+  },
   "vars": {
     "NODE_VERSION": "22.12.0",
     "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU"

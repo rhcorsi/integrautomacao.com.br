@@ -45,11 +45,6 @@
   Cache-Control: public, max-age=86400, s-maxage=2592000
   Vary: Accept-Encoding
 
-# Inline scripts in /scripts/ (form handlers, header menu) — change with deploys.
-/scripts/*
-  Cache-Control: public, max-age=3600, s-maxage=86400
-  Vary: Accept-Encoding
-
 # Favicons — change rarely.
 /favicon.svg
   Cache-Control: public, max-age=604800, s-maxage=2592000

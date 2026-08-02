@@ -1,17 +1,23 @@
 /**
  * Cloudflare Pages Function — POST /api/contact
  *
- * Valida o corpo, confirma o Turnstile no servidor e envia a mensagem pelo
- * Resend. O limite de requisições deve ser aplicado também no painel da
- * Cloudflare para /api/contact.
+ * Limits and decodes JSON incrementally, validates Turnstile server-side and
+ * sends the message through Resend. Edge rate limiting remains a dashboard
+ * control and is documented in README.md.
  */
 
-interface Env {
-  TURNSTILE_SECRET_KEY: string;
-  RESEND_API_KEY: string;
-  CONTACT_EMAIL_TO: string;
-  CONTACT_EMAIL_FROM: string;
-}
+import type { ContactEnv } from "../_shared/env";
+import {
+  drainResponseLimited,
+  fetchWithTimeout,
+  isJsonContentType,
+  isRecord,
+  jsonResponse,
+  logWorkerEvent,
+  methodNotAllowed,
+  readRequestJsonLimited,
+} from "../_shared/http";
+import { verifyTurnstile } from "../_shared/turnstile";
 
 interface ContactPayload {
   name: string;
@@ -28,36 +34,8 @@ interface ContactPayload {
   "cf-turnstile-response": string;
 }
 
-const MAX_BODY_LENGTH = 16_000;
-const FETCH_TIMEOUT_MS = 10_000;
-
-const json = (data: unknown, status = 200): Response =>
-  new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "cache-control": "no-store",
-      "content-type": "application/json; charset=utf-8",
-    },
-  });
-
-const methodNotAllowed = (): Response =>
-  new Response(
-    JSON.stringify({
-      ok: false,
-      message: "Endpoint disponível apenas via POST do formulário de contato.",
-    }),
-    {
-      status: 405,
-      headers: {
-        allow: "POST",
-        "cache-control": "no-store",
-        "content-type": "application/json; charset=utf-8",
-      },
-    },
-  );
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
+const MAX_BODY_BYTES = 16_000;
+const RESEND_TIMEOUT_MS = 10_000;
 
 const singleLine = (value: string, max: number) =>
   value
@@ -84,119 +62,152 @@ const escapeHtml = (value: string) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-async function fetchWithTimeout(
-  input: string,
+function parsePayload(value: unknown): ContactPayload | null {
+  if (!isRecord(value)) return null;
+
+  const name = value.name;
+  const email = value.email;
+  const message = value.message;
+  const lgpd = value.lgpd;
+  const token = value["cf-turnstile-response"];
+  const phone = value.phone;
+  const company = value.company;
+  const subject = value.subject;
+  const sourcePage = value.sourcePage;
+  const sourceLabel = value.sourceLabel;
+  const cta = value.cta;
+  const website = value.website;
+
+  if (
+    typeof name !== "string" ||
+    typeof email !== "string" ||
+    typeof message !== "string" ||
+    typeof lgpd !== "string" ||
+    typeof token !== "string" ||
+    (phone !== undefined && typeof phone !== "string") ||
+    (company !== undefined && typeof company !== "string") ||
+    (subject !== undefined && typeof subject !== "string") ||
+    (sourcePage !== undefined && typeof sourcePage !== "string") ||
+    (sourceLabel !== undefined && typeof sourceLabel !== "string") ||
+    (cta !== undefined && typeof cta !== "string") ||
+    (website !== undefined && typeof website !== "string")
+  ) {
+    return null;
+  }
+
+  return {
+    name,
+    email,
+    message,
+    lgpd,
+    "cf-turnstile-response": token,
+    phone,
+    company,
+    subject,
+    sourcePage,
+    sourceLabel,
+    cta,
+    website,
+  };
+}
+
+async function sendContactEmail(
   init: RequestInit,
-): Promise<Response> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-  try {
-    return await fetch(input, { ...init, signal: controller.signal });
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
-async function verifyTurnstile(
-  token: string,
-  secret: string,
-  ip: string | undefined,
-  expectedHostname: string,
+  requestId: string,
 ): Promise<boolean> {
-  try {
-    const body = new URLSearchParams();
-    body.set("secret", secret);
-    body.set("response", token);
-    if (ip) body.set("remoteip", ip);
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetchWithTimeout(
+        "https://api.resend.com/emails",
+        init,
+        RESEND_TIMEOUT_MS,
+      );
+      await drainResponseLimited(response);
+      if (response.ok) return true;
 
-    const response = await fetchWithTimeout(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      { method: "POST", body },
-    );
-    if (!response.ok) return false;
-
-    const data = (await response.json()) as {
-      success?: boolean;
-      action?: string;
-      hostname?: string;
-    };
-    return (
-      data.success === true &&
-      data.action === "contact-form" &&
-      data.hostname === expectedHostname
-    );
-  } catch {
-    return false;
+      const retryable =
+        response.status === 409 || response.status === 429 || response.status >= 500;
+      if (!retryable || attempt === maxAttempts) {
+        logWorkerEvent("error", "contact_resend_failed", {
+          requestId,
+          providerStatus: response.status,
+          attempt,
+        });
+        return false;
+      }
+      logWorkerEvent("warn", "contact_resend_retry", {
+        requestId,
+        providerStatus: response.status,
+        attempt,
+      });
+      const retryAfter = Number(response.headers.get("retry-after") ?? "0");
+      const waitMs = response.status === 429 && Number.isFinite(retryAfter)
+        ? Math.min(Math.max(retryAfter * 1_000, 250), 1_000)
+        : Math.min(attempt * 250, 750);
+      await new Promise((resolve) => setTimeout(resolve, waitMs));
+    } catch (error) {
+      if (attempt === maxAttempts) throw error;
+      logWorkerEvent("warn", "contact_resend_retry", {
+        requestId,
+        errorType: error instanceof Error ? error.name : "UnknownError",
+        attempt,
+      });
+      await new Promise((resolve) => setTimeout(resolve, Math.min(attempt * 250, 750)));
+    }
   }
+  return false;
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost: PagesFunction<ContactEnv> = async ({
+  request,
+  env,
+}) => {
+  const requestId = crypto.randomUUID();
+  const respond = (data: unknown, status = 200) =>
+    jsonResponse(data, status, requestId);
+
   if (!env.TURNSTILE_SECRET_KEY) {
-    return json(
+    logWorkerEvent("error", "contact_configuration_missing", {
+      requestId,
+      binding: "TURNSTILE_SECRET_KEY",
+    });
+    return respond(
       { ok: false, message: "Configuração de segurança indisponível." },
       503,
     );
   }
-  if (!env.RESEND_API_KEY || !env.CONTACT_EMAIL_TO || !env.CONTACT_EMAIL_FROM) {
-    return json(
+  if (!env.RESEND_SEND_API_KEY || !env.CONTACT_EMAIL_TO || !env.CONTACT_EMAIL_FROM) {
+    logWorkerEvent("error", "contact_configuration_missing", {
+      requestId,
+      binding: "RESEND_OR_EMAIL_BINDING",
+    });
+    return respond(
       { ok: false, message: "Configuração de envio indisponível." },
       503,
     );
   }
 
-  const contentType = request.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) {
-    return json({ ok: false, message: "Tipo de conteúdo inválido." }, 415);
-  }
-  const declaredLength = Number(request.headers.get("content-length") ?? "0");
-  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_LENGTH) {
-    return json({ ok: false, message: "Payload muito grande." }, 413);
+  if (!isJsonContentType(request.headers.get("content-type"))) {
+    return respond({ ok: false, message: "Tipo de conteúdo inválido." }, 415);
   }
 
-  let decoded: unknown;
-  try {
-    const raw = await request.text();
-    if (raw.length > MAX_BODY_LENGTH) {
-      return json({ ok: false, message: "Payload muito grande." }, 413);
-    }
-    decoded = JSON.parse(raw);
-  } catch {
-    return json({ ok: false, message: "Payload inválido." }, 400);
-  }
-  if (!isRecord(decoded)) {
-    return json({ ok: false, message: "Payload inválido." }, 400);
+  const decoded = await readRequestJsonLimited(request, MAX_BODY_BYTES);
+  if (!decoded.ok) {
+    return decoded.reason === "too-large"
+      ? respond({ ok: false, message: "Payload muito grande." }, 413)
+      : respond({ ok: false, message: "Payload inválido." }, 400);
   }
 
-  const required = [
-    "name",
-    "email",
-    "message",
-    "lgpd",
-    "cf-turnstile-response",
-  ];
-  const optional = [
-    "phone",
-    "company",
-    "subject",
-    "sourcePage",
-    "sourceLabel",
-    "cta",
-    "website",
-  ];
-  if (
-    required.some((field) => typeof decoded[field] !== "string") ||
-    optional.some(
-      (field) => decoded[field] !== undefined && typeof decoded[field] !== "string",
-    )
-  ) {
-    return json({ ok: false, message: "Campos inválidos." }, 400);
+  const payload = parsePayload(decoded.value);
+  if (!payload) {
+    return respond({ ok: false, message: "Campos inválidos." }, 400);
   }
-  const payload = decoded as unknown as ContactPayload;
 
   // Honeypot: resposta silenciosa para não orientar robôs.
-  if (payload.website) return json({ ok: true });
+  if (payload.website) return respond({ ok: true });
   if (payload.lgpd !== "1") {
-    return json(
+    return respond(
       {
         ok: false,
         message: "É necessário confirmar a leitura da Política de Privacidade.",
@@ -205,11 +216,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  const name = singleLine(payload.name, 120);
-  const email = singleLine(payload.email, 180).toLowerCase();
-  const message = multiline(payload.message, 4_000);
-  const phone = singleLine(payload.phone ?? "", 40);
-  const company = singleLine(payload.company ?? "", 120);
+  // Leia um caractere além do limite para rejeitar excesso em vez de alterar
+  // silenciosamente dados primários enviados pelo titular.
+  const name = singleLine(payload.name, 121);
+  const email = singleLine(payload.email, 181).toLowerCase();
+  const message = multiline(payload.message, 4_001);
+  const phone = singleLine(payload.phone ?? "", 41);
+  const company = singleLine(payload.company ?? "", 121);
   const subject =
     singleLine(payload.subject ?? "geral", 50)
       .toLowerCase()
@@ -217,38 +230,50 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const sourcePage = singleLine(payload.sourcePage ?? "", 300);
   const sourceLabel = singleLine(payload.sourceLabel ?? "", 160);
   const cta = singleLine(payload.cta ?? "", 160);
-  const token = singleLine(payload["cf-turnstile-response"], 2_048);
+  const token = payload["cf-turnstile-response"].trim();
 
-  if (name.length < 2) {
-    return json({ ok: false, message: "Nome inválido." }, 400);
+  if (name.length < 2 || name.length > 120) {
+    return respond({ ok: false, message: "Nome inválido." }, 400);
   }
   if (!isEmail(email)) {
-    return json({ ok: false, message: "E-mail inválido." }, 400);
+    return respond({ ok: false, message: "E-mail inválido." }, 400);
   }
-  if (message.length < 20) {
-    return json(
+  if (message.length < 20 || message.length > 4_000) {
+    return respond(
       { ok: false, message: "Mensagem precisa ter entre 20 e 4000 caracteres." },
       400,
     );
   }
-  if (!token) {
-    return json(
+  if (phone.length > 40 || company.length > 120) {
+    return respond({ ok: false, message: "Campos inválidos." }, 400);
+  }
+  if (!token || token.length > 2_048) {
+    return respond(
       { ok: false, message: "Verificação de segurança ausente." },
       403,
     );
   }
 
-  const ip = request.headers.get("CF-Connecting-IP") ?? undefined;
   const requestHostname = new URL(request.url).hostname;
-  if (
-    !(await verifyTurnstile(
-      token,
-      env.TURNSTILE_SECRET_KEY,
-      ip,
-      requestHostname,
-    ))
-  ) {
-    return json(
+  const turnstile = await verifyTurnstile({
+    action: "contact-form",
+    expectedHostname: requestHostname,
+    ip: request.headers.get("CF-Connecting-IP") ?? undefined,
+    secret: env.TURNSTILE_SECRET_KEY,
+    token,
+  });
+  if (turnstile === "unavailable") {
+    logWorkerEvent("warn", "contact_turnstile_unavailable", { requestId });
+    return respond(
+      {
+        ok: false,
+        message: "Verificação de segurança indisponível. Tente novamente.",
+      },
+      503,
+    );
+  }
+  if (turnstile === "invalid") {
+    return respond(
       { ok: false, message: "Verificação de segurança falhou." },
       403,
     );
@@ -285,27 +310,27 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     .filter(Boolean)
     .join("\n");
 
+  const resendInit: RequestInit = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_SEND_API_KEY}`,
+      "Content-Type": "application/json",
+      "Idempotency-Key": `contact-${requestId}`,
+      "User-Agent": "integrautomacao-contact/2.0",
+    },
+    body: JSON.stringify({
+      from: env.CONTACT_EMAIL_FROM,
+      to: [env.CONTACT_EMAIL_TO],
+      reply_to: email,
+      subject: subjectLabel,
+      html,
+      text,
+    }),
+  };
+
   try {
-    const response = await fetchWithTimeout("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        "content-type": "application/json",
-        "User-Agent": "integrautomacao-contact/1.0",
-      },
-      body: JSON.stringify({
-        from: env.CONTACT_EMAIL_FROM,
-        to: [env.CONTACT_EMAIL_TO],
-        reply_to: email,
-        subject: subjectLabel,
-        html,
-        text,
-      }),
-    });
-    if (!response.ok) {
-      const detail = (await response.text().catch(() => "")).slice(0, 1_000);
-      console.error("Resend failed", response.status, detail);
-      return json(
+    if (!(await sendContactEmail(resendInit, requestId))) {
+      return respond(
         {
           ok: false,
           message: "Não foi possível enviar agora. Tente novamente em instantes.",
@@ -314,17 +339,26 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       );
     }
   } catch (error) {
-    console.error("Resend exception", error);
-    return json(
+    logWorkerEvent("error", "contact_resend_exception", {
+      requestId,
+      errorType: error instanceof Error ? error.name : "UnknownError",
+    });
+    return respond(
       { ok: false, message: "Erro de rede. Tente novamente em instantes." },
       502,
     );
   }
 
-  return json({ ok: true });
+  logWorkerEvent("info", "contact_message_accepted", { requestId });
+  return respond({ ok: true });
 };
 
-export const onRequestGet: PagesFunction = async () => methodNotAllowed();
-export const onRequestPut: PagesFunction = async () => methodNotAllowed();
-export const onRequestPatch: PagesFunction = async () => methodNotAllowed();
-export const onRequestDelete: PagesFunction = async () => methodNotAllowed();
+const onlyPost = () =>
+  methodNotAllowed(
+    "Endpoint disponível apenas via POST do formulário de contato.",
+  );
+
+export const onRequestGet: PagesFunction = onlyPost;
+export const onRequestPut: PagesFunction = onlyPost;
+export const onRequestPatch: PagesFunction = onlyPost;
+export const onRequestDelete: PagesFunction = onlyPost;

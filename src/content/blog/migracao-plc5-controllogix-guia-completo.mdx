@@ -1,8 +1,8 @@
 ---
-title: "Migração PLC-5 para ControlLogix: o guia completo"
-description: "Guia técnico de migração PLC-5 para ControlLogix: datas de fim de vida, conversão de I/O com Bulletin 1492, tradução de lógica RSLogix 5 e cutover faseado."
+title: "Como migrar PLC-5 para ControlLogix em seis fases"
+description: "Como migrar PLC-5 para ControlLogix: levantamento, arquitetura, conversão de I/O e lógica, FAT, cutover com rollback e suporte."
 pubDate: 2026-06-10
-updatedDate: 2026-07-12
+updatedDate: 2026-07-13
 tags: ["Migração PLC", "ControlLogix", "Rockwell"]
 draft: false
 ---
@@ -34,6 +34,8 @@ status.
 Este guia descreve a [migração PLC-5/SLC 500](/tecnologias/migracao-plc5-slc500/)
 em seis fases — levantamento, engenharia, conversão, FAT, cutover e suporte — do
 ponto de vista de quem precisa entregar a planta rodando no fim.
+Para a intenção de orçamento, consulte separadamente os
+[fatores que definem quanto custa migrar PLC-5](/blog/quanto-custa-migrar-plc5/).
 
 ## Quando o PLC-5 e o SLC 500 saíram de linha?
 
@@ -52,8 +54,9 @@ priorizar a migração PLC-5. Três marcos importam:
   **31 de dezembro de 2025**. Instalações e licenças existentes não deixam de
   funcionar por essa data e podem continuar com suporte conforme contrato.
 
-A leitura de engenharia é direta: o PLC-5 está há quase uma década fora de linha
-e a janela de "deixar como está" fechou. Cada falha de módulo agora é uma
+A leitura de engenharia é direta: manter PLC-5 sem plano de ciclo de vida
+aumenta a exposição a peças descontinuadas e prazos incertos. Cada falha de
+módulo pode se tornar uma
 caçada por peça no mercado secundário, com tempo de parada imprevisível. Vale
 verificar o status de ciclo de vida (Product Lifecycle Status) de cada catálogo
 direto na Rockwell antes de decidir; veja como tratamos a

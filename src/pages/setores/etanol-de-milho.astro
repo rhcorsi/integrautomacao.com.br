@@ -12,7 +12,7 @@ const processAreas = [
   {
     title: "Recepção e moagem a seco",
     description:
-      "O grão chega seco e estocável, é limpo, moído e segue para o preparo do mosto. A rota predominante é a moagem a seco (dry milling); como o milho é um grão seco e estocável, a planta pode ser alimentada de forma regular ao longo do ano, sem a janela de processamento imediato que a cana exige. Dosagem, pesagem e transporte pedem controle sequencial e intertravamento de partida e parada de cada conjunto.",
+      "O grão chega seco e estocável, é limpo, moído e segue para o preparo do mosto. A rota predominante é a moagem a seco (dry milling); como o milho pode ser armazenado, a alimentação da planta depende menos do ritmo imediato da colheita do que no caso da cana. Dosagem, pesagem e transporte pedem controle sequencial e intertravamento de partida e parada de cada conjunto.",
   },
   {
     title: "Cozimento, liquefação e sacarificação",
@@ -45,30 +45,38 @@ const deliverables = [
 const faq = [
   {
     q: "O que muda na automação do etanol de milho em relação à cana?",
-    a: "A diferença começa na matéria-prima. A cana é colhida úmida e precisa ser processada em cerca de 24 horas antes de a sacarose degradar, o que amarra a usina ao calendário de safra e a uma entressafra de parada. O milho é um grão seco, estocável em silos por meses, então a planta pode processar praticamente o ano inteiro — relatos de operação em torno de doze meses sem a parada sazonal típica da cana. A rota também é distinta: no etanol de milho o amido precisa ser convertido em açúcar por liquefação e sacarificação enzimática antes da fermentação, etapas que não existem na cana. Isso desloca o eixo da automação da janela de entressafra para a estabilidade contínua de malhas regulatórias, receitas e governança de alarmes. Para o setor sucroenergético clássico, veja <a href=\"/setores/acucar-e-etanol/\">automação para açúcar e etanol</a>.",
+    a: "A diferença começa na matéria-prima. A cana perde qualidade após o corte e precisa ser processada em prazo curto, o que vincula a usina ao calendário de safra. O milho seco pode ser armazenado em silos, permitindo um calendário produtivo menos sazonal, ainda sujeito a abastecimento e paradas programadas. A rota também é distinta: no etanol de milho o amido precisa ser convertido em açúcar por liquefação e sacarificação enzimática antes da fermentação, etapas que não existem na cana. Isso desloca o eixo da automação para a estabilidade de malhas regulatórias, receitas e governança de alarmes ao longo de ciclos mais contínuos. Para o setor sucroenergético clássico, veja <a href=\"/setores/acucar-e-etanol/\">automação para açúcar e etanol</a>.",
   },
   {
     q: "O que é usina full, flex e flex full no etanol de milho?",
-    a: "São três arranjos descritos pelo setor. A usina full processa exclusivamente milho para etanol e opera o ano todo. A usina flex é uma planta de cana adaptada para produzir etanol de milho na entressafra da cana, aproveitando a estrutura ociosa. A flex full opera cana e milho em paralelo. Do ponto de vista de automação, o modelo flex é o que mais exige convivência de lógicas — moagem de cana e rota enzimática do milho no mesmo ambiente de controle —, reforçando o valor de uma arquitetura DCS padronizada em vez de ilhas de supervisório. Esse é justamente o ponto de contato com a <a href=\"/setores/acucar-e-etanol/\">automação de usina de açúcar e etanol</a>.",
+    a: "São três arranjos descritos pelo setor. A usina full processa exclusivamente milho para etanol e costuma ser projetada para calendário anual, com paradas programadas. A usina flex é uma planta de cana adaptada para produzir etanol de milho na entressafra da cana, aproveitando parte da estrutura existente. A flex full processa cana e milho em paralelo. Do ponto de vista de automação, o modelo flex exige a convivência entre a moagem de cana e a rota enzimática do milho no mesmo ambiente de controle, o que aumenta o valor de padrões comuns de software, alarmes e dados. Esse é o ponto de contato com a <a href=\"/setores/acucar-e-etanol/\">automação de usina de açúcar e etanol</a>.",
   },
   {
     q: "Por que uma planta greenfield favorece um DCS padronizado desde o FEED?",
-    a: "Numa planta nova (greenfield) não há legado de PLC, rede ou supervisório para conviver, e decisões tomadas na engenharia inicial acompanham a planta por décadas. Definir topologia de rede, padrão de software e arquitetura de controle já no FEED (Front-End Engineering Design) permite que os pacotes mecânicos, os painéis e a integração cheguem alinhados a um único padrão — em vez de dez telas feitas por dez fornecedores. Um DCS como o <a href=\"/solucoes/plantpax/\">PlantPAx</a>, com biblioteca de objetos de processo e controle de batelada nativo, encaixa nesse cenário porque padroniza malhas, faceplates e alarmes de fábrica. O raciocínio completo está em <a href=\"/blog/automacao-projetos-greenfield/\">automação greenfield: do FEED ao comissionamento</a>.",
+    a: "Numa planta nova (greenfield) não há legado de PLC, rede ou supervisório para conviver, e decisões tomadas na engenharia inicial acompanham a planta por décadas. Definir topologia de rede, padrão de software e arquitetura de controle já no FEED (Front-End Engineering Design) permite que os pacotes mecânicos, os painéis e a integração cheguem alinhados a um padrão comum. Um sistema como o <a href=\"/solucoes/plantpax/\">PlantPAx</a>, com biblioteca de objetos de processo e integração com controle de batelada, pode padronizar malhas, faceplates e alarmes. A escolha depende dos requisitos e da escala da planta. O raciocínio completo está em <a href=\"/blog/automacao-projetos-greenfield/\">automação greenfield: do FEED ao comissionamento</a>.",
   },
   {
     q: "Como modernizar a automação de uma planta que opera o ano inteiro?",
-    a: "Sem entressafra, não existe a janela sazonal ampla que a usina de cana usa para grandes cutovers. A modernização se apoia em paradas programadas mais curtas, em execução por área com processo independente e em preparação antecipada de engenharia, simulação e FAT. Controladores legados podem sustentar áreas durante a operação: a linha PLC-5 entrou em status discontinued em 30 de junho de 2017 e os últimos controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o catálogo de ciclo de vida da Rockwell Automation. O caminho é inventariar onde esses ativos operam, classificar criticidade e comparar sustentação, estoque e <a href=\"/solucoes/migracao-plc/\">migração planejada de PLC</a> para ControlLogix ou CompactLogix.",
+    a: "Quando a planta não dispõe de uma janela sazonal ampla, a modernização se apoia em paradas programadas mais curtas, execução por área com processo independente e preparação antecipada de engenharia, simulação e FAT. Controladores legados podem sustentar áreas durante a operação: a linha PLC-5 entrou em status discontinued em 30 de junho de 2017 e os últimos controladores SLC 500 saíram de venda em 31 de março de 2024, segundo o catálogo de ciclo de vida da Rockwell Automation. O caminho é inventariar onde esses ativos operam, classificar criticidade e comparar sustentação, estoque e <a href=\"/solucoes/migracao-plc/\">migração planejada de PLC</a> para ControlLogix ou CompactLogix.",
   },
   {
     q: "DDG, DDGS e óleo de milho entram no escopo de automação?",
     a: "Sim. Depois da destilação, o resíduo é processado em coprodutos: DDG e DDGS (grãos secos de destilaria, sem e com solúveis, respectivamente) usados em nutrição animal, além do óleo de milho extraído. Secagem, evaporação e extração são áreas de processo próprias, com malhas de temperatura, controle de secadores e intertravamentos que também precisam entrar na arquitetura de controle e na governança de alarmes. Tratar coprodutos como um apêndice manual costuma criar pontos cegos de dado e de segurança que a <a href=\"/tecnologias/factorytalk-historian/\">consolidação em historian</a> ajuda a fechar.",
   },
 ];
+
+const REVIEWED = "2026-07-13";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 ---
 
 <BaseLayout
   title="Automação para Etanol de Milho"
-  description="Automação para usinas de etanol de milho: moagem, liquefação, sacarificação, fermentação, destilação e coprodutos (DDG/DDGS) com PlantPAx/DCS padronizado desde o FEED."
+  description="Automação para etanol de milho: moagem, liquefação, fermentação, destilação, DDG/DDGS e PlantPAx/DCS desde o FEED. Solicite avaliação do seu projeto."
   breadcrumbLeaf="Etanol de Milho"
   jsonLd={[
     serviceSchema({
@@ -84,20 +92,19 @@ const faq = [
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
       <div>
         <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Setor · Etanol de Milho
+          Setor · Etanol de Milho · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
         </p>
         <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           Automação para Etanol de Milho
         </h1>
         <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
           Automação para etanol de milho é a engenharia de controle de uma
-          planta que processa grão seco praticamente o ano inteiro — sem a
-          entressafra da cana — combinando conversão enzimática do amido,
-          fermentação em batelada e destilação contínua. São plantas em geral
-          mais novas, muitas construídas do zero, o que abre espaço para um DCS
-          (sistema de controle distribuído) padronizado desde o projeto. A
-          Integra Automação Industrial atua no setor sucroenergético e trabalha
-          essa engenharia com foco em padrão, rastreabilidade e continuidade
+          planta que combina conversão enzimática do amido, fermentação em
+          batelada e destilação contínua, com calendário menos dependente da
+          safra do que a rota da cana. Em projetos greenfield, esse processo abre
+          espaço para um DCS (sistema de controle distribuído) padronizado desde
+          o FEED. Para esse escopo, a Integra Automação Industrial oferece
+          engenharia com foco em padrão, rastreabilidade e continuidade
           operacional.
         </p>
       </div>
@@ -106,20 +113,19 @@ const faq = [
           Escala do setor
         </p>
         <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
-          Na safra 2024/2025 o etanol de milho brasileiro alcançou 8,19 bilhões
-          de litros — cerca de 8,2 bilhões —, alta de 30,7% frente ao ciclo
-          anterior e mais de 23% de todo o etanol produzido no país, segundo a
-          UNICA. A produção se concentra no Centro-Oeste e cresce com plantas
-          novas, muitas delas projetadas para operar de forma praticamente
-          ininterrupta.
+          Em 2025, a produção brasileira de etanol de milho e outras biomassas
+          atingiu 9,45 bilhões de litros, equivalentes a 24,7% de todo o etanol
+          produzido no país, segundo o Balanço Energético Nacional 2026 da EPE.
+          A categoria oficial reúne o milho e outras biomassas; por isso o dado
+          não deve ser interpretado como volume exclusivo de etanol de milho.
         </p>
         <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
           Fonte: <a
-            href="https://unica.com.br/noticias/producao-de-etanol-de-milho-avanca-30-em-relacao-a-safra-anterior/"
+            href="https://dashboard.epe.gov.br/apps/livro-ben/livro/pt/capitulo_1.html"
             target="_blank"
             rel="noopener noreferrer"
             class="underline underline-offset-2 hover:no-underline"
-          >UNICA · safra 2024/2025</a> · acesso em 12 jul. 2026
+          >EPE · Balanço Energético Nacional 2026</a> · acesso em 13 jul. 2026
         </p>
       </aside>
     </div>
@@ -153,7 +159,7 @@ const faq = [
       <SectionHeader
         eyebrow="Por que greenfield favorece DCS desde o FEED"
         title="Por que uma planta nova de etanol de milho favorece um DCS padronizado?"
-        description="Boa parte das plantas de etanol de milho é recente e greenfield — construída do zero, sem legado a conviver. Isso amplia a liberdade de projeto e torna a padronização uma decisão de engenharia inicial, não uma correção posterior."
+        description="Quando a planta é greenfield — construída do zero, sem legado a conviver — a padronização pode ser definida na engenharia inicial, em vez de corrigida depois."
         accent={true}
       />
 
@@ -200,21 +206,20 @@ const faq = [
       </p>
 
       <SectionHeader
-        eyebrow="Operação o ano inteiro"
-        title="Sem entressafra, a estratégia de manutenção e modernização muda"
-        description="A cana amarra a usina a uma janela sazonal de parada. O milho é grão seco e estocável, e a planta tende a operar de forma quase contínua — o que redesenha como a modernização precisa ser planejada."
+        eyebrow="Calendário menos sazonal"
+        title="Ciclos mais contínuos mudam a estratégia de manutenção e modernização"
+        description="O milho é grão seco e estocável, o que reduz a dependência da colheita imediata. A disponibilidade real ainda depende de abastecimento e paradas programadas."
         accent={true}
       />
 
       <p class="text-base leading-relaxed text-integra-gray-700">
-        A cana precisa ser processada em cerca de 24 horas após o corte, antes
-        de a sacarose degradar, e a colheita depende de clima seco — por isso a
-        usina de cana para na entressafra e concentra grandes manutenções nessa
-        janela. O milho, por ser um grão de baixa umidade armazenável em silos,
-        permite processar praticamente todos os dias do ano; há relatos de
-        operação em torno de doze meses. Isso é uma vantagem de disponibilidade,
-        mas retira a janela sazonal ampla que a usina de cana usa para
-        modernizar controle.
+        A cana perde qualidade depois do corte e precisa ser processada em prazo
+        curto; sua colheita também segue uma janela sazonal. O milho, por ser um
+        grão armazenável em silos, permite um plano de produção menos dependente
+        do momento da colheita. Isso favorece ciclos operacionais mais contínuos,
+        mas paradas programadas continuam necessárias e a disponibilidade varia
+        conforme a planta. A modernização, portanto, não deve presumir uma entressafra
+        ampla para executar grandes cutovers.
       </p>
       <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
         A consequência prática é que a modernização passa a depender de paradas

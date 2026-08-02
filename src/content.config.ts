@@ -27,6 +27,7 @@ const cases = defineCollection({
       title: z.string(),
       summary: z.string(),
       pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
       sector: z.string(),
       tech: z.array(z.string()).default([]),
       heroImage: image().optional(),
@@ -43,13 +44,11 @@ const eventos = defineCollection({
     z.object({
       title: z.string(),
       summary: z.string(),
-      pubDate: z.coerce.date(),
       startDate: z.coerce.date(),
       endDate: z.coerce.date().optional(),
       eventStatus: z
         .enum(["scheduled", "completed", "cancelled", "postponed"])
         .default("completed"),
-      dateLabel: z.string(),
       location: z.string(),
       organizer: z.string(),
       tags: z.array(z.string()).default([]),
@@ -57,6 +56,14 @@ const eventos = defineCollection({
       coverAlt: z.string(),
       gallery: z.array(image()).default([]),
       draft: z.boolean().default(false),
+    }).superRefine((event, context) => {
+      if (event.endDate && event.endDate.getTime() < event.startDate.getTime()) {
+        context.addIssue({
+          code: "custom",
+          path: ["endDate"],
+          message: "endDate não pode ser anterior a startDate",
+        });
+      }
     }),
 });
 

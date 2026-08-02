@@ -8,6 +8,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import controllogixPrpNonConverged from "@/assets/manuals/controllogix-prp-non-converged.jpg";
 
 const pillars = [
@@ -84,13 +85,13 @@ const faq = [
 
 <BaseLayout
   title="Data Centers Industriais, IDC e Virtualização OT"
-  description="Projeto de data centers industriais, virtualização OT, alta disponibilidade, backup e recuperação para aplicações críticas de automação."
+  description="Projeto de data centers industriais, virtualização OT, alta disponibilidade, backup e recuperação para aplicações críticas. Avalie a resiliência do ambiente."
   ogImage="/og/solucoes-data-centers.png"
   jsonLd={[
     serviceSchema({
       name: "Data Centers Industriais e Virtualização OT",
       description:
-        "Projeto de data centers industriais, virtualização OT, alta disponibilidade, backup e recuperação para aplicações críticas de automação.",
+        "Projeto de data centers industriais, virtualização OT, alta disponibilidade, backup e recuperação para aplicações críticas. Avalie a resiliência do ambiente.",
       url: Astro.url.href,
     }),
     faqSchema(faq),
@@ -200,6 +201,17 @@ const faq = [
       <FAQAccordion items={faq} />
     </div>
   </section>
+
+  <RelatedSectors
+    title="Onde a infraestrutura OT sustenta a continuidade do processo"
+    description="Disponibilidade, recuperação e segregação precisam refletir o impacto de cada servidor na produção."
+    items={[
+      { href: "/setores/acucar-e-etanol/", label: "Açúcar e etanol", description: "Serviços plant-wide para campanhas sazonais e áreas de processo críticas." },
+      { href: "/setores/etanol-de-milho/", label: "Etanol de milho", description: "Operação menos sazonal, com dependência contínua de controle e dados." },
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Retenção de dados, receitas e rastreabilidade dependentes de serviços OT." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Supervisão, cadeia do frio e utilidades que exigem recuperação testada." },
+    ]}
+  />
 
   <CtaBlock
     title="Sua infraestrutura OT sustenta a operação ou só mantém sistemas ligados?"

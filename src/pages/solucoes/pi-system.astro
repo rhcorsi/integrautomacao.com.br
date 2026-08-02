@@ -8,6 +8,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
 import datamosaixReference from "@/assets/manuals/factorytalk-datamosaix-data-flow.jpg";
 
@@ -84,13 +85,13 @@ const faq = [
 
 <BaseLayout
   title="PI System / AVEVA, Dados Industriais"
-  description="Engenharia de dados industriais com PI System / AVEVA: tags, AF Templates, historian, qualidade de dados e integração com PlantPAx e FactoryTalk."
+  description="Engenharia de dados industriais com PI System / AVEVA: tags, AF Templates, historian e qualidade de dados. Converse com nossa engenharia."
   ogImage="/og/solucoes-pi-system.png"
   jsonLd={[
     serviceSchema({
       name: "PI System / AVEVA, Dados Industriais",
       description:
-        "Engenharia de dados industriais com PI System / AVEVA: tags, AF Templates, historian, qualidade de dados e integração com PlantPAx e FactoryTalk.",
+        "Engenharia de dados industriais com PI System / AVEVA: tags, AF Templates, historian e qualidade de dados. Converse com nossa engenharia.",
       url: Astro.url.href,
     }),
     faqSchema(faq),
@@ -210,6 +211,17 @@ const faq = [
       <FAQAccordion items={faq} />
     </div>
   </section>
+
+  <RelatedSectors
+    title="Onde o dado industrial precisa ganhar contexto"
+    description="A série temporal só gera decisão quando representa ativos, lotes, energia, qualidade e eventos do processo real."
+    items={[
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Lotes, CIP, parâmetros críticos e integração da qualidade." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Cadeia do frio, processo térmico, utilidades e rastreabilidade." },
+      { href: "/setores/acucar-e-etanol/", label: "Açúcar e etanol", description: "Balanços, energia, fermentação, destilação e desempenho de safra." },
+      { href: "/setores/armazenagem-de-graos/", label: "Armazenagem de grãos", description: "Temperatura, aeração, secagem e telemetria entre unidades." },
+    ]}
+  />
 
   <CtaBlock
     title="Quer transformar dados industriais em infraestrutura confiável?"

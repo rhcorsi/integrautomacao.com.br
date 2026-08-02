@@ -1,0 +1,573 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CtaBlock from "@/components/CtaBlock.astro";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import { faqSchema, techArticleSchema } from "@/utils/schema";
+import { SITE } from "@/utils/site";
+import { Icon } from "astro-icon/components";
+
+const description =
+  "Guia de cibersegurança OT: por que difere de TI, riscos reais em planta, zonas e conduítes IEC 62443, NIST SP 800-82 e o caminho por maturidade. Comece aqui.";
+
+const pageUrl = new URL("/ciberseguranca-ot/", SITE.url).toString();
+
+const otVsIt = [
+  [
+    "01",
+    "Prioridade invertida",
+    "Na TI (tecnologia da informação), a confidencialidade do dado costuma liderar. Na OT, o topo da lista é manter o processo disponível e as pessoas seguras: um controle que derruba a produção pode causar mais dano que o incidente que tentava evitar.",
+  ],
+  [
+    "02",
+    "Ciclo de vida em décadas",
+    "Controladores e supervisórios operam por décadas, com sistemas operacionais que saem de suporte muito antes da troca do equipamento. A segurança precisa conviver com o legado, não fingir que ele não existe.",
+  ],
+  [
+    "03",
+    "Protocolos sem autenticação",
+    "Boa parte dos protocolos industriais nasceu para redes isoladas: quem alcança a rede frequentemente consegue ler e escrever no controlador. A proteção vem da arquitetura ao redor, não do protocolo.",
+  ],
+  [
+    "04",
+    "Janelas raras de intervenção",
+    "Patch, reinicialização e teste dependem de parada planejada. A rotina de atualização mensal da TI não se transfere para a planta sem análise de impacto e janela negociada.",
+  ],
+  [
+    "05",
+    "Ferramentas que não se transferem",
+    "Varredura agressiva de rede, agente pesado e bloqueio automático podem travar equipamentos que não foram projetados para esse tráfego. Controles de TI precisam ser validados no contexto OT antes de tocar a produção.",
+  ],
+];
+
+const plantRisks = [
+  {
+    icon: "lucide:triangle-alert",
+    title: "Ransomware que alcança a produção",
+    description:
+      "O alvo inicial costuma ser a rede corporativa, mas o efeito chega à planta: servidores compartilhados, conexões diretas entre TI e OT e a decisão difícil de parar por precaução quando não se sabe até onde o ataque avançou. Sem segmentação e sem backup restaurável, a extensão da parada passa a depender da sorte, não do projeto.",
+    links: [
+      { href: "/tecnologias/backup-recuperacao-desastres/", label: "Backup e recuperação de desastres" },
+      { href: "/solucoes/redes-iec-62443/", label: "Segmentação de redes industriais" },
+    ],
+  },
+  {
+    icon: "lucide:monitor-cog",
+    title: "Acesso remoto improvisado",
+    description:
+      "Ferramentas de acesso instaladas caso a caso para suporte de fornecedor, sem inventário central, sem autenticação multifator (MFA) e sem registro de sessão. Cada uma é uma porta que a planta não enxerga — e que continua aberta depois que o suporte termina.",
+    links: [
+      { href: "/tecnologias/active-directory-ot/", label: "Identidade e acesso em OT" },
+    ],
+  },
+  {
+    icon: "lucide:network",
+    title: "Rede flat, sem zonas",
+    description:
+      "Quando escritório e chão de fábrica compartilham a mesma rede, um notebook infectado ou um dispositivo desconhecido alcança controladores que aceitam comandos sem autenticação. A segmentação em zonas e conduítes existe para conter esse movimento lateral.",
+    links: [
+      { href: "/solucoes/redes-iec-62443/", label: "Redes e IEC 62443" },
+    ],
+  },
+  {
+    icon: "lucide:file-cog",
+    title: "Estações críticas sem hardening",
+    description:
+      "Servidores SCADA e estações de engenharia com usuário compartilhado, sessão de administrador permanente, portas USB livres e serviços desnecessários ativos. São os computadores mais críticos da planta operando com menos controle que um notebook corporativo.",
+    links: [
+      { href: "/tecnologias/hardening-industrial/", label: "Hardening industrial" },
+    ],
+  },
+  {
+    icon: "lucide:database",
+    title: "Backup que não restaura",
+    description:
+      "O backup existe, mas não passou por teste de restauração; programas de CLP vivem no notebook de alguém; não há cópia isolada do ambiente. O custo dessa lacuna só aparece no pior momento possível.",
+    links: [
+      { href: "/tecnologias/backup-recuperacao-desastres/", label: "Backup e DR (recuperação de desastres) testados" },
+    ],
+  },
+  {
+    icon: "lucide:activity",
+    title: "Ativos invisíveis",
+    description:
+      "Não se protege o que não se conhece. Conversores esquecidos, conexões de fornecedor não documentadas e equipamentos fora do inventário são comuns em plantas com décadas de expansões — e cada um é superfície de ataque.",
+    links: [
+      { href: "/tecnologias/monitoramento-redes-industriais/", label: "Visibilidade da rede OT" },
+    ],
+  },
+];
+
+const architectureConcepts = [
+  {
+    title: "Modelo Purdue",
+    description:
+      "O modelo Purdue organiza a planta em níveis funcionais — do processo físico (nível 0) e controle (nível 1) à supervisão (nível 2), operações (nível 3) e sistemas corporativos (níveis 4 e 5) — e as arquiteturas derivadas dele (NIST SP 800-82, CPwE) acrescentam a IDMZ entre os domínios industrial e corporativo. Ele dá o vocabulário comum para discutir onde cada fluxo deve, e não deve, passar.",
+    links: [
+      { href: "/automacao-industrial/", label: "Ver as camadas no guia de automação" },
+    ],
+  },
+  {
+    title: "Zonas e conduítes (IEC 62443-3-2)",
+    description:
+      "A IEC 62443-3-2 estrutura a análise: o sistema em avaliação é particionado em zonas — grupos de ativos com requisitos de segurança semelhantes — e conduítes, os canais de comunicação entre elas. Cada zona e conduíte recebe a própria avaliação de risco, em vez de um controle único aplicado à planta inteira.",
+    links: [
+      { href: "/solucoes/redes-iec-62443/", label: "Projetar zonas e conduítes" },
+    ],
+  },
+  {
+    title: "SL-T por análise de risco",
+    description:
+      "O resultado da análise é o SL-T (Security Level Target): o nível de segurança alvo de cada zona e conduíte. Nem toda zona precisa do mesmo rigor — proteger a célula de envase e o historian com o mesmo investimento ignora o risco real de cada um. O SL-T orienta onde investir primeiro.",
+    links: [
+      { href: "/tecnologias/iec-62443-nist-ot/", label: "IEC 62443 e NIST na prática" },
+    ],
+  },
+];
+
+const securityLevels = [
+  ["SL 1", "Proteção contra violação casual ou coincidente, sem intenção de ataque."],
+  ["SL 2", "Proteção contra violação intencional com meios simples, poucos recursos, habilidades genéricas e baixa motivação."],
+  ["SL 3", "Proteção contra ataque com meios sofisticados, recursos moderados, habilidades específicas de sistemas industriais e motivação moderada."],
+  ["SL 4", "Proteção contra ataque com meios sofisticados, recursos amplos, habilidades específicas e alta motivação."],
+];
+
+const maturityPath = [
+  {
+    number: "01",
+    title: "Inventário e visibilidade",
+    text: "Levantar ativos, versões de firmware e software, conexões externas, acessos remotos e fluxos entre redes. Sem inventário, decisões de segurança são apostas.",
+    href: "/tecnologias/monitoramento-redes-industriais/",
+    label: "Como enxergar a rede OT",
+  },
+  {
+    number: "02",
+    title: "Segmentação e IDMZ",
+    text: "Particionar a rede em zonas e conduítes conforme o risco, com IDMZ entre os domínios corporativo e industrial e regras explícitas para o tráfego que atravessa fronteiras.",
+    href: "/solucoes/redes-iec-62443/",
+    label: "Redes industriais e IEC 62443",
+  },
+  {
+    number: "03",
+    title: "Hardening de sistemas",
+    text: "Reduzir superfície de ataque: contas e privilégios revisados, serviços e portas desnecessários desativados, mídias removíveis controladas e configurações documentadas.",
+    href: "/tecnologias/hardening-industrial/",
+    label: "Hardening industrial",
+  },
+  {
+    number: "04",
+    title: "Monitoramento contínuo",
+    text: "Observar a rede industrial de forma passiva, estabelecer o comportamento normal e alarmar desvios: ativo novo, conexão nova, tráfego inesperado entre zonas.",
+    href: "/tecnologias/monitoramento-redes-industriais/",
+    label: "Monitoramento de redes industriais",
+  },
+  {
+    number: "05",
+    title: "Patch management OT",
+    text: "Tratar atualização como decisão de risco: priorizar o que é explorável e crítico, usar controles compensatórios quando não há janela e registrar o que ficou pendente — em vez de aplicar tudo ou não aplicar nada.",
+    href: "/tecnologias/patch-management-ot/",
+    label: "Patch management em OT",
+  },
+  {
+    number: "06",
+    title: "Backup e DR testados",
+    text: "Definir RTO e RPO (objetivos de tempo de recuperação e de perda aceitável de dados) por sistema, manter cópia isolada e testar a restauração de verdade — incluindo programas de CLP e configurações de rede.",
+    href: "/tecnologias/backup-recuperacao-desastres/",
+    label: "Backup e recuperação de desastres",
+  },
+  {
+    number: "07",
+    title: "Governança de acesso",
+    text: "Identidade individual em vez de usuário compartilhado, diretório segregado para o ambiente OT e acesso remoto de terceiros com aprovação, registro e prazo de expiração.",
+    href: "/tecnologias/active-directory-ot/",
+    label: "Active Directory em OT",
+  },
+];
+
+const integratorArguments = [
+  {
+    title: "Segurança nasce na arquitetura",
+    text: "Zonas, conduítes e IDMZ são decisões de projeto de rede e de arquitetura de sistema. Quando entram no início — no documento de arquitetura, na especificação funcional — custam uma fração do que custa o retrofit depois da partida.",
+  },
+  {
+    title: "Mudar OT exige conhecer o processo",
+    text: "Segmentar uma rede em produção, trocar switches, ativar firewall entre zonas: cada passo interage com intertravamentos, redundância e janelas de parada. Quem programa o CLP e comissiona o sistema sabe o que pode ser tocado, quando e com qual plano de retorno.",
+  },
+  {
+    title: "Controle validado antes da planta",
+    text: "Regras de firewall, hardening e mudanças de rede passam por teste antes da janela de parada — como em uma entrega de automação bem conduzida: FAT (teste de aceitação em fábrica), plano de comissionamento, critério de aceite e rollback.",
+  },
+  {
+    title: "Segurança que sobrevive à partida",
+    text: "Controle sem dono degrada. Quando a segurança faz parte do escopo de automação — documentada no as-built, coberta pelo contrato de suporte — ela é mantida junto com o sistema, em vez de abandonada quando o projeto termina.",
+  },
+];
+
+const glossary = [
+  { term: "OT", definition: "Tecnologia operacional: hardware e software que monitora ou causa mudanças diretas em processos físicos — controladores, redes industriais, supervisórios e instrumentação.", href: "/tecnologias/iec-62443-nist-ot/" },
+  { term: "IACS", definition: "Industrial Automation and Control Systems: termo usado pela série IEC 62443 para o conjunto de sistemas de automação e controle industrial, incluindo pessoas e procedimentos." },
+  { term: "Zona", definition: "Agrupamento de ativos com requisitos de segurança semelhantes, definido por análise de risco conforme a IEC 62443-3-2." },
+  { term: "Conduíte", definition: "Canal de comunicação entre zonas. Concentra os controles sobre o tráfego que atravessa as fronteiras da arquitetura.", href: "/solucoes/redes-iec-62443/" },
+  { term: "IDMZ", definition: "Zona desmilitarizada industrial: camada intermediária entre a rede corporativa e a rede industrial que evita tráfego direto entre TI e OT.", href: "/solucoes/redes-iec-62443/" },
+  { term: "SL e SL-T", definition: "Security Level: escala da IEC 62443 que gradua a proteção de SL 1 (violação casual) a SL 4 (ataque sofisticado com amplos recursos). O SL-T é o nível alvo atribuído a cada zona e conduíte pela análise de risco." },
+  { term: "Defense-in-depth", definition: "Defesa em profundidade: camadas independentes de proteção, para que a falha de um controle não exponha o sistema inteiro." },
+  { term: "Modelo Purdue", definition: "Arquitetura de referência que organiza sistemas industriais em níveis funcionais, do processo físico aos sistemas corporativos.", href: "/automacao-industrial/" },
+  { term: "Rede flat", definition: "Rede sem segmentação, na qual dispositivos de escritório e de chão de fábrica compartilham o mesmo domínio de comunicação." },
+  { term: "Hardening", definition: "Redução da superfície de ataque de um ativo: contas, serviços, portas, mídias e permissões ajustados ao necessário para a função.", href: "/tecnologias/hardening-industrial/" },
+  { term: "RTO e RPO", definition: "Objetivos de tempo de recuperação e de perda de dados aceitável, usados para dimensionar backup e recuperação de desastres.", href: "/tecnologias/backup-recuperacao-desastres/" },
+  { term: "NIST SP 800-82", definition: "Guia do NIST (National Institute of Standards and Technology) para segurança de tecnologia operacional; a revisão 3 foi publicada em setembro de 2023." },
+];
+
+const faq = [
+  {
+    q: "Cibersegurança OT é responsabilidade da TI ou da automação?",
+    a: "Das duas, com papéis explícitos. A TI costuma dominar identidade, monitoramento corporativo e resposta a incidentes; a equipe de automação conhece o processo, as janelas de parada e o impacto físico de cada controle. Sem esse conhecimento, uma ação bem-intencionada — isolar um servidor, forçar um patch — pode parar a produção. Estruturas maduras definem governança conjunta, com a fronteira entre TI e OT projetada em vez de improvisada.",
+  },
+  {
+    q: "Por onde começar com orçamento limitado?",
+    a: "Pelo que reduz risco com pouco investimento: inventário de ativos e conexões, revisão dos acessos remotos existentes, backup testado de programas de CLP e servidores e substituição de senhas padrão. Esses passos criam a base para decidir onde segmentação e monitoramento trazem mais retorno. Comprar ferramenta antes de ter inventário costuma inverter a ordem do problema.",
+  },
+  {
+    q: "Antivírus resolve em rede industrial?",
+    a: "Ajuda em uma camada, não resolve o problema. Antivírus atua em estações e servidores Windows — e mesmo aí precisa ser homologado com o fornecedor do sistema supervisório para não interferir na operação. Ele não protege CLPs, remotas de I/O nem protocolos industriais que aceitam comandos sem autenticação. Por isso a referência em OT é defesa em profundidade: segmentação, hardening, monitoramento e backup atuando como camadas independentes.",
+  },
+  {
+    q: "O que é IDMZ?",
+    a: "IDMZ é a zona desmilitarizada industrial: a camada entre a rede corporativa e a rede industrial. Serviços que precisam ser acessados pelos dois lados — réplicas de historian, servidores de atualização, brokers de acesso remoto — ficam nela, de modo a evitar tráfego direto entre a TI e o chão de fábrica. Se algo na IDMZ for comprometido, essa camada pode ser isolada sem parar o processo.",
+  },
+  {
+    q: "Quanto tempo leva um diagnóstico de cibersegurança OT?",
+    a: "Depende do porte da planta, do número de unidades e da documentação existente — uma planta com as-built atualizado avança mais rápido que uma sem inventário. Por isso o caminho responsável começa com uma triagem técnica: entender contexto, base instalada e a preocupação atual antes de dimensionar escopo, esforço e cronograma do diagnóstico.",
+  },
+  {
+    q: "Qual a relação entre IEC 62443 e NIST SP 800-82?",
+    a: "São complementares. A série ISA/IEC 62443 é normativa: define requisitos, papéis, zonas, conduítes e níveis de segurança para sistemas de automação e controle, e serve de base para certificação. O NIST SP 800-82 é um guia: orienta como estruturar um programa de segurança OT e referencia controles do próprio NIST. Na prática, muitos programas usam a 62443 como requisito de arquitetura e o SP 800-82 como orientação de implantação.",
+  },
+];
+
+const references = [
+  {
+    name: "NIST SP 800-82 Rev. 3",
+    href: "https://csrc.nist.gov/pubs/sp/800/82/r3/final",
+    note: "Guide to Operational Technology (OT) Security, publicado em setembro de 2023: guia de referência para programas de segurança OT, topologias e controles.",
+  },
+  {
+    name: "IEC 62443-3-2:2020",
+    href: "https://webstore.iec.ch/en/publication/30727",
+    note: "Security risk assessment for system design: define a partição do sistema em zonas e conduítes, a avaliação de risco por zona e a atribuição de SL-T.",
+  },
+  {
+    name: "ISA/IEC 62443 · Series of Standards",
+    href: "https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards",
+    note: "Visão geral da família de normas para segurança de sistemas de automação e controle industrial (IACS), mantida pela ISA e pela IEC.",
+  },
+];
+
+const glossarySchema = {
+  "@context": "https://schema.org",
+  "@type": "DefinedTermSet",
+  "@id": `${pageUrl}#glossario`,
+  name: "Glossário de cibersegurança OT",
+  url: `${pageUrl}#glossario`,
+  inLanguage: "pt-BR",
+  hasDefinedTerm: glossary.map((item) => ({
+    "@type": "DefinedTerm",
+    name: item.term,
+    description: item.definition,
+    ...(item.href ? { url: new URL(item.href, SITE.url).toString() } : {}),
+  })),
+};
+---
+
+<BaseLayout
+  title="Cibersegurança OT: guia para plantas industriais"
+  description={description}
+  breadcrumbLeaf="Guia de cibersegurança OT"
+  ogImage="/og/solucoes.png"
+  jsonLd={[
+    techArticleSchema({
+      title: "Cibersegurança OT: guia para plantas industriais",
+      description,
+      url: pageUrl,
+      image: new URL("/og/solucoes.png", SITE.url).toString(),
+      datePublished: "2026-08-02",
+      dateModified: "2026-08-02",
+      authorName: "Equipe técnica Integra",
+      authorUrl: new URL("/equipe/", SITE.url).toString(),
+    }),
+    faqSchema(faq),
+    glossarySchema,
+  ]}
+>
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:py-24">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Guia técnico · segurança OT na prática · <span class="normal-case">Revisado em <time datetime="2026-08-02">2 de agosto de 2026</time> por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">Equipe técnica Integra</a></span>
+        </p>
+        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          Cibersegurança OT: o guia de quem projeta e integra os sistemas da planta.
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          Cibersegurança OT (tecnologia operacional) é a proteção dos sistemas
+          que monitoram e controlam processos físicos: CLPs (controladores
+          lógicos programáveis), supervisórios SCADA (supervisão e aquisição de
+          dados), redes industriais, servidores e estações de engenharia. Ela
+          difere da segurança de TI em um ponto essencial — a prioridade é
+          manter o processo disponível e as pessoas seguras — e por isso
+          precisa ser projetada dentro da planta, não aplicada por cima dela.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#maturidade" class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white hover:bg-integra-red-700">
+            Ver o caminho por maturidade <span aria-hidden="true">↓</span>
+          </a>
+          <a href="/contato/?assunto=guia-ciberseguranca-ot" class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 hover:border-integra-gray-900">
+            Falar sobre uma planta <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="mt-7 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
+          Publicado e revisado pela equipe técnica Integra · 2 de agosto de 2026
+        </p>
+      </div>
+
+      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 lg:p-8" aria-label="Nesta página">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">Nesta página</p>
+        <nav class="mt-5 grid gap-3 text-sm">
+          <a href="#ot-vs-ti" class="font-medium text-integra-gray-900 hover:text-integra-red-700">1. Por que OT não é TI</a>
+          <a href="#riscos" class="font-medium text-integra-gray-900 hover:text-integra-red-700">2. Riscos reais em planta</a>
+          <a href="#zonas-conduites" class="font-medium text-integra-gray-900 hover:text-integra-red-700">3. Purdue, zonas e conduítes</a>
+          <a href="#maturidade" class="font-medium text-integra-gray-900 hover:text-integra-red-700">4. O caminho por maturidade</a>
+          <a href="#integrador" class="font-medium text-integra-gray-900 hover:text-integra-red-700">5. O papel do integrador</a>
+          <a href="#glossario" class="font-medium text-integra-gray-900 hover:text-integra-red-700">6. Mini-glossário</a>
+          <a href="#perguntas" class="font-medium text-integra-gray-900 hover:text-integra-red-700">7. Perguntas frequentes</a>
+          <a href="#fontes" class="font-medium text-integra-gray-900 hover:text-integra-red-700">8. Fontes primárias</a>
+        </nav>
+      </aside>
+    </div>
+  </section>
+
+  <section id="ot-vs-ti" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Fundamentos"
+        title="Por que segurança OT não é segurança de TI"
+        description="As boas práticas de TI continuam valendo — o que muda é a ordem das prioridades, o ciclo de vida dos ativos e o custo de errar. Cinco diferenças explicam a maior parte dos conflitos entre as duas disciplinas."
+        accent={true}
+      />
+      <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-5">
+        {otVsIt.map(([number, title, text]) => (
+          <article class="bg-integra-white p-6">
+            <p class="font-mono text-xs font-semibold text-integra-red-700">{number}</p>
+            <h2 class="mt-3 text-lg font-semibold text-integra-gray-900">{title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-8 rounded-lg border-l-4 border-integra-red bg-integra-white p-6">
+        <p class="text-base leading-relaxed text-integra-gray-700">
+          Essas diferenças não são desculpa para fazer menos segurança — são o
+          motivo para fazer segurança projetada para o ambiente industrial. As
+          referências que orientam esse projeto são a série ISA/IEC 62443 e o
+          NIST SP 800-82, tratadas ao longo deste guia.
+          <a href="/tecnologias/iec-62443-nist-ot/" class="font-semibold text-integra-red-700 hover:underline">Como as duas referências se aplicam →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="riscos" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Diagnóstico honesto"
+        title="Os riscos que aparecem em planta real"
+        description="Antes de discutir ameaças sofisticadas, vale olhar para o que se repete em plantas brasileiras de todos os portes: exposições criadas por conveniência, urgência e falta de projeto."
+        accent={true}
+      />
+      <div class="grid gap-5">
+        {plantRisks.map((risk) => (
+          <article class="grid gap-6 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 lg:grid-cols-[13rem_1fr_auto] lg:items-center">
+            <div>
+              <div class="inline-flex size-10 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white">
+                <Icon name={risk.icon} class="size-5" aria-hidden="true" />
+              </div>
+            </div>
+            <div>
+              <h2 class="text-xl font-semibold text-integra-gray-900">{risk.title}</h2>
+              <p class="mt-3 max-w-3xl text-sm leading-relaxed text-integra-gray-700">{risk.description}</p>
+            </div>
+            <ul class="grid gap-2 lg:w-64">
+              {risk.links.map((link) => (
+                <li><a href={link.href} class="text-sm font-semibold text-integra-red-700 hover:underline">{link.label} →</a></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="zonas-conduites" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Arquitetura de segurança"
+        title="Modelo Purdue, zonas, conduítes e SL-T"
+        description="A pergunta de arquitetura não é qual firewall comprar, e sim onde ficam as fronteiras da planta e quanto rigor cada uma exige. Três conceitos organizam essa resposta."
+        accent={true}
+      />
+      <div class="grid gap-6 lg:grid-cols-3">
+        {architectureConcepts.map((concept) => (
+          <article class="flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-7">
+            <h2 class="text-2xl font-semibold text-integra-gray-900">{concept.title}</h2>
+            <p class="mt-4 text-sm leading-relaxed text-integra-gray-700">{concept.description}</p>
+            <ul class="mt-auto grid gap-2 pt-6">
+              {concept.links.map((link) => (
+                <li><a href={link.href} class="text-sm font-semibold text-integra-red-700 hover:underline">{link.label} →</a></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <div class="mt-8 grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-4">
+        {securityLevels.map(([level, text]) => (
+          <article class="bg-integra-white p-6">
+            <p class="font-mono text-xs font-semibold text-integra-red-700">{level}</p>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-8 rounded-lg border-l-4 border-integra-red bg-integra-white p-6">
+        <p class="text-base leading-relaxed text-integra-gray-700">
+          O modelo Purdue descreve funções; a IEC 62443 define zonas por risco.
+          Na prática os dois se combinam: os níveis ajudam a enxergar a planta,
+          e a análise de risco decide onde ficam as fronteiras reais — quase
+          sempre com a IDMZ como a fronteira mais importante entre TI e OT.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="maturidade" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Roteiro de evolução"
+        title="O caminho por maturidade: da visibilidade à governança"
+        description="Segurança OT não é um projeto único, é uma sequência de capacidades. A ordem importa: cada etapa cria a base que torna a seguinte viável — e começar pelo fim costuma desperdiçar investimento."
+        accent={true}
+      />
+      <ol class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2 lg:grid-cols-3">
+        {maturityPath.map((phase) => (
+          <li class="flex flex-col bg-integra-gray-50 p-7">
+            <p class="font-mono text-xs font-semibold text-integra-red-700">{phase.number}</p>
+            <h2 class="mt-3 text-xl font-semibold text-integra-gray-900">{phase.title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{phase.text}</p>
+            <a href={phase.href} class="mt-auto pt-5 text-sm font-semibold text-integra-red-700 hover:underline">{phase.label} →</a>
+          </li>
+        ))}
+        <li class="flex flex-col justify-center bg-integra-gray-900 p-7">
+          <p class="font-mono text-xs font-semibold text-integra-red-400">E depois?</p>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-200">
+            Maturidade não é chegar ao fim da lista: é revisar risco, inventário
+            e controles a cada mudança relevante da planta. A triagem técnica
+            ajuda a identificar em qual etapa sua operação está hoje.
+          </p>
+          <a href="/contato/?assunto=guia-ciberseguranca-ot" class="mt-auto pt-5 text-sm font-semibold text-integra-red-400 hover:underline">Solicitar triagem técnica →</a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="integrador" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Quem executa importa"
+        title="Por que o integrador de automação é ator central"
+        description="Consultoria aponta o risco; a proteção acontece quando alguém altera rede, servidores e controladores sem parar a produção. Essa execução é trabalho de engenharia de automação."
+        accent={true}
+      />
+      <div class="grid gap-6 md:grid-cols-2">
+        {integratorArguments.map((item) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-white p-7">
+            <h2 class="text-xl font-semibold text-integra-gray-900">{item.title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{item.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-8 rounded-lg border-l-4 border-integra-red bg-integra-white p-6">
+        <p class="text-base leading-relaxed text-integra-gray-700">
+          É por isso que este guia trata cibersegurança OT como disciplina de
+          engenharia, não como produto de prateleira. A Integra atua como
+          integradora de sistemas de automação desde 2016: segurança entra como
+          requisito dos projetos de rede, controle e supervisão — dentro do
+          escopo, com critério de aceite e documentação de handover.
+        </p>
+        <div class="mt-4 flex flex-wrap gap-4">
+          <a href="/solucoes/redes-iec-62443/" class="text-sm font-semibold text-integra-red-700 hover:underline">Conhecer a solução de redes e IEC 62443 →</a>
+          <a href="/servicos/" class="text-sm font-semibold text-integra-red-700 hover:underline">Ver serviços de engenharia →</a>
+          <a href="/automacao-industrial/" class="text-sm font-semibold text-integra-red-700 hover:underline">Guia de automação industrial →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="glossario" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Referência rápida"
+        title="Mini-glossário de cibersegurança OT"
+        description="Definições curtas para os termos que aparecem em análises de risco, propostas de segmentação e conversas entre TI, automação e gestão."
+        accent={true}
+      />
+      <dl class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 md:grid-cols-2 lg:grid-cols-3">
+        {glossary.map((item) => (
+          <div class="bg-integra-gray-50 p-6">
+            <dt class="text-base font-semibold text-integra-gray-900">{item.term}</dt>
+            <dd class="mt-2 text-sm leading-relaxed text-integra-gray-700">{item.definition}</dd>
+            {item.href && <a href={item.href} class="mt-4 inline-flex text-sm font-semibold text-integra-red-700 hover:underline">Aprofundar →</a>}
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section id="perguntas" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-20">
+      <div class="max-w-4xl">
+        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">Respostas diretas</p>
+        <h2 class="mt-3 text-3xl font-semibold text-integra-gray-900 sm:text-4xl">Perguntas frequentes sobre cibersegurança OT</h2>
+        <FAQAccordion items={faq} title="Dúvidas essenciais" />
+      </div>
+    </div>
+  </section>
+
+  <section id="fontes" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid py-20">
+      <SectionHeader
+        eyebrow="Base editorial"
+        title="Fontes primárias para continuar estudando"
+        description="O guia organiza conceitos para decisão. Normas e guias oficiais permanecem como referência para requisitos de projeto, análise de risco e certificação."
+        accent={true}
+      />
+      <div class="grid gap-5 lg:grid-cols-3">
+        {references.map((reference) => (
+          <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
+            <h2 class="text-lg font-semibold text-integra-gray-900">{reference.name}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{reference.note}</p>
+            <a href={reference.href} rel="noopener noreferrer" class="mt-5 inline-flex text-sm font-semibold text-integra-red-700 hover:underline">Consultar fonte oficial ↗</a>
+          </article>
+        ))}
+      </div>
+      <p class="mt-8 max-w-4xl text-sm leading-relaxed text-integra-gray-600">
+        Conteúdo educativo. A aplicação de normas, níveis de segurança,
+        requisitos legais e critérios de aceite depende do processo, da
+        jurisdição, da análise de risco e do escopo contratado.
+      </p>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Quer saber em que etapa desse caminho sua planta está?"
+    description="A triagem técnica levanta contexto, base instalada e o risco que preocupa hoje — antes de propor diagnóstico, arquitetura ou cronograma."
+    primaryCta={{ href: "/contato/?assunto=guia-ciberseguranca-ot", label: "Solicitar triagem técnica" }}
+    secondaryCta={{ href: "/solucoes/redes-iec-62443/", label: "Ver a solução de redes e IEC 62443" }}
+  />
+</BaseLayout>

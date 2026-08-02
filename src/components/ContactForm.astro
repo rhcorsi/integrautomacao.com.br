@@ -220,4 +220,305 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     defer></script>
 )}
 
-<script is:inline type="module" src="/scripts/contact-form.js"></script>
+<script>
+  interface ContactContext {
+    cta?: string;
+    createdAt?: number;
+    expiresAt?: number;
+    label?: string;
+    page?: string;
+  }
+
+  interface TurnstileWindow extends Window {
+    turnstile?: { reset: (container?: string | HTMLElement) => void };
+  }
+
+  const CONTACT_CONTEXT_KEY = "integra:contact-context";
+  const CONTACT_CONTEXT_TTL_MS = 30 * 60 * 1_000;
+  const contactForms =
+    document.querySelectorAll<HTMLFormElement>("[data-contact-form]");
+
+  const subjectLabels = new Map([
+    ["triagem", "Triagem técnica inicial"],
+    ["diagnostico", "Diagnóstico de engenharia"],
+    ["portfolio", "Portfólio técnico sob NDA"],
+    ["plantpax", "PlantPAx"],
+    ["factorytalk", "FactoryTalk"],
+    ["factorytalk-view-se", "FactoryTalk View SE"],
+    ["redes-cyber", "Redes Industriais / IEC 62443"],
+    ["migracao-plc", "Migração de PLC legado"],
+    ["migracao-slc500", "Migração de SLC 500"],
+    ["modernizacao-scada", "Modernização de SCADA"],
+    ["pi-system", "PI System / dados industriais"],
+    ["data-centers-industriais", "Data Centers Industriais"],
+    ["acucar-e-etanol", "Automação para Açúcar e Etanol"],
+    ["automacao-maringa", "Automação Industrial em Maringá"],
+    ["automacao-parana", "Automação Industrial no Paraná"],
+    ["servicos-automacao", "Serviços de automação industrial"],
+    ["programacao-clp", "Programação de CLP"],
+    ["comissionamento-industrial", "Comissionamento industrial"],
+    ["catalogo-tecnico", "Catálogo técnico"],
+    ["tecnologias-multivendor", "Tecnologias multivendor"],
+    ["certificacoes", "Certificações e parcerias"],
+    ["case-similar", "Case técnico similar"],
+    ["blog", "Sugestão de conteúdo técnico"],
+    ["greenfield", "Projeto greenfield"],
+    ["integrador", "Integração de sistemas"],
+    ["parceria", "Parceria / fornecedor"],
+    ["conteudo", "Conteúdo técnico / evento"],
+    ["outro", "Outro"],
+  ]);
+
+  const limit = (value: string | null | undefined, max: number) =>
+    (value ?? "").trim().slice(0, max);
+
+  const consumeStoredContactContext = (): ContactContext => {
+    try {
+      const value = sessionStorage.getItem(CONTACT_CONTEXT_KEY);
+      sessionStorage.removeItem(CONTACT_CONTEXT_KEY);
+      if (!value) return {};
+
+      const parsed: unknown = JSON.parse(value);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return {};
+      }
+      const createdAt = "createdAt" in parsed ? parsed.createdAt : undefined;
+      const expiresAt = "expiresAt" in parsed ? parsed.expiresAt : undefined;
+      const now = Date.now();
+      if (
+        typeof createdAt !== "number" ||
+        !Number.isFinite(createdAt) ||
+        typeof expiresAt !== "number" ||
+        !Number.isFinite(expiresAt) ||
+        createdAt > now + 60_000 ||
+        now - createdAt > CONTACT_CONTEXT_TTL_MS ||
+        expiresAt < now ||
+        expiresAt > createdAt + CONTACT_CONTEXT_TTL_MS
+      ) {
+        return {};
+      }
+      const context: ContactContext = { createdAt, expiresAt };
+      if ("page" in parsed && typeof parsed.page === "string") {
+        context.page = parsed.page;
+      }
+      if ("label" in parsed && typeof parsed.label === "string") {
+        context.label = parsed.label;
+      }
+      if ("cta" in parsed && typeof parsed.cta === "string") {
+        context.cta = parsed.cta;
+      }
+      return context;
+    } catch {
+      return {};
+    }
+  };
+
+  const storedContext = consumeStoredContactContext();
+
+  const labelFromSlug = (value: string) =>
+    value
+      .replace(/^\/+|\/+$/g, "")
+      .split(/[\/-]+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+
+  const referrerContext = (): ContactContext => {
+    if (!document.referrer) return { page: "", label: "Acesso direto" };
+
+    try {
+      const referrer = new URL(document.referrer);
+      if (referrer.origin === window.location.origin) {
+        return {
+          page: `${referrer.pathname}${referrer.hash}`,
+          label:
+            referrer.pathname === "/"
+              ? "Página inicial"
+              : labelFromSlug(referrer.pathname),
+        };
+      }
+      return {
+        page: referrer.hostname,
+        label: `Referência externa: ${referrer.hostname}`,
+      };
+    } catch {
+      return { page: "", label: "Acesso direto" };
+    }
+  };
+
+  const setStatus = (
+    status: HTMLElement | null,
+    message: string,
+    tone: "error" | "info" | "success" = "info",
+  ) => {
+    if (!status) return;
+    status.setAttribute("role", tone === "error" ? "alert" : "status");
+    status.setAttribute(
+      "aria-live",
+      tone === "error" ? "assertive" : "polite",
+    );
+    status.textContent = message;
+    status.classList.remove("text-integra-red-700", "text-emerald-700");
+    if (tone === "error") status.classList.add("text-integra-red-700");
+    if (tone === "success") status.classList.add("text-emerald-700");
+  };
+
+  const responseMessage = (value: unknown): string | undefined => {
+    if (
+      typeof value !== "object" ||
+      value === null ||
+      !("message" in value) ||
+      typeof value.message !== "string"
+    ) {
+      return undefined;
+    }
+    return value.message;
+  };
+
+  for (const form of contactForms) {
+    const status = form.querySelector<HTMLElement>('[role="status"]');
+    const submitBtn =
+      form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const subjectCandidate = form.querySelector("[data-contact-subject]");
+    const subjectSelect =
+      subjectCandidate instanceof HTMLSelectElement ? subjectCandidate : null;
+    const sourcePageInput =
+      form.querySelector<HTMLInputElement>("[data-contact-source-page]");
+    const sourceLabelInput =
+      form.querySelector<HTMLInputElement>("[data-contact-source-label]");
+    const ctaInput =
+      form.querySelector<HTMLInputElement>("[data-contact-cta]");
+
+    const applyContactContext = () => {
+      const params = new URL(window.location.href).searchParams;
+      const referrer = referrerContext();
+      const requestedSubject = limit(params.get("assunto"), 50)
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, "");
+
+      if (requestedSubject && subjectSelect) {
+        let option = Array.from(subjectSelect.options).find(
+          (candidate) => candidate.value === requestedSubject,
+        );
+        if (!option) {
+          option = document.createElement("option");
+          option.value = requestedSubject;
+          option.textContent =
+            subjectLabels.get(requestedSubject) ??
+            `Tema técnico: ${labelFromSlug(requestedSubject)}`;
+          subjectSelect.add(option);
+        }
+        subjectSelect.value = requestedSubject;
+      }
+
+      if (sourcePageInput) {
+        sourcePageInput.value = limit(
+          params.get("sourcePage") || storedContext.page || referrer.page,
+          300,
+        );
+      }
+      if (sourceLabelInput) {
+        sourceLabelInput.value = limit(
+          params.get("sourceLabel") || storedContext.label || referrer.label,
+          160,
+        );
+      }
+      if (ctaInput) {
+        ctaInput.value = limit(params.get("cta") || storedContext.cta, 160);
+      }
+    };
+
+    applyContactContext();
+
+    form.addEventListener(
+      "invalid",
+      () => {
+        setStatus(
+          status,
+          "Preencha os campos obrigatórios antes de enviar.",
+          "error",
+        );
+      },
+      true,
+    );
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        setStatus(
+          status,
+          "Preencha os campos obrigatórios antes de enviar.",
+          "error",
+        );
+        return;
+      }
+
+      const formData = new FormData(form);
+      if (formData.get("website")) {
+        setStatus(status, "Mensagem enviada.", "success");
+        form.reset();
+        applyContactContext();
+        return;
+      }
+
+      if (!formData.get("cf-turnstile-response")) {
+        setStatus(
+          status,
+          form.querySelector(".cf-turnstile")
+            ? "Aguarde a verificação de segurança e tente novamente."
+            : "Formulário temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.br.",
+          "error",
+        );
+        return;
+      }
+
+      submitBtn?.setAttribute("disabled", "true");
+      setStatus(status, "Enviando...", "info");
+
+      try {
+        const payload: Record<string, string> = {};
+        for (const [key, value] of formData.entries()) {
+          if (typeof value === "string") payload[key] = value;
+        }
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          setStatus(
+            status,
+            "Contexto recebido. Nosso prazo-alvo de retorno inicial é de 1 dia útil.",
+            "success",
+          );
+          form.reset();
+          applyContactContext();
+          return;
+        }
+
+        const data: unknown = await response.json().catch(() => null);
+        setStatus(
+          status,
+          responseMessage(data) ??
+            "Não foi possível enviar agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
+          "error",
+        );
+      } catch (error) {
+        console.error(error);
+        setStatus(
+          status,
+          "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
+          "error",
+        );
+      } finally {
+        submitBtn?.removeAttribute("disabled");
+        (window as TurnstileWindow).turnstile?.reset();
+      }
+    });
+  }
+</script>

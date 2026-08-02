@@ -8,6 +8,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 
 const risks = [
@@ -66,11 +67,11 @@ const faq = [
   },
   {
     q: "Quanto tempo de planta parada para migração?",
-    a: "Em planta com áreas independentes, fasamos por área para reduzir impacto operacional. Em planta de processo contínuo, normalmente exige janela única de cutover com plano detalhado. Toda migração passa por ambiente espelho de homologação antes do cutover.",
+    a: "Em planta com áreas independentes, fasamos por área para reduzir impacto operacional. Em planta de processo contínuo, pode ser necessária uma janela única de cutover com plano detalhado. A homologação usa ambiente espelho quando a reprodução é viável; nos demais casos, combinamos bancada, simulação, testes de interfaces e validações controladas conforme o risco.",
   },
   {
     q: "Migração quebra rastreabilidade histórica do PLC?",
-    a: "Não, porque rastreabilidade vive no Historian/MES, não no PLC. Configuramos novos PLCs para enviar mesmas tags ao mesmo Historian. Continuidade de série temporal sem ruptura.",
+    a: "Pode quebrar se o projeto não tratar a rastreabilidade como requisito de migração. Estado, receitas e identificadores podem depender do controlador; séries também dependem de caminhos e IDs dos pontos, timestamps, qualidade e interfaces com Historian ou MES. Mapeamos essas dependências, definimos a estratégia de continuidade e testamos registros e consultas antes e depois do cutover.",
   },
   {
     q: "E se o PLC tiver lógica proprietária complexa não documentada?",
@@ -81,7 +82,7 @@ const faq = [
 
 <BaseLayout
   title="Migração de PLC-5 e SLC 500 para Logix"
-  description="Modernização de PLC-5 e SLC 500 para ControlLogix ou CompactLogix com inventário, simulação, cutover controlado, rollback e documentação."
+  description="Modernização de PLC-5 e SLC 500 para ControlLogix ou CompactLogix com inventário, simulação, cutover controlado e rollback. Veja o roteiro completo."
   ogImage="/og/solucoes-migracao-plc.png"
   jsonLd={[
     serviceSchema({
@@ -272,6 +273,17 @@ const faq = [
       <FAQAccordion items={faq} />
     </div>
   </section>
+
+  <RelatedSectors
+    title="Como a janela de migração muda por setor"
+    description="Inventário, FAT e rollback seguem o mesmo rigor; a estratégia de cutover acompanha a sazonalidade e a criticidade da planta."
+    items={[
+      { href: "/setores/armazenagem-de-graos/", label: "Armazenagem de grãos", description: "Virada planejada fora do pico de recebimento e expedição da safra." },
+      { href: "/setores/acucar-e-etanol/", label: "Açúcar e etanol", description: "Engenharia antecipada para executar o cutover dentro da entressafra." },
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Migração por linha ou área, preservando rastreabilidade e produção." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Faseamento por linha, câmara ou utilidade em janelas operacionais curtas." },
+    ]}
+  />
 
   <CtaBlock
     title="Tem controladores legados sustentando uma área crítica?"

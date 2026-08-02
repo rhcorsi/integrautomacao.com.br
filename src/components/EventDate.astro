@@ -1,26 +1,20 @@
 ---
+import { formatEventDate, isoEventDate } from "@/utils/eventDate";
+
 interface Props {
   startDate: Date;
   endDate?: Date;
 }
 
 const { startDate, endDate = startDate } = Astro.props;
-const isoDate = (date: Date) => date.toISOString().slice(0, 10);
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(date);
-const isRange = isoDate(startDate) !== isoDate(endDate);
+const isRange = isoEventDate(startDate) !== isoEventDate(endDate);
 ---
 
-<time datetime={isoDate(startDate)}>{formatDate(startDate)}</time>
+<time datetime={isoEventDate(startDate)}>{formatEventDate(startDate)}</time>
 {isRange && (
   <>
     <span aria-hidden="true"> a </span>
     <span class="sr-only">até </span>
-    <time datetime={isoDate(endDate)}>{formatDate(endDate)}</time>
+    <time datetime={isoEventDate(endDate)}>{formatEventDate(endDate)}</time>
   </>
 )}

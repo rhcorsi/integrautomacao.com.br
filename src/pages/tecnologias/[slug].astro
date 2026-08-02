@@ -9,8 +9,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import {
   CATALOG_PUBLISHED,
-  CATALOG_REVIEWED,
-  CATALOG_REVIEWED_BY,
+  getTechReview,
   getRelatedTech,
   techCatalog,
   type TechPage,
@@ -31,8 +30,10 @@ interface Props {
 
 const { item } = Astro.props;
 const related = getRelatedTech(item.relatedTech);
+const review = getTechReview(item.slug);
 
 const pageUrl = new URL(`/tecnologias/${item.slug}/`, SITE.url).toString();
+const techSocialImage = "/og/tecnologias.png";
 const techLd =
   item.type === "Serviço"
     ? serviceSchema({ name: item.title, description: item.description, url: pageUrl })
@@ -40,15 +41,17 @@ const techLd =
         title: item.title,
         description: item.description,
         url: pageUrl,
+        image: new URL(techSocialImage, SITE.url).toString(),
         datePublished: CATALOG_PUBLISHED,
-        dateModified: CATALOG_REVIEWED,
-        authorName: CATALOG_REVIEWED_BY,
+        dateModified: review.reviewedDate,
+        authorName: review.reviewedBy,
         authorUrl: new URL("/equipe/", SITE.url).toString(),
       });
-const reviewedDisplay = new Date(`${CATALOG_REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+const reviewedDisplay = new Date(`${review.reviewedDate}T00:00:00Z`).toLocaleDateString("pt-BR", {
   day: "numeric",
   month: "long",
   year: "numeric",
+  timeZone: "UTC",
 });
 const jsonLdBlocks =
   item.faq && item.faq.length > 0 ? [techLd, faqSchema(item.faq)] : [techLd];
@@ -59,6 +62,8 @@ const jsonLdBlocks =
   description={item.description}
   canonical={`/tecnologias/${item.slug}/`}
   ogType={item.type === "Serviço" ? "website" : "article"}
+  ogImage={techSocialImage}
+  ogImageAlt="Tecnologias de automação industrial atendidas pela Integra"
   jsonLd={jsonLdBlocks}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
@@ -71,7 +76,7 @@ const jsonLdBlocks =
             item.group === "Redes e Cibersegurança OT" ? "text-integra-ot" : "text-integra-red-700",
           ]}
         >
-          {item.type} · {item.group} · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{CATALOG_REVIEWED_BY}</a></span>
+          {item.type} · {item.group} · <span class="normal-case">Revisado em <time datetime={review.reviewedDate}>{reviewedDisplay}</time> por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{review.reviewedBy}</a></span>
         </p>
         <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           {item.title}
@@ -176,7 +181,7 @@ const jsonLdBlocks =
     </div>
   </section>
 
-  {(related.length > 0 || item.relatedSolutions.length > 0) && (
+  {(related.length > 0 || item.relatedSolutions.length > 0 || (item.relatedGuides?.length ?? 0) > 0 || (item.relatedCases?.length ?? 0) > 0) && (
     <section class="border-b border-integra-gray-200 bg-integra-white">
       <div class="container-fluid py-20">
         <SectionHeader
@@ -186,6 +191,38 @@ const jsonLdBlocks =
           accent={true}
         />
         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {item.relatedCases?.map((caseItem) => (
+            <a
+              href={caseItem.href}
+              class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
+            >
+              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+                Case público
+              </p>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {caseItem.label}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-integra-gray-600">
+                {caseItem.description}
+              </p>
+            </a>
+          ))}
+          {item.relatedGuides?.map((guide) => (
+            <a
+              href={guide.href}
+              class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
+            >
+              <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+                Guia técnico
+              </p>
+              <h3 class="text-lg font-semibold text-integra-gray-900">
+                {guide.label}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-integra-gray-600">
+                {guide.description}
+              </p>
+            </a>
+          ))}
           {item.relatedSolutions.map((solution) => (
             <a
               href={solution.href}

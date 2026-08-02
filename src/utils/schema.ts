@@ -116,6 +116,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   "automacao-industrial-maringa": "Automação Industrial em Maringá",
   "automacao-industrial-parana": "Automação Industrial no Paraná",
   "automacao-industrial": "Guia de Automação Industrial",
+  "ciberseguranca-ot": "Cibersegurança OT",
   "programacao-clp": "Programação de CLP",
   "comissionamento-industrial": "Comissionamento Industrial",
   "acucar-e-etanol": "Açúcar e Etanol",
@@ -184,6 +185,7 @@ export function breadcrumbSchema(pathname: string, leafName?: string) {
 
 /** BlogPosting para posts do blog. */
 export function articleSchema(opts: {
+  type?: "Article" | "BlogPosting";
   title: string;
   description: string;
   url: string;
@@ -196,7 +198,7 @@ export function articleSchema(opts: {
 
   return {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": opts.type ?? "BlogPosting",
     "@id": `${opts.url}#article`,
     headline: opts.title,
     description: opts.description,

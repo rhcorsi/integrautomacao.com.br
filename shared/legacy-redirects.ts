@@ -1,14 +1,12 @@
 /**
- * Fonte única de verdade para os redirects de query-string do WordPress
- * legado (?p=, ?page_id=, ?post_type=). Consumida por:
- *   - functions/_middleware.ts (Cloudflare Pages middleware, deploy automático)
- *   - workers/legacy-redirects.ts (Worker opcional de rota, deploy via wrangler)
+ * Regras compartilhadas pelo middleware para redirects de query string e
+ * paths legados. O arquivo public/_redirects mantém o fallback path-based do
+ * Pages; alterações de alias devem ser refletidas nos dois lugares.
  *
- * Critérios (deliberadamente conservadores):
- *   - ?p=N redireciona apenas IDs conhecidos do site antigo;
- *   - ?page_id apenas o valor 640 (única página real, o Blog);
- *   - ?post_type apenas avia_framework_post (drafts internos do tema Enfold).
- * Qualquer outra query passa adiante e recebe a página normal.
+ * Critérios conservadores:
+ * - `?p=N` redireciona somente IDs conhecidos;
+ * - `?page_id=640` é a antiga página de blog;
+ * - `?post_type=avia_framework_post` cobre rascunhos internos do tema Enfold.
  */
 
 export const LEGACY_POST_REDIRECTS: Record<string, string> = {
@@ -22,14 +20,104 @@ export const LEGACY_POST_REDIRECTS: Record<string, string> = {
   "956": "/",
 };
 
-/** Resolve o destino de redirect para uma URL legada, ou null se não houver. */
+export const LEGACY_PATH_REDIRECTS: Record<string, string> = {
+  "/tecnologias/pid-intertravamentos-sequenciamento": "/tecnologias/intertravamentos-sequencias/",
+  "/integra-acao/eventos": "/eventos/",
+  "/home-2": "/",
+  "/sitemap.xml": "/sitemap-index.xml",
+  "/wp-sitemap.xml": "/sitemap-index.xml",
+  "/feed": "/rss.xml",
+  "/comments/feed": "/rss.xml",
+  "/company": "/empresa/",
+  "/about": "/empresa/",
+  "/about-us": "/empresa/",
+  "/aboutus": "/empresa/",
+  "/team": "/equipe/",
+  "/services": "/servicos/",
+  "/solutions": "/solucoes/",
+  "/products": "/tecnologias/",
+  "/technologies": "/tecnologias/",
+  "/case-studies": "/cases/",
+  "/news": "/blog/",
+  "/security.txt": "/.well-known/security.txt",
+  "/sobre": "/empresa/",
+  "/sobre-nos": "/empresa/",
+  "/quem-somos": "/empresa/",
+  "/contact": "/contato/",
+  "/contacto": "/contato/",
+  "/clientes": "/cases/",
+  "/projetos": "/cases/",
+  "/portfolio": "/cases/",
+};
+
+const LEGACY_CONTROL_PARAMS = new Set(["p", "page_id", "post_type"]);
+
+function withPreservedQuery(url: URL, destination: string): string {
+  const target = new URL(destination, url.origin);
+  for (const [name, value] of url.searchParams) {
+    if (!LEGACY_CONTROL_PARAMS.has(name)) {
+      target.searchParams.append(name, value);
+    }
+  }
+  return `${target.pathname}${target.search}`;
+}
+
+function withAllQuery(url: URL, destination: string): string {
+  const target = new URL(destination, url.origin);
+  target.search = url.search;
+  return `${target.pathname}${target.search}`;
+}
+
+function resolvePathRedirect(url: URL): string | null {
+  const normalizedPath =
+    url.pathname === "/" ? "/" : url.pathname.replace(/\/+$/, "");
+  const exact = LEGACY_PATH_REDIRECTS[normalizedPath];
+  if (exact) return withAllQuery(url, exact);
+
+  if (normalizedPath.startsWith("/integra-acao/eventos/")) {
+    const suffix = normalizedPath.slice("/integra-acao/eventos/".length);
+    return withAllQuery(url, `/eventos/${suffix}/`);
+  }
+  if (
+    normalizedPath.startsWith("/category/") ||
+    normalizedPath.startsWith("/tag/") ||
+    normalizedPath.startsWith("/author/") ||
+    /^\/20[^/]*\//.test(normalizedPath)
+  ) {
+    return withAllQuery(url, "/blog/");
+  }
+  if (
+    normalizedPath.startsWith("/portfolio-item/") ||
+    normalizedPath.startsWith("/portfolio/")
+  ) {
+    return withAllQuery(url, "/cases/");
+  }
+  if (normalizedPath.startsWith("/sobre/")) {
+    return withAllQuery(url, "/empresa/");
+  }
+  if (normalizedPath.startsWith("/wp-sitemap-")) {
+    return withAllQuery(url, "/sitemap-index.xml");
+  }
+  return null;
+}
+
+/**
+ * Resolve a URL legada removendo apenas parâmetros de controle do WordPress.
+ * Parâmetros independentes (UTM, gclid etc.) sobrevivem ao redirect.
+ */
 export function resolveLegacyRedirect(url: URL): string | null {
   const p = url.searchParams.get("p");
-  if (p && LEGACY_POST_REDIRECTS[p]) return LEGACY_POST_REDIRECTS[p];
+  if (p && LEGACY_POST_REDIRECTS[p]) {
+    return withPreservedQuery(url, LEGACY_POST_REDIRECTS[p]);
+  }
 
-  if (url.searchParams.get("page_id") === "640") return "/blog/";
+  if (url.searchParams.get("page_id") === "640") {
+    return withPreservedQuery(url, "/blog/");
+  }
 
-  if (url.searchParams.get("post_type") === "avia_framework_post") return "/";
+  if (url.searchParams.get("post_type") === "avia_framework_post") {
+    return withPreservedQuery(url, "/");
+  }
 
-  return null;
+  return resolvePathRedirect(url);
 }

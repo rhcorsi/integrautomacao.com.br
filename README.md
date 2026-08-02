@@ -4,9 +4,8 @@ Site institucional da **Integra Automação Industrial** — engenharia e
 integração de sistemas industriais.
 
 Stack: **Astro + Tailwind v4 + MDX + TypeScript estrito**, hospedado em
-**Cloudflare Pages** (estático) com **Cloudflare Pages Function** para o
-formulário de contato e **Cloudflare Worker** para redirects legados de
-query string.
+**Cloudflare Pages** (estático) com **Cloudflare Pages Functions** para os
+formulários e para a normalização canônica de hosts e URLs legadas.
 
 ## Pré-requisitos
 
@@ -20,6 +19,8 @@ npm install              # instala dependências
 npm run dev              # http://localhost:4321
 npm run check            # astro check (TypeScript + content collections)
 npm run build            # gera dist/
+npm test                 # testes isolados das Pages Functions no runtime Workers
+npm run types:check      # valida os tipos gerados do ambiente Cloudflare
 npm run preview          # serve dist/ localmente
 npm run pages:dev        # serve dist/ + functions/ via wrangler
                          # (necessário para testar /api/contact e /api/newsletter local)
@@ -35,12 +36,13 @@ site/
 │   ├── favicon.svg          # SimboloColorido (vetorial)
 │   ├── logo.png             # logo principal para JSON-LD
 │   └── robots.txt
-├── functions/api/           # Cloudflare Pages Functions
-│   ├── contact.ts           # POST /api/contact (Turnstile + Resend)
-│   └── newsletter.ts        # POST /api/newsletter (Turnstile + Resend Contacts/Segments)
-├── workers/
-│   ├── legacy-redirects.ts  # Worker para ?p=N (deploy via wrangler)
-│   └── wrangler.toml        # config do Worker (NÃO do Pages)
+├── functions/               # Cloudflare Pages Functions e middleware
+│   ├── _middleware.ts       # host canônico, redirects legados e headers da API
+│   ├── _shared/             # limites de body/resposta, logs e Turnstile
+│   ├── types.d.ts           # bindings gerados por wrangler types
+│   └── api/
+│       ├── contact.ts       # POST /api/contact (Turnstile + Resend)
+│       └── newsletter.ts    # POST /api/newsletter (Contacts/Segments/Topics)
 ├── src/
 │   ├── assets/              # imagens otimizadas via astro:assets
 │   ├── components/          # componentes reutilizáveis
@@ -55,7 +57,7 @@ site/
 │   └── utils/site.ts        # constantes de empresa (CNPJ, endereço, etc.)
 ├── astro.config.mjs
 ├── tsconfig.json
-├── wrangler.toml            # config do Worker legacy-redirects
+├── wrangler.jsonc           # configuração única do Cloudflare Pages
 └── package.json
 ```
 
@@ -144,7 +146,8 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    NODE_VERSION              = 22
    PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
    TURNSTILE_SECRET_KEY      = <secret>       # encrypted
-   RESEND_API_KEY            = <API key>      # encrypted
+   RESEND_SEND_API_KEY       = <sending key>  # encrypted; somente POST /emails
+   RESEND_CONTACTS_API_KEY   = <full key>     # encrypted; somente newsletter
    RESEND_SEGMENT_ID         = <Segment ID>   # encrypted — newsletter Integra Ação
    RESEND_TOPIC_ID           = <Topic ID>     # encrypted — preferência explícita da newsletter
    CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
@@ -152,12 +155,18 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    ```
 
    Marque todas as variáveis server-side como **Encrypted** para não vazarem nos logs:
-   `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`,
+   `TURNSTILE_SECRET_KEY`, `RESEND_SEND_API_KEY`, `RESEND_CONTACTS_API_KEY`,
+   `RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`,
    `CONTACT_EMAIL_TO` e `CONTACT_EMAIL_FROM`.
    `PUBLIC_TURNSTILE_SITE_KEY` precisa existir no ambiente de build; se faltar,
    o formulário aparece como indisponível e não cai mais em `mailto:` automático.
    Não use placeholders como `<site key pública do Turnstile>`; a site key
    pública atual é `0x4AAAAAADKRCm67kAoc7SHU`.
+   Crie duas chaves distintas no Resend: uma chave **Sending access** restrita
+   ao domínio de envio para `RESEND_SEND_API_KEY`, usada só pelo contato, e uma
+   chave **Full access** para `RESEND_CONTACTS_API_KEY`, usada pelo workflow de
+   Contacts/Segments/Topics. Não reutilize a chave full-access no endpoint de
+   contato; registre owner, data de criação e rotação das duas chaves.
    `RESEND_SEGMENT_ID` e `RESEND_TOPIC_ID` são obrigatórios e usam o modelo
    atual de Contacts + Segments + Topics do Resend. Crie o Topic com padrão
    `opt_out` e selecione esse Topic em todo Broadcast da Integra Ação. Crie
@@ -165,6 +174,11 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    `newsletter_policy_version`, `newsletter_consent_source` e
    `newsletter_consent_text`. A API devolve indisponibilidade se Segment ou
    Topic não estiver configurado e nunca confirma inscrição não registrada.
+   O estado `unsubscribed` do Resend é global: se um contato já estiver em
+   descadastro global, a Function preserva essa escolha e responde `409`
+   (`GLOBAL_OPT_OUT`). A preferência da Integra Ação é controlada pelo Topic;
+   não reative contatos manualmente sem confirmar o pedido pelo canal de
+   privacidade.
 
 5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
    `integrautomacao.com.br`, `www.integrautomacao.com.br` e, se usados,
@@ -189,7 +203,8 @@ URL postada como comentário. Em pushes para `main` deploya para produção.
 | `CLOUDFLARE_ACCOUNT_ID`      | Visível no dashboard CF, painel direito de qualquer página |
 | `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare → Turnstile → Site → Public site key |
 
-Os secrets server-side (`TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`,
+Os secrets server-side (`TURNSTILE_SECRET_KEY`, `RESEND_SEND_API_KEY`,
+`RESEND_CONTACTS_API_KEY`,
 `RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`, `CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
 porque eles são consumidos pela Pages Function em runtime, não pelo
 build.
@@ -206,23 +221,6 @@ build.
 > triggers nesse workflow e desconecte a integração direta no painel
 > da Cloudflare.
 
-### Worker `legacy-redirects`
-
-Roda **separado** do site Pages, em zone-level. Após o cutover de DNS:
-
-```bash
-cd workers
-npx wrangler login                  # interativo, primeira vez
-npx wrangler deploy                 # deploya o Worker (lê workers/wrangler.toml)
-```
-
-No painel: **Workers & Pages → integrautomacao-legacy-redirects → Triggers**
-adicione a route `integrautomacao.com.br/*` (Zone:
-integrautomacao.com.br).
-
-> O `wrangler.toml` fica em `workers/`, não no root, para que o Cloudflare
-> Pages não o leia como config de Pages durante o build.
-
 ## Branch protection (recomendado)
 
 Settings → Branches → Add branch ruleset → Apply to **default branch**:
@@ -235,19 +233,16 @@ Settings → Branches → Add branch ruleset → Apply to **default branch**:
 - Restrict deletions
 - Block force pushes
 
-### Cloudflare Worker (legacy-redirects)
+### Migração do antigo Worker de redirects
 
-Roda **separado** do site. Deploy:
-
-```bash
-npx wrangler deploy
-```
-
-Depois, no painel da Cloudflare, configure a rota:
-`integrautomacao.com.br/*` → Worker `integrautomacao-legacy-redirects`.
-
-O Worker faz pass-through quando a URL não casa nenhum padrão legado, então
-todas as URLs novas continuam servidas pelo CF Pages normalmente.
+O middleware de Pages em `functions/_middleware.ts`, apoiado por
+`shared/legacy-redirects.ts`, consolida host, query string e aliases conhecidos
+em um único salto; `public/_redirects` permanece como fallback path-based do
+Pages. Se o Worker
+`integrautomacao-legacy-redirects` ou sua route de zona já tiverem sido
+publicados, remova a route e depois o Worker no dashboard da Cloudflare. Essa
+limpeza é externa ao repositório e deve acompanhar o primeiro deploy desta
+versão para evitar duas camadas tomando decisões sobre a mesma URL.
 
 ### Cloudflare Rate Limiting (proteção dos forms)
 
@@ -257,6 +252,33 @@ para os paths `/api/contact` e `/api/newsletter`:
 - Janela: 10 segundos (limite do Free plan)
 - Threshold: 3-5 requests por IP
 - Ação: Block (HTTP 429)
+
+O código também limita o corpo JSON por bytes mesmo quando não há
+`Content-Length`, restringe o tamanho das respostas dos provedores, usa timeout
+e idempotência nas operações compatíveis e não grava PII nos eventos
+personalizados. O código emite apenas eventos estruturados minimizados;
+invocation logs e traces automáticos permanecem desativados para evitar que URL,
+User-Agent ou identificadores presentes em chamadas de provedor sejam retidos
+por padrão. Ajuste acesso e retenção no dashboard conforme a política interna.
+
+## Testes das Functions
+
+Os testes usam o runtime Workers com Vitest. Eles cobrem limites de body UTF-8,
+validação Turnstile, retry idempotente de e-mail e os cenários de compensação da
+newsletter, incluindo respostas perdidas após uma mutação no Resend.
+
+```bash
+npm test
+npm run types:check
+npm run check
+npm run build
+```
+
+Após alterar bindings ou `wrangler.jsonc`, regenere e versione os tipos:
+
+```bash
+npm run types:generate
+```
 
 ## Configuração de DNS (Cloudflare)
 
@@ -283,6 +305,19 @@ _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 
 ## Backlog editorial e operacional
 
+- [ ] **P0 antes do próximo deploy:** concluir o gate de direitos de todos os
+      ativos de terceiros em [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md),
+      anexando comprovante interno ou substituindo/removendo o item.
+- [ ] **P0 antes de usar Broadcasts da newsletter:** decidir e implementar
+      double opt-in (link transacional assinado, expiração e Topic em `opt_out`
+      até a confirmação) ou registrar decisão formal de produto/privacidade.
+      Turnstile prova uma interação, não o controle da caixa postal; o aceite
+      atual do formulário, isoladamente, não autentica o titular do e-mail.
+- [ ] Definir orçamento global de tempo para os workflows de contato e
+      newsletter e, para mutações da newsletter, uma via de compensação
+      independente (por exemplo, Queue/Workflow). Cada chamada já tem deadline,
+      mas tentativas sequenciais podem somar latência maior durante
+      indisponibilidade prolongada do provedor.
 - [ ] Adicionar páginas setoriais somente quando houver conteúdo próprio,
       fontes primárias e evidências publicáveis para o segmento.
 - [ ] Publicar novos cases apenas com autorização, anonimização e distinção

@@ -31,6 +31,7 @@ const publicSource = publicSourceFor(source);
 ---
 
 <figure
+  data-manual-reference="true"
   class:list={[
     "overflow-hidden rounded-lg border shadow-xl",
     dark
@@ -88,7 +89,7 @@ const publicSource = publicSourceFor(source);
             rel="noopener noreferrer"
             class="underline underline-offset-2 hover:no-underline"
           >
-            abrir fonte primária
+            {publicSource.linkLabel}
           </a>
           {` · acesso em ${publicSource.accessedAt}`}
         </>

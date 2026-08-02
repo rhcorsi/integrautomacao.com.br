@@ -8,6 +8,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import plantpaxReference from "@/assets/manuals/plantpax-reference-medium-pass.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import plantpaxPasscSmall from "@/assets/manuals/plantpax-passc-small-1k-io.jpg";
@@ -83,7 +84,7 @@ const faq = [
   },
   {
     q: "Vocês trabalham com PlantPAx 3.x e 4.x ou só com 5.x?",
-    a: "Atendemos todas as versões da plataforma, incluindo manutenção evolutiva em PlantPAx 3.5, 4.1 e 5.0. Cada versão tem particularidades de arquitetura que respeitamos.",
+    a: "O atendimento pode abranger bases 3.x, 4.x e 5.x, mas a confirmação depende da release, do hardware, dos arquivos disponíveis, das licenças e do escopo. O diagnóstico inicial identifica o que pode ser sustentado, corrigido ou migrado com apoio da documentação aplicável à versão instalada.",
   },
   {
     q: "Qual a diferença entre PlantPAx e DeltaV/Experion?",
@@ -110,13 +111,13 @@ const faq = [
 
 <BaseLayout
   title="PlantPAx, Sistema de Controle Distribuído"
-  description="Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica."
+  description="Engenharia, implementação e suporte de PlantPAx (3.x a 5.x) com arquitetura padronizada e biblioteca de objetos de processo. Peça uma revisão da arquitetura."
   ogImage="/og/solucoes-plantpax.png"
   jsonLd={[
     serviceSchema({
       name: "PlantPAx, Sistema de Controle Distribuído",
       description:
-        "Engenharia, implementação e suporte de PlantPAx (versões 3.x a 5.x) com arquitetura padronizada, biblioteca de objetos de processo e governança técnica.",
+        "Engenharia, implementação e suporte de PlantPAx (3.x a 5.x) com arquitetura padronizada e biblioteca de objetos de processo. Peça uma revisão da arquitetura.",
       url: Astro.url.href,
     }),
     faqSchema(faq),
@@ -134,9 +135,9 @@ const faq = [
         <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
           O PlantPAx é o sistema de controle distribuído moderno da Rockwell
           Automation. Integra controle de processo, energia, informação e
-          segurança em uma única infraestrutura plant-wide. Nossa equipe atua
-          em todas as versões da plataforma, com profundidade técnica
-          comprovada em PlantPAx 3.x, 4.x e 5.x.
+          segurança em uma infraestrutura plant-wide. Para bases 3.x, 4.x ou
+          5.x, a equipe confirma release, hardware, bibliotecas, licenças e
+          documentação antes de definir sustentação ou migração.
         </p>
       </div>
       <ManualReference
@@ -233,10 +234,10 @@ const faq = [
         <div class="mt-8 grid gap-8 lg:grid-cols-2">
           <ManualReference
             image={plantpaxPasscSmall}
-            alt="Reference Architecture - Small PASS-C com até 10 clientes, 5 controladores e até 5000 tags Historian"
+            alt="Arquitetura de referência Small PASS-C com 1.000 pontos de I/O, oito clientes OWS e quatro controladores ControlLogix redundantes"
             title="Entry-tier: PASS-C consolidado para plantas até 1k I/O"
-            source="Rockwell Automation · PlantPAx 5.20 Reference Architectures"
-            caption="Print público da arquitetura Small: PASS-C reúne HMI, Data, Alarms e Batch em um único servidor consolidado, útil para projetos abaixo de 2.000 pontos de I/O."
+            source="Rockwell Automation · PlantPAx Reference Architecture (Small PASS-C, 1k I/O)"
+            caption="A figura de referência Small mostra um PASS-C consolidando os papéis indicados no diagrama, oito clientes OWS, quatro controladores ControlLogix redundantes e 1.000 pontos de I/O. É um exemplo caracterizado, não um limite aplicável a qualquer projeto."
           />
           <ManualReference
             image={plantpaxRedundantPrp}
@@ -272,6 +273,17 @@ const faq = [
       <FAQAccordion items={faq} />
     </div>
   </section>
+
+  <RelatedSectors
+    title="Onde uma arquitetura PlantPAx precisa responder ao processo"
+    description="A plataforma é a mesma; criticidade, receitas, utilidades e janela operacional mudam por setor."
+    items={[
+      { href: "/setores/acucar-e-etanol/", label: "Açúcar e etanol", description: "Controle contínuo, batelada, utilidades e cutover concentrado na entressafra." },
+      { href: "/setores/etanol-de-milho/", label: "Etanol de milho", description: "Conversão enzimática, fermentação, destilação e padronização desde o FEED." },
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Receitas, CIP, rastreabilidade e governança de processo em ambiente sanitário." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Utilidades, processo térmico e áreas em que disponibilidade justifica abordagem DCS." },
+    ]}
+  />
 
   <CtaBlock
     title="Tem um projeto PlantPAx para conversar?"

@@ -49,7 +49,7 @@ const faq = [
   },
   {
     q: "Como a automação apoia a rastreabilidade exigida pelo SIF e por mercados externos?",
-    a: "O Decreto 9.013/2017 (RIISPOA) exige controles de rastreabilidade de animais, matérias-primas, insumos e produtos ao longo da cadeia, e somente estabelecimentos sob SIF podem exportar. A automação não substitui o programa de autocontrole da planta, mas fornece a base de dados que o sustenta: temperaturas de câmara, tempos de cozimento e resfriamento e eventos de processo registrados com data, hora e contexto de lote em um <a href=\"/tecnologias/factorytalk-historian/\">historian</a>. Em auditoria, a diferença entre registro manual e série temporal automática costuma aparecer na velocidade e na consistência da resposta.",
+    a: "O <a href=\"https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/decreto/d9013.htm\" target=\"_blank\" rel=\"noopener noreferrer\">Decreto 9.013/2017 (RIISPOA)</a> trata da rastreabilidade de animais, matérias-primas, insumos e produtos ao longo da cadeia e condiciona o comércio internacional ao SIF, além das exigências do mercado de destino. A automação não substitui o programa de autocontrole da planta, mas pode fornecer dados que o apoiam: temperaturas de câmara, tempos de cozimento e resfriamento e eventos de processo registrados com data, hora e contexto de lote em um <a href=\"/tecnologias/factorytalk-historian/\">historian</a>. A qualidade desses registros depende de instrumentos, procedimentos e governança dos dados.",
   },
   {
     q: "O que a automação faz — e o que não faz — na sala de máquinas de amônia?",
@@ -64,11 +64,19 @@ const faq = [
     a: "Frigorífico é uma planta híbrida: controle discreto e de velocidade nas linhas de abate e desossa, regulatório contínuo no frio industrial e batelada nos processados. Esse perfil costuma aderir melhor a uma arquitetura de supervisão SCADA (sistema de supervisão e aquisição de dados) <a href=\"/solucoes/factorytalk/\">FactoryTalk</a> sobre controladores Logix, com Batch onde há receita, do que a um DCS (sistema de controle distribuído) de processo contínuo puro. Em plantas com forte peso de utilidades e processo térmico, vale comparar com uma abordagem <a href=\"/solucoes/plantpax/\">PlantPAx</a> para essas áreas. A resposta certa sai do mapeamento das áreas, não do catálogo.",
   },
 ];
+
+const REVIEWED = "2026-07-13";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 ---
 
 <BaseLayout
   title="Automação para Frigoríficos"
-  description="Automação para frigoríficos: abate e desossa com ritmo regulado, frio industrial com amônia (NR-13, NBR 16069), rastreabilidade SIF e batelada em embutidos."
+  description="Automação para frigoríficos: abate, frio industrial com amônia, rastreabilidade SIF, batelada em processados e modernização. Fale com nossa engenharia."
   breadcrumbLeaf="Frigoríficos"
   jsonLd={[
     serviceSchema({
@@ -84,7 +92,7 @@ const faq = [
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
       <div>
         <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Setor · Proteína animal
+          Setor · Proteína animal · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
         </p>
         <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           Automação para Frigoríficos
@@ -95,9 +103,9 @@ const faq = [
           regulado e com registro auditável — numa planta que responde ao mesmo
           tempo à inspeção sanitária do SIF (Serviço de Inspeção Federal), à
           NR-36 na organização das linhas e à NR-13 na sala de máquinas de
-          amônia. Frigoríficos estão entre os setores prioritários da Integra
-          Automação Industrial, com foco em supervisão FactoryTalk, controle de
-          receita por lote e rastreabilidade do animal ao produto final.
+          amônia. Para esse escopo, a Integra Automação Industrial oferece
+          engenharia de supervisão, controle de receitas por lote,
+          rastreabilidade de processo e modernização de sistemas legados.
         </p>
       </div>
       <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
@@ -105,14 +113,19 @@ const faq = [
           Escala do setor
         </p>
         <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
-          Em 2025 o Brasil produziu 15,3 milhões de toneladas de carne de
-          frango e exportou 5,3 milhões de toneladas para 153 países, mantendo
-          a posição de maior exportador mundial que ocupa desde 2004, segundo a
-          ABPA. Cada tonelada exportada passou por uma planta sob SIF, com
-          rastreabilidade e cadeia do frio auditáveis.
+          Em 2025 o Brasil produziu 15,289 milhões de toneladas de carne de
+          frango e exportou 5,324 milhões de toneladas, segundo a ABPA. O país
+          permaneceu como maior exportador e terceiro maior produtor mundial.
+          A exportação exige estabelecimento sob SIF e o atendimento às
+          condições aplicáveis ao mercado de destino.
         </p>
         <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
-          Fonte: ABPA · Relatório Anual 2026 (dados 2025)
+          <a
+            href="https://abpa-br.org/noticias/abpa-lanca-relatorio-anual-2026-com-dados-oficiais-da-avicultura-e-da-suinocultura-do-brasil/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline underline-offset-2 hover:no-underline"
+          >Fonte: ABPA · Relatório Anual 2026 (dados 2025)</a>
         </p>
       </aside>
     </div>
@@ -206,9 +219,10 @@ const faq = [
           refrigeração, incluindo detectores de amônia em sala de máquinas com
           acionamento automático de alarmes sonoros e visuais e da ventilação
           mecânica de emergência. No sistema de supervisão, esses eventos
-          precisam de prioridade máxima de alarme,
-          registro histórico e intertravamentos definidos em conjunto com o
-          responsável pela segurança da instalação.
+          precisam de prioridade coerente com a análise de risco e com a
+          filosofia de alarmes da planta, além de registro histórico e
+          intertravamentos definidos com o responsável pela segurança da
+          instalação.
         </p>
       </TechnicalCallout>
 
@@ -230,19 +244,19 @@ const faq = [
       <SectionHeader
         eyebrow="Do animal ao produto final"
         title="Rastreabilidade: o dado de processo sustenta o programa de autocontrole"
-        description="O RIISPOA exige rastreabilidade ao longo da cadeia e os mercados externos auditam planta a planta. A automação é a camada que registra o que aconteceu com cada lote, sem depender de digitação."
+        description="O RIISPOA exige rastreabilidade ao longo da cadeia. Com identificação, instrumentação e integração adequadas, a automação pode registrar eventos por lote e reduzir digitação manual."
         accent={true}
       />
 
       <p class="text-base leading-relaxed text-integra-gray-700">
-        O Decreto 9.013/2017 (RIISPOA — Regulamento da Inspeção Industrial e
-        Sanitária de Produtos de Origem Animal) define rastreabilidade como a
+        O <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/decreto/d9013.htm" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">Decreto 9.013/2017 (RIISPOA — Regulamento da Inspeção Industrial e Sanitária de Produtos de Origem Animal)</a>
+        define rastreabilidade como a
         capacidade de identificar a origem e seguir a movimentação do produto
         ao longo de produção, distribuição e comercialização — e determina que
-        somente estabelecimentos sob SIF realizam comércio internacional.
-        Habilitações de mercados externos são concedidas e auditadas por
-        planta, o que transforma a qualidade do registro em ativo comercial:
-        perder uma habilitação custa mercado, não apenas uma não conformidade.
+        somente estabelecimentos sob SIF realizam comércio internacional. Além
+        do registro no SIF, o estabelecimento precisa atender aos requisitos e,
+        quando aplicável, à habilitação do mercado de destino, conforme a
+        <a href="https://www.gov.br/agricultura/pt-br/internacional/assuntos/inspecao/produtos-animal/empresario/registro-de-estabelecimentos" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">orientação oficial do MAPA para exportadores</a>.
       </p>
       <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
         O papel da automação nessa cadeia é fornecer a série temporal que o
@@ -314,9 +328,10 @@ const faq = [
         que devolve a área operando dentro da mesma janela. A Integra estrutura
         essa avaliação em
         <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>,
-        comparando sustentação e migração por criticidade — a cadeia do frio e
-        a caldeira, que também é equipamento NR-13, ficam por último e com
-        redundância de plano. Uma visão geral do método está na página de
+        comparando sustentação e migração por criticidade. Áreas como cadeia do
+        frio e caldeira, também abrangida pela NR-13 conforme seu enquadramento,
+        exigem sequência de cutover, contingência e critérios de aceite definidos
+        para a instalação. Uma visão geral do método está na página de
         <a href="/automacao-industrial/" class="text-integra-red-700 underline hover:text-integra-red">automação industrial</a>.
       </p>
 

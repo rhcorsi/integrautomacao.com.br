@@ -87,6 +87,8 @@ export interface TechPage {
   faq: { q: string; a: string }[];
   relatedSolutions: { href: string; label: string }[];
   relatedTech: string[];
+  relatedGuides?: { href: string; label: string; description: string }[];
+  relatedCases?: { href: string; label: string; description: string }[];
 }
 
 export const GROUP_ORDER: TechGroup[] = [
@@ -98,13 +100,8 @@ export const GROUP_ORDER: TechGroup[] = [
   "Serviços de Engenharia",
 ];
 
-/**
- * Datas editoriais do catálogo (ISO). Emitidas no TechArticle JSON-LD e
- * visíveis nas páginas. Atualize CATALOG_REVIEWED somente após revisão
- * técnica substantiva das afirmações mutáveis do catálogo.
- */
+/** Datas editoriais ISO. A data de revisão é controlada por item no ledger ao fim do arquivo. */
 export const CATALOG_PUBLISHED = "2026-05-06";
-export const CATALOG_REVIEWED = "2026-07-12";
 export const CATALOG_REVIEWED_BY = "Equipe técnica Integra";
 
 const batchSource = "Rockwell Automation - PlantPAx Batch Design Considerations";
@@ -138,7 +135,7 @@ const telitEletronorSource = "Telit Cinterion + Eletronor - Eletroday (apresenta
 const siemensNetworkRefSource = "Siemens AG - Network Reference Architecture for Discrete Manufacturing (Article 109802750)";
 const simaticSt70Source = "Siemens AG - SIMATIC ST 70 Catalog (2025)";
 const siemensNetworkUserViewSource = "Siemens AG - Network Reference Architecture for Discrete Manufacturing (Article 109802750, V2.0)";
-const plantpax520RefSource = "Rockwell Automation - PlantPAx 5.20 Reference Architectures";
+const plantpaxSmallRefSource = "Rockwell Automation - PlantPAx Reference Architecture (Small PASS-C, 1k I/O)";
 const logixRedundancyRefSource = "Rockwell Automation - Logix Redundancy Systems Reference Architectures";
 const logixSisSource = "Rockwell Automation - Logix Redundancy Systems Reference Architectures (Logix SIS Topologies)";
 const cpweIdentityMobilitySource = "Cisco + Rockwell Automation - Deploying Identity and Mobility Services within a CPwE Architecture (ENET-TD008B-EN-P)";
@@ -146,7 +143,7 @@ const plantpaxMediumPassSource = "Rockwell Automation - PlantPAx 5.40 Reference 
 
 
 // V3 library sources
-const plantpax540RefSource = "Rockwell Automation - PlantPAx 5.40 Reference Architectures";
+const plantpaxLargeRefSource = "Rockwell Automation - PlantPAx Reference Architecture (Large, multiple PASS, 10k I/O)";
 const controllogix5580SystemsSource = "Rockwell Automation - ControlLogix 5580 and ControlLogix 5570 Systems Selection Guide (1756-SG020-EN-P)";
 const ftServicesRefSource = "Rockwell Automation - FactoryTalk Services Platform Reference Architectures";
 const ftHistorianRefSource = "Rockwell Automation - FactoryTalk Historian Reference Architectures";
@@ -185,6 +182,15 @@ const serviceRelated = [
   { href: "/contato/", label: "Falar com especialista" },
 ];
 
+const moinhoCaseRelated = [
+  {
+    href: "/cases/projeto-moinho/",
+    label: "Modernização de controle e supervisão em planta moageira",
+    description:
+      "Case público com SCADA FactoryTalk View SE, ControlLogix, EtherNet/IP, cutover por área e governança de alarmes.",
+  },
+];
+
 const multiVendorRelated = [
   { href: "/tecnologias/", label: "Catálogo técnico" },
   { href: "/contato/?assunto=tecnologias-multivendor", label: "Avaliar stack existente" },
@@ -202,8 +208,8 @@ export const techCatalog: TechPage[] = [
     slug: "plantpax-5x",
     group: "Controle e DCS",
     type: "Tecnologia",
-    title: "PlantPAx 5.x",
-    seoTitle: "PlantPAx 5.x: arquitetura e aplicação",
+    title: "PlantPAx 5.x: requisitos e arquitetura técnica",
+    seoTitle: "PlantPAx 5.x: requisitos e arquitetura técnica",
     shortTitle: "PlantPAx 5.x",
     description:
       "Arquitetura DCS moderna para controle plant-wide, com objetos de processo, servidores FactoryTalk e governança de ciclo de vida.",
@@ -269,6 +275,23 @@ export const techCatalog: TechPage[] = [
     ],
     relatedSolutions: plantpaxRelated,
     relatedTech: ["plantpax-library", "factorytalk-view-se", "factorytalk-historian", "ethernet-ip-cpwe"],
+    relatedGuides: [
+      {
+        href: "/blog/o-que-e-plantpax-dcs-rockwell/",
+        label: "O que é PlantPAx?",
+        description: "Introdução conceitual para entender componentes, limites e papel do DCS.",
+      },
+      {
+        href: "/blog/plantpax-arquitetura-dcs/",
+        label: "Como projetar uma arquitetura PlantPAx",
+        description: "Guia de projeto sobre objetos, servidores, redes e governança plant-wide.",
+      },
+      {
+        href: "/blog/plantpax-5x-vs-4x/",
+        label: "PlantPAx 5.x vs 4.x",
+        description: "Comparativo para decidir se e quando migrar uma instalação existente.",
+      },
+    ],
   },
   {
     slug: "plantpax-library",
@@ -281,10 +304,10 @@ export const techCatalog: TechPage[] = [
     intro:
       "A biblioteca PlantPAx evita que cada área da planta seja programada de um jeito. Ela cria uma base comum para controle, operação, diagnóstico e manutenção, reduzindo variação técnica e facilitando evolução futura.",
     image: plantpaxPasscAnnotated,
-    imageAlt: "PASS-C Small Reference Architecture com 200 OI, 30 OE, 10 OA e 5 OE",
-    imageTitle: "Como a biblioteca PlantPAx aterrissa em arquitetura PASS-C Small",
-    imageSource: plantpax540RefSource,
-    imageCaption: "Print público da Reference Architecture PASS-C: a biblioteca de objetos é a linguagem comum entre o controlador, a HMI e o data server consolidados num só servidor.",
+    imageAlt: "Arquitetura de referência PlantPAx Large com múltiplos PASS, 10.000 pontos de I/O, 60 clientes OWS e 20 pares de controladores",
+    imageTitle: "Biblioteca PlantPAx em uma arquitetura Large com múltiplos PASS",
+    imageSource: plantpaxLargeRefSource,
+    imageCaption: "A figura de referência Large mostra três servidores PASS, 60 clientes OWS, 20 pares de controladores e 10.000 pontos de I/O. Ela ilustra a aplicação dos Process Objects entre controle e supervisão; não representa uma arquitetura PASS-C Small.",
     useCases: [
       "Padronização de válvulas, motores, inversores, malhas PID, equipamentos e fases.",
       "Redução de inconsistência entre telas, alarmes e lógica de controle.",
@@ -412,6 +435,7 @@ export const techCatalog: TechPage[] = [
       { href: "/solucoes/plantpax/", label: "PlantPAx" },
     ],
     relatedTech: ["migracao-plc5-slc500", "ethernet-ip-cpwe", "intertravamentos-sequencias"],
+    relatedCases: moinhoCaseRelated,
   },
   {
     slug: "controle-regulatorio-pid",
@@ -426,8 +450,8 @@ export const techCatalog: TechPage[] = [
     image: plantpaxPasscSmall,
     imageAlt: "PASS-C Small Reference Architecture com até 1.000 pontos de I/O",
     imageTitle: "PASS-C Small: onde o controle regulatório vive em arquitetura entry-tier",
-    imageSource: plantpax520RefSource,
-    imageCaption: "Print público da PlantPAx 5.20 Reference Architecture: em projetos pequenos, o controle regulatório roda em PASS-C consolidado com HMI, dados, alarmes e batch num só servidor, ideal para áreas com até 1.000 pontos.",
+    imageSource: plantpaxSmallRefSource,
+    imageCaption: "A figura de referência Small mostra um PASS-C com os papéis de software indicados no diagrama, oito clientes OWS, quatro controladores ControlLogix redundantes e 1.000 pontos de I/O. A adequação ao processo depende do dimensionamento e dos testes do projeto.",
     useCases: [
       "Malhas PID instáveis, sem documentação ou com sintonia herdada.",
       "Processos contínuos (vapor, vazão, pressão, temperatura) que precisam de controle robusto.",
@@ -593,7 +617,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "FactoryTalk View SE é o mesmo que FactoryTalk View ME?",
-        a: "Não. ME (Machine Edition) é para PanelView e operação local de máquina. SE (Site Edition) é a plataforma SCADA distribuída para planta inteira, com servidores, clientes, alarmes governados e historian. SE é o que entra em projetos PlantPAx.",
+        a: "Não. ME (Machine Edition) é para PanelView e operação local de máquina. SE (Site Edition) é a plataforma SCADA distribuída para planta inteira, com servidores, clientes, alarmes governados e historian. SE é a HMI do sistema PlantPAx distribuído; View ME e PanelView podem coexistir em aplicações locais quando a matriz de biblioteca e versão da release permitir.",
       },
       {
         q: "Quantos clientes simultâneos View SE suporta por servidor?",
@@ -610,6 +634,19 @@ export const techCatalog: TechPage[] = [
     ],
     relatedSolutions: factorytalkRelated,
     relatedTech: ["factorytalk-optix", "thinmanager", "factorytalk-historian", "factorytalk-security"],
+    relatedGuides: [
+      {
+        href: "/blog/factorytalk-view-se-guia/",
+        label: "Arquitetura e operação do View SE",
+        description: "Referência sobre edições, servidores, redundância, alarmes e licenciamento.",
+      },
+      {
+        href: "/blog/factorytalk-view-se-vs-optix/",
+        label: "View SE vs FactoryTalk Optix",
+        description: "Comparativo por arquitetura, disponibilidade e cenário de aplicação.",
+      },
+    ],
+    relatedCases: moinhoCaseRelated,
   },
   {
     slug: "factorytalk-optix",
@@ -681,6 +718,13 @@ export const techCatalog: TechPage[] = [
     ],
     relatedSolutions: factorytalkRelated,
     relatedTech: ["factorytalk-view-se", "factorytalk-datamosaix", "thingworx-kepware"],
+    relatedGuides: [
+      {
+        href: "/blog/factorytalk-view-se-vs-optix/",
+        label: "View SE vs FactoryTalk Optix",
+        description: "Critérios técnicos para escolher ou combinar as duas plataformas.",
+      },
+    ],
   },
   {
     slug: "factorytalk-batch",
@@ -1021,7 +1065,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Kepware exige licença por tag ou por servidor?",
-        a: "Modelo é por servidor + drivers (avulsos ou em suítes) + plug-ins. A unidade de licença é o driver: tags, canais e devices não são licenciados (têm apenas limites técnicos que variam por driver). O cálculo depende do mix de marcas e protocolos da planta. O cálculo de licença depende do mix de marcas e do volume de canais.",
+        a: "O modelo é por servidor, drivers (avulsos ou em suítes) e plug-ins. A unidade comercial não é cada tag; canais, dispositivos e tags têm limites técnicos que variam por driver e versão. A composição e os direitos de uso precisam ser confirmados na cotação vigente para o mix de marcas e protocolos da planta.",
       },
       {
         q: "ThingWorx roda on-premises ou só nuvem?",
@@ -1083,7 +1127,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "DataMosaix pode substituir completamente o Historian local?",
-        a: "Em algumas arquiteturas sim, em outras coexistem. DataMosaix é SaaS com armazenamento contextualizado, AF-like; Historian SE é on-prem. Para plantas que querem dados em nuvem com governança, DataMosaix é o caminho; para a operação de tempo real crítica da planta, ainda há enorme valor em manter o Historian local.",
+        a: "Não é uma substituição automática. O DataMosaix é uma plataforma SaaS/DataOps que pode ingerir e contextualizar séries de fontes industriais, inclusive historians; a equivalência precisa demonstrar coleta confiável, store-and-forward, resolução, retenção, latência, desempenho de consulta e continuidade local. Em muitas arquiteturas, o historian preserva a camada temporal próxima da operação e o DataMosaix acrescenta contexto, governança e consumo em nuvem.",
       },
       {
         q: "DataMosaix integra com Power BI / Grafana?",
@@ -1153,11 +1197,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Edge computing industrial é o mesmo que IoT?",
-        a: "Edge é uma camada arquitetural, processamento próximo do dado (PLC, gateway, IPC industrial). IoT é a categoria geral. Toda IIoT bem feita usa edge para reduzir latência, banda e dependência de cloud para operação crítica.",
+        a: "Edge é uma camada arquitetural de processamento próximo do dado, por exemplo em PLC, gateway ou IPC industrial; IoT é uma categoria mais ampla. Arquiteturas IIoT frequentemente se beneficiam de edge quando precisam reduzir latência, banda ou dependência de nuvem, mas a necessidade e a fronteira dessa camada dependem do caso de uso.",
       },
       {
         q: "Quando vale a pena trazer compute para a borda?",
-        a: "Quando há latência crítica (reação <100ms), banda limitada (rural, planta isolada), volume de dados alto (visão, áudio, vibração) ou requisito de operação offline. Senão, processar central simplifica.",
+        a: "Quando há latência crítica (reação &lt;100 ms), banda limitada (rural, planta isolada), volume de dados alto (visão, áudio, vibração) ou requisito de operação offline. Senão, processar central simplifica.",
       },
       {
         q: "Edge industrial precisa de hardening?",
@@ -1175,7 +1219,8 @@ export const techCatalog: TechPage[] = [
     slug: "data-centers-industriais",
     group: "Infraestrutura OT",
     type: "Tecnologia",
-    title: "Data Centers Industriais",
+    title: "Arquitetura de data center industrial para OT",
+    seoTitle: "Arquitetura de data center industrial para OT",
     shortTitle: "Data Centers OT",
     description:
       "Infraestrutura para servidores HMI, historian, Batch, AssetCentre, domínio industrial, thin clients e aplicações críticas de automação.",
@@ -1361,7 +1406,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Migrar VMs entre hipervisores quebra licença Rockwell?",
-        a: "Não, mas exige cuidado: ativação por hardware ID muda quando o hipervisor muda. Reativamos as licenças (FactoryTalk, RSLogix) com o token correto após migração, parte do plano de cutover.",
+        a: "Pode exigir reativação, conforme o método de ativação, o Host ID e os direitos da licença. Antes do cutover, inventariamos as ativações, confirmamos o procedimento suportado pelo fabricante e planejamos transferência, rehost ou suporte; a migração só é aceita depois de validar cada licença no ambiente de destino.",
       },
       {
         q: "Quanto tempo leva migrar 20 VMs industriais?",
@@ -1507,11 +1552,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Plano de DR (Disaster Recovery) para OT precisa ser site offsite?",
-        a: "Idealmente sim, com RTO/RPO compatível com criticidade. Em plantas onde site espelho não é viável, mantemos cold standby (servidores físicos prontos, backup recente) para recuperação em horas.",
+        a: "O plano precisa proteger cópias contra o mesmo evento que afeta o ambiente principal; isso pode envolver armazenamento offsite ou imutável, sem significar obrigatoriamente um site espelho. Um ambiente alternativo, quando necessário, é dimensionado separadamente. RTO e RPO só devem ser declarados depois de exercícios de restauração e recuperação representativos.",
       },
       {
         q: "Snapshot de VM substitui backup de programa PLC?",
-        a: "Não. Programa PLC vive no controlador, não no servidor. AssetCentre faz backup periódico desse programa, com versionamento, comparação e restore, esse é o backup que importa quando perde um controlador.",
+        a: "Não. O snapshot protege apenas o estado daquela VM. A recuperação do controle exige preservar projetos offline e uploads verificados, versões de firmware e software, configuração de módulos, redes, HMIs e demais dependências. O AssetCentre pode automatizar parte do versionamento e da comparação quando a plataforma e a aplicação são compatíveis; o conjunto deve ser validado em teste de restore.",
       },
     ],
     relatedSolutions: infraRelated,
@@ -1576,7 +1621,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "FT Security registra log de quem fez o quê?",
-        a: "Sim, via FactoryTalk Diagnostics e AssetCentre. Toda mudança de configuração, login, alarme, comando crítico fica logado com timestamp, usuário e estação. Esses logs alimentam SIEM corporativo quando integrado.",
+        a: "FactoryTalk Security, Diagnostics e AssetCentre podem registrar eventos de identidade, diagnóstico e mudanças cobertas pelas aplicações configuradas. A cobertura de alarmes e comandos críticos não é automática nem universal: precisa ser definida na aplicação, testada ponta a ponta e, quando requerido, integrada ao repositório ou SIEM corporativo com retenção e identidade preservadas.",
       },
       {
         q: "Como migrar de modelo de senha compartilhada para FT Security?",
@@ -1650,7 +1695,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença entre DLR e PRP?",
-        a: "DLR é anel com cura rápida (<3 ms em anel de 50 nós), tecnologia ODVA da especificação EtherNet/IP (origem Rockwell) para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote), para tolerância a falha total de rede. Use cases distintos.",
+        a: "DLR é anel com cura rápida (&lt;3 ms em anel de 50 nós), tecnologia ODVA da especificação EtherNet/IP (origem Rockwell) para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote), para tolerância a falha total de rede. Use cases distintos.",
       },
       {
         q: "CPwE exige hardware Cisco e Rockwell juntos?",
@@ -1659,6 +1704,7 @@ export const techCatalog: TechPage[] = [
     ],
     relatedSolutions: cyberRelated,
     relatedTech: ["iec-62443-nist-ot", "protocolos-industriais", "monitoramento-redes-industriais"],
+    relatedCases: moinhoCaseRelated,
   },
   {
     slug: "protocolos-industriais",
@@ -2366,7 +2412,8 @@ export const techCatalog: TechPage[] = [
     slug: "migracao-plc5-slc500",
     group: "Serviços de Engenharia",
     type: "Serviço",
-    title: "Migração PLC-5 e SLC 500 para Logix",
+    title: "Arquitetura técnica de migração PLC-5 e SLC 500",
+    seoTitle: "Migração PLC-5 e SLC 500: arquitetura técnica",
     shortTitle: "Migração PLC-5 e SLC 500",
     description:
       "Modernização de controladores legados para ControlLogix ou CompactLogix com inventário, simulação, FAT/SAT, cutover e rollback.",
@@ -2436,6 +2483,18 @@ export const techCatalog: TechPage[] = [
       { href: "/solucoes/redes-iec-62443/", label: "Redes Industriais" },
     ],
     relatedTech: ["controllogix-compactlogix", "controle-regulatorio-pid", "factorytalk-view-se"],
+    relatedGuides: [
+      {
+        href: "/blog/migracao-plc5-controllogix-guia-completo/",
+        label: "Como migrar PLC-5 em seis fases",
+        description: "Sequência de levantamento, engenharia, conversão, FAT, cutover e suporte.",
+      },
+      {
+        href: "/blog/quanto-custa-migrar-plc5/",
+        label: "Fatores de custo da migração PLC-5",
+        description: "O que altera o orçamento antes de qualquer estimativa responsável.",
+      },
+    ],
   },
   {
     slug: "tc-devicewise",
@@ -2643,7 +2702,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Qual a diferença prática entre STL, LAD, FBD e SCL no STEP 7?",
-        a: "STL é assembly Siemens, máxima performance, baixa legibilidade. LAD/FBD são gráficos, fáceis de manter. SCL é texto estruturado, equivalente a IEC 61131 ST. Cada equipe de manutenção tem preferência; escolhemos mantendo legibilidade.",
+        a: "STL/AWL é uma linguagem textual de baixo nível, próxima de instruções de máquina, compacta e geralmente mais difícil de manter; não existe garantia universal de desempenho máximo, que depende da lógica, da CPU e da compilação. LAD/FBD são gráficos, e SCL é texto estruturado alinhado à IEC 61131-3. A escolha considera suporte da plataforma, comportamento, legibilidade e capacidade da equipe de manutenção.",
       },
       {
         q: "Migrar de STEP 7 Classic para TIA Portal é caro?",
@@ -2920,7 +2979,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Control Expert substitui o Unity Pro?",
-        a: "Sim. Control Expert é o nome novo do Unity Pro, dentro da estratégia EcoStruxure. Funcionalidade equivalente, com ganhos em integração e UX. Migração é update direto, não projeto.",
+        a: "Control Expert sucedeu o Unity Pro na linha EcoStruxure, mas isso não torna todo upgrade uma atualização trivial. O caminho pode envolver conversão de projeto e precisa validar versão, sistema operacional, firmware, bibliotecas e DFBs, drivers, DTMs, build e testes de regressão conforme a base instalada.",
       },
       {
         q: "Control Expert programa M580 e M340?",
@@ -3081,6 +3140,75 @@ export const techCatalog: TechPage[] = [
     relatedTech: ["schneider-control-expert", "schneider-machine-expert", "elipse-e3"],
   },
 ];
+
+/**
+ * Ledger individual das páginas técnicas. Uma revisão isolada deve alterar
+ * somente a chave correspondente; cobertura, formato ISO e datas futuras são
+ * validados na carga do catálogo.
+ */
+export const TECH_REVIEW_DATES: Record<string, string> = {
+  "plantpax-5x": "2026-07-13",
+  "plantpax-library": "2026-07-13",
+  "controllogix-compactlogix": "2026-07-13",
+  "controle-regulatorio-pid": "2026-07-13",
+  "intertravamentos-sequencias": "2026-07-13",
+  "factorytalk-view-se": "2026-07-13",
+  "factorytalk-optix": "2026-07-13",
+  "factorytalk-batch": "2026-07-13",
+  "thinmanager": "2026-07-13",
+  "factorytalk-assetcentre": "2026-07-13",
+  "factorytalk-historian": "2026-07-13",
+  "thingworx-kepware": "2026-07-13",
+  "factorytalk-datamosaix": "2026-07-13",
+  "edge-computing-industrial": "2026-07-13",
+  "data-centers-industriais": "2026-07-13",
+  "virtualizacao-ot": "2026-07-13",
+  "migracao-vms": "2026-07-13",
+  "active-directory-ot": "2026-07-13",
+  "backup-recuperacao-desastres": "2026-07-13",
+  "factorytalk-security": "2026-07-13",
+  "ethernet-ip-cpwe": "2026-07-13",
+  "protocolos-industriais": "2026-07-13",
+  "iec-62443-nist-ot": "2026-07-13",
+  "hardening-industrial": "2026-07-13",
+  "patch-management-ot": "2026-07-13",
+  "monitoramento-redes-industriais": "2026-07-13",
+  "manutencao-corretiva-preventiva": "2026-07-13",
+  "suporte-remoto-presencial": "2026-07-13",
+  "auditoria-conformidade": "2026-07-13",
+  "otimizacao-performance": "2026-07-13",
+  "documentacao-handover-treinamento": "2026-07-13",
+  "migracao-plc5-slc500": "2026-07-13",
+  "tc-devicewise": "2026-07-13",
+  "tia-portal": "2026-07-13",
+  "simatic-manager-step7": "2026-07-13",
+  "siemens-wincc-pcs7": "2026-07-13",
+  "siemens-redes-industriais": "2026-07-13",
+  "elipse-e3": "2026-07-13",
+  "schneider-control-expert": "2026-07-13",
+  "schneider-machine-expert": "2026-07-13",
+  "schneider-machine-scada-expert": "2026-07-13",
+};
+
+const catalogSlugs = new Set(techCatalog.map((item) => item.slug));
+const ledgerSlugs = new Set(Object.keys(TECH_REVIEW_DATES));
+const missingReviewDates = [...catalogSlugs].filter((slug) => !ledgerSlugs.has(slug));
+const orphanReviewDates = [...ledgerSlugs].filter((slug) => !catalogSlugs.has(slug));
+const todayIso = new Date().toISOString().slice(0, 10);
+const invalidReviewDates = Object.entries(TECH_REVIEW_DATES).filter(
+  ([, date]) => !/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(`${date}T00:00:00Z`)) || date > todayIso,
+);
+if (missingReviewDates.length || orphanReviewDates.length || invalidReviewDates.length) {
+  throw new Error(
+    `Ledger de revisão técnica inválido: ausentes=${missingReviewDates.join(",") || "nenhum"}; órfãos=${orphanReviewDates.join(",") || "nenhum"}; datas=${invalidReviewDates.map(([slug]) => slug).join(",") || "nenhuma"}`,
+  );
+}
+
+export function getTechReview(slug: string) {
+  const reviewedDate = TECH_REVIEW_DATES[slug];
+  if (!reviewedDate) throw new Error(`Página técnica sem revisão registrada: ${slug}`);
+  return { reviewedDate, reviewedBy: CATALOG_REVIEWED_BY } as const;
+}
 
 export const techCatalogBySlug = new Map(techCatalog.map((item) => [item.slug, item]));
 

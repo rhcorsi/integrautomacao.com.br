@@ -1,4 +1,4 @@
-﻿---
+---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { faqSchema, serviceSchema } from "@/utils/schema";
 import ArchitectureDiagram from "@/components/ArchitectureDiagram.astro";
@@ -9,6 +9,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import cpweReference from "@/assets/manuals/cpwe-ot-it-bridging.jpg";
 import controllogixReference from "@/assets/manuals/controllogix-dlr-converged.jpg";
 import idmzUntrustedTrusted from "@/assets/manuals/idmz-untrusted-trusted-zones.jpg";
@@ -65,7 +66,7 @@ const deliverables = [
   "Endurecimento de configuração de switches (port security, BPDU guard, storm control)",
   "Integração OPC UA com camada de supervisão e informação",
   "Roteiro de cibersegurança orientado à IEC 62443 SL-T por zona",
-  "Programa de gestão de patches e atualizações (FactoryTalk AssetCentre)",
+  "Processo de patching OT com inventário e evidências; FactoryTalk AssetCentre pode apoiar auditoria e controle de ativos, mas não instala patches de sistema operacional",
   "Diagnóstico de tráfego, loops, broadcast storms, latência e saúde de switches",
   "Hardening de servidores, estações de engenharia, HMIs e switches industriais",
   "Plano de monitoramento OT e resposta a incidentes com evidências operacionais",
@@ -118,13 +119,13 @@ const faq = [
 
 <BaseLayout
   title="Redes Industriais e IEC 62443"
-  description="Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82."
+  description="Redes industriais segundo CPwE: segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82. Solicite avaliação da sua rede."
   ogImage="/og/solucoes-redes-iec-62443.png"
   jsonLd={[
     serviceSchema({
       name: "Redes Industriais e Cibersegurança OT (IEC 62443)",
       description:
-        "Projeto e implementação de redes industriais segundo CPwE, com segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82.",
+        "Redes industriais segundo CPwE: segmentação, switches Stratix/Cisco e cibersegurança OT alinhada à IEC 62443 e NIST SP 800-82. Solicite avaliação da sua rede.",
       url: Astro.url.href,
     }),
     faqSchema(faq),
@@ -321,6 +322,17 @@ const faq = [
       <FAQAccordion items={faq} />
     </div>
   </section>
+
+  <RelatedSectors
+    title="Como zonas, conduítes e disponibilidade aparecem no processo"
+    description="A topologia de rede deve seguir áreas, fluxos permitidos, operação remota e consequência de falha de cada setor."
+    items={[
+      { href: "/setores/armazenagem-de-graos/", label: "Armazenagem de grãos", description: "Unidades distribuídas, telemetria, acesso remoto e rotas de transporte." },
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Segmentação entre produção, qualidade, utilidades e sistemas corporativos." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Linhas, frio industrial e acesso controlado a ambientes de utilidades." },
+      { href: "/setores/etanol-de-milho/", label: "Etanol de milho", description: "Arquitetura plant-wide para processo contínuo, batelada e pacotes integrados." },
+    ]}
+  />
 
   <CtaBlock
     title="Sua planta precisa de uma análise de rede e cibersegurança OT?"

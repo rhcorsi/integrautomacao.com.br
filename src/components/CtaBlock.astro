@@ -17,8 +17,8 @@ const {
 
 const isDark = variant === "dark";
 
-// Keep crawlable contact URLs stable. Click context is captured client-side
-// in contact-context.js and restored by contact-form.js.
+// Keep crawlable contact URLs stable. Bundled client code enriches the contact
+// submission with its page and CTA context without changing the destination.
 const primaryHref = primaryCta.href;
 const secondaryHref = secondaryCta?.href;
 ---

@@ -117,6 +117,9 @@ function warn(route, rule, message) {
 
 const requiredOpenGraph = ["og:title", "og:description", "og:type", "og:url", "og:image", "og:image:alt"];
 const requiredTwitter = ["twitter:card", "twitter:title", "twitter:description", "twitter:image", "twitter:image:alt"];
+const requiresGovernedReview = (route) =>
+  (route.startsWith("/setores/") && route !== "/setores/") ||
+  (route.startsWith("/tecnologias/") && route !== "/tecnologias/");
 const files = walk(distDir);
 
 for (const file of files) {
@@ -124,11 +127,169 @@ for (const file of files) {
   const html = fs.readFileSync(file, "utf8");
   const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head\s*>/i)?.[1] ?? "";
   const mainMatches = [...html.matchAll(/<main\b[^>]*>([\s\S]*?)<\/main\s*>/gi)];
+  const main = mainMatches[0]?.[1] ?? "";
+  const pageText = visibleText(html);
+  const visibleTimeDates = new Set();
+
+  for (const timeMatch of html.matchAll(/<time\b([^>]*)>([\s\S]*?)<\/time\s*>/gi)) {
+    const tag = `<time${timeMatch[1]}>`;
+    const dateTime = attribute(tag, "datetime");
+    if (!dateTime || !/^\d{4}-\d{2}-\d{2}$/.test(dateTime)) continue;
+    const instant = new Date(`${dateTime}T00:00:00Z`);
+    if (Number.isNaN(instant.getTime())) {
+      error(route, "time-datetime", `datetime invÃ¡lido: ${dateTime}`);
+      continue;
+    }
+    visibleTimeDates.add(dateTime);
+    const expected = new Intl.DateTimeFormat("pt-BR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(instant);
+    const actual = visibleText(timeMatch[2]).replace(/^0(?=\d)/, "");
+    if (actual !== expected) {
+      error(
+        route,
+        "time-visible-date",
+        `datetime ${dateTime} diverge do texto visÃ­vel â€œ${actual}â€; esperado â€œ${expected}â€`,
+      );
+    }
+  }
+
+  if (/abrir fonte prim[áa]ria/i.test(pageText)) {
+    error(
+      route,
+      "source-label",
+      "rótulo genérico afirma fonte primária sem distinguir documento citado de documentação relacionada",
+    );
+  }
+
+  if (requiresGovernedReview(route)) {
+    if (
+      !/Revisado em\s+(?:<time\b[^>]*>)?\d{1,2}\s+de\s+\p{L}+\s+de\s+\d{4}(?:<\/time>)?\s+por\s+<a\b(?=[^>]*\bhref\s*=\s*["']\/equipe\/["'])[^>]*>[^<]+<\/a>/iu.test(
+        main,
+      )
+    ) {
+      error(
+        route,
+        "editorial-review",
+        "página editorial governada sem data e responsável visivelmente vinculados a /equipe/",
+      );
+    }
+  }
+
+  let jsonLdNumber = 0;
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
+    const tag = `<script${match[1]}>`;
+    const scriptType = (attribute(tag, "type") || "").toLowerCase();
+    const scriptSrc = attribute(tag, "src");
+    if (!scriptSrc && scriptType !== "application/ld+json" && scriptType !== "application/json") {
+      error(
+        route,
+        "csp-inline-script",
+        "script executável inline seria bloqueado pela CSP; gere um asset externo com src",
+      );
+    }
+    if (scriptType !== "application/ld+json") continue;
+    jsonLdNumber += 1;
+
+    let data;
+    try {
+      data = JSON.parse(match[2]);
+    } catch (parseError) {
+      error(route, "json-ld", `bloco ${jsonLdNumber} contém JSON inválido: ${parseError.message}`);
+      continue;
+    }
+
+    const pending = Array.isArray(data) ? [...data] : [data];
+    while (pending.length > 0) {
+      const node = pending.shift();
+      if (!node || typeof node !== "object") continue;
+      if (Array.isArray(node)) {
+        pending.push(...node);
+        continue;
+      }
+
+      const types = Array.isArray(node["@type"]) ? node["@type"] : [node["@type"]];
+      const visibleSchemaDateFields = types.includes("Event")
+        ? ["startDate", "endDate"]
+        : types.includes("TechArticle")
+          ? ["dateModified"]
+          : types.includes("Article") || types.includes("BlogPosting")
+            ? ["datePublished", "dateModified"]
+            : [];
+      for (const field of visibleSchemaDateFields) {
+        if (typeof node[field] !== "string") continue;
+        const isoDate = node[field].slice(0, 10);
+        if (/^\d{4}-\d{2}-\d{2}$/.test(isoDate) && !visibleTimeDates.has(isoDate)) {
+          error(
+            route,
+            "schema-visible-date",
+            `${field}=${isoDate} do JSON-LD nÃ£o possui <time datetime> visÃ­vel correspondente`,
+          );
+        }
+      }
+      if (types.includes("FAQPage") && Array.isArray(node.mainEntity)) {
+        const normalizedPageText = pageText.normalize("NFKC").replace(/\s+/g, " ").toLocaleLowerCase("pt-BR");
+        for (const question of node.mainEntity) {
+          if (!question || typeof question.name !== "string") continue;
+          const normalizedQuestion = question.name
+            .normalize("NFKC")
+            .replace(/\s+/g, " ")
+            .trim()
+            .toLocaleLowerCase("pt-BR");
+          if (normalizedQuestion && !normalizedPageText.includes(normalizedQuestion)) {
+            error(route, "faq-visible", `pergunta do FAQPage não está visível: “${question.name}”`);
+          }
+
+          const answer = question.acceptedAnswer;
+          if (!answer || typeof answer !== "object" || typeof answer.text !== "string") {
+            error(route, "faq-answer", `pergunta sem acceptedAnswer.text válido: “${question.name}”`);
+            continue;
+          }
+          const normalizedAnswer = visibleText(answer.text)
+            .normalize("NFKC")
+            .replace(/\s+/g, " ")
+            .trim()
+            .toLocaleLowerCase("pt-BR");
+          if (normalizedAnswer && !normalizedPageText.includes(normalizedAnswer)) {
+            error(route, "faq-visible", `resposta do FAQPage não está visível: “${question.name}”`);
+          }
+        }
+      }
+
+      if (Array.isArray(node["@graph"])) pending.push(...node["@graph"]);
+    }
+  }
+
+  let manualReferenceNumber = 0;
+  for (const match of html.matchAll(
+    /<figure\b[^>]*\bdata-manual-reference=["']true["'][^>]*>([\s\S]*?)<\/figure\s*>/gi,
+  )) {
+    manualReferenceNumber += 1;
+    const referenceHtml = match[1];
+    const sourceLinks = [...referenceHtml.matchAll(/<a\b[^>]*>/gi)].filter((link) => {
+      const href = attribute(link[0], "href") || "";
+      const target = attribute(link[0], "target");
+      return href.startsWith("https://") && target === "_blank";
+    });
+    const referenceText = visibleText(referenceHtml);
+    if (
+      sourceLinks.length !== 1 ||
+      !/(abrir documento citado|consultar documentação oficial relacionada)/i.test(referenceText)
+    ) {
+      error(
+        route,
+        "manual-source",
+        `referência técnica ${manualReferenceNumber} sem vínculo público qualificado e inequívoco`,
+      );
+    }
+  }
 
   if (mainMatches.length !== 1) {
     error(route, "main", `esperado 1 elemento <main>; encontrado(s): ${mainMatches.length}`);
   }
-  const main = mainMatches[0]?.[1] ?? "";
   const h1Count = [...main.matchAll(/<h1\b[^>]*>/gi)].length;
   if (h1Count !== 1) error(route, "h1", `esperado exatamente 1 H1 dentro de <main>; encontrado(s): ${h1Count}`);
 
@@ -144,8 +305,8 @@ for (const file of files) {
   const description = descriptions[0];
   if (descriptions.length !== 1 || !description) {
     error(route, "meta-description", `esperada 1 meta description não vazia; encontrada(s): ${descriptions.length}`);
-  } else if (description.length < 90 || description.length > 170) {
-    warn(route, "description-length", `${description.length} caracteres (faixa recomendada: 90–170)`);
+  } else if (description.length < 90 || description.length > 160) {
+    warn(route, "description-length", `${description.length} caracteres (faixa editorial: 90–160)`);
   }
 
   const canonicals = canonicalHrefs(head);
@@ -235,9 +396,13 @@ for (const [rule, count] of countsByRule(warnings)) console.log(`  AVISO ${rule}
 printItems("Falhas estruturais", structural);
 printItems("Avisos editoriais", warnings);
 
-if (structural.length > 0) {
-  console.error("\nAuditoria reprovada por falhas estruturais.");
+if (structural.length > 0 || warnings.length > 0) {
+  console.error(
+    structural.length > 0
+      ? "\nAuditoria reprovada por falhas estruturais ou avisos editoriais."
+      : "\nAuditoria reprovada: avisos editoriais precisam ser resolvidos ou justificados no código.",
+  );
   process.exitCode = 1;
 } else {
-  console.log(warnings.length > 0 ? "\nEstrutura aprovada; avisos editoriais requerem revisão humana." : "\nAuditoria aprovada sem ocorrências.");
+  console.log("\nAuditoria aprovada sem ocorrências.");
 }

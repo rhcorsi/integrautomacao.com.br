@@ -138,4 +138,135 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     defer></script>
 )}
 
-<script is:inline type="module" src="/scripts/newsletter-form.js"></script>
+<script>
+  interface NewsletterTurnstileWindow extends Window {
+    turnstile?: { reset: (container?: string | HTMLElement) => void };
+  }
+
+  const newsletterForms =
+    document.querySelectorAll<HTMLFormElement>("[data-newsletter-form]");
+
+  const setNewsletterStatus = (
+    status: HTMLElement | null,
+    message: string,
+    tone: "error" | "info" | "success" = "info",
+  ) => {
+    if (!status) return;
+    status.setAttribute("role", tone === "error" ? "alert" : "status");
+    status.setAttribute(
+      "aria-live",
+      tone === "error" ? "assertive" : "polite",
+    );
+    status.textContent = message;
+    status.classList.remove("text-integra-red-700", "text-emerald-700");
+    if (tone === "error") status.classList.add("text-integra-red-700");
+    if (tone === "success") status.classList.add("text-emerald-700");
+  };
+
+  const responseMessage = (value: unknown): string | undefined => {
+    if (
+      typeof value !== "object" ||
+      value === null ||
+      !("message" in value) ||
+      typeof value.message !== "string"
+    ) {
+      return undefined;
+    }
+    return value.message;
+  };
+
+  for (const form of newsletterForms) {
+    const status = form.querySelector<HTMLElement>('[role="status"]');
+    const submitBtn =
+      form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    form.addEventListener(
+      "invalid",
+      () => {
+        setNewsletterStatus(
+          status,
+          "Preencha os campos obrigatórios antes de enviar.",
+          "error",
+        );
+      },
+      true,
+    );
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        setNewsletterStatus(
+          status,
+          "Preencha os campos obrigatórios antes de enviar.",
+          "error",
+        );
+        return;
+      }
+
+      const formData = new FormData(form);
+      if (formData.get("website")) {
+        setNewsletterStatus(status, "Inscrição registrada.", "success");
+        form.reset();
+        return;
+      }
+
+      if (!formData.get("cf-turnstile-response")) {
+        setNewsletterStatus(
+          status,
+          form.querySelector(".cf-turnstile")
+            ? "Aguarde a verificação de segurança e tente novamente."
+            : "Inscrição temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.br.",
+          "error",
+        );
+        return;
+      }
+
+      submitBtn?.setAttribute("disabled", "true");
+      setNewsletterStatus(status, "Processando…", "info");
+
+      try {
+        const payload: Record<string, string> = {};
+        for (const [key, value] of formData.entries()) {
+          if (typeof value === "string") payload[key] = value;
+        }
+        const response = await fetch("/api/newsletter", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          setNewsletterStatus(
+            status,
+            "Inscrição confirmada. Você receberá as próximas edições publicadas.",
+            "success",
+          );
+          form.reset();
+          return;
+        }
+
+        const data: unknown = await response.json().catch(() => null);
+        setNewsletterStatus(
+          status,
+          responseMessage(data) ??
+            "Não foi possível inscrever agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
+          "error",
+        );
+      } catch (error) {
+        console.error(error);
+        setNewsletterStatus(
+          status,
+          "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
+          "error",
+        );
+      } finally {
+        submitBtn?.removeAttribute("disabled");
+        (window as NewsletterTurnstileWindow).turnstile?.reset();
+      }
+    });
+  }
+</script>

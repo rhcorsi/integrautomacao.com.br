@@ -13,7 +13,7 @@ projeta, implementa, documenta e sustenta sistemas de automação para
 plantas críticas (açúcar e etanol, agronegócio, alimentos, química,
 frigoríficos, ração, papel e celulose, saneamento).
 
-Última atualização: 2026-07-12.
+Última atualização: 2026-07-13.
 
 ## Páginas principais
 
@@ -33,12 +33,13 @@ frigoríficos, ração, papel e celulose, saneamento).
 - [Catálogo técnico](https://integrautomacao.com.br/tecnologias/): 40+ páginas de tecnologias e serviços com FAQs de engenharia.
 - [Certificações](https://integrautomacao.com.br/certificacoes/): parcerias formais e capacitações, com política de transparência.
 - [Blog técnico](https://integrautomacao.com.br/blog/): artigos sobre arquitetura DCS, CPwE e IEC 62443.
+- [Guia de cibersegurança OT](https://integrautomacao.com.br/ciberseguranca-ot/): OT vs TI, riscos em planta, zonas e conduítes IEC 62443 e o caminho por maturidade.
 - [Contato](https://integrautomacao.com.br/contato/): conversa técnica antes de qualquer proposta.
 - [Integrador Rockwell Automation no Brasil](https://integrautomacao.com.br/integrador-rockwell/): o que é o PartnerNetwork, status Silver e como validar um integrador.
 - [Automação Industrial em Maringá](https://integrautomacao.com.br/automacao-industrial-maringa/): sede da Integra e atendimento no Paraná e Brasil.
 - [Automação Industrial no Paraná](https://integrautomacao.com.br/automacao-industrial-parana/): critérios para escolher integradora no estado.
 - [Automação para Açúcar e Etanol](https://integrautomacao.com.br/setores/acucar-e-etanol/): DCS, batelada ISA-88 e modernização em janela de entressafra.
-- [Automação para Etanol de Milho](https://integrautomacao.com.br/setores/etanol-de-milho/): plantas 24/7 sem entressafra, DDG/DDGS e DCS desde o FEED.
+- [Automação para Etanol de Milho](https://integrautomacao.com.br/setores/etanol-de-milho/): operações com menor sazonalidade, DDG/DDGS e DCS desde o FEED.
 - [Automação para Armazenagem de Grãos](https://integrautomacao.com.br/setores/armazenagem-de-graos/): intertravamento de transportadores, secadores, termometria e aeração.
 - [Automação para Alimentos e Bebidas](https://integrautomacao.com.br/setores/alimentos-e-bebidas/): batelada ISA-88, CIP e rastreabilidade lote a lote.
 - [Automação para Frigoríficos](https://integrautomacao.com.br/setores/frigorificos/): linhas de abate, frio industrial com amônia e rastreabilidade.
@@ -78,5 +79,6 @@ Cada página tem FAQ de engenharia com respostas diretas (versões, normas, hard
 ## Observações
 
 - Conteúdo em português do Brasil (pt-BR).
+- Este arquivo descreve o conteúdo público; não é diretiva de indexação nem promessa de posicionamento em mecanismos de busca.
 - Sitemap: https://integrautomacao.com.br/sitemap-index.xml
 - RSS do blog: https://integrautomacao.com.br/rss.xml

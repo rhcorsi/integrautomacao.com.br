@@ -49,7 +49,7 @@ const faq = [
   },
   {
     q: "O que a fiscalização do MAPA pede ver como evidência de prevenção de contaminação cruzada?",
-    a: "As regras vêm da IN nº 4/2007 (Boas Práticas de Fabricação em alimentação animal) e da IN nº 8/2004, que proíbe proteínas e gorduras de origem animal na alimentação de ruminantes, com exceções previstas na própria norma (como leite e produtos lácteos). O que a fiscalização quer é evidência de cumprimento — e é isso que a automação produz: o registro de que a matriz de sequenciamento bloqueou ordens de produção incompatíveis, o comprovante de cada flushing executado entre receitas, com data, hora e batelada associada, e o histórico por lote pronto para auditoria. Em vez de reconstruir planilhas na visita do fiscal, a qualidade responde com relatórios do próprio sistema de controle, sustentados por <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos e sequências</a> testáveis.",
+    a: "A <a href=\"https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/arquivos-alimentacao-animal/legislacao/instrucao-normativa-no-4-de-23-de-fevereiro-de-2007.pdf/view\" target=\"_blank\" rel=\"noopener noreferrer\">IN nº 4/2007</a> trata das Boas Práticas de Fabricação em alimentação animal, e a <a href=\"https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/arquivos-alimentacao-animal/legislacao/instrucao-normativa-no-8-de-25-de-marco-de-2004.pdf/view\" target=\"_blank\" rel=\"noopener noreferrer\">IN nº 8/2004</a> proíbe proteínas e gorduras de origem animal na alimentação de ruminantes, com as exceções da própria norma. A fiscalização avalia o cumprimento das BPF e dos controles aplicáveis à fábrica. Registros automáticos de bloqueios de sequência, flushing, data, hora e lote podem compor essa evidência, mas não bastam para demonstrar conformidade: precisam estar coerentes com o manual de BPF, os procedimentos, a verificação de limpeza e a responsabilidade técnica. <a href=\"/tecnologias/intertravamentos-sequencias/\">Intertravamentos e sequências</a> testáveis apoiam esse controle.",
   },
   {
     q: "O que a ISA-88 muda na prática numa fábrica de ração?",
@@ -76,7 +76,7 @@ const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-
 
 <BaseLayout
   title="Automação para Fábricas de Ração"
-  description="Automação para fábricas de ração: dosagem e pesagem de precisão, batelada ISA-88, sequenciamento contra contaminação cruzada, peletização, rastreabilidade e expedição."
+  description="Automação para fábricas de ração: dosagem, batelada ISA-88, controle de contaminação cruzada, peletização e rastreabilidade. Converse sobre a sua planta."
   breadcrumbLeaf="Fábricas de Ração"
   jsonLd={[
     serviceSchema({
@@ -103,10 +103,10 @@ const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-
           misturadas, peletizadas e expedidas com repetibilidade: pesagem de
           macro e microingredientes dentro da tolerância, sequenciamento que
           respeita as regras de contaminação cruzada e registro que liga cada
-          lote de insumo ao caminhão que saiu da fábrica. Fábricas de ração
-          estão entre os setores prioritários da Integra Automação Industrial,
-          com foco em precisão de dosagem, receitas e batelada e automação de
-          mistura.
+          lote de insumo ao caminhão que saiu da fábrica. Para esse escopo, a
+          Integra Automação Industrial oferece engenharia com foco em precisão
+          de dosagem, gestão de receitas e batelada, automação da mistura e
+          rastreabilidade de processo.
         </p>
       </div>
       <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
@@ -114,14 +114,15 @@ const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-
           Escala do setor
         </p>
         <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
-          O Sindirações projetou 90 milhões de toneladas de ração produzidas no
-          Brasil em 2025, avanço de 2,8% sobre o ano anterior — só a avicultura
-          de corte deve responder por cerca de 37,9 milhões de toneladas. A
-          maior parte desse volume sai de fábricas que dosam, misturam e
-          expedem em ciclos de batelada repetidos ao longo de todo o turno.
+          O balanço do Sindirações indica que a produção brasileira de
+          alimentação animal ficou em cerca de 94 milhões de toneladas em 2025,
+          expansão superior a 3% sobre o ano anterior. O segmento de frangos de
+          corte respondeu por 37,85 milhões de toneladas. A maior parte desse
+          volume sai de fábricas que dosam, misturam e expedem em ciclos de
+          batelada repetidos ao longo de todo o turno.
         </p>
         <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
-          <a href="https://sindiracoes.org.br/sem-alimentacao-animal-nao-ha-proteina-animal/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: Sindirações · balanço 2025</a>
+          <a href="https://sindiracoes.org.br/wp-content/uploads/2026/03/boletim_informativo_setor_mar2026_port_sindiracoes.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: Sindirações · desempenho de 2025, boletim de março de 2026</a>
         </p>
       </aside>
     </div>
@@ -206,38 +207,36 @@ const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-
 
       <SectionHeader
         eyebrow="Contaminação cruzada"
-        title="Sequência de produção é requisito sanitário, não preferência de programação"
-        description="Em alimentação animal, a ordem das bateladas e a limpeza entre elas são reguladas. O sistema de controle é o lugar onde essa regra deixa de depender da memória do operador."
+        title="Sequência de produção integra o controle sanitário da fábrica"
+        description="Em alimentação animal, a ordem das bateladas e a limpeza entre elas integram as BPF. O controle pode executar e registrar regras definidas pela qualidade."
         accent={true}
       />
 
       <p class="text-base leading-relaxed text-integra-gray-700">
-        A Instrução Normativa nº 4/2007 do MAPA (Ministério da Agricultura,
-        Pecuária e Abastecimento) estabelece as Boas Práticas de Fabricação
+        A <a href="https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/arquivos-alimentacao-animal/legislacao/instrucao-normativa-no-4-de-23-de-fevereiro-de-2007.pdf/view" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">Instrução Normativa nº 4/2007 do MAPA</a>
+        (Ministério da Agricultura e Pecuária) estabelece as Boas Práticas de Fabricação
         (BPF) para estabelecimentos de alimentação animal: define contaminação
         cruzada, exige medidas de prevenção em todas as etapas e determina
         linhas separadas de produção quando, havendo alto risco de contaminação
         cruzada, os métodos de limpeza forem considerados ineficientes.
       </p>
       <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
-        A IN
-        nº 8/2004 proíbe proteínas e gorduras de origem animal na alimentação
+        A <a href="https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/arquivos-alimentacao-animal/legislacao/instrucao-normativa-no-8-de-25-de-marco-de-2004.pdf/view" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">IN nº 8/2004</a>
+        proíbe proteínas e gorduras de origem animal na alimentação
         de ruminantes, com exceções previstas na própria norma (como leite e
         produtos lácteos) — quem produz ração para ruminantes e monogástricos
-        na mesma planta precisa controlar sequência e limpeza de linha. Os
-        textos estão na página de
-        <a href="https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/legislacao-alimentacao-animal" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">legislação de alimentação animal do MAPA</a>,
-        e o enquadramento de cada fábrica deve ser confirmado com o responsável
-        técnico.
+        na mesma planta precisa controlar sequência e limpeza de linha. Os links
+        acima levam aos textos oficiais; o enquadramento de cada fábrica deve ser
+        confirmado com seu responsável técnico.
       </p>
       <p class="mt-4 text-base leading-relaxed text-integra-gray-700">
-        A automação torna essas regras executáveis: uma matriz de
-        compatibilidade entre receitas bloqueia sequências não permitidas,
-        dispara flushing (batelada de limpeza com ingrediente neutro) entre
-        produtos incompatíveis e registra cada limpeza com data, hora e
-        batelada associada. O programa de BPF continua sendo da qualidade; o
-        controle o executa da mesma forma em todos os turnos e deixa a trilha
-        de auditoria pronta para a fiscalização.
+        Quando a qualidade define e valida uma matriz de compatibilidade, a
+        automação pode bloquear sequências não permitidas, solicitar flushing
+        (batelada de limpeza com ingrediente definido no procedimento) entre
+        produtos incompatíveis e registrar cada execução com data, hora e
+        batelada associada. O programa de BPF continua sob responsabilidade da
+        fábrica e de sua equipe técnica; o controle ajuda a repetir o
+        procedimento e fornece uma trilha documental de apoio à fiscalização.
       </p>
 
       <SectionHeader

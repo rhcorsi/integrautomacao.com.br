@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import logoColorido from "@/assets/logos/Colorido.png";
 import EmailLink from "@/components/EmailLink.astro";
+import { formatEventDateRange } from "@/utils/eventDate";
 import { NAV, MEGA_MENUS, COMPANY, type MegaMenu } from "@/utils/site";
 
 const normalizeRoutePath = (value: string) =>
@@ -35,7 +36,7 @@ const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
   .slice(0, 5);
 
 const allEventos = (await getCollection("eventos", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime());
 
 const dynamicMegas: Record<string, MegaMenu> = {
   "/cases/": {
@@ -123,7 +124,7 @@ const dynamicMegas: Record<string, MegaMenu> = {
               ...allEventos.map((e) => ({
                 href: `/eventos/${e.id}/`,
                 label: e.data.title,
-                description: e.data.dateLabel,
+                description: formatEventDateRange(e.data.startDate, e.data.endDate),
               })),
               { href: "/eventos/", label: "Ver todos os eventos →" },
             ]
@@ -472,4 +473,54 @@ const allMegas: Record<string, MegaMenu> = {
   </nav>
 </header>
 
-<script is:inline type="module" src="/scripts/header-menu.js"></script>
+<script>
+  const toggle =
+    document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.getElementById("mobile-nav");
+  const iconOpen = document.querySelector<HTMLElement>("[data-icon-open]");
+  const iconClose = document.querySelector<HTMLElement>("[data-icon-close]");
+
+  if (toggle && menu && iconOpen && iconClose) {
+    const setOpen = (open: boolean) => {
+      menu.classList.toggle("hidden", !open);
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      iconOpen.classList.toggle("hidden", open);
+      iconClose.classList.toggle("hidden", !open);
+    };
+
+    toggle.addEventListener("click", () => {
+      setOpen(menu.classList.contains("hidden"));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !menu.classList.contains("hidden")) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+
+  for (const wrapper of document.querySelectorAll<HTMLElement>(
+    "[data-desktop-mega]",
+  )) {
+    const trigger =
+      wrapper.querySelector<HTMLElement>("[data-mega-trigger]");
+    if (!trigger) continue;
+
+    const setExpanded = (expanded: boolean) => {
+      trigger.setAttribute("aria-expanded", String(expanded));
+    };
+
+    wrapper.addEventListener("mouseenter", () => setExpanded(true));
+    wrapper.addEventListener("mouseleave", () => setExpanded(false));
+    wrapper.addEventListener("focusin", () => setExpanded(true));
+    wrapper.addEventListener("focusout", (event) => {
+      if (!(event.relatedTarget instanceof Node)) {
+        setExpanded(false);
+      } else if (!wrapper.contains(event.relatedTarget)) {
+        setExpanded(false);
+      }
+    });
+  }
+</script>

@@ -2,7 +2,7 @@
 title: "FactoryTalk View SE vs Optix: qual escolher?"
 description: "FactoryTalk Optix ou View SE? Comparativo técnico honesto: arquitetura, redundância, licenciamento, PlantPAx e cenários de decisão para sua planta."
 pubDate: 2026-06-10
-updatedDate: 2026-07-12
+updatedDate: 2026-07-13
 tags: ["FactoryTalk Optix", "FactoryTalk View SE", "HMI"]
 draft: false
 ---
@@ -15,6 +15,12 @@ com engenharia via navegador. **FactoryTalk View SE** é o HMI/SCADA
 cliente-servidor que sustenta aplicações distribuídas e o PlantPAx há mais de
 duas décadas. A escolha entre os dois não é "novo vs velho": é uma decisão de
 arquitetura, e errar aqui custa caro ao longo do ciclo de vida do sistema.
+
+Este artigo responde à intenção de **comparação e escolha**. Para arquitetura,
+redundância, alarmes e licenciamento do produto, consulte o
+[guia técnico do FactoryTalk View SE](/blog/factorytalk-view-se-guia/); para
+escopo de implantação, use a página de
+[FactoryTalk View SE para SCADA industrial](/tecnologias/factorytalk-view-se/).
 
 ## O que é o FactoryTalk Optix?
 
@@ -52,14 +58,17 @@ As características que o diferenciam:
 
 A pergunta certa não é "qual é mais moderno", e sim "o que cada um faz hoje,
 com suporte oficial". O FactoryTalk View SE continua sendo desenvolvido: a
-versão 15.00, lançada em setembro de 2024, trouxe data logging em InfluxDB,
-conectividade MQTT e bibliotecas de aplicação pré-configuradas. E mantém
-vantagens estruturais:
+[página oficial apresenta a versão 16.00](https://www.rockwellautomation.com/en-us/products/software/factorytalk/operationsuite/view/factorytalk-view-site-edition.html),
+com documentação publicada em outubro de 2025. Como marco anterior, a 15.00
+trouxe data logging em InfluxDB, conectividade MQTT e bibliotecas de aplicação
+pré-configuradas. A plataforma mantém vantagens estruturais:
 
 - **Redundância nativa e provada.** Servidores HMI, de dados e de alarmes em
   pares redundantes com sincronização automática, validados há anos em campo.
-  Uma aplicação distribuída View SE suporta até 10 servidores HMI (cada par
-  redundante consome 2 dessa conta), segundo a documentação da Rockwell.
+  As [notas da release 16](https://compatibility.rockwellautomation.com/GeneratedReleaseNote.aspx?v1=65990)
+  documentam até 10 servidores HMI não redundantes ou 10 pares redundantes e
+  até 120 sessões simultâneas de View SE Client em aplicação distribuída;
+  sizing e compatibilidade precisam ser confirmados para a versão instalada.
 - **Integração profunda com Logix.** Alarmes baseados em tag do controlador
   via FactoryTalk Alarms & Events, diagnóstico direto de
   [ControlLogix/CompactLogix](/tecnologias/controllogix-compactlogix/) e
@@ -83,14 +92,14 @@ vantagens estruturais:
 
 | Critério | FactoryTalk View SE | FactoryTalk Optix |
 | --- | --- | --- |
-| Arquitetura | Cliente-servidor distribuído (até 10 servidores HMI) | Aplicação autônoma com clientes web |
+| Arquitetura | Cliente-servidor distribuído (diretrizes recomendadas da v16: até 10 servidores HMI não redundantes ou 10 pares redundantes e 120 sessões SE Client; sizing deve ser validado) | Aplicação autônoma com clientes web |
 | Sistema operacional | Windows / Windows Server | Windows, Windows Server e Linux (x86 e ARM) |
 | Cliente de operação | Cliente instalado + ViewPoint (web limitado) | Navegador HTML5, sem instalação |
 | Engenharia | View Studio (desktop, multiusuário com coordenação manual, sem versionamento nativo) | Optix Studio (web ou desktop, multiusuário, Git) |
 | Conectividade | Foco em Logix; OPC DA/UA via FactoryTalk Linx | OPC UA nativo + drivers de terceiros |
 | Alta disponibilidade | Redundância de HMI/data server documentada por versão | Recursos em evolução; validar release, topologia e licenciamento atuais |
 | PlantPAx | HMI de sistema oficial, biblioteca completa | HMI local de skid a partir do PlantPAx 5.50 |
-| Licenciamento | Por servidor + contagem de displays/clientes | Feature tokens (clientes web, OPC UA, banco) |
+| Licenciamento | Bundles Server ou Station, com clientes incluídos ou adicionais; Station Lite mantém limite de displays | Feature tokens (clientes web, OPC UA, banco) |
 | Maturidade | 20+ anos de campo | Lançado em novembro de 2022 |
 
 ## Quando escolher cada um?
@@ -155,11 +164,12 @@ proposta](/contato/?assunto=factorytalk).
 ### O FactoryTalk Optix substitui o FactoryTalk View SE?
 
 Não. A Rockwell mantém as duas plataformas ativas no portfólio e segue
-lançando versões do View SE (a 15.00 saiu em setembro de 2024). O Optix cobre
+lançando versões do View SE (a página oficial apresenta a 16.00, com
+documentação de outubro de 2025). O Optix cobre
 casos que o View SE atendia mal, como cliente web puro, Linux e multi-vendor,
-mas não replica hoje redundância de servidor nem o papel de HMI de sistema do
-PlantPAx nas mesmas condições. Como o portfólio está evoluindo, essa comparação
-deve ser revalidada na release contratada.
+mas equivalência em redundância e no papel de HMI de sistema do PlantPAx não
+deve ser presumida. Como o portfólio está evoluindo, essa comparação precisa
+ser revalidada na release contratada.
 
 ### O FactoryTalk Optix funciona com PlantPAx?
 
@@ -179,10 +189,11 @@ dispositivos edge sem licença de Windows Server.
 
 ### O FactoryTalk View SE vai ser descontinuado?
 
-Não há qualquer anúncio de descontinuação. O View SE recebeu a versão 15.00
-em setembro de 2024, com InfluxDB, MQTT e novas bibliotecas de aplicação, e
-permanece como HMI de sistema do PlantPAx na release 5.50. Planejar como se o
-View SE fosse morrer em breve é um erro de avaliação hoje.
+Na data desta revisão, a página oficial apresenta a versão 16.00 e as fontes
+oficiais consultadas não anunciam descontinuação do View SE. A versão 15.00
+foi um marco com InfluxDB, MQTT e novas bibliotecas de aplicação, e o View SE
+permanece como HMI de sistema do PlantPAx na release 5.50. A decisão de ciclo
+de vida deve acompanhar os comunicados oficiais, o PCDC e a release instalada.
 
 ### Como funciona o licenciamento do FactoryTalk Optix?
 

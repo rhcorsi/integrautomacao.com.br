@@ -49,11 +49,11 @@ const faq = [
   },
   {
     q: "Termometria de silo precisa estar integrada ao supervisório?",
-    a: "Precisa, se o objetivo é conservação e não apenas registro. Termometria lida em painel local ou planilha depende de alguém olhar na hora certa. Integrada ao supervisório e a um <a href=\"/tecnologias/factorytalk-historian/\">historian</a>, a leitura vira tendência: o sistema mostra a evolução da temperatura de cada cabo ao longo de semanas, alarma por taxa de subida — não só por valor absoluto — e comanda a aeração dentro da janela de ar ambiente favorável. É a diferença entre reagir a um foco de aquecimento e enxergá-lo se formando.",
+    a: "É recomendável quando se busca tendência, alarme centralizado e coordenação com a aeração, mas não é a única arquitetura possível. Um sistema autônomo, acompanhado por procedimento e responsáveis definidos, também pode apoiar a conservação. Integrada ao supervisório e a um <a href=\"/tecnologias/factorytalk-historian/\">historian</a>, a termometria permite acompanhar a evolução de cada cabo, alertar por taxa de subida — não só por valor absoluto — e apoiar o comando da aeração dentro da janela de ar ambiente favorável. A escolha depende da criticidade, da confiabilidade das interfaces e do modo de operação da unidade.",
   },
   {
     q: "Como funciona o intertravamento de transportadores em uma unidade de grãos?",
-    a: "A regra de base é partir a rota de jusante para montante e parar de montante para jusante: o equipamento que recebe o grão liga antes do que envia, e uma falha em um ponto derruba tudo que está a montante para evitar embuchamento. Sobre essa base entram as proteções de campo — sensor de rotação (subvelocidade), desalinhamento de correia, chave de emergência de cabo e sensor de embuchamento — e a seleção de rota, que bloqueia combinações fisicamente impossíveis entre silos, secador e expedição. O padrão de projeto que aplicamos está descrito em <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos e sequências</a>.",
+    a: "A regra de base é partir a rota de jusante para montante e parar de montante para jusante: o equipamento que recebe o grão liga antes do que envia, e uma falha em um ponto derruba tudo que está a montante para evitar embuchamento. Sobre essa base entram as proteções de campo — sensor de rotação (subvelocidade), desalinhamento de correia, chave de emergência de cabo e sensor de embuchamento — e a seleção de rota, que bloqueia combinações fisicamente impossíveis entre silos, secador e expedição. O padrão de projeto recomendado está descrito em <a href=\"/tecnologias/intertravamentos-sequencias/\">intertravamentos e sequências</a>.",
   },
   {
     q: "Automação elimina o risco de explosão de pó em elevadores de canecas?",
@@ -64,11 +64,19 @@ const faq = [
     a: "A execução do cutover pede a janela de menor movimento, que varia por região e mix de culturas — em muitas praças, entre a expedição do milho segunda safra e a recepção da soja seguinte. O erro mais comum é começar a discutir o projeto com a janela já aberta: engenharia, FAT e simulação da lógica de rotas precisam estar prontos antes. Controladores PLC-5 e SLC 500, comuns nessas unidades, estão descontinuados pela Rockwell Automation — a linha PLC-5 desde 30 de junho de 2017 e os últimos SLC 500 desde 31 de março de 2024 —, o que torna o planejamento de <a href=\"/solucoes/migracao-plc/\">migração de PLC</a> menos adiável a cada ciclo.",
   },
 ];
+
+const REVIEWED = "2026-07-13";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 ---
 
 <BaseLayout
   title="Automação para Armazenagem de Grãos"
-  description="Automação de silos e armazenagem de grãos: moega, secadores, termometria, aeração e expedição com supervisório, telemetria remota e intertravamentos."
+  description="Automação para silos e armazenagem de grãos: moega, secadores, termometria, aeração, expedição e telemetria. Conte como opera sua unidade."
   breadcrumbLeaf="Armazenagem de Grãos"
   jsonLd={[
     serviceSchema({
@@ -84,7 +92,7 @@ const faq = [
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
       <div>
         <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Setor · Agronegócio e Grãos
+          Setor · Agronegócio e Grãos · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
         </p>
         <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           Automação para Armazenagem de Grãos
@@ -94,10 +102,10 @@ const faq = [
           intertravamentos, supervisório e telemetria que mantém recepção,
           secagem, aeração e expedição coordenadas no pico da colheita — quando
           fila de caminhão na moega vira custo por hora — e conserva a massa de
-          grãos nos meses seguintes. A Integra Automação Industrial tem o
-          agronegócio entre seus setores prioritários e atende o setor com a
-          disciplina de quem projeta para janela de safra: automação de silos
-          precisa estar pronta e testada antes de o primeiro caminhão chegar.
+          grãos nos meses seguintes. Para esse escopo, a Integra Automação
+          Industrial oferece diagnóstico, programação, supervisão e
+          comissionamento orientados à janela de safra: a automação da unidade
+          precisa estar preparada e testada antes do pico de recebimento.
         </p>
       </div>
       <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
@@ -107,14 +115,23 @@ const faq = [
         <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
           A safra 2024/25 fechou em 350,2 milhões de toneladas de grãos — novo
           recorde da série histórica, segundo o 12º levantamento da Conab —,
-          enquanto a capacidade estática de armazenagem do país está na casa de
-          210 milhões de toneladas, também conforme a Conab. A pressão sobre
+          enquanto a capacidade estática de armazenagem do país chegou a cerca
+          de 212,1 milhões de toneladas em 2024, também conforme a Conab. A pressão sobre
           cada unidade cresce a cada ciclo: secar, armazenar e expedir mais
           volume com a mesma estrutura.
         </p>
         <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
-          Fontes: Conab · 12º levantamento da safra 2024/25 e levantamento de
-          capacidade estática de armazenagem (2025)
+          Fontes: <a
+            href="https://www.gov.br/conab/pt-br/assuntos/noticias/producao-de-graos-atinge-novo-recorde-com-350-2-milhoes-de-toneladas-colhidas-na-safra-2024-25"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline underline-offset-2 hover:no-underline"
+          >Conab · 12º levantamento da safra 2024/25</a> · <a
+            href="https://www.gov.br/conab/pt-br/acesso-a-informacao/institucional/publicacoes/outras-publicacoes/anuario-agrologistico-2025"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline underline-offset-2 hover:no-underline"
+          >Anuário Agrologístico 2025</a>
         </p>
       </aside>
     </div>
@@ -193,8 +210,8 @@ const faq = [
           moega ao secador não anda, a recepção para e a fila cresce na porta.
           Por isso a partida em cascata, as proteções de campo (rotação,
           desalinhamento, embuchamento) e a seleção de rota merecem o mesmo
-          rigor de documentação de uma malha de processo — o padrão que
-          aplicamos está em
+          rigor de documentação de uma malha de processo — o padrão de
+          engenharia recomendado está em
           <a href="/tecnologias/intertravamentos-sequencias/">intertravamentos e sequências</a>.
           O secador, por outro lado, é território de
           <a href="/tecnologias/controle-regulatorio-pid/">controle regulatório PID</a>
@@ -268,7 +285,7 @@ const faq = [
         <a href="/solucoes/migracao-plc/" class="text-integra-red-700 underline hover:text-integra-red">migração de PLC</a>
         e conduz a virada com
         <a href="/servicos/comissionamento-industrial/" class="text-integra-red-700 underline hover:text-integra-red">comissionamento assistido</a>
-        — a mesma disciplina de janela curta que aplicamos no setor de
+        — a mesma disciplina de janela curta adotada em projetos do setor de
         <a href="/setores/acucar-e-etanol/" class="text-integra-red-700 underline hover:text-integra-red">açúcar e etanol</a>,
         onde a entressafra também concentra modernização.
       </p>

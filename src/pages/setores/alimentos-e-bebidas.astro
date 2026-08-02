@@ -11,9 +11,9 @@ import TechnicalCallout from "@/components/TechnicalCallout.astro";
 /*
  * Governança de fatos — claims mutáveis desta página.
  * Última verificação: 13 jul. 2026 · Próxima revisão: jul. 2027 (anual).
- * - ABIA, balanço do setor 2024: faturamento de R$ 1,277 trilhão (+9,98%), ~10,8% do PIB;
- *   Brasil líder mundial em exportação de alimentos industrializados em volume desde 2022.
- *   Fonte: https://www.abia.org.br/numeros-setor
+ * - ABIA, balanço final de 2025: faturamento de R$ 1,388 trilhão (+8,02%), 10,9% do PIB,
+ *   288 milhões de toneladas produzidas e liderança das exportações em volume pelo 4º ano.
+ *   Fonte: https://abia.org.br/release/industria-de-alimentos-contribui-para-conter-inflacao-lidera-a-geracao-de-empregos-e-sustenta-crescimento-em-2025/
  * - RDC nº 655/2022 (ANVISA): recolhimento de alimentos; comunicação imediatamente após a
  *   ciência (art. 21); revogou a RDC 24/2015 (art. 38). Fonte oficial linkada no callout
  *   (AnvisaLegis).
@@ -70,7 +70,7 @@ const faq = [
   },
   {
     q: "A automação de CIP substitui a validação da limpeza?",
-    a: "Não — são camadas complementares. O que o auditor pede, na prática, é evidência de que cada ciclo executou dentro dos limites validados, e é isso que o registro automático de CIP cobre: data e hora, linha ou tanque higienizado, fases executadas e os valores medidos de tempo, temperatura, vazão e condutividade, com desvios sinalizados. O que o registro não prova é que esses limites limpam de fato o equipamento — essa prova vem do estudo de validação sanitária e do projeto higiênico, e precisa ser refeita quando mudam produto, equipamento ou químico de limpeza. Em resumo: a validação define os parâmetros; a automação garante e comprova que cada ciclo os cumpriu.",
+    a: "Não — são camadas complementares. O registro automático de CIP pode documentar data e hora, linha ou tanque higienizado, fases executadas e valores medidos de tempo, temperatura, vazão e condutividade, com os desvios sinalizados. Esses registros ajudam a verificar se o ciclo operou dentro dos limites definidos, desde que instrumentos, lógica, carimbo de tempo e integridade dos dados estejam controlados. Eles não demonstram, sozinhos, a eficácia sanitária da limpeza: essa conclusão depende do estudo de validação, do projeto higiênico, dos procedimentos e das verificações da qualidade. Em resumo: a validação define e confirma os parâmetros; a automação registra a execução e apoia a evidência documental.",
   },
   {
     q: "Preciso de DCS ou dá para usar SCADA (supervisão e aquisição de dados) com PLC na planta de alimentos?",
@@ -81,11 +81,19 @@ const faq = [
     a: "Definindo primeiro quais indicadores a gestão precisa receber — a tecnologia vem depois. Exemplos típicos numa planta de alimentos: produção e rendimento por lote, consumo de insumos e de utilidades (vapor, frio e água de CIP) por ordem de produção, tempo de parada por causa, aderência ao binômio tempo-temperatura e o registro que apoia a liberação de lote pela qualidade. Com os indicadores definidos, cada um é mapeado às tags que o originam no controle, e o <a href=\"/tecnologias/factorytalk-historian/\">historian</a> faz a ponte entre OT e TI — o dado nasce no chão de fábrica e chega ao MES e ao ERP sem redigitação.",
   },
 ];
+
+const REVIEWED = "2026-07-13";
+const REVIEWED_BY = "Equipe técnica Integra";
+const reviewedDisplay = new Date(`${REVIEWED}T12:00:00`).toLocaleDateString("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 ---
 
 <BaseLayout
   title="Automação para Alimentos e Bebidas"
-  description="Automação para a indústria de alimentos e bebidas: linhas contínuas e bateladas com ISA-88, CIP automatizado, rastreabilidade de lote para recall e integração MES/ERP."
+  description="Automação para alimentos e bebidas: ISA-88, CIP automatizado, rastreabilidade de lotes, recall e integração MES/ERP. Descreva seu processo à nossa engenharia."
   breadcrumbLeaf="Alimentos e Bebidas"
   jsonLd={[
     serviceSchema({
@@ -101,7 +109,7 @@ const faq = [
     <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
       <div>
         <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Setor · Alimentos e Bebidas
+          Setor · Alimentos e Bebidas · <span class="normal-case">Revisado em {reviewedDisplay} por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">{REVIEWED_BY}</a></span>
         </p>
         <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
           Automação para Alimentos e Bebidas
@@ -110,11 +118,11 @@ const faq = [
           Automação para a indústria de alimentos e bebidas é a engenharia de
           controle que mantém linhas contínuas e bateladas operando com receita
           reproduzível, limpeza registrada e rastreabilidade de lote. Na prática,
-          essas três exigências definem se a planta consegue responder a um
-          recolhimento e sustentar auditoria sanitária. A Integra Automação
-          Industrial, fundada em 2016, atua no setor com abordagem multivendor
-          e base Rockwell, e leva segurança alimentar como requisito de projeto
-          — não como camada acrescentada depois.
+          essas três frentes influenciam diretamente a capacidade de responder a
+          um recolhimento e sustentar auditorias sanitárias. Para esse escopo, a
+          Integra Automação Industrial oferece engenharia multivendor, com base
+          Rockwell quando adequada, e trata segurança alimentar como requisito
+          de projeto — não como camada acrescentada depois.
         </p>
       </div>
       <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
@@ -122,15 +130,15 @@ const faq = [
           Escala do setor
         </p>
         <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">
-          Segundo a ABIA, a indústria de alimentos faturou R$ 1,277 trilhão em
-          2024 — alta de 9,98% sobre o ano anterior, cerca de 10,8% do PIB — e
-          o Brasil é, desde 2022, líder mundial em exportação de alimentos
-          industrializados em volume. Boa parte dessa produção passa por
-          plantas que combinam processo contínuo, batelada e ciclos de
-          higienização no mesmo turno.
+          Segundo a ABIA, a indústria de alimentos faturou R$ 1,388 trilhão em
+          2025 — alta de 8,02% sobre o ano anterior e equivalente a 10,9% do
+          PIB —, com 288 milhões de toneladas produzidas. O Brasil liderou as
+          exportações de alimentos industrializados em volume pelo quarto ano
+          consecutivo. Boa parte dessa produção passa por plantas que combinam
+          processo contínuo, batelada e higienização no mesmo turno.
         </p>
         <p class="mt-4 text-xs font-mono uppercase tracking-wider text-integra-red-700">
-          <a href="https://www.abia.org.br/numeros-setor" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: ABIA · balanço de 2024</a>
+          <a href="https://abia.org.br/release/industria-de-alimentos-contribui-para-conter-inflacao-lidera-a-geracao-de-empregos-e-sustenta-crescimento-em-2025/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:no-underline">Fonte: ABIA · balanço final de 2025</a>
         </p>
       </aside>
     </div>
@@ -207,8 +215,8 @@ const faq = [
 
       <SectionHeader
         eyebrow="CIP e higienização"
-        title="CIP automatizado é sequência de processo — e prova de que a limpeza aconteceu"
-        description="A limpeza no local se intercala com a produção. Automatizá-la não é só girar válvulas: é executar fases na ordem certa e registrar que os parâmetros de limpeza foram atingidos."
+        title="CIP automatizado executa e registra a sequência de limpeza"
+        description="A limpeza no local se intercala com a produção. Automatizá-la é executar fases na ordem definida e registrar os valores medidos para análise e auditoria."
         accent={true}
       />
 
@@ -291,9 +299,10 @@ const faq = [
 
       <p class="text-base leading-relaxed text-integra-gray-700">
         No Brasil, as BPF (Boas Práticas de Fabricação) para estabelecimentos que
-        produzem e industrializam alimentos têm base na Portaria SVS/MS nº
-        326/1997, sobre condições higiênico-sanitárias e boas práticas de
-        fabricação, e na RDC nº 275/2002 da ANVISA, que trata dos POPs
+        produzem e industrializam alimentos têm base na
+        <a href="https://bvsms.saude.gov.br/bvs/saudelegis/svs1/1997/prt0326_30_07_1997.html" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">Portaria SVS/MS nº 326/1997</a>,
+        sobre condições higiênico-sanitárias e boas práticas de fabricação, e na
+        <a href="https://bvsms.saude.gov.br/bvs/saudelegis/anvisa/2002/rdc0275_21_10_2002.html" target="_blank" rel="noopener noreferrer" class="text-integra-red-700 underline hover:text-integra-red">RDC nº 275/2002 da ANVISA</a>, que trata dos POPs
         (Procedimentos Operacionais Padronizados) — entre eles higienização,
         controle de pragas e programa de recolhimento de alimentos. Esses
         requisitos moldam decisões de automação: registro de higienização,

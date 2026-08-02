@@ -8,6 +8,7 @@ import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
 
 const sinais = [
@@ -141,7 +142,7 @@ const faq = [
 
 <BaseLayout
   title="Modernização de SCADA Industrial"
-  description="Modernização de SCADA e supervisórios legados: migração RSView32 → FactoryTalk View SE, telas ISA-101, alarmes ISA-18.2, historian, virtualização e IEC 62443."
+  description="Modernização de SCADA legado: migração RSView32 para FactoryTalk View SE, telas ISA-101, alarmes ISA-18.2 e IEC 62443. Veja o roteiro em nove fases."
   ogImage="/og/solucoes-modernizacao-scada.png"
   breadcrumbLeaf="Modernização de SCADA"
   jsonLd={[
@@ -190,6 +191,17 @@ const faq = [
       />
     </div>
   </section>
+
+  <RelatedSectors
+    title="O que muda na modernização de supervisão por operação"
+    description="Telas e servidores são só uma parte: contexto de lote, rotas, utilidades e janelas de parada definem o projeto."
+    items={[
+      { href: "/setores/armazenagem-de-graos/", label: "Armazenagem de grãos", description: "Rotas de transporte, secadores, termometria e operação distribuída." },
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Receitas, CIP e rastreabilidade precisam sobreviver ao cutover." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Linhas, frio industrial e eventos de processo com contexto de lote." },
+      { href: "/setores/fabricas-de-racao/", label: "Fábricas de ração", description: "Dosagem, mistura, peletização e expedição numa navegação coerente." },
+    ]}
+  />
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">
@@ -495,6 +507,28 @@ const faq = [
       />
 
       <FAQAccordion items={faq} />
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-16">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+        Case público relacionado
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900">
+        Modernização de controle e supervisão em planta moageira
+      </h2>
+      <p class="mt-4 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        O case descreve um cutover por área com FactoryTalk View SE,
+        ControlLogix, EtherNet/IP, padronização de telas e governança de alarmes,
+        preservando dados confidenciais do cliente.
+      </p>
+      <a
+        href="/cases/projeto-moinho/"
+        class="mt-6 inline-flex rounded-md border border-integra-gray-300 px-4 py-2 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+      >
+        Ler o case técnico
+      </a>
     </div>
   </section>
 

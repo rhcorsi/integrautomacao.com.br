@@ -1,4 +1,4 @@
-﻿---
+---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
@@ -7,6 +7,7 @@ import StandardsBadges from "@/components/StandardsBadges.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import ManualReference from "@/components/ManualReference.astro";
+import RelatedSectors from "@/components/RelatedSectors.astro";
 import viewSeReference from "@/assets/manuals/factorytalk-view-se-distributed-small.jpg";
 import historianReference from "@/assets/manuals/factorytalk-historian-logical-diagram.jpg";
 
@@ -111,13 +112,13 @@ const faq = [
 
 <BaseLayout
   title="FactoryTalk Suite: supervisão e informação"
-  description="Engenharia, implementação e suporte da suíte FactoryTalk: View SE, Optix, Batch, Historian, AssetCentre e ThinManager. Padronização e governança técnica."
+  description="Engenharia e suporte da suíte FactoryTalk: View SE, Optix, Batch, Historian, AssetCentre e ThinManager, com governança técnica. Fale com nossos especialistas."
   ogImage="/og/solucoes-factorytalk.png"
   jsonLd={[
     serviceSchema({
       name: "FactoryTalk Suite",
       description:
-        "Engenharia, implementação e suporte da suíte FactoryTalk: View SE, Optix, Batch, Historian, AssetCentre e ThinManager. Padronização e governança técnica.",
+        "Engenharia e suporte da suíte FactoryTalk: View SE, Optix, Batch, Historian, AssetCentre e ThinManager, com governança técnica. Fale com nossos especialistas.",
       url: Astro.url.href,
     }),
     faqSchema(faq),
@@ -244,6 +245,39 @@ const faq = [
       <FAQAccordion items={faq} />
     </div>
   </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid max-w-4xl py-16">
+      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
+        Case público relacionado
+      </p>
+      <h2 class="text-3xl font-semibold text-integra-gray-900">
+        FactoryTalk em uma modernização de planta moageira
+      </h2>
+      <p class="mt-4 max-w-3xl text-base leading-relaxed text-integra-gray-700">
+        O case publicado apresenta supervisão FactoryTalk View SE, governança de
+        alarmes, documentação e execução faseada, sem expor a identidade ou a
+        arquitetura confidencial do cliente.
+      </p>
+      <a
+        href="/cases/projeto-moinho/"
+        class="mt-6 inline-flex rounded-md border border-integra-gray-300 px-4 py-2 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+      >
+        Ler o case técnico
+      </a>
+    </div>
+  </section>
+
+  <RelatedSectors
+    title="Onde o ecossistema FactoryTalk assume funções diferentes"
+    description="Supervisão, receitas, histórico e gestão de ativos precisam acompanhar o processo e o risco de cada operação."
+    items={[
+      { href: "/setores/alimentos-e-bebidas/", label: "Alimentos e bebidas", description: "Linhas híbridas, bateladas, CIP e rastreabilidade por lote." },
+      { href: "/setores/frigorificos/", label: "Frigoríficos", description: "Supervisão de linhas, frio industrial, receitas e cadeia do frio." },
+      { href: "/setores/fabricas-de-racao/", label: "Fábricas de ração", description: "Dosagem, receitas, sequenciamento e histórico de bateladas." },
+      { href: "/setores/armazenagem-de-graos/", label: "Armazenagem de grãos", description: "Rotas, secagem, termometria, expedição e telemetria de unidades." },
+    ]}
+  />
 
   <CtaBlock
     title="Quer modernizar sua supervisão sem parar a planta?"

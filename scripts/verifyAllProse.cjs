@@ -25,9 +25,19 @@ walkDir(srcDir, filePath => {
 
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
+  let activeCatalogProseArray = null;
 
   lines.forEach((line, idx) => {
     const trimmed = line.trim();
+
+    if (filePath.endsWith('techCatalog.ts')) {
+      const fieldStart = trimmed.match(/^(useCases|howIntegraActs|deliverables):\s*\[$/);
+      if (fieldStart) {
+        activeCatalogProseArray = fieldStart[1];
+      } else if (activeCatalogProseArray && /^\],?$/.test(trimmed)) {
+        activeCatalogProseArray = null;
+      }
+    }
     
     // Ignore lines that are code blocks, imports, css rules, etc.
     if (trimmed.startsWith('import ') || trimmed.startsWith('export ') || trimmed.startsWith('const ') || trimmed.startsWith('let ') || trimmed.startsWith('var ')) return;
@@ -49,11 +59,9 @@ walkDir(srcDir, filePath => {
       }
     }
 
-    // 2. Check array strings in techCatalog.ts for starting lowercase
-    if (filePath.endsWith('techCatalog.ts')) {
-      // Find array items like: "useCases: [", "howIntegraActs: [", "deliverables: ["
-      // and strings inside them like: "  \"lowercase string\","
-      const stringItemMatch = trimmed.match(/^["']([a-z])(.*)["'],?$/);
+    // 2. Check only catalog prose arrays (never object keys or ledgers).
+    if (activeCatalogProseArray) {
+      const stringItemMatch = trimmed.match(/^["'](\p{Ll})(.*)["'],?$/u);
       if (stringItemMatch) {
         lowercaseStartIssues.push({
           file: path.relative(srcDir, filePath),
@@ -87,4 +95,8 @@ if (lowercaseStartIssues.length > 0) {
     console.log(`File: src/${issue.file} at Line ${issue.lineNum}`);
     console.log(`  Context: "${issue.text}"`);
   });
+}
+
+if (doubleSpaceIssues.length > 0 || lowercaseStartIssues.length > 0) {
+  process.exitCode = 1;
 }

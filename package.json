@@ -10,17 +10,21 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "test": "vitest run",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
     "audit:routes": "node scripts/verifyRoutes.cjs",
+    "audit:redirects": "node scripts/verifyRedirects.cjs",
     "audit:terminology": "node scripts/verifyTechnicalTerminology.cjs",
     "audit:prose": "node scripts/verifyAllProse.cjs",
     "audit:utf8": "node scripts/verifyUtf8.cjs",
     "audit:faqs": "node scripts/checkTechCatalogFaqs.cjs",
     "audit:html": "node scripts/auditEditorialHtml.cjs",
-    "audit:editorial": "npm run build && npm run audit:routes && npm run audit:terminology && npm run audit:prose && npm run audit:utf8 && npm run audit:faqs && npm run audit:html",
-    "pages:dev": "wrangler pages dev dist"
+    "audit:editorial": "npm run build && npm run audit:routes && npm run audit:redirects && npm run audit:terminology && npm run audit:prose && npm run audit:utf8 && npm run audit:faqs && npm run audit:html",
+    "pages:dev": "wrangler pages dev dist",
+    "types:generate": "wrangler types functions/types.d.ts --include-runtime=false",
+    "types:check": "wrangler types functions/types.d.ts --include-runtime=false --check"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.2",
@@ -37,8 +41,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@cloudflare/workers-types": "^5.20260712.1",
+    "@cloudflare/vitest-pool-workers": "^0.18.4",
+    "@cloudflare/workers-types": "^5.20260713.1",
     "typescript": "^5.7.3",
+    "vitest": "^4.1.0",
     "wrangler": "^4.110.0"
   }
 }

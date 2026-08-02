@@ -25,6 +25,7 @@ const formatDate = (date: Date) =>
     day: "2-digit",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   });
 
 const publishedDate = formatDate(entry.data.pubDate);
@@ -53,6 +54,7 @@ const articleLd = articleSchema({
   description={entry.data.description}
   ogType="article"
   ogImage={socialImage}
+  ogImageAlt={entry.data.heroAlt ?? entry.data.title}
   jsonLd={[articleLd]}
 >
   <article>

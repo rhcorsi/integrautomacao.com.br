@@ -3,13 +3,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
+import { formatEventDateRange } from "@/utils/eventDate";
 
 const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
 const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime())
   .slice(0, 3);
 
 const formatos = [
@@ -227,7 +228,7 @@ const temas = [
                         {e.data.title}
                       </h4>
                       <p class="mt-1 text-sm text-integra-gray-600">
-                        {e.data.dateLabel} · {e.data.location}
+                        {formatEventDateRange(e.data.startDate, e.data.endDate)} · {e.data.location}
                       </p>
                     </a>
                   </li>

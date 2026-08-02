@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY } from "@/utils/site";
 
-const lastUpdated = "12 de julho de 2026";
+const lastUpdated = "13 de julho de 2026";
 ---
 
 <BaseLayout
@@ -52,14 +52,35 @@ const lastUpdated = "12 de julho de 2026";
           <li>Conteúdo da mensagem que você nos enviou</li>
         </ul>
         <p>
+          Quando você abre o formulário a partir de uma chamada interna, o
+          navegador guarda temporariamente, em <em>sessionStorage</em>, apenas a
+          página, o rótulo e a chamada que originaram a navegação. Esse contexto
+          expira em até 30 minutos, é consumido uma única vez pelo formulário e
+          somente é transmitido se você efetivamente enviar a mensagem.
+        </p>
+        <p>
           Quando você se inscreve na newsletter
           <a href="/integra-acao/newsletter/">Integra Ação</a>, coletamos:
         </p>
         <ul>
           <li>Nome</li>
           <li>E-mail</li>
-          <li>Estado da inscrição e histórico de interações de marketing mantido pelo operador de e-mail</li>
+          <li>
+            Estado global do contato, participação no segmento e preferência
+            específica da newsletter Integra Ação
+          </li>
+          <li>
+            Evidência do consentimento: data e hora, versão desta política,
+            página de origem e texto apresentado no aceite
+          </li>
+          <li>Histórico de interações de marketing mantido pelo operador de e-mail</li>
         </ul>
+        <p>
+          O registro do formulário demonstra a solicitação e o aceite nele
+          apresentados, mas o Turnstile não autentica, por si só, o controle da
+          caixa postal informada. A Integra mantém esse limite probatório na
+          governança do canal e pode adotar confirmação adicional por e-mail.
+        </p>
 
         <h3>2.2 Dados técnicos coletados automaticamente</h3>
         <p>
@@ -125,6 +146,14 @@ const lastUpdated = "12 de julho de 2026";
           comunicações e poderemos manter apenas registros mínimos necessários
           para comprovar o cancelamento e evitar reenvios indevidos.
         </p>
+        <p>
+          O contexto temporário de origem do formulário permanece somente na
+          sessão do navegador, por no máximo 30 minutos, ou até ser consumido.
+          Registros técnicos da aplicação são estruturados e minimizados: nossos
+          eventos personalizados não registram corpo de formulário, endereço de
+          e-mail, token anti-bot ou endereço IP. A infraestrutura pode manter
+          metadados próprios da requisição pelos prazos configurados no provedor.
+        </p>
 
         <h2>5. Com quem compartilhamos</h2>
         <p>
@@ -147,9 +176,15 @@ const lastUpdated = "12 de julho de 2026";
         <p>
           Esses operadores podem processar dados em outros países, conforme a
           localização de sua infraestrutura e os mecanismos contratuais
-          aplicáveis. Limitamos o compartilhamento ao necessário para cada
-          serviço e mantemos a Integra responsável pelas decisões sobre o
-          tratamento.
+          aplicáveis e as regras brasileiras de transferência internacional de
+          dados, inclusive a Resolução CD/ANPD nº 19/2024. Limitamos o
+          compartilhamento ao necessário para cada serviço e mantemos a Integra
+          responsável pelas decisões sobre o tratamento. Consulte a
+          <a
+            href="https://www.gov.br/anpd/pt-br/assuntos/assuntos-internacionais/transferencia-internacional-de-dados"
+            rel="noopener noreferrer"
+            target="_blank"
+          >orientação oficial da ANPD sobre transferências internacionais</a>.
         </p>
 
         <h2>6. Cookies</h2>
@@ -203,6 +238,14 @@ const lastUpdated = "12 de julho de 2026";
           Você também pode cancelar a newsletter a qualquer momento pelo link
           de descadastro presente nos e-mails recebidos ou escrevendo para o
           e-mail de privacidade acima.
+        </p>
+        <p>
+          O cancelamento global mantido pelo operador de e-mail não é revertido
+          automaticamente por uma nova tentativa no formulário. Para evitar a
+          reativação indevida de uma preferência anterior, a reinscrição nesse
+          caso deve ser solicitada pelo canal de privacidade. O consentimento da
+          newsletter é administrado também por preferência específica, sem
+          reativar outras comunicações.
         </p>
 
         <h2>9. Segurança</h2>

@@ -150,6 +150,43 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
       <slot />
     </main>
     <Footer />
-    <script is:inline src="/scripts/contact-context.js" defer></script>
+    <script>
+      const CONTACT_CONTEXT_KEY = "integra:contact-context";
+      const CONTACT_CONTEXT_TTL_MS = 30 * 60 * 1_000;
+
+      document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+        const link = event.target.closest<HTMLAnchorElement>(
+          'a[href^="/contato"]',
+        );
+        if (!link) return;
+
+        try {
+          const createdAt = Date.now();
+          const nearestSection = link.closest(
+            "section, article, header, footer, nav",
+          );
+          const heading = nearestSection?.querySelector("h1, h2, h3");
+          const label = heading?.textContent?.trim() || document.title;
+          const cta =
+            link.textContent?.trim() ||
+            link.getAttribute("aria-label") ||
+            "Contato";
+
+          sessionStorage.setItem(
+            CONTACT_CONTEXT_KEY,
+            JSON.stringify({
+              page: `${window.location.pathname}${window.location.hash}`,
+              label: label.slice(0, 160),
+              cta: cta.slice(0, 160),
+              createdAt,
+              expiresAt: createdAt + CONTACT_CONTEXT_TTL_MS,
+            }),
+          );
+        } catch {
+          // Navigation must never depend on temporary contact context.
+        }
+      });
+    </script>
   </body>
 </html>

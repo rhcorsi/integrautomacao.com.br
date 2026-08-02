@@ -8,7 +8,8 @@ Disallow: /xmlrpc.php
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Crawlers de IA: liberados DELIBERADAMENTE (decisão de 10/06/2026).
-# Estratégia: ser lido e citado por assistentes de IA (ver /llms.txt).
+# Acesso permitido a rastreadores de IA. Esta permissão não é tratada como
+# sinal de ranking nem substitui indexação, conteúdo útil e links internos.
 # Estes grupos específicos também neutralizam o bloco "managed robots.txt"
 # da Cloudflare para parsers no padrão Google (Allow vence empate com
 # Disallow) — mas o ideal é manter esse recurso DESLIGADO no painel.
