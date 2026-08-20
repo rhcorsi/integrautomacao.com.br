@@ -42,13 +42,13 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@cloudflare/vitest-pool-workers": "^0.19.1",
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "^5.20260713.1",
     "@emnapi/core": "1.11.3",
     "@emnapi/runtime": "1.11.3",
     "@emnapi/wasi-threads": "1.2.2",
     "typescript": "^5.7.3",
     "vitest": "^4.1.10",
-    "wrangler": "^4.110.0"
+    "wrangler": "^4.124.0"
   }
 }
