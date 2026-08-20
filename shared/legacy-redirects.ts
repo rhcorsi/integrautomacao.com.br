@@ -48,6 +48,11 @@ export const LEGACY_PATH_REDIRECTS: Record<string, string> = {
   "/clientes": "/cases/",
   "/projetos": "/cases/",
   "/portfolio": "/cases/",
+  // Páginas "tela-N" do tema antigo (Enfold): sem equivalente semântico,
+  // aparecem no Search Console com impressões e zero cliques — mandam para a home.
+  "/tela-2": "/",
+  "/tela-3": "/",
+  "/tela-7": "/",
 };
 
 const LEGACY_CONTROL_PARAMS = new Set(["p", "page_id", "post_type"]);
@@ -81,9 +86,19 @@ function resolvePathRedirect(url: URL): string | null {
   if (
     normalizedPath.startsWith("/category/") ||
     normalizedPath.startsWith("/tag/") ||
-    normalizedPath.startsWith("/author/") ||
-    /^\/20[^/]*\//.test(normalizedPath)
+    normalizedPath.startsWith("/author/")
   ) {
+    return withAllQuery(url, "/blog/");
+  }
+  if (/^\/20[^/]*\//.test(normalizedPath)) {
+    // Posts datados do WordPress com equivalente semântico real vão para a
+    // página certa em vez do índice do blog (vistos com impressões no GSC).
+    if (normalizedPath.includes("projeto-moinho")) {
+      return withAllQuery(url, "/cases/projeto-moinho/");
+    }
+    if (normalizedPath.includes("uso-de-cookie")) {
+      return withAllQuery(url, "/uso-de-cookies/");
+    }
     return withAllQuery(url, "/blog/");
   }
   if (

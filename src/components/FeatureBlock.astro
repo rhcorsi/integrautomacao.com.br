@@ -158,11 +158,13 @@ const v = variantStyles[variant];
           {/* Fundo branco em todos os variants: os diagramas de referência
               têm fundo claro e precisam de contraste para leitura. */}
           <div class="relative overflow-hidden rounded-lg shadow-2xl aspect-[16/9] flex items-center justify-center bg-integra-white ring-1 ring-integra-gray-900/10">
+            {/* sizes alinhado à coluna real (~600-670px), não a 800px:
+                evita baixar a variante 1600w sem necessidade em DPR 2. */}
             <Image
               src={image}
               alt={imageAlt}
-              widths={[800, 1200, 1600, 2000]}
-              sizes="(min-width: 1024px) 800px, 100vw"
+              widths={[640, 800, 1200, 1600]}
+              sizes="(min-width: 1536px) 670px, (min-width: 1024px) 600px, 100vw"
               loading="lazy"
               decoding="async"
               class="w-full h-full object-contain"

@@ -5,6 +5,10 @@ const ALTERNATE_PRODUCTION_HOSTS = new Set([
   "www.integrautomacao.com.br",
   "integrautomacao-com-br.pages.dev",
 ]);
+const PRODUCTION_HOSTNAMES = new Set([
+  "integrautomacao.com.br",
+  ...ALTERNATE_PRODUCTION_HOSTS,
+]);
 
 const API_SECURITY_HEADERS: Record<string, string> = {
   "Strict-Transport-Security": "max-age=31536000",
@@ -25,8 +29,14 @@ function resolvePublicRedirect(request: Request, url: URL): URL | null {
   const alternateHost = ALTERNATE_PRODUCTION_HOSTS.has(url.hostname);
   const insecureCanonical =
     url.hostname === "integrautomacao.com.br" && url.protocol !== "https:";
+  // A Cloudflare faz proxy de portas alternativas (2082…2096): sem este
+  // redirect, o site inteiro responde duplicado em :2096 (herança do cPanel)
+  // e o Google indexa a mesma página em duas "origens".
+  const nonDefaultPort =
+    PRODUCTION_HOSTNAMES.has(url.hostname) && url.port !== "";
   const legacyTarget = resolveLegacyRedirect(url);
-  if (!alternateHost && !insecureCanonical && !legacyTarget) return null;
+  if (!alternateHost && !insecureCanonical && !nonDefaultPort && !legacyTarget)
+    return null;
 
   if (legacyTarget) return new URL(legacyTarget, CANONICAL_ORIGIN);
 

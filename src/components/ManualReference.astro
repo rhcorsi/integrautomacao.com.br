@@ -12,6 +12,11 @@ interface Props {
   caption: string;
   theme?: "light" | "dark" | "ot";
   loading?: "lazy" | "eager";
+  /** Ajustar ao tamanho real de exibição do card no layout — o default
+      (~800px de coluna) superfete imagens em grids de 2-3 colunas. */
+  sizes?: string;
+  /** Candidatos de largura; alinhar com `sizes`. */
+  widths?: number[];
 }
 
 const {
@@ -23,6 +28,8 @@ const {
   caption,
   theme = "light",
   loading = "lazy",
+  sizes = "(min-width: 1024px) 800px, 100vw",
+  widths = [800, 1200, 1600, 2000],
 } = Astro.props;
 
 const dark = theme === "dark";
@@ -59,8 +66,8 @@ const publicSource = publicSourceFor(source);
     <Image
       src={image}
       alt={alt}
-      widths={[800, 1200, 1600, 2000]}
-      sizes="(min-width: 1024px) 800px, 100vw"
+      widths={widths}
+      sizes={sizes}
       loading={loading}
       fetchpriority={loading === "eager" ? "high" : undefined}
       decoding="async"
@@ -82,10 +89,14 @@ const publicSource = publicSourceFor(source);
       {publicSource && (
         <>
           {" · "}
+          {/* aria-label com a fonte: vários cards na mesma página compartilham
+              o mesmo linkLabel — sem ele, links idênticos levariam a destinos
+              diferentes (falha de práticas recomendadas do Lighthouse). */}
           <a
             href={publicSource.href}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`${publicSource.linkLabel} — ${source}`}
             class="underline underline-offset-2 hover:no-underline"
           >
             {publicSource.linkLabel}

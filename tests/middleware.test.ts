@@ -73,6 +73,27 @@ describe("Pages middleware", () => {
     expect(nextPost).toHaveBeenCalledOnce();
   });
 
+  it("canonicalizes non-default ports (:2096 legacy do cPanel) para a origem canônica", async () => {
+    const next = vi.fn(async () => new Response("next"));
+    const response = await onRequest(
+      pagesContext(
+        new Request(
+          "https://integrautomacao.com.br:2096/blog/plantpax-5x-vs-4x/?utm_source=x",
+        ),
+        {},
+        next,
+      ),
+    );
+
+    expect(response.status).toBe(301);
+    const location = new URL(response.headers.get("location") ?? "");
+    expect(location.toString()).toBe(
+      "https://integrautomacao.com.br/blog/plantpax-5x-vs-4x/?utm_source=x",
+    );
+    expect(location.port).toBe("");
+    expect(next).not.toHaveBeenCalled();
+  });
+
   it("hardens every API response produced by a Pages Function", async () => {
     const response = await onRequest(
       pagesContext(

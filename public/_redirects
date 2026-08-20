@@ -67,6 +67,15 @@
 /projetos/             /cases/                               301
 /portfolio             /cases/                               301
 
+# Páginas "tela-N" do tema antigo: sem equivalente — home (GSC mostrava
+# impressões com zero cliques nessas URLs).
+/tela-2                /                                    301
+/tela-2/               /                                    301
+/tela-3                /                                    301
+/tela-3/               /                                    301
+/tela-7                /                                    301
+/tela-7/               /                                    301
+
 # Dynamic rules remain after every exact path to keep Pages matching fast.
 /integra-acao/eventos/*  /eventos/:splat/                    301
 /wp-sitemap-*            /sitemap-index.xml                  301

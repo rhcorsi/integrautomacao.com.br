@@ -174,12 +174,14 @@ const allMegas: Record<string, MegaMenu> = {
         class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
         aria-label="Página inicial Integra Automação Industrial"
       >
+        {/* Logo renderiza h-16/h-20 (≈195-244px de largura); sizes acima
+            disso fazia o navegador baixar a variante 480/720 sem uso. */}
         <Image
           src={logoColorido}
           alt="Integra Automação Industrial"
           class="h-16 w-auto lg:h-20"
           widths={[320, 480, 720]}
-          sizes="(min-width: 1024px) 480px, 320px"
+          sizes="(min-width: 1024px) 250px, 200px"
           loading="eager"
           decoding="async"
         />

@@ -2501,7 +2501,9 @@ export const techCatalog: TechPage[] = [
     group: "Dados Industriais e IIoT",
     type: "Software",
     title: "TC deviceWISE",
-    seoTitle: "TC deviceWISE para integração IIoT",
+    // CTR: queries são "devicewise" puro — incluir a marca-mãe (Telit
+    // Cinterion) ajuda o usuário a reconhecer a página certa na SERP.
+    seoTitle: "TC deviceWISE (Telit Cinterion): guia IIoT",
     shortTitle: "TC deviceWISE",
     description:
       "Plataforma IIoT da Telit Cinterion para conectar ativos industriais, executar lógica no edge e integrar dados OT com sistemas de negócio.",
@@ -2574,10 +2576,12 @@ export const techCatalog: TechPage[] = [
     group: "Controle e DCS",
     type: "Software",
     title: "Siemens TIA Portal",
-    seoTitle: "Siemens TIA Portal para automação industrial",
+    // CTR: queries são "tia portal", "tia portal é gratuito", "tia portal
+    // download" — o título precisa prometer guia completo, não só a marca.
+    seoTitle: "Siemens TIA Portal: guia completo em português",
     shortTitle: "TIA Portal",
     description:
-      "Ambiente Siemens para engenharia de PLCs, IHMs, redes PROFINET e drives em arquiteturas SIMATIC modernas.",
+      "TIA Portal explicado: versões, licenciamento, S7-1200/1500, WinCC, PROFINET e migração do STEP 7 Classic, com prática de engenharia em plantas reais.",
     intro:
       "TIA Portal concentra engenharia de controladores, IHMs, redes e acionamentos Siemens em um fluxo integrado. A Integra atende projetos com TIA Portal em versões antigas e atuais, principalmente quando a planta já possui base SIMATIC e precisa manter, expandir ou padronizar sistemas sem perder governança.",
     image: tiaSelectionTool,
@@ -2717,9 +2721,12 @@ export const techCatalog: TechPage[] = [
     group: "Supervisão e Operação",
     type: "Software",
     title: "SIMATIC WinCC e PCS 7",
+    // CTR: 9,4 mil impressões/3 meses com 0,13% de CTR — o snippet anterior
+    // não respondia às queries de versão ("wincc 7", "wincc unified").
+    seoTitle: "SIMATIC WinCC 7.x/Unified e PCS 7: guia em português",
     shortTitle: "SIMATIC WinCC / PCS 7",
     description:
-      "Sistemas Siemens de supervisão, operação e processo, incluindo WinCC clássico, WinCC 7.x, WinCC Unified e bases PCS 7 quando aplicável.",
+      "WinCC clássico, 7.x, Unified e PCS 7: diferenças de versão, arquitetura de supervisão Siemens, migração e manutenção de SCADA em plantas reais.",
     intro:
       "WinCC e PCS 7 aparecem em plantas que precisam operar processo, telas, alarmes, históricos e diagnósticos dentro do ecossistema Siemens. A Integra atende manutenção, evolução e integração desses ambientes, deixando claro que a atuação é técnica e não um selo formal de integrador Siemens.",
     image: siemensNetworkLayer2,
@@ -2859,10 +2866,12 @@ export const techCatalog: TechPage[] = [
     group: "Supervisão e Operação",
     type: "Software",
     title: "Elipse E3",
-    seoTitle: "Elipse E3 para supervisão industrial",
+    // CTR: queries "elipse e3", "supervisório elipse e3", "protocolo e3",
+    // "elipse e3 preço" — posicionar como guia do SCADA brasileiro.
+    seoTitle: "Elipse E3: guia do supervisório SCADA brasileiro",
     shortTitle: "Elipse E3",
     description:
-      "Supervisório brasileiro robusto para operação, alarmes, históricos e integração com múltiplas famílias de PLCs e sistemas industriais.",
+      "Elipse E3 em detalhes: drivers e protocolos, alarmes, históricos, E3 Server/Viewer, licenciamento e boas práticas de telas em projetos multi-vendor.",
     intro:
       "Elipse E3 é uma solução brasileira reconhecida em supervisão industrial, usada para conectar PLCs, servidores, clientes, históricos, alarmes e operação remota. A Integra desenvolve e mantém sistemas E3 em plantas multi-vendor, com foco em telas coerentes, comunicação confiável e documentação.",
     image: elipseE3Reference,
@@ -2931,9 +2940,12 @@ export const techCatalog: TechPage[] = [
     group: "Controle e DCS",
     type: "Software",
     title: "Schneider EcoStruxure Control Expert",
+    // CTR: "unity pro schneider" e variações de versão (v16, 16.2) são buscadas
+    // pelo nome antigo — incluí-lo no título captura a intenção.
+    seoTitle: "Schneider Control Expert (ex-Unity Pro): guia Modicon",
     shortTitle: "Schneider Control Expert",
     description:
-      "Engenharia e manutenção de PLCs Schneider/Modicon em ambientes Control Expert, Unity Pro e arquiteturas de controle menores.",
+      "Control Expert e Unity Pro para PLCs Modicon M340/M580: versões, migração, programação IEC e manutenção documentada em ambientes Schneider.",
     intro:
       "A Integra atende tecnologias Schneider em projetos de PLCs, IHMs, supervisórios e equipamentos de menor porte. O escopo não inclui posicionamento como integrador Foxboro DCS; aqui o foco é engenharia aplicada a Control Expert, Unity Pro, Modicon e sistemas de máquina/processo discreto.",
     image: schneiderControlReference,
@@ -3002,9 +3014,11 @@ export const techCatalog: TechPage[] = [
     group: "Controle e DCS",
     type: "Software",
     title: "Schneider EcoStruxure Machine Expert",
+    // CTR: "machine expert 2.6", "somachine expert" — nome antigo no título.
+    seoTitle: "Schneider Machine Expert (ex-SoMachine): guia completo",
     shortTitle: "Schneider Machine Expert",
     description:
-      "Programação e manutenção de PLCs de máquina Schneider, IHMs e dispositivos em ambientes Machine Expert e bases SoMachine.",
+      "Machine Expert e bases SoMachine para PLCs de máquina Schneider: versões, IHMs, redes e sustentação de células com documentação as-built.",
     intro:
       "Machine Expert aparece em máquinas, células e sistemas menores com PLCs Schneider. A Integra atua na manutenção, ajustes, expansão e documentação desses sistemas, conectando lógica, IHM, redes e diagnóstico para que a máquina continue sustentável.",
     image: schneiderMachineReference,
