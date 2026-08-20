@@ -1006,10 +1006,9 @@ como são:
 
 ## Mais detalhes
 
-O plano completo do projeto está em
-`C:\Users\rafha\.claude\plans\baixei-o-backup-e-mellow-cosmos.md`.
-Inclui contexto, decisões técnicas, direção de UX/UI com benchmarks
-(Cybertrol, Brock, Rockwell, AVEVA), cronograma e roadmap pós-lançamento.
+O plano completo do projeto (contexto, decisões técnicas, direção de UX/UI
+com benchmarks — Cybertrol, Brock, Rockwell, AVEVA — cronograma e roadmap
+pós-lançamento) é mantido internamente, fora do repositório.
 
 Documentos vivos no repositório:
 
