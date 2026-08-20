@@ -16,10 +16,11 @@ formulários e para a normalização canônica de hosts, portas e URLs legadas.
 
 | Indicador | Valor |
 |---|---|
-| Páginas geradas | 110 |
+| Páginas geradas | 111 (inclui `/busca/`, noindex) |
 | Lighthouse mobile | 98 Performance · 100 A11y · 100 BP · 100 SEO |
 | Lighthouse desktop | 100 em todas as categorias |
 | Core Web Vitals (lab, mobile) | FCP 1,7s · LCP 2,1s · TBT 0 · CLS 0 |
+| Busca interna | Pagefind — 111 páginas indexadas em pt-BR |
 | Testes das Functions | 25/25 passando |
 | Auditoria editorial (`audit:editorial`) | aprovada sem ocorrências |
 | Conteúdo | 13 posts · 1 case · 11 eventos · 41 páginas de tecnologia · 9 setores · 7 soluções · 2 serviços |
@@ -54,6 +55,27 @@ npm run pages:dev        # serve dist/ + functions/ via wrangler
 | `audit:utf8` | 100% dos arquivos com UTF-8 válido (sem mojibake/BOM quebrado) |
 | `audit:faqs` | **Zero FAQ duplicada** no catálogo de 240+ perguntas |
 | `audit:html` | Auditoria editorial do HTML: títulos 30–65 chars, datas do JSON-LD com `<time>` visível correspondente, FAQPage espelhando o conteúdo, etc. |
+
+### Geradores de assets e scripts utilitários (`scripts/`)
+
+| Script | Para que serve | Quando rodar |
+|---|---|---|
+| `generateFavicons.mjs` | Gera `favicon.ico` (16/32/48) e `apple-touch-icon.png` (180×180) a partir do `favicon.svg` via sharp | `node scripts/generateFavicons.mjs` — só quando o símbolo da marca mudar |
+| `generate_og_images.py` | Gera os cards sociais 1200×630 de `public/og/` (PIL/Pillow; fontes do Windows) | Ao criar post/case novo (convenção `blog-<slug>.png` / `case-<id>.png`) |
+| `verifyRoutes.cjs` | Toda referência interna do `dist/` aponta para página existente | via `audit:editorial` |
+| `verifyRedirects.cjs` | Alvos de `_redirects` + `legacy-redirects.ts` existem; sem cadeias | via `audit:editorial` |
+| `verifyTechnicalTerminology.cjs` | Nomes de produtos/normas escritos corretamente no texto visível | via `audit:editorial` |
+| `verifyAllProse.cjs` | Espaços duplos, capitalização do catálogo | via `audit:editorial` |
+| `verifyUtf8.cjs` | UTF-8 válido em 100% dos arquivos | via `audit:editorial` |
+| `checkTechCatalogFaqs.cjs` | Zero FAQ duplicada nas 240+ do catálogo | via `audit:editorial` |
+| `auditEditorialHtml.cjs` | Títulos 30–65 chars, datas do schema com `<time>` visível, FAQ espelhada | via `audit:editorial` |
+| `checkEncoding3.cjs`, `compareFaqs.cjs`, `listAllSolutionFaqs.cjs` | Utilitários pontuais de inspeção (não rodam no gate) | sob demanda |
+
+> **Gotcha de encoding (Windows):** nunca editar arquivos do `src/` com
+> `Get-Content`/`Set-Content` do PowerShell 5.1 — ele lê UTF-8 sem BOM como
+> Windows-1252 e grava mojibake (incidente real de ago/2026 no
+> `AnimatedPlantDiagram`). Usar a ferramenta de edição da IDE/agente ou .NET
+> com `UTF8Encoding($false)`.
 
 **Build de produção exige** `PUBLIC_TURNSTILE_SITE_KEY` no ambiente; sem ela
 os formulários renderizam o estado de indisponibilidade (fail-closed por
@@ -116,8 +138,49 @@ site/
 ├── astro.config.mjs
 ├── tsconfig.json
 ├── wrangler.jsonc           # configuração única do Cloudflare Pages
+├── .npmrc                   # include=optional — SEM ele, npm ci no Linux do
+│                            # Pages omite binários opcionais (lightningcss,
+│                            # emnapi, pagefind) e o build quebra
+├── .nvmrc                   # Node 22.12.0 (CI e Pages leem daqui)
 └── package.json
 ```
+
+## Inventário de rotas (111 páginas)
+
+| Seção | Rotas | Origem |
+|---|---|---|
+| `/` home | 1 | estática |
+| Páginas-pilar e institucionais | 12 | `automacao-industrial`, `ciberseguranca-ot`, `automacao-industrial-maringa`, `automacao-industrial-parana`, `integrador-rockwell`, `empresa`, `equipe/`, `certificacoes` (+`silver-system-integrator`), `contato`, `setores.astro` (índice), `404` |
+| `/solucoes/` | 8 | índice + 7 estáticas (plantpax, factorytalk, redes-iec-62443, modernizacao-scada, migracao-plc, pi-system, data-centers) |
+| `/servicos/` | 3 | índice + programacao-clp + comissionamento-industrial |
+| `/setores/` | 9 | páginas estáticas por setor |
+| `/tecnologias/` | 42 | índice + `[slug]` data-driven (41 entradas em `techCatalog.ts`) |
+| `/blog/` | 14 | índice + 13 posts `.mdx` |
+| `/cases/` | 2 | índice + projeto-moinho |
+| `/eventos/` | 12 | índice + 11 eventos `.mdx` |
+| `/integra-acao/` | 3 | índice + newsletter + webinar (webinar é **noindex** enquanto placeholder) |
+| Legais | 4 | politica-privacidade, uso-de-cookies, politica-editorial, avisos-legais |
+| Utilitárias | 2 | `/busca/` (noindex, fora do sitemap), `/404.html` (noindex, fora do sitemap) |
+| Feeds/meta | — | `/rss.xml`, `/sitemap-index.xml`, `/llms.txt`, `/.well-known/security.txt` |
+
+## Dados institucionais (fonte única: `src/utils/site.ts`)
+
+Os valores abaixo alimentam header, footer, contato, JSON-LD e og — mudam
+**somente** em `site.ts`:
+
+| Campo | Valor |
+|---|---|
+| Razão social | Integra Automação Industrial Ltda - ME |
+| CNPJ | 24.543.173/0001-14 |
+| Fundação | 2016 · Maringá-PR |
+| Endereço | Rua Topázio, 965 — Maringá-PR · CEP 87.083-050 |
+| Geo | -23.4173, -51.9333 |
+| E-mail comercial | comercial@integrautomacao.com.br |
+| E-mail privacidade | lgpd@integrautomacao.com.br |
+| Telefone comercial | (44) 3305-7147 (`PHONE_COMMERCIAL`) |
+| WhatsApp | (44) 99952-3947 (`PHONE_WHATSAPP`) |
+| LinkedIn | linkedin.com/company/integrautomacao |
+| Credencial | Silver System Integrator (Rockwell PartnerNetwork) + PlantPAx DCS Certified |
 
 ## Design system
 
@@ -253,7 +316,7 @@ site/
 - `integra-acao/webinar` é `noindex` enquanto for placeholder — remover o
   noindex quando a primeira sessão confirmada for publicada.
 
-### Busca interna (Pagefind)
+## Busca interna (Pagefind)
 
 - Índice estático gerado pós-build: `"build": "astro build && pagefind --site
   dist"` — 111 páginas em pt-BR. Em `astro dev` o índice não existe e a
@@ -452,6 +515,22 @@ Orçamentos e decisões (Lighthouse mobile 98 / desktop 100 em ago/2026):
 | Trusted Types / CSP `strict-dynamic` | Não adotado — host allowlist documentado + superfície JS mínima |
 | Versão `/en/` | No backlog (mirar multinacionais) |
 
+## Convenções de código
+
+- **Idioma:** código e comentários em pt-BR; commits seguem o histórico
+  (título descritivo em inglês, corpo livre).
+- **Slugs/URLs:** kebab-case, sempre com `/` final; âncoras em pt-BR.
+- **Line endings:** LF (o Git no Windows avisa sobre CRLF — informativo,
+  não é erro).
+- **Imagens em conteúdo:** sempre via `astro:assets` (src/assets) com
+  `widths`/`sizes` fiéis ao layout; `public/` só para o que não passa pelo
+  pipeline (og cards, favicon, PDFs).
+- **Comentários explicam o PORQUÊ**, não o quê — ver exemplos em
+  `_headers`, `BaseLayout.astro` e `webform.ts`.
+- **Nada de PowerShell para editar arquivos** (ver gotcha de encoding).
+- **Tailwind:** somente tokens do `@theme` — classes `integra-*` inexistentes
+  no tema NÃO geram CSS (silenciosamente).
+
 ## Como adicionar conteúdo
 
 ### Novo post no blog
@@ -537,6 +616,41 @@ Orçamentos e decisões (Lighthouse mobile 98 / desktop 100 em ago/2026):
    `coverImage` e `coverAlt` são **obrigatórios** (a capa alimenta o og:image
    da página, com dimensões reais passadas ao `og:image:width/height`).
 
+### Nova página de tecnologia (catálogo)
+
+1. Adicione a entrada em `src/data/techCatalog.ts` (41 existentes servem de
+   modelo). Campos-chave:
+   - `slug` (kebab-case, vira a rota), `group`, `type`
+     (Software/Tecnologia/Serviço), `title`, `shortTitle`.
+   - `seoTitle` (opcional): sobrescreve o `<title>` — pense na **query**,
+     não no nome interno; ≤55 chars (" | Integra" é anexado; gate: 30–65).
+   - `description`: **triplo uso** — meta description + intro visível +
+     description do `serviceSchema`. Tem que funcionar nos três contextos.
+   - `faq`: cada pergunta é única no site inteiro (`audit:faqs` reprova
+     duplicata). Incluir nomes legados quando as pessoas buscam por eles
+     (ex.: "ex-Unity Pro").
+   - `relatedTech` / `relatedSolutions`: slugs de outras entradas/páginas.
+2. Se usar imagem de manual público, registrar a fonte em
+   `src/data/sourceRegistry.ts` — e verificar o gate jurídico
+   (`ASSET_RIGHTS_REVIEW.md`) antes de publicar.
+
+### Nova página de setor ou solução
+
+São páginas `.astro` estáticas em `src/pages/setores/` ou `src/pages/solucoes/`.
+Requisitos mínimos: `breadcrumbLeaf` curto, `PageHero` no cabeçalho, headings
+de card em `<h3>` (SectionHeader é h2), `serviceSchema`/`itemListSchema`
+conforme o padrão das irmãs, e entrada no Footer + mega-menu (`site.ts`).
+**Só criar quando houver conteúdo próprio, fontes e evidências publicáveis**
+(regra do backlog editorial).
+
+### Novo redirect legado
+
+1. Registre em `shared/legacy-redirects.ts` (path exato, prefixo ou query
+   `?p=N` conhecido).
+2. Espelhe em `public/_redirects` (estáticos antes dos splats) — inerte hoje
+   (Functions servem `/*`), mas mantido por segurança/documentação.
+3. `npm run audit:redirects` valida os alvos.
+
 ### Sanitização de conteúdo (regra inegociável)
 
 Antes de publicar qualquer case/post derivado de propostas internas:
@@ -549,6 +663,51 @@ Antes de publicar qualquer case/post derivado de propostas internas:
 - ✅ OK reutilizar vocabulário técnico genérico (PlantPAx, FactoryTalk,
   ControlLogix, IEC 62443, etc.)
 - ✅ OK reutilizar declarações institucionais (manifesto, valores)
+
+## Variáveis de ambiente (referência consolidada)
+
+| Variável | Escopo | Visibilidade | Usada por |
+|---|---|---|---|
+| `PUBLIC_TURNSTILE_SITE_KEY` | **build** | pública (vai para o HTML) | `turnstile.ts` → widgets dos formulários |
+| `TURNSTILE_SECRET_KEY` | runtime (Pages) | encrypted | `functions/_shared/turnstile.ts` (verificação server-side) |
+| `RESEND_SEND_API_KEY` | runtime | encrypted | `api/contact.ts` (somente POST /emails) |
+| `RESEND_CONTACTS_API_KEY` | runtime | encrypted | `api/newsletter.ts` (Contacts/Segments/Topics) |
+| `RESEND_SEGMENT_ID` | runtime | encrypted | `api/newsletter.ts` — segmento Integra Ação |
+| `RESEND_TOPIC_ID` | runtime | encrypted | `api/newsletter.ts` — preferência explícita (opt_out até confirmar) |
+| `CONTACT_EMAIL_TO` | runtime | encrypted | destino do contato (comercial@) |
+| `CONTACT_EMAIL_FROM` | runtime | encrypted | remetente (`noreply@forms.` — subdomínio dedicado do Resend) |
+| `NODE_VERSION` | build | — | `22` no Pages/CI (ver `.nvmrc`: 22.12.0) |
+| `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` | CI (GitHub secrets) | secret | só na Opção B de deploy |
+
+## Serviços de terceiros
+
+| Serviço | Uso no site | Onde se configura |
+|---|---|---|
+| Cloudflare Pages | hosting estático + CDN | dashboard → Workers & Pages |
+| Cloudflare Pages Functions | `/api/contact`, `/api/newsletter`, middleware canônico | `functions/` |
+| Cloudflare Turnstile | anti-bot dos formulários | Turnstile → site key/secret |
+| Cloudflare Web Analytics | beacon `static.cloudflareinsights.com` (injetado pela zona; está no CSP) | Web Analytics da zona |
+| Cloudflare Speed Brain | prefetch especulativo da zona — **incompatível com CSP por nonce** (motivo da CSP sem nonce) | Speed → Settings |
+| Resend | envio transacional (contato) + Contacts/Segments/Topics (newsletter) | painel Resend; domínio de envio `forms.` (DNS only) |
+| Google Search Console | acompanhamento de cobertura/desempenho | propriedade verificada |
+
+**Analytics:** somente Cloudflare Web Analytics (sem GA4, sem cookies de
+rastreamento — ver `uso-de-cookies`). **Crawlers de IA:** liberados
+deliberadamente no `robots.txt` (18 user-agents; decisão de 10/06/2026) e o
+site publica `llms.txt`. Manter o "managed robots.txt" da Cloudflare
+**desligado** no painel (comentários no `robots.txt` explicam o porquê).
+
+**Arquivos públicos especiais:**
+
+| Arquivo | Função | Manutenção |
+|---|---|---|
+| `llms.txt` | Resumo do site para agentes/LLMs | Atualizar ao mudar estrutura de seções ou posicionamento |
+| `robots.txt` | Bloqueia superfície WP legada; libera 18 crawlers de IA | Comentários internos explicam a política |
+| `rss.xsl` | Stylesheet do feed (RSS legível no browser) | — |
+| `.well-known/security.txt` | RFC 9116 — contato de segurança | **Expira 2027-06-01** — renovar antes (contato lgpd@) |
+| `favicon.ico` / `apple-touch-icon.png` | Ícones gerados do `favicon.svg` | `node scripts/generateFavicons.mjs` |
+| `og/*.png` (35+) | Cards sociais 1200×630 | `scripts/generate_og_images.py` |
+| `downloads/` | PDF do certificado Silver SI | Substituir quando a credencial for renovada |
 
 ## Deploy
 
@@ -657,6 +816,20 @@ Settings → Branches → Add branch ruleset → Apply to **default branch**:
 - Restrict deletions
 - Block force pushes
 
+### CI (`.github/workflows/ci.yml`)
+
+Roda em push/PR para `main` e via dispatch. Job **"Lint and build"**
+(ubuntu, Node do `.nvmrc`, `npm ci`): `astro check` → `npm run build`
+(que inclui o Pagefind) → smoke-test do `dist/`. É o status check exigido
+pela branch protection sugerida acima.
+
+### Remotes git
+
+| Remote | Repositório | Papel |
+|---|---|---|
+| `origin` | `rhcorsi/integrautomacao.com.br` | **principal** — `main` rastreia este; dispara o deploy da Opção A |
+| `dev-com` | `rhcorsi/integrautomacao.com` | espelho de desenvolvimento (push manual quando fizer sentido) |
+
 ### Migração do antigo Worker de redirects
 
 O middleware de Pages em `functions/_middleware.ts`, apoiado por
@@ -746,6 +919,29 @@ _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 - **Query fantasma** ("44 wincc", 8 mil impressões): tráfego artificial —
   não otimizar para ela.
 
+## Histórico de ondas (ago/2026)
+
+Contexto para futuros mantenedores entenderem *por que* certas coisas são
+como são:
+
+1. **Onda de auditoria front-end** — 2 bugs críticos corrigidos (paleta
+   fantasma no RfpChecklist; texturas do hero invisíveis por falta de
+   `isolate`), formulários endurecidos (dead-end de ad-blocker, timeouts,
+   noscript), JSON-LD com escape `\u003c`, helpers `collections.ts`/
+   `webform.ts`, hierarquia h2→h3, limpeza de 2,2 MB de assets órfãos.
+2. **Onda Search Console** — canonicalização de porta `:2096` (o Pages
+   respondia duplicado na porta do cPanel), redirects cirúrgicos de URLs
+   legadas (`tela-N`, datadas, `/download/`), títulos de CTR nas páginas de
+   tecnologia com milhares de impressões.
+3. **Onda PageSpeed** — `sizes`/`widths` fiéis ao layout (economia de ~131
+   KiB no desktop), links de fonte com `aria-label` único, `favicon.ico` +
+   `apple-touch-icon.png` gerados do SVG.
+4. **Onda de design** — `PageHero` em 18 páginas (textura + breadcrumbs +
+   acento de seção), busca Pagefind com UI própria, `MetricStrip`, seção de
+   foto real na home, reveal escalonado, diagrama de arquitetura interativo.
+5. **Correção de mojibake** — strings do `AnimatedPlantDiagram` corrompidas
+   por edição em PowerShell Latin-1; restauradas e varredura geral limpa.
+
 ## Backlog editorial e operacional
 
 - [ ] **Observatory — Polish (Speed → Observatory):** ativar em modo
@@ -796,10 +992,14 @@ _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 | Sintoma | Causa provável | Ação |
 |---|---|---|
 | Formulário mostra "temporariamente indisponível" em produção | `PUBLIC_TURNSTILE_SITE_KEY` ausente/placeholder no build | Conferir env var no Pages e rebuildar |
+| Busca mostra "índice gerado no build" | `astro dev` não tem `/pagefind/` | Normal em dev; testar com `npm run build` + `pages:dev` |
+| Build falha na etapa Pagefind (CI/Pages) | binário linux ausente | Pagefind está em `dependencies` por isso; conferir `.npmrc` `include=optional` intacto |
 | og:image quebrado no WhatsApp/LinkedIn | Card fora da convenção de nome | Verificar se o arquivo existe em `public/og/`; a convenção tem fallback automático |
 | `audit:html` reclama de data sem `<time>` | Texto de data colapsado ou sem elemento `<time>` | Usar `EventDate` (nunca colapsar range em página com Event schema) |
 | `audit:faqs` reprova | Pergunta repetida entre páginas | Reformular o ângulo da pergunta em uma delas |
 | Novo embed de terceiro não carrega | CSP `frame-src` restrito | Adicionar a origem em `_headers` |
+| Classe `integra-*` sem efeito visual | Cor inexistente no `@theme` (ex.: blue/yellow/green) | Usar somente tokens definidos em `global.css` |
+| Texto com "Ã§/Ã©/Â·" no site | Arquivo editado via PowerShell (Latin-1) | Restaurar string com ferramenta UTF-8; ver gotcha de encoding |
 | GSC mostra URLs estranhas (`:2096`, `tela-N`) | Legado já tratado no middleware | Aguardar reconsolidação do índice; novos padrões → `legacy-redirects.ts` + `_redirects` |
 
 ## Mais detalhes
@@ -808,3 +1008,15 @@ O plano completo do projeto está em
 `C:\Users\rafha\.claude\plans\baixei-o-backup-e-mellow-cosmos.md`.
 Inclui contexto, decisões técnicas, direção de UX/UI com benchmarks
 (Cybertrol, Brock, Rockwell, AVEVA), cronograma e roadmap pós-lançamento.
+
+Documentos vivos no repositório:
+
+- [`SEO_ROADMAP.md`](./SEO_ROADMAP.md) — estratégia de SEO por cluster de
+  intenção (o que já foi coberto e o que falta publicar).
+- [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md) — **gate jurídico P0**
+  dos ativos de terceiros (manuais de fabricantes).
+
+Fora do repositório (pastas irmãs no diretório de trabalho): `docs/` (guias
+operacionais de Cloudflare/GSC), `Logomarca/` (identidade visual),
+`_screens/` (capturas de QA), `Manuais e Docs*/` (fontes primárias dos
+fabricantes) e o `Backup Baixado/` do WordPress legado.
