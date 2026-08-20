@@ -1,13 +1,13 @@
 ---
 /**
  * Painel "sala de controle": diagrama de planta animado para o hero escuro.
- * Dados pulsam do campo (N0-1) atÃ© o corporativo (N4-5) atravessando a IDMZ,
+ * Dados pulsam do campo (N0-1) até o corporativo (N4-5) atravessando a IDMZ,
  * em CSS puro (offset-path), sem JavaScript. Com prefers-reduced-motion o
- * diagrama permanece estÃ¡tico e completo. Tags de instrumento no padrÃ£o
- * ISA-5.1 (TT = transmissor de temperatura, FT = vazÃ£o, XV = vÃ¡lvula).
+ * diagrama permanece estático e completo. Tags de instrumento no padrão
+ * ISA-5.1 (TT = transmissor de temperatura, FT = vazão, XV = válvula).
  */
 
-// Caminhos dos conduÃ­tes, usados no desenho e na animaÃ§Ã£o dos pulsos.
+// Caminhos dos conduítes, usados no desenho e na animação dos pulsos.
 const P1 = "M140 538 V470 H180 V446";
 const P2 = "M280 538 V470 H230 V446";
 const P3 = "M420 538 V470 H270 V446";
@@ -47,10 +47,10 @@ const otText = "#003a5d";
 ---
 
 <div class="overflow-hidden rounded-xl border border-integra-gray-200 bg-integra-white shadow-xl">
-  {/* Barra de tÃ­tulo do painel, estilo estaÃ§Ã£o de supervisÃ£o */}
+  {/* Barra de título do painel, estilo estação de supervisão */}
   <div class="flex items-center justify-between border-b border-integra-gray-200 bg-integra-gray-50 px-4 py-2.5">
     <p class="font-mono text-[10px] uppercase tracking-widest text-integra-gray-500">
-      SupervisÃ£o Â· visÃ£o geral da planta
+      Supervisão · visão geral da planta
     </p>
     <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-emerald-700">
       <span class="apd-status inline-block size-1.5 rounded-full bg-emerald-500"></span>
@@ -73,7 +73,7 @@ const otText = "#003a5d";
     <desc id="apd-desc">
       Diagrama animado em camadas: instrumentos de campo alimentam o
       controlador ControlLogix, que alimenta os servidores SCADA redundantes
-      e o Historian; os dados atravessam a IDMZ por conduÃ­te controlado atÃ©
+      e o Historian; os dados atravessam a IDMZ por conduíte controlado até
       o ambiente corporativo. Pulsos indicam o fluxo de dados subindo pelas
       camadas.
     </desc>
@@ -88,22 +88,22 @@ const otText = "#003a5d";
       </filter>
     </defs>
 
-    {/* â”€â”€ Bandas de zona â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── Bandas de zona ─────────────────────────────────────────── */}
     <rect x="40" y="56" width="480" height="94" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="76" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N4-5 Â· CORPORATIVO</text>
+    <text x="56" y="76" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N4-5 · CORPORATIVO</text>
 
     <rect x="40" y="180" width="480" height="60" rx="10" fill="rgba(0,58,93,0.04)" stroke={otLine} stroke-dasharray="5 4" stroke-opacity="0.45"></rect>
 
     <rect x="40" y="264" width="480" height="84" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="281" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N3 Â· SUPERVISÃƒO E DADOS</text>
+    <text x="56" y="281" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N3 · SUPERVISÃO E DADOS</text>
 
     <rect x="40" y="376" width="480" height="84" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="393" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N1-2 Â· CONTROLE E OPERAÃ‡ÃƒO</text>
+    <text x="56" y="393" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N1-2 · CONTROLE E OPERAÇÃO</text>
 
     <rect x="40" y="488" width="480" height="108" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="505" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N0 Â· CAMPO Â· INSTRUMENTAÃ‡ÃƒO</text>
+    <text x="56" y="505" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N0 · CAMPO · INSTRUMENTAÇÃO</text>
 
-    {/* â”€â”€ ConduÃ­tes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── Conduítes ──────────────────────────────────────────────── */}
     <g fill="none" stroke={wire} stroke-width="1.5">
       <path d={P1}></path>
       <path d={P2}></path>
@@ -117,12 +117,12 @@ const otText = "#003a5d";
       <path d={PHIST}></path>
     </g>
 
-    {/* â”€â”€ Corporativo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── Corporativo ────────────────────────────────────────────── */}
     <rect x="180" y="92" width="200" height="44" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
-    <text x="280" y="112" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">ERP Â· BI Â· nuvem</text>
-    <text x="280" y="127" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">camada de decisÃ£o</text>
+    <text x="280" y="112" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">ERP · BI · nuvem</text>
+    <text x="280" y="127" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">camada de decisão</text>
 
-    {/* â”€â”€ IDMZ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── IDMZ ───────────────────────────────────────────────────── */}
     <g transform="translate(196, 198)">
       <rect width="26" height="16" rx="2.5" fill="none" stroke={otText} stroke-width="1.2"></rect>
       <line x1="2" y1="5.5" x2="24" y2="5.5" stroke={otText} stroke-width="0.8"></line>
@@ -130,10 +130,10 @@ const otText = "#003a5d";
       <line x1="9" y1="0.5" x2="9" y2="5.5" stroke={otText} stroke-width="0.8"></line>
       <line x1="17" y1="5.5" x2="17" y2="10.5" stroke={otText} stroke-width="0.8"></line>
     </g>
-    <text x="232" y="210" font-family={mono} font-size="10" letter-spacing="1.5" fill={otText}>IDMZ Â· ZONA DESMILITARIZADA INDUSTRIAL</text>
-    <text x="232" y="226" font-family={mono} font-size="8.5" fill="#4a6d85">sem caminho direto TI â‡„ chÃ£o de fÃ¡brica</text>
+    <text x="232" y="210" font-family={mono} font-size="10" letter-spacing="1.5" fill={otText}>IDMZ · ZONA DESMILITARIZADA INDUSTRIAL</text>
+    <text x="232" y="226" font-family={mono} font-size="8.5" fill="#4a6d85">sem caminho direto TI ⇄ chão de fábrica</text>
 
-    {/* â”€â”€ SupervisÃ£o â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── Supervisão ─────────────────────────────────────────────── */}
     {[
       { x: 64, name: "SCADA A", sub: "redundante" },
       { x: 216, name: "SCADA B", sub: "redundante" },
@@ -146,16 +146,16 @@ const otText = "#003a5d";
       </g>
     ))}
 
-    {/* â”€â”€ Controle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── Controle ───────────────────────────────────────────────── */}
     <rect x="120" y="398" width="180" height="48" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
-    <text x="210" y="420" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">ControlLogix Â· PAC</text>
+    <text x="210" y="420" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">ControlLogix · PAC</text>
     <text x="210" y="436" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">controle de processo</text>
 
     <rect x="340" y="398" width="120" height="48" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
     <text x="400" y="420" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">HMI local</text>
-    <text x="400" y="436" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">operaÃ§Ã£o</text>
+    <text x="400" y="436" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">operação</text>
 
-    {/* â”€â”€ Campo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    {/* ── Campo ──────────────────────────────────────────────────── */}
     {[
       { x: 140, tag: "TT-101" },
       { x: 280, tag: "FT-202" },
@@ -169,7 +169,7 @@ const otText = "#003a5d";
       </g>
     ))}
 
-    {/* â”€â”€ Pulsos de dados (CSS offset-path; invisÃ­veis sem animaÃ§Ã£o) â”€â”€ */}
+    {/* ── Pulsos de dados (CSS offset-path; invisíveis sem animação) ── */}
     {pulses.map((p) => (
       <circle
         class="apd-dot"
@@ -179,7 +179,7 @@ const otText = "#003a5d";
         style={`--apd-path: path('${p.path}'); --apd-dur: ${p.dur}; --apd-delay: ${p.delay};`}
       ></circle>
     ))}
-    {/* Comando descendo: supervisÃ£o -> controlador */}
+    {/* Comando descendo: supervisão -> controlador */}
     <circle
       class="apd-dot apd-dot-down"
       r="3"
