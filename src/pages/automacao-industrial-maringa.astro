@@ -8,8 +8,11 @@ import CtaBlock from "@/components/CtaBlock.astro";
 const regionalStrengths = [
   {
     title: "Proteína animal e alimentos",
+    // O dado do IBGE (34,4% do abate de frangos) é contado UMA vez, no guia
+    // regional do Paraná — aqui fica a consequência operacional, sem
+    // duplicar estatística entre páginas irmãs.
     description:
-      "O Paraná respondeu por 34,4% do abate nacional de frangos em 2025, segundo o IBGE. Frigoríficos, fábricas de ração e plantas de alimentos combinam rastreabilidade por lote e linhas contínuas nas quais falhas de automação podem gerar impacto operacional relevante.",
+      "O Paraná é o líder nacional em proteína animal, e o noroeste concentra frigoríficos, fábricas de ração e plantas de alimentos. São operações com rastreabilidade por lote e linhas contínuas nas quais falhas de automação podem gerar impacto operacional relevante.",
   },
   {
     title: "Grãos e cooperativas agroindustriais",
@@ -82,8 +85,12 @@ const faq = [
 ];
 ---
 
+{/* Página transacional local: mira "empresa de automação em Maringá".
+    O guia "como escolher no Paraná" fica em /automacao-industrial-parana/
+    — títulos, H1, FAQ e schema foram deliberadamente separados para não
+    canibalizar. */}
 <BaseLayout
-  title="Automação Industrial em Maringá e no Paraná"
+  title="Empresa de automação industrial em Maringá-PR"
   description="Empresa de automação em Maringá-PR com atuação nacional em PlantPAx, FactoryTalk, migração de PLC e cibersegurança OT. Agende uma conversa técnica."
   breadcrumbLeaf="Automação Industrial em Maringá"
   jsonLd={[

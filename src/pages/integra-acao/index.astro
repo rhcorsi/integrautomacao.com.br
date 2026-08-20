@@ -2,16 +2,11 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { Icon } from "astro-icon/components";
-import { getCollection } from "astro:content";
 import { formatEventDateRange } from "@/utils/eventDate";
+import { getPublishedEventos, getPublishedPosts } from "@/utils/collections";
 
-const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
-
-const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime())
-  .slice(0, 3);
+const recentPosts = (await getPublishedPosts()).slice(0, 3);
+const recentEventos = (await getPublishedEventos()).slice(0, 3);
 
 const formatos = [
   {
@@ -74,6 +69,7 @@ const temas = [
 
 <BaseLayout
   title="Integra Ação: conteúdo técnico"
+  breadcrumbLeaf="Integra Ação"
   description="Conteúdo para quem projeta, opera e mantém sistemas industriais: newsletter técnica, webinars em preparação e eventos da Integra."
   ogImage="/og/integra-acao.png"
 >

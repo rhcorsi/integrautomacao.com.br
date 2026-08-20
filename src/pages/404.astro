@@ -9,10 +9,11 @@ const popular = [
 ];
 ---
 
+{/* Sem canonical: noindex + canonical são sinais contraditórios para o
+    Google; a 404 não deve consolidar nem ser rastreada como conteúdo. */}
 <BaseLayout
   title="Página não encontrada"
   description="A página que você procura não existe ou foi movida. Use os caminhos sugeridos para continuar no site da Integra."
-  canonical="/404.html"
   noindex={true}
 >
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">

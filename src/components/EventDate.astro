@@ -1,4 +1,13 @@
 ---
+/**
+ * Data/intervalo de eventos com <time datetime> para início E fim.
+ *
+ * Regra editorial do projeto (audit:html): toda data do JSON-LD do evento
+ * (startDate/endDate) precisa ter um <time datetime> visível correspondente
+ * cujo texto seja a data completa ("1 de outubro de 2025"). Por isso este
+ * componente NÃO colapsa ranges no mesmo mês — o colapso ("1–2 de outubro")
+ * só é usado em cards sem schema vinculado (formatEventDateRange).
+ */
 import { formatEventDate, isoEventDate } from "@/utils/eventDate";
 
 interface Props {

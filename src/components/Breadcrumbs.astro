@@ -28,6 +28,7 @@ const items = breadcrumbItems(Astro.url.pathname, leaf);
             {isLeaf ? (
               <span
                 aria-current="page"
+                title={item.name}
                 class="max-w-[18rem] truncate text-integra-gray-700"
               >
                 {item.name}

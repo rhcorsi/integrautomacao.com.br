@@ -34,10 +34,13 @@ const temasPropostos = [
 ];
 ---
 
+{/* noindex enquanto a página for placeholder "em preparação" — remover
+    quando a primeira sessão confirmada estiver publicada. */}
 <BaseLayout
   title="Webinars Integra Ação"
   description="Formato de webinars técnicos da Integra Ação: sessões em preparação, temas propostos e agenda publicada após confirmação."
   ogImage="/og/integra-acao-webinar.png"
+  noindex={true}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
@@ -127,13 +130,13 @@ const temasPropostos = [
         Próxima edição
       </p>
       <h2 class="text-3xl font-semibold sm:text-4xl mb-6">
-        Webinars em preparação.
+        Como as sessões serão anunciadas.
       </h2>
       <p class="text-base leading-relaxed text-integra-gray-200 lg:text-lg mb-8">
-        Os primeiros webinars serão divulgados pela newsletter e por aqui
-        quando tema, apresentador e data estiverem confirmados. A inscrição na
-        newsletter permite receber o convite; a existência de gravação será
-        informada em cada edição.
+        Nenhuma data é publicada antes de tema, apresentador e pauta estarem
+        fechados. Quando isso acontecer, o convite sai primeiro na newsletter
+        Integra Ação e depois nesta página, com link de inscrição e a
+        informação sobre gravação da edição.
       </p>
       <div class="flex flex-wrap gap-4">
         <a

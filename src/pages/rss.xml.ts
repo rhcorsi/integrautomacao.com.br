@@ -1,17 +1,16 @@
 import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
 import type { APIContext } from "astro";
 import { SITE } from "@/utils/site";
+import { getPublishedPosts } from "@/utils/collections";
 
 export async function GET(context: APIContext) {
-  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
-  );
+  const posts = await getPublishedPosts();
 
   return rss({
     title: `${SITE.name}, Blog técnico`,
+    // Manter alinhada à description da página /blog/.
     description:
-      "Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443 e governança de engenharia industrial.",
+      "Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443, migração de PLC e governança de engenharia industrial.",
     site: context.site!,
     stylesheet: "/rss.xsl",
     xmlns: { dc: "http://purl.org/dc/elements/1.1/" },

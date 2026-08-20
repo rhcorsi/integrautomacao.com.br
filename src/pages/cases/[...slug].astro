@@ -1,16 +1,20 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
 import { COLLECTIVE_AUTHOR } from "@/data/authors";
+import { CASE_SOLUTIONS, TECH_LINKS } from "@/data/caseRelations";
 import { SITE } from "@/utils/site";
 import { articleSchema } from "@/utils/schema";
+import { getPublishedCases } from "@/utils/collections";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 export async function getStaticPaths() {
-  const cases = await getCollection("cases", ({ data }) => !data.draft);
+  const cases = await getPublishedCases();
   return cases.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
@@ -36,7 +40,21 @@ const formattedUpdatedDate = entry.data.updatedDate?.toLocaleDateString("pt-BR",
 const updatedDateIso = entry.data.updatedDate?.toISOString().slice(0, 10);
 
 const caseUrl = new URL(Astro.url.pathname, SITE.url).toString();
-const socialImage = entry.data.heroImage?.src;
+// Convenção: o card social dedicado (public/og/case-<id>.png, 1200×630)
+// tem prioridade sobre a hero bruta; se não existir, cai na hero com as
+// dimensões reais — nunca quebra a imagem social silenciosamente.
+const dedicatedOg = `/og/case-${entry.id}.png`;
+const hasDedicatedOg = existsSync(
+  join(process.cwd(), "public", "og", `case-${entry.id}.png`),
+);
+const socialImage = hasDedicatedOg
+  ? dedicatedOg
+  : (entry.data.heroImage?.src ?? dedicatedOg);
+const socialImageSize = hasDedicatedOg
+  ? { width: 1200, height: 630 }
+  : entry.data.heroImage
+    ? { width: entry.data.heroImage.width, height: entry.data.heroImage.height }
+    : { width: 1200, height: 630 };
 const caseLd = articleSchema({
   type: "Article",
   title: entry.data.title,
@@ -45,38 +63,8 @@ const caseLd = articleSchema({
   datePublished: entry.data.pubDate,
   dateModified: entry.data.updatedDate ?? entry.data.pubDate,
   tags: entry.data.tech,
-  image: socialImage ? new URL(socialImage, SITE.url).toString() : undefined,
+  image: new URL(socialImage, SITE.url).toString(),
 });
-
-const TECH_LINKS: Record<string, { href: string; description: string }> = {
-  "FactoryTalk View SE": {
-    href: "/tecnologias/factorytalk-view-se/",
-    description: "Arquitetura distribuída, servidores HMI, alarmes e redundância.",
-  },
-  ControlLogix: {
-    href: "/tecnologias/controllogix-compactlogix/",
-    description: "Controladores Logix, redes, I/O e critérios de dimensionamento.",
-  },
-  "EtherNet/IP": {
-    href: "/tecnologias/ethernet-ip-cpwe/",
-    description: "Arquitetura de rede industrial, segmentação e disponibilidade.",
-  },
-};
-
-const CASE_SOLUTIONS: Record<string, { href: string; label: string; description: string }[]> = {
-  "projeto-moinho": [
-    {
-      href: "/solucoes/modernizacao-scada/",
-      label: "Modernização de SCADA",
-      description: "Método, fronteiras e entregáveis para modernizar supervisórios legados.",
-    },
-    {
-      href: "/solucoes/factorytalk/",
-      label: "FactoryTalk Suite",
-      description: "Integração do View SE com o restante do ecossistema FactoryTalk.",
-    },
-  ],
-};
 
 const relatedTechnologies = entry.data.tech.flatMap((label) => {
   const link = TECH_LINKS[label];
@@ -91,6 +79,8 @@ const relatedSolutions = CASE_SOLUTIONS[entry.id] ?? [];
   ogType="article"
   ogImage={socialImage}
   ogImageAlt={entry.data.heroAlt ?? entry.data.title}
+  ogImageWidth={socialImageSize.width}
+  ogImageHeight={socialImageSize.height}
   jsonLd={[caseLd]}
 >
   <article>

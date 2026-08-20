@@ -6,10 +6,20 @@
  * para que Service, Article e BreadcrumbList possam referenciá-la por
  * `{ "@id": ORG_ID }`.
  */
-import { SITE, COMPANY } from "@/utils/site";
+import { SITE, COMPANY, PHONE_COMMERCIAL } from "@/utils/site";
 import { COLLECTIVE_AUTHOR } from "@/data/authors";
 
 export const ORG_ID = `${SITE.url}/#organization`;
+
+/**
+ * Serialização segura de JSON-LD para `<script is:inline>`: escapa `<` como
+ * \u003c para que nenhuma string de conteúdo (título, resumo) possa fechar o
+ * bloco com `</script>` e injetar markup. Custa nada e é defesa em
+ * profundidade — usar SEMPRE no set:html do layout.
+ */
+export function serializeJsonLd(block: Record<string, unknown>): string {
+  return JSON.stringify(block).replace(/</g, "\\u003c");
+}
 
 export function organizationSchema() {
   return {
@@ -24,7 +34,7 @@ export function organizationSchema() {
     image: `${SITE.url}/og/default.png`,
     taxID: COMPANY.taxId,
     email: COMPANY.email,
-    telephone: COMPANY.phones[0].value,
+    telephone: PHONE_COMMERCIAL.value,
     address: {
       "@type": "PostalAddress",
       streetAddress: COMPANY.address.street,
@@ -82,7 +92,7 @@ export function organizationSchema() {
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: COMPANY.phones[0].value,
+      telephone: PHONE_COMMERCIAL.value,
       email: COMPANY.email,
       contactType: "sales",
       areaServed: "BR",
@@ -287,6 +297,8 @@ export function eventSchema(opts: {
   location: string;
   organizer: string;
   image?: string;
+  /** Evento online (webinar/transmissão): usa VirtualLocation + modo Online. */
+  online?: boolean;
 }) {
   const statusMap = {
     scheduled: "https://schema.org/EventScheduled",
@@ -319,13 +331,17 @@ export function eventSchema(opts: {
     url: opts.url,
     startDate: opts.startDate.toISOString().slice(0, 10),
     ...(opts.endDate ? { endDate: opts.endDate.toISOString().slice(0, 10) } : {}),
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventAttendanceMode: opts.online
+      ? "https://schema.org/OnlineEventAttendanceMode"
+      : "https://schema.org/OfflineEventAttendanceMode",
     ...(eventStatus ? { eventStatus } : {}),
-    location: {
-      "@type": "Place",
-      name: venuePart && cityState ? venuePart : opts.location,
-      address,
-    },
+    location: opts.online
+      ? { "@type": "VirtualLocation", url: opts.url }
+      : {
+          "@type": "Place",
+          name: venuePart && cityState ? venuePart : opts.location,
+          address,
+        },
     organizer: { "@type": "Organization", name: opts.organizer },
     ...(opts.image ? { image: opts.image } : {}),
     inLanguage: "pt-BR",
@@ -358,8 +374,13 @@ export function techArticleSchema(opts: {
     author: {
       "@type": "Organization",
       name: opts.authorName ?? SITE.name,
+      // Mesmo schemaId do articleSchema — derivar de COLLECTIVE_AUTHOR,
+      // nunca hardcodar o fragmento.
       ...(opts.authorUrl
-        ? { "@id": `${opts.authorUrl}#editorial-team`, url: opts.authorUrl }
+        ? {
+            "@id": `${opts.authorUrl}#${COLLECTIVE_AUTHOR.schemaId}`,
+            url: opts.authorUrl,
+          }
         : { "@id": ORG_ID }),
     },
     ...(opts.datePublished ? { datePublished: opts.datePublished } : {}),

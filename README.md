@@ -33,9 +33,18 @@ site/
 ├── public/                  # arquivos servidos como-são
 │   ├── _redirects           # redirects path-based (não query string)
 │   ├── _headers             # CSP, HSTS e cache headers
+│   ├── _routes.json         # escopo do middleware de Functions
 │   ├── favicon.svg          # SimboloColorido (vetorial)
+│   ├── favicon.ico          # 16/32/48 gerado do SVG (scripts/generateFavicons.mjs)
+│   ├── apple-touch-icon.png # 180×180 gerado do SVG (idem)
 │   ├── logo.png             # logo principal para JSON-LD
-│   └── robots.txt
+│   ├── robots.txt
+│   ├── llms.txt             # resumo do site para agentes/LLMs
+│   ├── rss.xsl              # stylesheet do feed RSS
+│   ├── og/                  # cards sociais 1200×630 (seções + blog + cases)
+│   ├── images/              # imagens públicas fora do pipeline astro:assets
+│   ├── downloads/           # PDFs públicos (certificado Silver SI)
+│   └── .well-known/         # security.txt
 ├── functions/               # Cloudflare Pages Functions e middleware
 │   ├── _middleware.ts       # host canônico, redirects legados e headers da API
 │   ├── _shared/             # limites de body/resposta, logs e Turnstile
@@ -46,15 +55,25 @@ site/
 ├── src/
 │   ├── assets/              # imagens otimizadas via astro:assets
 │   ├── components/          # componentes reutilizáveis
-│   ├── content/             # cases e posts em .mdx
+│   ├── content/             # blog, cases e eventos em .mdx
 │   │   ├── blog/
 │   │   ├── cases/
-│   │   └── config.ts        # schemas zod
+│   │   └── eventos/
+│   ├── content.config.ts    # schemas zod das coleções
+│   ├── data/                # autores, catálogo técnico, fontes, relações de cases
 │   ├── layouts/
 │   │   └── BaseLayout.astro # head, JSON-LD, Header, Footer
 │   ├── pages/               # rotas
 │   ├── styles/global.css    # Tailwind v4 + tokens @theme
-│   └── utils/site.ts        # constantes de empresa (CNPJ, endereço, etc.)
+│   └── utils/
+│       ├── site.ts          # constantes de empresa (CNPJ, endereço, telefones)
+│       ├── schema.ts        # geradores de JSON-LD (+ serializeJsonLd)
+│       ├── collections.ts   # acesso centralizado às coleções (draft+sort)
+│       ├── webform.ts       # helpers client-side dos formulários (Turnstile, status)
+│       ├── turnstile.ts     # resolução da site key (build time)
+│       └── eventDate.ts     # datas de eventos em pt-BR (partes UTC)
+├── scripts/
+│   └── generateFavicons.mjs # gera favicon.ico + apple-touch-icon.png do SVG
 ├── astro.config.mjs
 ├── tsconfig.json
 ├── wrangler.jsonc           # configuração única do Cloudflare Pages
@@ -78,7 +97,12 @@ site/
    ---
    ```
 
-3. Conteúdo em Markdown ou MDX. Para callouts técnicos:
+3. **Imagem social (og:image):** a convenção é um card 1200×630 em
+   `public/og/blog-<slug>.png`. A página usa essa arte automaticamente **se o
+   arquivo existir**; sem ela, cai no card padrão da seção (`/og/blog.png`) —
+   nunca quebra. Para arte diferente sem seguir a convenção, use `ogImage` no
+   frontmatter.
+4. Conteúdo em Markdown ou MDX. Para callouts técnicos:
 
    ```mdx
    import TechnicalCallout from "@/components/TechnicalCallout.astro";
@@ -112,6 +136,30 @@ site/
    heroImage: "../../assets/cases/<slug>/hero.jpg"
    heroAlt: "Descrição da imagem"
    ```
+
+### Novo evento
+
+1. Crie `src/content/eventos/<slug>.mdx`
+2. Frontmatter mínimo:
+
+   ```yaml
+   ---
+   title: "Nome do evento"
+   summary: "Resumo de uma linha — aparece em cards e meta description"
+   startDate: 2026-05-10
+   endDate: 2026-05-11        # opcional; não pode ser anterior a startDate
+   eventStatus: completed     # scheduled | completed | cancelled | postponed
+   location: "Belo Horizonte, MG · Centro de Convenções"
+   organizer: "Nome do organizador"
+   tags: ["PlantPAx"]
+   coverImage: "../../assets/eventos/<slug>/foto-01.jpg"
+   coverAlt: "Descrição da foto de capa"
+   draft: false
+   ---
+   ```
+
+   `coverImage` e `coverAlt` são **obrigatórios** (a capa alimenta o og:image
+   da página, com dimensões reais passadas ao `og:image:width/height`).
 
 ### Sanitização de conteúdo (regra inegociável)
 
@@ -308,6 +356,12 @@ _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 - [ ] **P0 antes do próximo deploy:** concluir o gate de direitos de todos os
       ativos de terceiros em [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md),
       anexando comprovante interno ou substituindo/removendo o item.
+- [ ] **CI:** falhar o build de produção se `PUBLIC_TURNSTILE_SITE_KEY` estiver
+      ausente/placeholder — sem a key, os formulários renderizam o estado de
+      indisponibilidade (fail-closed por design, mas silencioso).
+- [ ] **CSP reporting:** avaliar endpoint de `report-to`/`report-uri` (ex.:
+      um Pages Function gravando métrica estruturada) para tornar violações de
+      CSP visíveis em produção — hoje elas são silenciosas.
 - [ ] **P0 antes de usar Broadcasts da newsletter:** decidir e implementar
       double opt-in (link transacional assinado, expiração e Topic em `opt_out`
       até a confirmação) ou registrar decisão formal de produto/privacidade.

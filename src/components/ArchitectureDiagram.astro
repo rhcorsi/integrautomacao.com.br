@@ -23,11 +23,14 @@ const sans = "'Inter Variable', ui-sans-serif, system-ui, sans-serif";
 const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
 ---
 
+{/* min-w + rolagem horizontal: evita textos de ~4px físicos em telas
+    estreitas (o viewBox é 880 unidades de largura). */}
+<div class="overflow-x-auto">
 <svg
   viewBox="0 0 880 656"
   role="img"
   aria-labelledby="archdiag-title archdiag-desc"
-  class:list={["h-auto w-full", className]}
+  class:list={["h-auto w-full min-w-[880px]", className]}
   xmlns="http://www.w3.org/2000/svg"
 >
   <title id="archdiag-title">
@@ -245,3 +248,4 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
     </text>
   </g>
 </svg>
+</div>

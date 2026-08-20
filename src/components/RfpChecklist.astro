@@ -1,0 +1,477 @@
+---
+/**
+ * RfpChecklist.astro
+ * Ferramenta interativa client-side para autoavaliação e exportação de RFP de automação.
+ *
+ * Paleta: usa apenas tokens do @theme (integra-ot / integra-red / integra-gray).
+ * Os itens são data-driven: o markdown exportado consome data-section/data-title,
+ * então título curto (data-title) e rótulo visível podem divergir sem quebrar o export.
+ */
+
+interface ChecklistItem {
+  /** Título curto usado no markdown exportado. */
+  title: string;
+  /** Rótulo completo exibido na interface. */
+  label: string;
+}
+
+interface ChecklistSection {
+  key: string;
+  legend: string;
+  items: ChecklistItem[];
+}
+
+const sections: ChecklistSection[] = [
+  {
+    key: "Contexto",
+    legend: "1. Contexto da Planta e Objetivo",
+    items: [
+      {
+        title: "Regime de operação declarado (contínuo, batelada, sazonal)",
+        label: "Regime de operação declarado (contínuo, batelada ou sazonal com período de entressafra).",
+      },
+      {
+        title: "Motivação e objetivo mensurável de sucesso da planta",
+        label: "Motivação e objetivo mensurável de sucesso (ex: eliminar obsolescência, reduzir gargalo).",
+      },
+      {
+        title: "Responsável técnico da contratante designado",
+        label: "Interlocutor técnico e de processos designado pela contratante para dúvidas.",
+      },
+    ],
+  },
+  {
+    key: "Inventário",
+    legend: "2. Inventário do Sistema Existente",
+    items: [
+      {
+        title: "Lista de controladores, fabricantes, modelos e firmwares",
+        label: "Relação de controladores (CLP/PAC), fabricantes, modelos e versão de firmware em campo.",
+      },
+      {
+        title: "Contagem precisa de I/O por tipo (DI, DO, AI, AO, Safety)",
+        label: "Contagem de I/O discriminada por tipo (DI, DO, AI, AO, RTD/Termopar, Safety e remotos).",
+      },
+      {
+        title: "Topologia de rede existente e protocolos mapeados",
+        label: "Topologia de rede industrial e protocolos em uso (EtherNet/IP, PROFINET, Modbus, DH+, RIO).",
+      },
+      {
+        title: "Grau de confiabilidade do as-built existente declarado",
+        label: "Grau de confiabilidade da documentação as-built (e previsão de visita técnica se houver dúvida).",
+      },
+    ],
+  },
+  {
+    key: "URS",
+    legend: "3. URS — Requisitos do Usuário",
+    items: [
+      {
+        title: "Modos de operação e regras de intertravamento inegociáveis",
+        label: "Modos de operação (Manual / Auto / Degradado) e intertravamentos inegociáveis de processo.",
+      },
+      {
+        title: "Sequências de partida, parada, CIP e troca de receitas",
+        label: "Sequências de partida, parada, limpeza CIP e gerenciamento de receitas (ISA-88 quando aplicável).",
+      },
+      {
+        title: "Requisitos de HMI/SCADA, telas e alarmes",
+        label: "Requisitos visuais de HMI/SCADA, navegação por área, relatórios e padrões de alarme.",
+      },
+      {
+        title: "Integrações com MES, ERP/SAP, Historian ou laboratório",
+        label: "Pontos de integração corporativa declarados (MES, ERP/SAP, Historiador de Processos).",
+      },
+    ],
+  },
+  {
+    key: "Escopo",
+    legend: "4. Fronteiras de Escopo e Exclusões",
+    items: [
+      {
+        title: "Matriz de responsabilidades por disciplina (Hardware, Montagem, Software)",
+        label: "Matriz de responsabilidades por disciplina (hardware, licenças, montagem de painel, elétrica).",
+      },
+      {
+        title: "Lista explícita de exclusões de fornecimento",
+        label: "Lista explícita de exclusões (o que NÃO faz parte do fornecimento do integrador).",
+      },
+      {
+        title: "Infraestrutura de TI/OT e virtualização com dono definido",
+        label: "Dono definido para infraestrutura de TI/OT (servidores, virtualização, switches e nobreaks).",
+      },
+    ],
+  },
+  {
+    key: "Normas",
+    legend: "5. Normas e Padrões Exigidos",
+    items: [
+      {
+        title: "Conformidade com NR-10 e NR-12 vigentes",
+        label: "Conformidade explícita com normas regulamentadoras brasileiras (NR-10 e NR-12).",
+      },
+      {
+        title: "Filosofia de alarmes baseada na ANSI/ISA-18.2",
+        label: "Filosofia e governança de alarmes segundo a norma ANSI/ISA-18.2.",
+      },
+      {
+        title: "Cibersegurança de rede industrial alinhada à ISA/IEC 62443",
+        label: "Requisitos de cibersegurança OT e segmentação de rede alinhados à ISA/IEC 62443.",
+      },
+    ],
+  },
+  {
+    key: "FAT/SAT",
+    legend: "6. Critérios de Aceite: FAT e SAT",
+    items: [
+      {
+        title: "Escopo de teste em fábrica (FAT) com simulação de I/O",
+        label: "Escopo de teste em fábrica (FAT) com simulação de lógica, intertravamentos e telas de operação.",
+      },
+      {
+        title: "Protocolo de aceite em campo (SAT) conforme IEC 62381",
+        label: "Protocolo e checklists formais de teste em campo (SAT) estruturados conforme IEC 62381.",
+      },
+      {
+        title: "Critérios de bloqueio e procedimento de encerramento de pendências",
+        label: "Critérios de bloqueio de embarque/aceite e procedimento de tratamento de punch-list (desvios).",
+      },
+    ],
+  },
+  {
+    key: "Parada",
+    legend: "7. Janela de Parada e Execução em Campo",
+    items: [
+      {
+        title: "Janelas de parada com datas, limites e intervenção em produção",
+        label: "Janelas de parada informadas (datas, duração máxima e o que roda em paralelo).",
+      },
+      {
+        title: "Exigência de plano de cutover faseado e plano de rollback",
+        label: "Exigência formal de plano de cutover faseado e plano de rollback para cada etapa crítica.",
+      },
+    ],
+  },
+  {
+    key: "Documentação",
+    legend: "8. Documentação e Entregáveis de Engenharia",
+    items: [
+      {
+        title: "FDS (Especificação Funcional de Projeto) aprovada antes do código",
+        label: "FDS (Especificação Funcional de Projeto) como portão de aprovação antes da programação em massa.",
+      },
+      {
+        title: "As-built elétrico e de redes, código fonte comentado e Data Book",
+        label: "As-built elétrico/rede, programas comentados, Data Book final e procedimentos de restauração.",
+      },
+    ],
+  },
+  {
+    key: "Suporte",
+    legend: "9. Suporte Pós-Partida e Treinamento",
+    items: [
+      {
+        title: "Dias de partida assistida presencial e plantão de suporte",
+        label: "Dias de partida assistida presencial, canal de plantão remoto e prazo de resposta contratual.",
+      },
+      {
+        title: "Treinamento com carga horária para operação e manutenção",
+        label: "Treinamento formal para operadores e mantenedores, com material didático e carga horária definida.",
+      },
+    ],
+  },
+];
+
+const totalItems = sections.reduce((sum, s) => sum + s.items.length, 0);
+
+/* Estados do badge: as mesmas classes aplicadas pelo JS em updateScore().
+   Paleta real do tema — risco em vermelho, intermediário em azul-OT,
+   robusto em cinza-900 (premium, on-brand). */
+const badgeBase =
+  "inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-semibold";
+const badgeInitial = `${badgeBase} border-integra-red/25 bg-integra-red/10 text-integra-red-800`;
+---
+
+<div class="not-prose my-12 rounded-2xl border border-integra-gray-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+  <div class="border-b border-integra-gray-200 pb-6">
+    <div class="inline-flex items-center gap-2 rounded-full border border-integra-ot/20 bg-integra-ot/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-integra-ot-700">
+      <span class="inline-block h-2 w-2 rounded-full bg-integra-ot animate-pulse" aria-hidden="true"></span>
+      Ferramenta Interativa de Engenharia
+    </div>
+    <h3 class="mt-3 text-2xl font-bold tracking-tight text-integra-gray-900 sm:text-3xl">
+      Checklist de Maturidade da RFP de Automação
+    </h3>
+    <p class="mt-2 text-base leading-relaxed text-integra-gray-600">
+      Marque os itens que a sua especificação já contempla. A ferramenta calcula a prontidão técnica em tempo real e permite exportar o roteiro estruturado para uso imediato em sua concorrência.
+    </p>
+  </div>
+
+  {/* Barra de Progresso e Score */}
+  <div class="mt-6 rounded-xl border border-integra-gray-100 bg-integra-gray-50 p-5">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <span class="text-xs font-semibold uppercase tracking-wider text-integra-gray-500">Índice de Prontidão</span>
+        <div class="flex items-baseline gap-2" aria-hidden="true">
+          <span id="score-percentage" class="text-3xl font-extrabold text-integra-gray-900">0%</span>
+          <span id="score-counter" class="text-sm font-medium text-integra-gray-500">(0 de {totalItems} itens)</span>
+        </div>
+      </div>
+      <div id="status-badge" class={badgeInitial} aria-hidden="true">
+        <span class="inline-block h-2 w-2 rounded-full bg-integra-red"></span>
+        Especificação inicial — risco alto de aditivos e desvios
+      </div>
+    </div>
+
+    {/* Anúncio único e politicamente correto para leitores de tela:
+        os valores visuais ficam aria-hidden e esta região resume o estado. */}
+    <p id="rfp-score-announce" class="sr-only" role="status">
+      Prontidão da especificação: 0% — 0 de {totalItems} itens. Especificação inicial.
+    </p>
+
+    {/* Barra visual */}
+    <div
+      class="mt-4 h-3 w-full overflow-hidden rounded-full bg-integra-gray-200"
+      role="progressbar"
+      aria-label="Índice de prontidão da especificação"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+      id="progress-track"
+    >
+      <div id="progress-bar" class="h-full w-0 bg-integra-ot transition-[width] duration-300 ease-out"></div>
+    </div>
+  </div>
+
+  {/* Blocos do Checklist */}
+  <div class="mt-8 space-y-6">
+    {sections.map((section) => (
+      <fieldset class="rounded-xl border border-integra-gray-200 p-5">
+        <legend class="px-2 text-sm font-bold uppercase tracking-wider text-integra-ot-700">
+          {section.legend}
+        </legend>
+        <div class="mt-3 space-y-3">
+          {section.items.map((item) => (
+            <label class="flex items-start gap-3 text-sm text-integra-gray-800 cursor-pointer">
+              <input
+                type="checkbox"
+                class="rfp-item mt-0.5 h-4 w-4 rounded border-integra-gray-300 accent-integra-ot"
+                data-section={section.key}
+                data-title={item.title}
+              />
+              <span>{item.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    ))}
+  </div>
+
+  {/* Ações e Botões (não imprimem) */}
+  <div class="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-integra-gray-200 pt-6 print:hidden">
+    <div class="flex flex-wrap items-center gap-3">
+      <button
+        id="btn-copy-md"
+        type="button"
+        class="inline-flex items-center gap-2 rounded-lg bg-integra-ot px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-integra-ot-700 transition-colors"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        <span data-label>Copiar Markdown</span>
+      </button>
+
+      <button
+        id="btn-download-md"
+        type="button"
+        class="inline-flex items-center gap-2 rounded-lg border border-integra-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-integra-gray-700 shadow-sm hover:bg-integra-gray-50 transition-colors"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        Baixar Rascunho (.md)
+      </button>
+
+      <button
+        id="btn-print"
+        type="button"
+        class="inline-flex items-center gap-2 rounded-lg border border-integra-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-integra-gray-700 shadow-sm hover:bg-integra-gray-50 transition-colors"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        Imprimir / PDF
+      </button>
+    </div>
+
+    <button
+      id="btn-reset"
+      type="button"
+      class="text-xs font-semibold text-integra-gray-500 hover:text-integra-red-700 underline underline-offset-2"
+    >
+      Limpar Seleção
+    </button>
+  </div>
+
+  {/* CTA Contextual de Fechamento */}
+  <div class="mt-8 rounded-xl bg-premium-dark-card p-6 text-white sm:p-8">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div class="space-y-2 max-w-2xl">
+        <span class="text-xs font-mono uppercase tracking-widest text-integra-red-300">Apoio de Engenharia</span>
+        <h4 class="text-xl font-bold sm:text-2xl text-white">Precisa de uma revisão técnica antes de emitir a RFP?</h4>
+        <p class="text-sm text-integra-gray-300 leading-relaxed">
+          A equipe de engenharia da Integra analisa sua especificação em conversa técnica, apontando lacunas de escopo e riscos de comissionamento antes da concorrência ir ao mercado.
+        </p>
+      </div>
+      <a
+        href="/contato/?assunto=rfp-automacao"
+        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-integra-red px-6 py-3.5 text-sm font-bold text-white shadow-md hover:bg-integra-red-700 transition-colors"
+      >
+        Falar com Engenheiro de RFP
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initRfpChecklist() {
+    const root = document.querySelector<HTMLElement>(".rfp-item");
+    if (!root) return;
+
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(".rfp-item");
+    const scorePercentage = document.getElementById("score-percentage");
+    const scoreCounter = document.getElementById("score-counter");
+    const progressTrack = document.getElementById("progress-track");
+    const progressBar = document.getElementById("progress-bar");
+    const statusBadge = document.getElementById("status-badge");
+    const announce = document.getElementById("rfp-score-announce");
+    const btnCopy = document.getElementById("btn-copy-md");
+    const btnDownload = document.getElementById("btn-download-md");
+    const btnPrint = document.getElementById("btn-print");
+    const btnReset = document.getElementById("btn-reset");
+
+    const total = checkboxes.length;
+
+    const badgeBase =
+      "inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-semibold";
+    // Mesmas classes declaradas no markup inicial — paleta real do @theme.
+    const badgeStates = [
+      {
+        className: `${badgeBase} border-integra-red/25 bg-integra-red/10 text-integra-red-800`,
+        dot: "bg-integra-red",
+        text: "Especificação inicial — risco alto de aditivos e desvios",
+        sr: "Especificação inicial",
+      },
+      {
+        className: `${badgeBase} border-integra-ot/25 bg-integra-ot/10 text-integra-ot-700`,
+        dot: "bg-integra-ot",
+        text: "Escopo intermediário — revise fronteiras de TI e portões FAT/SAT",
+        sr: "Escopo intermediário",
+      },
+      {
+        className: `${badgeBase} border-integra-gray-900 bg-integra-gray-900 text-integra-white`,
+        dot: "bg-integra-red-300",
+        text: "RFP robusta — pronta para emissão com baixo risco de aditivos",
+        sr: "RFP robusta",
+      },
+    ] as const;
+
+    function updateScore() {
+      const checked = document.querySelectorAll<HTMLInputElement>(".rfp-item:checked").length;
+      const pct = Math.round((checked / total) * 100);
+
+      if (scorePercentage) scorePercentage.textContent = `${pct}%`;
+      if (scoreCounter) scoreCounter.textContent = `(${checked} de ${total} itens)`;
+      if (progressBar) progressBar.style.width = `${pct}%`;
+      progressTrack?.setAttribute("aria-valuenow", String(pct));
+
+      const state = pct < 40 ? badgeStates[0] : pct < 80 ? badgeStates[1] : badgeStates[2];
+
+      if (statusBadge) {
+        statusBadge.className = state.className;
+        // Reconstrói com ponto decorativo aria-hidden + texto (sem emoji lido em voz alta).
+        statusBadge.replaceChildren();
+        const dot = document.createElement("span");
+        dot.className = `inline-block h-2 w-2 rounded-full ${state.dot}`;
+        dot.setAttribute("aria-hidden", "true");
+        statusBadge.appendChild(dot);
+        statusBadge.insertAdjacentText("beforeend", state.text);
+      }
+
+      if (announce) {
+        announce.textContent = `Prontidão da especificação: ${pct}% — ${checked} de ${total} itens. ${state.sr}.`;
+      }
+    }
+
+    function generateMarkdown(): string {
+      let md = "# Checklist de Especificação Técnica — RFP de Automação Industrial\n\n";
+      md += `*Data de Geração: ${new Date().toLocaleDateString("pt-BR")}*\n`;
+      md += `*Fonte: Integra Automação Industrial (integrautomacao.com.br)*\n\n`;
+
+      const checkedCount = document.querySelectorAll<HTMLInputElement>(".rfp-item:checked").length;
+      const pct = Math.round((checkedCount / total) * 100);
+      md += `## Status Geral de Prontidão: ${pct}% (${checkedCount}/${total} requisitos atendidos)\n\n`;
+
+      let currentSection = "";
+      checkboxes.forEach((cb) => {
+        const sec = cb.dataset.section || "Geral";
+        const title = cb.dataset.title || "";
+        const isChecked = cb.checked ? "[X]" : "[ ]";
+
+        if (sec !== currentSection) {
+          currentSection = sec;
+          md += `\n### Bloco: ${sec}\n\n`;
+        }
+
+        md += `- ${isChecked} ${title}\n`;
+      });
+
+      md += "\n---\n*Precisa de apoio na revisão da sua RFP? Contato: comercial@integrautomacao.com.br / (44) 3045-9200*\n";
+      return md;
+    }
+
+    checkboxes.forEach((cb) => cb.addEventListener("change", updateScore));
+
+    btnReset?.addEventListener("click", () => {
+      checkboxes.forEach((cb) => (cb.checked = false));
+      updateScore();
+    });
+
+    btnCopy?.addEventListener("click", async () => {
+      const label = btnCopy.querySelector<HTMLElement>("[data-label]");
+      const original = label?.textContent ?? "Copiar Markdown";
+      try {
+        await navigator.clipboard.writeText(generateMarkdown());
+        if (label) label.textContent = "Copiado!";
+      } catch {
+        // Sem alert(): feedback inline no próprio botão.
+        if (label) label.textContent = "Falhou — use Baixar (.md)";
+      }
+      window.setTimeout(() => {
+        if (label) label.textContent = original;
+      }, 2500);
+    });
+
+    btnDownload?.addEventListener("click", () => {
+      const text = generateMarkdown();
+      const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "checklist-rfp-automacao-integra.md";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    btnPrint?.addEventListener("click", () => {
+      window.print();
+    });
+
+    updateScore();
+  }
+
+  // Scripts do Astro são módulos (deferred): o DOM já está parseado quando
+  // executam, mas o listener cobre o caso de readyState "loading". O site não
+  // usa ClientRouter, portanto astro:page-load não existe por aqui.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initRfpChecklist, { once: true });
+  } else {
+    initRfpChecklist();
+  }
+</script>

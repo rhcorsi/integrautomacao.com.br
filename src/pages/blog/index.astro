@@ -1,18 +1,13 @@
 ﻿---
-import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { Icon } from "astro-icon/components";
 import { formatEventDateRange } from "@/utils/eventDate";
+import { getPublishedEventos, getPublishedPosts } from "@/utils/collections";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
-);
-
-const recentEventos = (await getCollection("eventos", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime())
-  .slice(0, 4);
+const posts = await getPublishedPosts();
+const recentEventos = (await getPublishedEventos()).slice(0, 4);
 
 const dateFmt = (d: Date) =>
   d.toLocaleDateString("pt-BR", {
@@ -49,6 +44,7 @@ const integraAcaoFormatos = [
 
 <BaseLayout
   title="Blog técnico de automação industrial"
+  breadcrumbLeaf="Blog"
   description="Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443, migração de PLC e governança de engenharia industrial."
   ogImage="/og/blog.png"
 >

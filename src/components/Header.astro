@@ -1,10 +1,14 @@
 ---
 import { Image } from "astro:assets";
-import { getCollection } from "astro:content";
 import logoColorido from "@/assets/logos/Colorido.png";
 import EmailLink from "@/components/EmailLink.astro";
 import { formatEventDateRange } from "@/utils/eventDate";
-import { NAV, MEGA_MENUS, COMPANY, type MegaMenu } from "@/utils/site";
+import {
+  getPublishedCases,
+  getPublishedEventos,
+  getPublishedPosts,
+} from "@/utils/collections";
+import { NAV, MEGA_MENUS, COMPANY, PHONE_COMMERCIAL, type MegaMenu } from "@/utils/site";
 
 const normalizeRoutePath = (value: string) =>
   value === "/" ? "/" : value.replace(/\/+$/, "");
@@ -16,27 +20,16 @@ const isActive = (href: string) => {
     : path === target || path.startsWith(`${target}/`);
 };
 
-const phoneCommercial = COMPANY.phones[0];
+const phoneCommercial = PHONE_COMMERCIAL;
 
-const withContactContext = (
-  href: string,
-  _label?: string,
-  _sourceLabel?: string,
-) => href;
+// O contexto de origem dos CTAs de contato é capturado no clique pelo
+// script do BaseLayout (sessionStorage) — os hrefs aqui ficam limpos.
 
-// Build dynamic mega-menus for Cases and Blog from content collections.
-// Static list-based, so the header re-renders on every page (Astro caches
-// the import); no extra round trips at runtime.
-const recentCases = (await getCollection("cases", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 5);
-
-const recentPosts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 5);
-
-const allEventos = (await getCollection("eventos", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime());
+// Mega-menus dinâmicos de Cases/Blog/Eventos via helpers centralizados
+// (filtro de draft + ordenação em src/utils/collections.ts).
+const recentCases = (await getPublishedCases()).slice(0, 5);
+const recentPosts = (await getPublishedPosts()).slice(0, 5);
+const allEventos = (await getPublishedEventos()).slice(0, 6);
 
 const dynamicMegas: Record<string, MegaMenu> = {
   "/cases/": {
@@ -319,11 +312,7 @@ const allMegas: Record<string, MegaMenu> = {
                           {mega.promo.description}
                         </p>
                         <a
-                          href={withContactContext(
-                            mega.promo.cta.href,
-                            mega.promo.cta.label,
-                            `Mega-menu: ${label}`,
-                          )}
+                          href={mega.promo.cta.href}
                           class="inline-flex items-center gap-1.5 text-sm font-semibold text-integra-red-700 hover:text-integra-red-700"
                         >
                           {mega.promo.cta.label}
@@ -338,11 +327,7 @@ const allMegas: Record<string, MegaMenu> = {
                       <div class="container-wide py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
                         {mega.quickLinks.map((q) => (
                           <a
-                            href={withContactContext(
-                              q.href,
-                              q.label,
-                              `Atalho do mega-menu: ${label}`,
-                            )}
+                            href={q.href}
                             class="text-sm font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors"
                           >
                             {q.label} <span aria-hidden="true">→</span>
@@ -359,10 +344,7 @@ const allMegas: Record<string, MegaMenu> = {
       </nav>
 
       <a
-        href={withContactContext(
-          "/contato/?assunto=triagem",
-          "Solicitar triagem técnica",
-        )}
+        href="/contato/?assunto=triagem"
         class="hidden lg:inline-flex ml-auto min-[1440px]:ml-0 items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
       >
         Solicitar triagem
@@ -460,11 +442,7 @@ const allMegas: Record<string, MegaMenu> = {
         );
       })}
       <a
-        href={withContactContext(
-          "/contato/?assunto=triagem",
-          "Solicitar triagem técnica",
-          "Menu mobile",
-        )}
+        href="/contato/?assunto=triagem"
         class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-3 text-base font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md"
       >
         Solicitar triagem técnica

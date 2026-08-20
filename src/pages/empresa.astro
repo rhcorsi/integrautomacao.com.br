@@ -99,7 +99,8 @@ const timeline = [
 ---
 
 <BaseLayout
-  title="Integra Automação Industrial: empresa"
+  title="Sobre a Integra Automação Industrial"
+  breadcrumbLeaf="Empresa"
   description="Empresa brasileira de engenharia e integração de sistemas industriais, fundada em 2016 em Maringá-PR. Arquitetura, padronização e governança técnica."
   ogImage="/og/empresa.png"
 >
@@ -239,16 +240,20 @@ const timeline = [
         description="Nossos valores não são flexibilizados por pressão comercial. São extraídos diretamente da cultura dos fundadores e validados em cada projeto."
         accent={true}
       />
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Lista ordenada: as "cinco regras" são uma sequência — a <ol> dá a
+          semântica que o badge numérico (aria-hidden) só sugere visualmente. */}
+      <ol class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {valores.map((v, i) => (
-          <ValueCard
-            icon={v.icon}
-            title={v.title}
-            description={v.description}
-            index={i + 1}
-          />
+          <li class="h-full">
+            <ValueCard
+              icon={v.icon}
+              title={v.title}
+              description={v.description}
+              index={i + 1}
+            />
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   </section>
 

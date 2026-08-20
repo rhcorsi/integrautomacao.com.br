@@ -38,9 +38,14 @@ const primaryHref = primaryCta.href;
 const secondaryHref = secondaryCta.href;
 ---
 
+{/*
+  `isolate` cria o stacking context da section: sem ele, o background opaco
+  da própria section é pintado SOBRE as camadas decorativas `-z-10`,
+  tornando grid e hatch invisíveis.
+*/}
 <section
   class:list={[
-    "relative overflow-hidden border-b",
+    "relative isolate overflow-hidden border-b",
     dark
       ? "border-integra-gray-800 bg-premium-dark text-integra-white"
       : "border-integra-gray-200 bg-integra-white",
@@ -129,7 +134,7 @@ const secondaryHref = secondaryCta.href;
           <p
             class:list={[
               "mt-10 font-mono text-xs uppercase tracking-widest",
-              dark ? "text-integra-gray-500" : "text-integra-gray-500",
+              dark ? "text-integra-gray-400" : "text-integra-gray-500",
             ]}
           >
             <span

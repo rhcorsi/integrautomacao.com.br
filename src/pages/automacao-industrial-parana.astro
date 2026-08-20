@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { faqSchema, serviceSchema } from "@/utils/schema";
+import { faqSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
@@ -61,7 +61,7 @@ const regions = [
   {
     title: "Oeste e sudoeste",
     description:
-      "Cascavel, Toledo, Pato Branco e Francisco Beltrão: frigoríficos, cooperativas agroindustriais, lácteos e ração — o eixo da proteína animal que faz do Paraná o líder nacional no abate de frangos (34,4% em 2025, IBGE).",
+      "Cascavel, Toledo, Pato Branco e Francisco Beltrão: frigoríficos, cooperativas agroindustriais, lácteos e ração — o eixo da proteína animal que sustenta a liderança estadual citada no contexto acima.",
   },
   {
     title: "Atuação nacional",
@@ -88,25 +88,24 @@ const faq = [
     a: "Sim. A Integra Automação Industrial tem sede em Maringá-PR e atende todo o Paraná: norte e noroeste (Maringá, Londrina, Apucarana, Umuarama, Paranavaí, Campo Mourão), Curitiba e região metropolitana, oeste (Cascavel, Toledo), sudoeste e demais regiões. Desde 2016 a atuação é nacional, combinando engenharia remota estruturada com mobilização presencial para levantamento de campo, FAT, SAT, comissionamento e startup.",
   },
   {
-    q: "Quanto custa um projeto de automação industrial?",
-    a: "Depende da quantidade de I/O e malhas, documentação existente, legado, janela de parada, requisitos de validação, telas, relatórios e cibersegurança OT. Uma proposta anterior ao levantamento deve explicitar hipóteses, exclusões e margem de incerteza; o diagnóstico permite reduzir essas premissas antes do preço definitivo.",
+    // Ângulo de COMPARAÇÃO de propostas — a pergunta genérica "quanto custa
+    // um projeto de automação?" pertence ao FAQ do guia-pilar
+    // (/automacao-industrial/); duplicá-la aqui faria dois FAQPage
+    // disputarem o mesmo rich result.
+    q: "Duas propostas de automação com preços muito diferentes: como comparar?",
+    a: "Normalize o escopo antes de comparar o preço: o que cada proposta inclui em levantamento, engenharia, licenças, montagem, FAT, SAT, documentação as-built, treinamento e suporte pós-partida. Propostas anteriores ao diagnóstico devem explicitar hipóteses e exclusões; a mais barata costuma transferir itens para aditivos. Peça a matriz de responsabilidades preenchida para as duas.",
   },
 ];
 ---
 
+{/* Guia de escolha (intenção informacional-comercial). Sem serviceSchema:
+    a declaração de Service para o mercado regional é única e vive na página
+    de Maringá — dois Services gêmeos diluem a entidade. */}
 <BaseLayout
   title="Como escolher uma empresa de automação no Paraná"
   description="Guia para avaliar empresas de automação no Paraná: escopo do fornecedor, credenciais, FAT/SAT, cibersegurança OT e suporte. Use o checklist antes de contratar."
   breadcrumbLeaf="Automação Industrial no Paraná"
-  jsonLd={[
-    serviceSchema({
-      name: "Automação Industrial no Paraná",
-      description:
-        "Engenharia e integração de automação industrial no Paraná: DCS PlantPAx, FactoryTalk, migração de PLC legado, redes industriais IEC 62443 e suporte OT, a partir de Maringá-PR.",
-      url: Astro.url.href,
-    }),
-    faqSchema(faq),
-  ]}
+  jsonLd={[faqSchema(faq)]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20 lg:py-24">
@@ -364,10 +363,12 @@ const faq = [
 
   <section class="border-b border-integra-gray-200">
     <div class="container-fluid py-20">
+      {/* O dado do Censo (409.657 hab.) fica na página de Maringá — uma
+          estatística, uma página. */}
       <SectionHeader
         eyebrow="Cobertura"
         title="Quais regiões do Paraná a Integra atende a partir de Maringá?"
-        description="A Integra Automação Industrial opera a partir de Maringá — terceira maior cidade do Paraná, com 409.657 habitantes no Censo 2022 (IBGE) — no entroncamento entre o norte, o noroeste e o centro-oeste do estado."
+        description="A Integra Automação Industrial opera a partir de Maringá, no entroncamento entre o norte, o noroeste e o centro-oeste do estado — a mesma região onde a agroindústria paranaense se concentra."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

@@ -13,17 +13,18 @@ const { icon, title, description, index } = Astro.props;
 ---
 
 <article
-  class="group relative h-full rounded-lg border border-integra-gray-200 bg-integra-white p-7 hover:-translate-y-1 hover:shadow-lg hover:shadow-integra-red/[0.03] hover:border-integra-red/60 transition-all duration-300 ease-out"
+  class="group relative h-full rounded-lg border border-integra-gray-200 bg-integra-white p-7 hover:-translate-y-1 hover:shadow-lg hover:shadow-integra-red/[0.03] hover:border-integra-red/60 transition-[transform,box-shadow,border-color] duration-300 ease-out"
 >
   {index !== undefined && (
     <span
+      aria-hidden="true"
       class="absolute -top-3 -right-3 inline-flex size-7 items-center justify-center rounded-full border border-integra-gray-200 bg-integra-white text-xs font-mono font-semibold text-integra-gray-500 group-hover:border-integra-red/40 group-hover:text-integra-red-700 transition-colors duration-300"
     >
       {String(index).padStart(2, "0")}
     </span>
   )}
   <div
-    class="inline-flex size-12 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white mb-5 group-hover:bg-integra-red group-hover:scale-105 transition-all duration-300 ease-out"
+    class="inline-flex size-12 items-center justify-center rounded-md bg-integra-gray-900 text-integra-white mb-5 group-hover:bg-integra-red group-hover:scale-105 transition-[transform,background-color] duration-300 ease-out"
   >
     <Icon name={icon} class="size-6" aria-hidden="true" />
   </div>

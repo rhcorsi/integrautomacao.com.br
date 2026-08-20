@@ -15,13 +15,14 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 <form
   id="newsletter-form"
   data-newsletter-form
+  data-contact-email={COMPANY.email}
   data-turnstile-ready={hasTurnstile ? "true" : "false"}
   method="POST"
   action="/api/newsletter"
   class="grid gap-5"
 >
   <p class="text-xs text-integra-gray-500">
-    Campos marcados com <span class="font-semibold text-integra-red-700">*</span> são obrigatórios.
+    Campos marcados com <span class="font-semibold text-integra-red">*</span> são obrigatórios.
   </p>
   <div class="grid gap-2">
     <label for="nl-name" class="text-sm font-medium text-integra-gray-900">
@@ -35,7 +36,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       autocomplete="name"
       minlength="2"
       maxlength="120"
-      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/40 text-integra-gray-900"
     />
   </div>
 
@@ -50,7 +51,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       required
       autocomplete="email"
       maxlength="180"
-      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
+      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/40 text-integra-gray-900"
     />
   </div>
 
@@ -83,14 +84,37 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     </label>
   </div>
 
-  <!-- Cloudflare Turnstile -->
+  <!-- Cloudflare Turnstile. Fallback oculto revelado se o api.js for
+       bloqueado (ad-blocker) — ver ContactForm. -->
   {hasTurnstile ? (
-    <div
-      class="cf-turnstile"
-      data-sitekey={turnstileSiteKey}
-      data-theme="light"
-      data-action="newsletter-form"
-    />
+    <>
+      <div
+        class="cf-turnstile"
+        data-sitekey={turnstileSiteKey}
+        data-theme="light"
+        data-action="newsletter-form"
+      />
+      <div
+        data-turnstile-fallback
+        hidden
+        role="alert"
+        class="rounded-md border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
+      >
+        <p class="font-semibold text-integra-gray-900">
+          Verificação de segurança bloqueada pelo navegador.
+        </p>
+        <p class="mt-1">
+          Desative o bloqueador de conteúdo para este site ou escreva para
+          <a
+            href={`mailto:${COMPANY.email}?subject=Inscri%C3%A7%C3%A3o%20newsletter%20Integra%20A%C3%A7%C3%A3o`}
+            class="font-semibold text-integra-red-700 underline underline-offset-2 hover:text-integra-red-700"
+          >
+            {COMPANY.email}
+          </a>
+          para inscrição manual.
+        </p>
+      </div>
+    </>
   ) : (
     <div
       role="alert"
@@ -112,9 +136,29 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     </div>
   )}
 
+  {/* Sem JavaScript o fetch não roda e a API só aceita JSON. */}
+  <noscript>
+    <div class="rounded-md border border-integra-gray-300 bg-integra-gray-50 p-4 text-sm leading-relaxed text-integra-gray-800">
+      <p class="font-semibold text-integra-gray-900">
+        A inscrição exige JavaScript.
+      </p>
+      <p class="mt-1">
+        Escreva para
+        <a
+          href={`mailto:${COMPANY.email}?subject=Inscri%C3%A7%C3%A3o%20newsletter%20Integra%20A%C3%A7%C3%A3o`}
+          class="font-semibold text-integra-red-700 underline underline-offset-2"
+        >
+          {COMPANY.email}
+        </a>
+        para inscrição manual.
+      </p>
+    </div>
+  </noscript>
+
   <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
     <p
       id="nl-status"
+      data-form-status
       role="status"
       aria-live="polite"
       class="text-sm text-integra-gray-700 min-h-[1.25rem]"
@@ -130,60 +174,51 @@ const hasTurnstile = turnstileSiteKey.length > 0;
   </div>
 </form>
 
-{hasTurnstile && (
-  <script
-    is:inline
-    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-    async
-    defer></script>
-)}
-
 <script>
-  interface NewsletterTurnstileWindow extends Window {
-    turnstile?: { reset: (container?: string | HTMLElement) => void };
-  }
+  import {
+    FORM_FETCH_TIMEOUT_MS,
+    ensureTurnstileScript,
+    networkErrorMessage,
+    responseMessage,
+    setFormStatus,
+    turnstileRendered,
+    watchTurnstileBlocked,
+    type TurnstileWindow,
+  } from "@/utils/webform";
 
   const newsletterForms =
     document.querySelectorAll<HTMLFormElement>("[data-newsletter-form]");
 
-  const setNewsletterStatus = (
-    status: HTMLElement | null,
-    message: string,
-    tone: "error" | "info" | "success" = "info",
-  ) => {
-    if (!status) return;
-    status.setAttribute("role", tone === "error" ? "alert" : "status");
-    status.setAttribute(
-      "aria-live",
-      tone === "error" ? "assertive" : "polite",
-    );
-    status.textContent = message;
-    status.classList.remove("text-integra-red-700", "text-emerald-700");
-    if (tone === "error") status.classList.add("text-integra-red-700");
-    if (tone === "success") status.classList.add("text-emerald-700");
-  };
-
-  const responseMessage = (value: unknown): string | undefined => {
-    if (
-      typeof value !== "object" ||
-      value === null ||
-      !("message" in value) ||
-      typeof value.message !== "string"
-    ) {
-      return undefined;
-    }
-    return value.message;
-  };
+  // Carrega o api.js uma única vez (deduplicado entre contato e newsletter).
+  if (
+    document.querySelector(
+      '[data-newsletter-form][data-turnstile-ready="true"]',
+    )
+  ) {
+    ensureTurnstileScript();
+  }
 
   for (const form of newsletterForms) {
-    const status = form.querySelector<HTMLElement>('[role="status"]');
+    const status = form.querySelector<HTMLElement>("[data-form-status]");
     const submitBtn =
       form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const contactEmail =
+      form.dataset.contactEmail ?? "comercial@integrautomacao.com.br";
+
+    // Ad-blocker bloqueia challenges.cloudflare.com: revela o fallback.
+    watchTurnstileBlocked(form, () => {
+      const container = form.querySelector<HTMLElement>(".cf-turnstile");
+      const fallback = form.querySelector<HTMLElement>(
+        "[data-turnstile-fallback]",
+      );
+      if (container) container.hidden = true;
+      if (fallback) fallback.hidden = false;
+    });
 
     form.addEventListener(
       "invalid",
       () => {
-        setNewsletterStatus(
+        setFormStatus(
           status,
           "Preencha os campos obrigatórios antes de enviar.",
           "error",
@@ -196,7 +231,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       event.preventDefault();
       if (!form.checkValidity()) {
         form.reportValidity();
-        setNewsletterStatus(
+        setFormStatus(
           status,
           "Preencha os campos obrigatórios antes de enviar.",
           "error",
@@ -206,24 +241,25 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 
       const formData = new FormData(form);
       if (formData.get("website")) {
-        setNewsletterStatus(status, "Inscrição registrada.", "success");
+        setFormStatus(status, "Inscrição registrada.", "success");
         form.reset();
         return;
       }
 
       if (!formData.get("cf-turnstile-response")) {
-        setNewsletterStatus(
+        // Widget renderizado = desafio em andamento; sem iframe = bloqueado.
+        setFormStatus(
           status,
-          form.querySelector(".cf-turnstile")
+          turnstileRendered(form)
             ? "Aguarde a verificação de segurança e tente novamente."
-            : "Inscrição temporariamente indisponível: a verificação de segurança não carregou. Use o e-mail comercial@integrautomacao.com.br.",
+            : `A verificação de segurança não carregou (bloqueador de conteúdo?). Escreva para ${contactEmail}.`,
           "error",
         );
         return;
       }
 
       submitBtn?.setAttribute("disabled", "true");
-      setNewsletterStatus(status, "Processando…", "info");
+      setFormStatus(status, "Processando…", "info");
 
       try {
         const payload: Record<string, string> = {};
@@ -237,10 +273,11 @@ const hasTurnstile = turnstileSiteKey.length > 0;
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(FORM_FETCH_TIMEOUT_MS),
         });
 
         if (response.ok) {
-          setNewsletterStatus(
+          setFormStatus(
             status,
             "Inscrição confirmada. Você receberá as próximas edições publicadas.",
             "success",
@@ -250,22 +287,18 @@ const hasTurnstile = turnstileSiteKey.length > 0;
         }
 
         const data: unknown = await response.json().catch(() => null);
-        setNewsletterStatus(
+        setFormStatus(
           status,
           responseMessage(data) ??
-            "Não foi possível inscrever agora. Tente novamente em instantes ou escreva para comercial@integrautomacao.com.br.",
+            `Não foi possível inscrever agora. Tente novamente em instantes ou escreva para ${contactEmail}.`,
           "error",
         );
       } catch (error) {
         console.error(error);
-        setNewsletterStatus(
-          status,
-          "Erro de rede. Tente novamente ou escreva para comercial@integrautomacao.com.br.",
-          "error",
-        );
+        setFormStatus(status, networkErrorMessage(contactEmail), "error");
       } finally {
         submitBtn?.removeAttribute("disabled");
-        (window as NewsletterTurnstileWindow).turnstile?.reset();
+        (window as TurnstileWindow).turnstile?.reset();
       }
     });
   }

@@ -20,6 +20,8 @@ const { title = "Perguntas frequentes", items } = Astro.props;
     {
       items.map(({ q, a }) => (
         <details class="group py-5">
+          {/* list-none não remove o marcador no Safari — ver o <style>
+              abaixo com ::-webkit-details-marker. */}
           <summary
             class="flex items-start justify-between gap-4 cursor-pointer list-none font-medium text-integra-gray-900 hover:text-integra-red-700"
           >
@@ -48,3 +50,11 @@ const { title = "Perguntas frequentes", items } = Astro.props;
     }
   </div>
 </section>
+
+<style>
+  /* Safari: o triângulo nativo do <summary> só sai com este pseudo-elemento;
+     sem ele, o ícone "+" do componente apareceria duplicado. */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

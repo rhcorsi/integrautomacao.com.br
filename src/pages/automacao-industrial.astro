@@ -347,7 +347,7 @@ const glossarySchema = {
         ].map(([number, title, text]) => (
           <article class="bg-integra-white p-6">
             <p class="font-mono text-xs font-semibold text-integra-red-700">{number}</p>
-            <h2 class="mt-3 text-lg font-semibold text-integra-gray-900">{title}</h2>
+            <h3 class="mt-3 text-lg font-semibold text-integra-gray-900">{title}</h3>
             <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
           </article>
         ))}
@@ -381,7 +381,7 @@ const glossarySchema = {
               <p class="mt-3 font-mono text-[11px] uppercase tracking-widest text-integra-red-700">{layer.level}</p>
             </div>
             <div>
-              <h2 class="text-xl font-semibold text-integra-gray-900">{layer.title}</h2>
+              <h3 class="text-xl font-semibold text-integra-gray-900">{layer.title}</h3>
               <p class="mt-3 max-w-3xl text-sm leading-relaxed text-integra-gray-700">{layer.description}</p>
             </div>
             <ul class="grid gap-2 lg:w-64">
@@ -406,7 +406,7 @@ const glossarySchema = {
       <div class="grid gap-6 lg:grid-cols-3">
         {automationTypes.map((type) => (
           <article class="flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-7">
-            <h2 class="text-2xl font-semibold text-integra-gray-900">{type.title}</h2>
+            <h3 class="text-2xl font-semibold text-integra-gray-900">{type.title}</h3>
             <p class="mt-4 text-sm leading-relaxed text-integra-gray-700"><strong>Exemplos:</strong> {type.examples}</p>
             <p class="mt-3 text-sm leading-relaxed text-integra-gray-700"><strong>Foco de engenharia:</strong> {type.focus}</p>
             <ul class="mt-auto grid gap-2 pt-6">
@@ -432,7 +432,7 @@ const glossarySchema = {
         {projectPhases.map(([number, title, text]) => (
           <li class="bg-integra-gray-50 p-7">
             <p class="font-mono text-xs font-semibold text-integra-red-700">{number}</p>
-            <h2 class="mt-3 text-xl font-semibold text-integra-gray-900">{title}</h2>
+            <h3 class="mt-3 text-xl font-semibold text-integra-gray-900">{title}</h3>
             <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{text}</p>
           </li>
         ))}
@@ -456,7 +456,7 @@ const glossarySchema = {
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {decisionPaths.map((item) => (
           <article class="flex h-full flex-col rounded-lg border border-integra-gray-200 bg-integra-white p-6">
-            <h2 class="text-lg font-semibold leading-snug text-integra-gray-900">{item.question}</h2>
+            <h3 class="text-lg font-semibold leading-snug text-integra-gray-900">{item.question}</h3>
             <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{item.answer}</p>
             <a href={item.href} class="mt-auto pt-6 text-sm font-semibold text-integra-red-700 hover:underline">{item.label} →</a>
           </article>
@@ -506,7 +506,7 @@ const glossarySchema = {
       <div class="grid gap-5 lg:grid-cols-3">
         {references.map((reference) => (
           <article class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6">
-            <h2 class="text-lg font-semibold text-integra-gray-900">{reference.name}</h2>
+            <h3 class="text-lg font-semibold text-integra-gray-900">{reference.name}</h3>
             <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{reference.note}</p>
             <a href={reference.href} rel="noopener noreferrer" class="mt-5 inline-flex text-sm font-semibold text-integra-red-700 hover:underline">Consultar fonte oficial ↗</a>
           </article>

@@ -161,6 +161,35 @@
   }
 }
 
+/*
+ * Impressão limpa: remove o chrome do site (header, footer, skip-link) e
+ * deixa só o conteúdo principal. Beneficia artigos, guias e a ferramenta
+ * de checklist RFP (botões de ação já usam a variante print:hidden).
+ */
+@media print {
+  .skip-link,
+  body > header,
+  body > footer {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  /* Evita quebra de página no meio de cards, figuras e fieldsets. */
+  article,
+  figure,
+  fieldset,
+  pre {
+    break-inside: avoid;
+  }
+}
+
 /* Component utilities - small, opt-in, technical-looking primitives */
 @utility container-narrow {
   width: 100%;

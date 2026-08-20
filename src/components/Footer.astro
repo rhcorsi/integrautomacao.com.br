@@ -2,11 +2,11 @@
 import { Image } from "astro:assets";
 import logoColorido from "@/assets/logos/Colorido.png";
 import EmailLink from "@/components/EmailLink.astro";
-import { SITE, COMPANY } from "@/utils/site";
+import { SITE, COMPANY, PHONE_COMMERCIAL, PHONE_WHATSAPP } from "@/utils/site";
 
 const year = new Date().getFullYear();
-const phoneCommercial = COMPANY.phones[0];
-const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
+const phoneCommercial = PHONE_COMMERCIAL;
+const phoneWhatsApp = PHONE_WHATSAPP;
 
 const columns = [
   {

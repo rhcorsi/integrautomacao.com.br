@@ -53,10 +53,9 @@ const publicSource = publicSourceFor(source);
     </p>
   </div>
 
-  <div class:list={[
-    "flex aspect-[16/9] items-center justify-center",
-    dark ? "bg-white" : "bg-integra-white",
-  ]}>
+  {/* Fundo branco mesmo no tema dark: os manuais têm fundo claro e
+      precisam de palco neutro para leitura. */}
+  <div class="flex aspect-[16/9] items-center justify-center bg-integra-white">
     <Image
       src={image}
       alt={alt}

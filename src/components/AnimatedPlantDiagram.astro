@@ -1,13 +1,13 @@
 ---
 /**
  * Painel "sala de controle": diagrama de planta animado para o hero escuro.
- * Dados pulsam do campo (N0-1) até o corporativo (N4-5) atravessando a IDMZ,
+ * Dados pulsam do campo (N0-1) atÃ© o corporativo (N4-5) atravessando a IDMZ,
  * em CSS puro (offset-path), sem JavaScript. Com prefers-reduced-motion o
- * diagrama permanece estático e completo. Tags de instrumento no padrão
- * ISA-5.1 (TT = transmissor de temperatura, FT = vazão, XV = válvula).
+ * diagrama permanece estÃ¡tico e completo. Tags de instrumento no padrÃ£o
+ * ISA-5.1 (TT = transmissor de temperatura, FT = vazÃ£o, XV = vÃ¡lvula).
  */
 
-// Caminhos dos conduítes, usados no desenho e na animação dos pulsos.
+// Caminhos dos conduÃ­tes, usados no desenho e na animaÃ§Ã£o dos pulsos.
 const P1 = "M140 538 V470 H180 V446";
 const P2 = "M280 538 V470 H230 V446";
 const P3 = "M420 538 V470 H270 V446";
@@ -40,17 +40,17 @@ const nodeStroke = "#c9c9c9";
 const wire = "#c9c9c9";
 const label = "#4a4a4a";
 const labelDim = "#666666";
-const white = "#1a1a1a";
+const ink = "#1a1a1a";
 const pulse = "#e30613";
 const otLine = "#003a5d";
 const otText = "#003a5d";
 ---
 
 <div class="overflow-hidden rounded-xl border border-integra-gray-200 bg-integra-white shadow-xl">
-  {/* Barra de título do painel, estilo estação de supervisão */}
+  {/* Barra de tÃ­tulo do painel, estilo estaÃ§Ã£o de supervisÃ£o */}
   <div class="flex items-center justify-between border-b border-integra-gray-200 bg-integra-gray-50 px-4 py-2.5">
     <p class="font-mono text-[10px] uppercase tracking-widest text-integra-gray-500">
-      Supervisão · visão geral da planta
+      SupervisÃ£o Â· visÃ£o geral da planta
     </p>
     <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-emerald-700">
       <span class="apd-status inline-block size-1.5 rounded-full bg-emerald-500"></span>
@@ -58,18 +58,22 @@ const otText = "#003a5d";
     </p>
   </div>
 
+  {/* Em telas estreitas o diagrama manteria textos de ~5px físicos se
+      escalasse livremente: o min-w preserva a legibilidade e o container
+      ganha rolagem horizontal (padrão de tabelas/diagramas técnicos). */}
+  <div class="overflow-x-auto">
   <svg
     viewBox="0 0 560 612"
     role="img"
     aria-labelledby="apd-title apd-desc"
-    class="h-auto w-full"
+    class="h-auto w-full min-w-[560px]"
     xmlns="http://www.w3.org/2000/svg"
   >
     <title id="apd-title">Fluxo de dados da planta, do campo ao corporativo</title>
     <desc id="apd-desc">
       Diagrama animado em camadas: instrumentos de campo alimentam o
       controlador ControlLogix, que alimenta os servidores SCADA redundantes
-      e o Historian; os dados atravessam a IDMZ por conduíte controlado até
+      e o Historian; os dados atravessam a IDMZ por conduÃ­te controlado atÃ©
       o ambiente corporativo. Pulsos indicam o fluxo de dados subindo pelas
       camadas.
     </desc>
@@ -84,22 +88,22 @@ const otText = "#003a5d";
       </filter>
     </defs>
 
-    {/* ── Bandas de zona ─────────────────────────────────────────── */}
+    {/* â”€â”€ Bandas de zona â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     <rect x="40" y="56" width="480" height="94" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="76" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N4-5 · CORPORATIVO</text>
+    <text x="56" y="76" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N4-5 Â· CORPORATIVO</text>
 
     <rect x="40" y="180" width="480" height="60" rx="10" fill="rgba(0,58,93,0.04)" stroke={otLine} stroke-dasharray="5 4" stroke-opacity="0.45"></rect>
 
     <rect x="40" y="264" width="480" height="84" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="281" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N3 · SUPERVISÃO E DADOS</text>
+    <text x="56" y="281" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N3 Â· SUPERVISÃƒO E DADOS</text>
 
     <rect x="40" y="376" width="480" height="84" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="393" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N1-2 · CONTROLE E OPERAÇÃO</text>
+    <text x="56" y="393" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N1-2 Â· CONTROLE E OPERAÃ‡ÃƒO</text>
 
     <rect x="40" y="488" width="480" height="108" rx="10" fill={bandFill} stroke={bandStroke}></rect>
-    <text x="56" y="505" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N0 · CAMPO · INSTRUMENTAÇÃO</text>
+    <text x="56" y="505" font-family={mono} font-size="9" letter-spacing="1.5" fill={labelDim}>N0 Â· CAMPO Â· INSTRUMENTAÃ‡ÃƒO</text>
 
-    {/* ── Conduítes ──────────────────────────────────────────────── */}
+    {/* â”€â”€ ConduÃ­tes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     <g fill="none" stroke={wire} stroke-width="1.5">
       <path d={P1}></path>
       <path d={P2}></path>
@@ -113,12 +117,12 @@ const otText = "#003a5d";
       <path d={PHIST}></path>
     </g>
 
-    {/* ── Corporativo ────────────────────────────────────────────── */}
+    {/* â”€â”€ Corporativo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     <rect x="180" y="92" width="200" height="44" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
-    <text x="280" y="112" font-family={sans} font-size="13" font-weight="600" fill={white} text-anchor="middle">ERP · BI · nuvem</text>
-    <text x="280" y="127" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">camada de decisão</text>
+    <text x="280" y="112" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">ERP Â· BI Â· nuvem</text>
+    <text x="280" y="127" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">camada de decisÃ£o</text>
 
-    {/* ── IDMZ ───────────────────────────────────────────────────── */}
+    {/* â”€â”€ IDMZ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     <g transform="translate(196, 198)">
       <rect width="26" height="16" rx="2.5" fill="none" stroke={otText} stroke-width="1.2"></rect>
       <line x1="2" y1="5.5" x2="24" y2="5.5" stroke={otText} stroke-width="0.8"></line>
@@ -126,10 +130,10 @@ const otText = "#003a5d";
       <line x1="9" y1="0.5" x2="9" y2="5.5" stroke={otText} stroke-width="0.8"></line>
       <line x1="17" y1="5.5" x2="17" y2="10.5" stroke={otText} stroke-width="0.8"></line>
     </g>
-    <text x="232" y="210" font-family={mono} font-size="10" letter-spacing="1.5" fill={otText}>IDMZ · ZONA DESMILITARIZADA INDUSTRIAL</text>
-    <text x="232" y="226" font-family={mono} font-size="8.5" fill="#4a6d85">sem caminho direto TI ⇄ chão de fábrica</text>
+    <text x="232" y="210" font-family={mono} font-size="10" letter-spacing="1.5" fill={otText}>IDMZ Â· ZONA DESMILITARIZADA INDUSTRIAL</text>
+    <text x="232" y="226" font-family={mono} font-size="8.5" fill="#4a6d85">sem caminho direto TI â‡„ chÃ£o de fÃ¡brica</text>
 
-    {/* ── Supervisão ─────────────────────────────────────────────── */}
+    {/* â”€â”€ SupervisÃ£o â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     {[
       { x: 64, name: "SCADA A", sub: "redundante" },
       { x: 216, name: "SCADA B", sub: "redundante" },
@@ -137,21 +141,21 @@ const otText = "#003a5d";
     ].map((n) => (
       <g>
         <rect x={n.x} y="286" width="136" height="48" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
-        <text x={n.x + 68} y="308" font-family={sans} font-size="13" font-weight="600" fill={white} text-anchor="middle">{n.name}</text>
+        <text x={n.x + 68} y="308" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">{n.name}</text>
         <text x={n.x + 68} y="324" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">{n.sub}</text>
       </g>
     ))}
 
-    {/* ── Controle ───────────────────────────────────────────────── */}
+    {/* â”€â”€ Controle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     <rect x="120" y="398" width="180" height="48" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
-    <text x="210" y="420" font-family={sans} font-size="13" font-weight="600" fill={white} text-anchor="middle">ControlLogix · PAC</text>
+    <text x="210" y="420" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">ControlLogix Â· PAC</text>
     <text x="210" y="436" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">controle de processo</text>
 
     <rect x="340" y="398" width="120" height="48" rx="8" fill={nodeFill} stroke={nodeStroke}></rect>
-    <text x="400" y="420" font-family={sans} font-size="13" font-weight="600" fill={white} text-anchor="middle">HMI local</text>
-    <text x="400" y="436" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">operação</text>
+    <text x="400" y="420" font-family={sans} font-size="13" font-weight="600" fill={ink} text-anchor="middle">HMI local</text>
+    <text x="400" y="436" font-family={mono} font-size="8.5" fill={labelDim} text-anchor="middle">operaÃ§Ã£o</text>
 
-    {/* ── Campo ──────────────────────────────────────────────────── */}
+    {/* â”€â”€ Campo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
     {[
       { x: 140, tag: "TT-101" },
       { x: 280, tag: "FT-202" },
@@ -165,7 +169,7 @@ const otText = "#003a5d";
       </g>
     ))}
 
-    {/* ── Pulsos de dados (CSS offset-path; invisíveis sem animação) ── */}
+    {/* â”€â”€ Pulsos de dados (CSS offset-path; invisÃ­veis sem animaÃ§Ã£o) â”€â”€ */}
     {pulses.map((p) => (
       <circle
         class="apd-dot"
@@ -175,7 +179,7 @@ const otText = "#003a5d";
         style={`--apd-path: path('${p.path}'); --apd-dur: ${p.dur}; --apd-delay: ${p.delay};`}
       ></circle>
     ))}
-    {/* Comando descendo: supervisão -> controlador */}
+    {/* Comando descendo: supervisÃ£o -> controlador */}
     <circle
       class="apd-dot apd-dot-down"
       r="3"
@@ -184,6 +188,7 @@ const otText = "#003a5d";
       style={`--apd-path: path('${P4}'); --apd-dur: 3.8s; --apd-delay: 2.8s;`}
     ></circle>
   </svg>
+  </div>
 </div>
 
 <style>

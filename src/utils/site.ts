@@ -37,6 +37,18 @@ const PHONES: Phone[] = [
   },
 ];
 
+/**
+ * Acessos nomeados — NÃO depender da ordem do array `COMPANY.phones`
+ * (`phones[0]`, `find(p => p.whatsapp)` quebram silenciosamente se alguém
+ * reordenar a lista; dois telefones têm whatsapp:true).
+ */
+export const PHONE_COMMERCIAL: Phone = PHONES.find(
+  (p) => p.label === "Comercial",
+)!;
+export const PHONE_WHATSAPP: Phone = PHONES.find(
+  (p) => p.label === "WhatsApp",
+)!;
+
 export const COMPANY = {
   legalName: "Integra Automação Industrial Ltda - ME",
   taxId: "24.543.173/0001-14",

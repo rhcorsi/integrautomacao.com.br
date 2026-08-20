@@ -2,14 +2,15 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContactForm from "@/components/ContactForm.astro";
 import EmailLink from "@/components/EmailLink.astro";
-import { COMPANY } from "@/utils/site";
+import { COMPANY, PHONE_COMMERCIAL, PHONE_WHATSAPP } from "@/utils/site";
 
-const phoneCommercial = COMPANY.phones[0];
-const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
+const phoneCommercial = PHONE_COMMERCIAL;
+const phoneWhatsApp = PHONE_WHATSAPP;
 ---
 
 <BaseLayout
   title="Contato técnico para automação industrial"
+  breadcrumbLeaf="Contato"
   description="Solicite uma triagem técnica com a Integra: contexto, risco, base instalada e próximo passo. Maringá-PR, atuação nacional. Envie sua mensagem."
   ogImage="/og/contato.png"
 >
@@ -141,12 +142,13 @@ const phoneWhatsApp = COMPANY.phones.find((p) => p.whatsapp)!;
           <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
             LinkedIn
           </h3>
+          {/* Texto do link deve refletir o destino real (slug /company/). */}
           <a
             href={COMPANY.social.linkedin}
             rel="noopener noreferrer"
             class="text-base font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors"
           >
-            /integra-automacao-industrial
+            /company/integrautomacao
           </a>
         </div>
       </aside>

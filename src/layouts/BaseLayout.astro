@@ -4,13 +4,17 @@ import interLatinWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-n
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { SITE } from "@/utils/site";
-import { organizationSchema, breadcrumbSchema } from "@/utils/schema";
+import { organizationSchema, breadcrumbSchema, serializeJsonLd } from "@/utils/schema";
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
   ogImageAlt?: string;
+  /** Dimensões reais da ogImage — os cards de /og/ são 1200×630; páginas
+      que passam imagem bruta (hero/cover) devem informar as delas. */
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   ogType?: "website" | "article";
   noindex?: boolean;
   canonical?: string;
@@ -26,6 +30,8 @@ const {
   description = SITE.defaultDescription,
   ogImage: requestedOgImage,
   ogImageAlt,
+  ogImageWidth = 1200,
+  ogImageHeight = 630,
   ogType = "website",
   noindex = false,
   canonical,
@@ -39,6 +45,12 @@ const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
 const ogImageBySection: Record<string, string> = {
   blog: "/og/blog.png",
   "automacao-industrial": "/og/solucoes.png",
+  // Páginas regionais e de credencial: cards existentes mais próximos do
+  // tema, em vez do default genérico.
+  "automacao-industrial-maringa": "/og/empresa.png",
+  "automacao-industrial-parana": "/og/solucoes.png",
+  "ciberseguranca-ot": "/og/solucoes-redes-iec-62443.png",
+  "integrador-rockwell": "/og/certificacoes-silver.png",
   cases: "/og/cases.png",
   certificacoes: "/og/certificacoes.png",
   contato: "/og/contato.png",
@@ -78,6 +90,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL.toString()} />
     <link
       rel="alternate"
@@ -116,6 +129,8 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalURL.toString()} />
     <meta property="og:image" content={ogImageURL.toString()} />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    <meta property="og:image:height" content={String(ogImageHeight)} />
     <meta property="og:image:alt" content={socialImageAlt} />
     <meta property="og:locale" content="pt_BR" />
 
@@ -131,7 +146,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
       <script
         is:inline
         type="application/ld+json"
-        set:html={JSON.stringify(block)}
+        set:html={serializeJsonLd(block)}
       />
     ))}
 

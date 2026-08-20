@@ -77,10 +77,10 @@ const v = variantStyles[variant];
     <div
       class:list={[
         "grid gap-12 items-center lg:gap-16",
-        "lg:grid-cols-2",
+        image && "lg:grid-cols-2",
       ]}
     >
-      <div class={imagePosition === "left" ? "lg:order-2" : "lg:order-1"}>
+      <div class={imagePosition === "left" && image ? "lg:order-2" : "lg:order-1"}>
         <p
           class:list={[
             "text-xs font-mono uppercase tracking-widest mb-4",
@@ -151,16 +151,13 @@ const v = variantStyles[variant];
         }
       </div>
 
-      <div
-        class={`relative ${imagePosition === "left" ? "lg:order-1" : "lg:order-2"}`}
-      >
-        {image ? (
-          <div
-            class:list={[
-              "relative overflow-hidden rounded-lg shadow-2xl aspect-[16/9] flex items-center justify-center",
-              variant === "light" ? "bg-integra-white" : "bg-integra-white",
-            ]}
-          >
+      {image && (
+        <div
+          class={`relative ${imagePosition === "left" ? "lg:order-1" : "lg:order-2"}`}
+        >
+          {/* Fundo branco em todos os variants: os diagramas de referência
+              têm fundo claro e precisam de contraste para leitura. */}
+          <div class="relative overflow-hidden rounded-lg shadow-2xl aspect-[16/9] flex items-center justify-center bg-integra-white ring-1 ring-integra-gray-900/10">
             <Image
               src={image}
               alt={imageAlt}
@@ -171,8 +168,8 @@ const v = variantStyles[variant];
               class="w-full h-full object-contain"
             />
           </div>
-        ) : null}
-      </div>
+        </div>
+      )}
     </div>
   </div>
 </section>

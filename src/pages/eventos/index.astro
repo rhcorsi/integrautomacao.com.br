@@ -1,17 +1,16 @@
 ---
-import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import EventDate from "@/components/EventDate.astro";
+import { getPublishedEventos } from "@/utils/collections";
 
-const eventos = (await getCollection("eventos", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.startDate.getTime() - a.data.startDate.getTime(),
-);
+const eventos = await getPublishedEventos();
 ---
 
 <BaseLayout
   title="Eventos e Capacitação Técnica"
+  breadcrumbLeaf="Eventos"
   description="Registros de eventos, treinamentos e conferências acompanhados pela Integra, com temas técnicos e aprendizados para a engenharia industrial."
   ogImage="/og/eventos.png"
 >

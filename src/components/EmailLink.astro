@@ -10,6 +10,10 @@ const className = Astro.props.class;
 const optionalAttrs = ariaLabel ? { "aria-label": ariaLabel } : {};
 ---
 
+{/* Os marcadores email_off desativam a ofuscação de e-mail da Cloudflare
+    neste trecho — deliberado: o recurso injeta scripts inline no HTML, que
+    a CSP do site (sem 'unsafe-inline') bloquearia, quebrando o link. Se a
+    ofuscação for desligada no painel CF, os comentários são inócuos. */}
 <!--email_off-->
 <a href={`mailto:${email}`} class={className} {...optionalAttrs}>
   <slot />
