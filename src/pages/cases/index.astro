@@ -1,6 +1,7 @@
 ﻿---
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { getPublishedCases } from "@/utils/collections";
 
@@ -13,35 +14,27 @@ const cases = await getPublishedCases();
   description="Cases técnicos da Integra Automação Industrial: arquitetura, tecnologias aplicadas, problema, abordagem e resultados."
   ogImage="/og/cases.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Cases
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Engenharia em campo, documentada.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Publicamos contexto, restrições, abordagem, entregáveis e resultados
-        que podem ser divulgados. Nomes de clientes e detalhes de arquitetura
-        permanecem preservados quando o acordo de confidencialidade exige.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a
-          href="#cases-publicados"
-          class="inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
-        >
-          Ver cases publicados <span aria-hidden="true">↓</span>
-        </a>
-        <a
-          href="/contato/?assunto=portfolio"
-          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
-        >
-          Solicitar portfólio sob NDA
-        </a>
-      </div>
+  <PageHero
+    eyebrow="Cases"
+    title="Engenharia em campo, documentada."
+    description="Publicamos contexto, restrições, abordagem, entregáveis e resultados que podem ser divulgados. Nomes de clientes e detalhes de arquitetura permanecem preservados quando o acordo de confidencialidade exige."
+    breadcrumbLeaf="Cases"
+  >
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href="#cases-publicados"
+        class="inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
+      >
+        Ver cases publicados <span aria-hidden="true">↓</span>
+      </a>
+      <a
+        href="/contato/?assunto=portfolio"
+        class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+      >
+        Solicitar portfólio sob NDA
+      </a>
     </div>
-  </section>
+  </PageHero>
 
   <section id="cases-publicados" class="scroll-mt-32 border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import NewsletterForm from "@/components/NewsletterForm.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { faqSchema } from "@/utils/schema";
@@ -63,47 +64,39 @@ const faq = [
   ogImage="/og/integra-acao-newsletter.png"
   jsonLd={[faqSchema(faq)]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <div>
-          <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-            Integra Ação · Newsletter técnica
-          </p>
-          <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl mb-6">
-            Conteúdo técnico quando houver algo que valha o envio.
-          </h1>
-          <p class="text-lg leading-relaxed text-integra-gray-700 lg:text-xl mb-8">
-            Inscreva-se para receber uma curadoria periódica sobre arquitetura
-            industrial, redes, cibersegurança OT e governança de engenharia. A
-            prioridade é conteúdo educativo, com vínculo comercial e recorte de
-            fabricante indicados com transparência.
-          </p>
-          <ul class="space-y-3 text-sm text-integra-gray-700">
-            <li class="flex items-start gap-2">
-              <span class="text-integra-red-700 mt-0.5">·</span>
-              Envios periódicos, somente quando a curadoria estiver pronta.
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-integra-red-700 mt-0.5">·</span>
-              Conteúdo técnico em português, com referências validadas.
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-integra-red-700 mt-0.5">·</span>
-              Cancelamento com um clique a qualquer momento.
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-integra-red-700 mt-0.5">·</span>
-              Dados tratados apenas pela Integra e pelos operadores descritos na política.
-            </li>
-          </ul>
-        </div>
-        <div class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7 lg:p-8 shadow-sm">
-          <NewsletterForm />
-        </div>
-      </div>
+  <PageHero
+    eyebrow="Integra Ação · Newsletter técnica"
+    title="Conteúdo técnico quando houver algo que valha o envio."
+    breadcrumbLeaf="Newsletter"
+  >
+    <p class="mt-6 mb-8 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+      Inscreva-se para receber uma curadoria periódica sobre arquitetura
+      industrial, redes, cibersegurança OT e governança de engenharia. A
+      prioridade é conteúdo educativo, com vínculo comercial e recorte de
+      fabricante indicados com transparência.
+    </p>
+    <ul class="space-y-3 text-sm text-integra-gray-700">
+      <li class="flex items-start gap-2">
+        <span class="text-integra-red-700 mt-0.5">·</span>
+        Envios periódicos, somente quando a curadoria estiver pronta.
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-integra-red-700 mt-0.5">·</span>
+        Conteúdo técnico em português, com referências validadas.
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-integra-red-700 mt-0.5">·</span>
+        Cancelamento com um clique a qualquer momento.
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-integra-red-700 mt-0.5">·</span>
+        Dados tratados apenas pela Integra e pelos operadores descritos na política.
+      </li>
+    </ul>
+    <div slot="aside" class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-7 lg:p-8 shadow-sm">
+      <NewsletterForm />
     </div>
-  </section>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

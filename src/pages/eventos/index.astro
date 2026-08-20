@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import EventDate from "@/components/EventDate.astro";
 import { getPublishedEventos } from "@/utils/collections";
@@ -14,21 +15,12 @@ const eventos = await getPublishedEventos();
   description="Registros de eventos, treinamentos e conferências acompanhados pela Integra, com temas técnicos e aprendizados para a engenharia industrial."
   ogImage="/og/eventos.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Eventos · Treinamentos · Conferências
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Eventos e capacitação técnica da Integra.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Capacitação contínua é parte do método. Aqui reunimos recaps de eventos,
-        treinamentos e agendas técnicas acompanhados pela equipe, com os temas
-        que ajudam a manter projetos, tecnologias e práticas de engenharia atualizados.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Eventos · Treinamentos · Conferências"
+    title="Eventos e capacitação técnica da Integra."
+    description="Capacitação contínua é parte do método. Aqui reunimos recaps de eventos, treinamentos e agendas técnicas acompanhados pela equipe, com os temas que ajudam a manter projetos, tecnologias e práticas de engenharia atualizados."
+    breadcrumbLeaf="Eventos"
+  />
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

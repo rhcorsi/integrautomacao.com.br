@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import { itemListSchema, serviceSchema } from "@/utils/schema";
@@ -80,24 +81,18 @@ const pageUrl = new URL("/servicos/", SITE.url).toString();
     }),
   ]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-10 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:py-24">
-      <div>
-        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Serviços · engenharia de campo e software
-        </p>
-        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-          Serviços de automação industrial para executar, validar e sustentar sistemas.
-        </h1>
-      </div>
-      <p class="max-w-2xl text-lg leading-relaxed text-integra-gray-700">
-        A Integra atua do diagnóstico ao pós-partida em sistemas Rockwell e
-        ambientes multivendor. Cada serviço começa pela fronteira técnica,
-        pelas responsabilidades e pelo critério de aceite — a base para que
-        programação, campo e operação terminem falando sobre o mesmo sistema.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Serviços · engenharia de campo e software"
+    title="Serviços de automação industrial para executar, validar e sustentar sistemas."
+    breadcrumbLeaf="Serviços de automação industrial"
+  >
+    <p slot="aside" class="max-w-2xl text-lg leading-relaxed text-integra-gray-700">
+      A Integra atua do diagnóstico ao pós-partida em sistemas Rockwell e
+      ambientes multivendor. Cada serviço começa pela fronteira técnica,
+      pelas responsabilidades e pelo critério de aceite — a base para que
+      programação, campo e operação terminem falando sobre o mesmo sistema.
+    </p>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

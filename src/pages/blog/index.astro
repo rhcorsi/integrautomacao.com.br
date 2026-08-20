@@ -1,6 +1,7 @@
 ﻿---
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { Icon } from "astro-icon/components";
 import { formatEventDateRange } from "@/utils/eventDate";
@@ -48,22 +49,12 @@ const integraAcaoFormatos = [
   description="Artigos técnicos sobre PlantPAx, FactoryTalk, redes industriais, IEC 62443, migração de PLC e governança de engenharia industrial."
   ogImage="/og/blog.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Blog técnico
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Blog de automação industrial.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Publicamos análises para esclarecer arquiteturas, normas e decisões que
-        aparecem no dia a dia das plantas industriais. O conteúdo é educativo,
-        baseado em fontes e produzido por uma empresa que também presta os
-        serviços relacionados — vínculo que tratamos com transparência.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Blog técnico"
+    title="Blog de automação industrial."
+    description="Publicamos análises para esclarecer arquiteturas, normas e decisões que aparecem no dia a dia das plantas industriais. O conteúdo é educativo, baseado em fontes e produzido por uma empresa que também presta os serviços relacionados — vínculo que tratamos com transparência."
+    breadcrumbLeaf="Blog"
+  />
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
@@ -299,52 +300,47 @@ const glossarySchema = {
     glossarySchema,
   ]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:py-24">
-      <div>
-        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Guia técnico · segurança OT na prática · <span class="normal-case">Revisado em <time datetime="2026-08-02">2 de agosto de 2026</time> por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">Equipe técnica Integra</a></span>
-        </p>
-        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-          Cibersegurança OT: o guia de quem projeta e integra os sistemas da planta.
-        </h1>
-        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
-          Cibersegurança OT (tecnologia operacional) é a proteção dos sistemas
-          que monitoram e controlam processos físicos: CLPs (controladores
-          lógicos programáveis), supervisórios SCADA (supervisão e aquisição de
-          dados), redes industriais, servidores e estações de engenharia. Ela
-          difere da segurança de TI em um ponto essencial — a prioridade é
-          manter o processo disponível e as pessoas seguras — e por isso
-          precisa ser projetada dentro da planta, não aplicada por cima dela.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#maturidade" class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white hover:bg-integra-red-700">
-            Ver o caminho por maturidade <span aria-hidden="true">↓</span>
-          </a>
-          <a href="/contato/?assunto=guia-ciberseguranca-ot" class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 hover:border-integra-gray-900">
-            Falar sobre uma planta <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <p class="mt-7 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
-          Publicado e revisado pela equipe técnica Integra · 2 de agosto de 2026
-        </p>
-      </div>
-
-      <aside class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 lg:p-8" aria-label="Nesta página">
-        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">Nesta página</p>
-        <nav class="mt-5 grid gap-3 text-sm">
-          <a href="#ot-vs-ti" class="font-medium text-integra-gray-900 hover:text-integra-red-700">1. Por que OT não é TI</a>
-          <a href="#riscos" class="font-medium text-integra-gray-900 hover:text-integra-red-700">2. Riscos reais em planta</a>
-          <a href="#zonas-conduites" class="font-medium text-integra-gray-900 hover:text-integra-red-700">3. Purdue, zonas e conduítes</a>
-          <a href="#maturidade" class="font-medium text-integra-gray-900 hover:text-integra-red-700">4. O caminho por maturidade</a>
-          <a href="#integrador" class="font-medium text-integra-gray-900 hover:text-integra-red-700">5. O papel do integrador</a>
-          <a href="#glossario" class="font-medium text-integra-gray-900 hover:text-integra-red-700">6. Mini-glossário</a>
-          <a href="#perguntas" class="font-medium text-integra-gray-900 hover:text-integra-red-700">7. Perguntas frequentes</a>
-          <a href="#fontes" class="font-medium text-integra-gray-900 hover:text-integra-red-700">8. Fontes primárias</a>
-        </nav>
-      </aside>
+  <PageHero
+    eyebrow="Guia técnico · segurança OT na prática"
+    title="Cibersegurança OT: o guia de quem projeta e integra os sistemas da planta."
+    breadcrumbLeaf="Guia de cibersegurança OT"
+    accent="ot"
+  >
+    <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+      Cibersegurança OT (tecnologia operacional) é a proteção dos sistemas
+      que monitoram e controlam processos físicos: CLPs (controladores
+      lógicos programáveis), supervisórios SCADA (supervisão e aquisição de
+      dados), redes industriais, servidores e estações de engenharia. Ela
+      difere da segurança de TI em um ponto essencial — a prioridade é
+      manter o processo disponível e as pessoas seguras — e por isso
+      precisa ser projetada dentro da planta, não aplicada por cima dela.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="#maturidade" class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white hover:bg-integra-red-700">
+        Ver o caminho por maturidade <span aria-hidden="true">↓</span>
+      </a>
+      <a href="/contato/?assunto=guia-ciberseguranca-ot" class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 hover:border-integra-gray-900">
+        Falar sobre uma planta <span aria-hidden="true">→</span>
+      </a>
     </div>
-  </section>
+    <p class="mt-7 text-xs font-mono uppercase tracking-wider text-integra-gray-500">
+      Revisado em <time datetime="2026-08-02">2 de agosto de 2026</time> por <a href="/equipe/" class="underline underline-offset-2 hover:no-underline">Equipe técnica Integra</a>
+    </p>
+
+    <aside slot="aside" class="rounded-lg border border-integra-ot/20 bg-integra-ot/5 p-6 lg:p-8" aria-label="Nesta página">
+      <p class="text-xs font-mono uppercase tracking-widest text-integra-ot">Nesta página</p>
+      <nav class="mt-5 grid gap-3 text-sm">
+        <a href="#ot-vs-ti" class="font-medium text-integra-gray-900 hover:text-integra-ot">1. Por que OT não é TI</a>
+        <a href="#riscos" class="font-medium text-integra-gray-900 hover:text-integra-ot">2. Riscos reais em planta</a>
+        <a href="#zonas-conduites" class="font-medium text-integra-gray-900 hover:text-integra-ot">3. Purdue, zonas e conduítes</a>
+        <a href="#maturidade" class="font-medium text-integra-gray-900 hover:text-integra-ot">4. O caminho por maturidade</a>
+        <a href="#integrador" class="font-medium text-integra-gray-900 hover:text-integra-ot">5. O papel do integrador</a>
+        <a href="#glossario" class="font-medium text-integra-gray-900 hover:text-integra-ot">6. Mini-glossário</a>
+        <a href="#perguntas" class="font-medium text-integra-gray-900 hover:text-integra-ot">7. Perguntas frequentes</a>
+        <a href="#fontes" class="font-medium text-integra-gray-900 hover:text-integra-ot">8. Fontes primárias</a>
+      </nav>
+    </aside>
+  </PageHero>
 
   <section id="ot-vs-ti" class="scroll-mt-36 border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

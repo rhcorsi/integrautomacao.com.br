@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import ContactForm from "@/components/ContactForm.astro";
 import EmailLink from "@/components/EmailLink.astro";
 import { COMPANY, PHONE_COMMERCIAL, PHONE_WHATSAPP } from "@/utils/site";
@@ -14,21 +15,12 @@ const phoneWhatsApp = PHONE_WHATSAPP;
   description="Solicite uma triagem técnica com a Integra: contexto, risco, base instalada e próximo passo. Maringá-PR, atuação nacional. Envie sua mensagem."
   ogImage="/og/contato.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-16 lg:py-20">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Contato
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Comece pela triagem técnica.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl">
-        A primeira conversa serve para entender o contexto, verificar aderência
-        e definir o próximo passo. Ela não substitui levantamento de campo nem
-        diagnóstico documentado. Nosso prazo-alvo de retorno inicial é de 1 dia útil.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Contato"
+    title="Comece pela triagem técnica."
+    description="A primeira conversa serve para entender o contexto, verificar aderência e definir o próximo passo. Ela não substitui levantamento de campo nem diagnóstico documentado. Nosso prazo-alvo de retorno inicial é de 1 dia útil."
+    breadcrumbLeaf="Contato"
+  />
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-12 lg:py-16">

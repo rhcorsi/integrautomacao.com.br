@@ -1,0 +1,251 @@
+---
+/**
+ * Busca interna — índice estático do Pagefind, gerado pós-build
+ * (`npm run build` → `pagefind --site dist`). Em `astro dev` o índice não
+ * existe; a página mostra o aviso de indisponibilidade em vez de quebrar.
+ * noindex proposital: página de resultados não é destino de busca externa.
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
+---
+
+<BaseLayout
+  title="Buscar no site da Integra Automação Industrial"
+  description="Busca interna do site da Integra Automação Industrial: soluções, tecnologias, guias, cases e artigos técnicos."
+  breadcrumbLeaf="Busca"
+  noindex={true}
+>
+  <PageHero
+    eyebrow="Busca"
+    title="Encontre soluções, tecnologias e guias."
+    description="Busca instantânea em todo o conteúdo do site — páginas de soluções, catálogo técnico, setores, guias, cases e artigos do blog."
+    breadcrumbLeaf="Busca"
+  />
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-narrow py-16 lg:py-20">
+      {/* A região interativa não entra no próprio índice. */}
+      <div data-pagefind-ignore>
+        <div class="relative">
+          <svg
+            class="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-integra-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input
+            id="site-search"
+            type="search"
+            enterkeyhint="search"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Buscar por tecnologia, norma, setor… (ex.: PlantPAx, IEC 62443, migração PLC-5)"
+            aria-label="Buscar no site"
+            class="w-full rounded-lg border border-integra-gray-300 bg-integra-white py-4 pl-14 pr-5 text-base text-integra-gray-900 shadow-sm focus:border-integra-gray-900 focus:outline-none focus:ring-2 focus:ring-integra-red/40"
+          />
+        </div>
+
+        <p
+          id="search-status"
+          role="status"
+          aria-live="polite"
+          class="mt-4 min-h-[1.25rem] font-mono text-xs uppercase tracking-wider text-integra-gray-500"
+        >
+          Digite para buscar — o índice é carregado sob demanda.
+        </p>
+
+        <ol id="search-results" class="mt-6 grid gap-4"></ol>
+
+        <noscript>
+          <p class="mt-6 rounded-md border border-integra-gray-300 bg-integra-white p-4 text-sm text-integra-gray-800">
+            A busca interna exige JavaScript. Navegue pelo menu ou escreva para
+            <a href="mailto:comercial@integrautomacao.com.br" class="font-semibold text-integra-red-700 underline underline-offset-2">comercial@integrautomacao.com.br</a>.
+          </p>
+        </noscript>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Destaque dos termos encontrados (o Pagefind envolve matches em <mark>). */
+  #search-results mark {
+    background: rgba(227, 6, 19, 0.12);
+    color: inherit;
+    padding-inline: 0.1em;
+    border-radius: 2px;
+  }
+</style>
+
+<script>
+  interface PagefindResultData {
+    url: string;
+    meta: { title?: string };
+    excerpt: string;
+  }
+  interface PagefindSearchResult {
+    data: () => Promise<PagefindResultData>;
+  }
+  interface PagefindModule {
+    init: () => Promise<void>;
+    search: (
+      query: string,
+    ) => Promise<{ results: PagefindSearchResult[] }>;
+  }
+
+  const input = document.getElementById("site-search");
+  const statusEl = document.getElementById("search-status");
+  const listEl = document.getElementById("search-results");
+  if (
+    input instanceof HTMLInputElement &&
+    statusEl instanceof HTMLElement &&
+    listEl instanceof HTMLOListElement
+  ) {
+    // Aliases com narrowing fixo para as closures (TS não propaga
+    // instanceof para dentro de funções aninhadas).
+    const searchInput = input;
+    const status = statusEl;
+    const resultsList = listEl;
+    let pagefind: PagefindModule | null = null;
+    let pagefindFailed = false;
+    let debounceTimer = 0;
+    let searchSeq = 0;
+
+    const SECTION_LABELS: Record<string, string> = {
+      solucoes: "Soluções",
+      servicos: "Serviços",
+      tecnologias: "Tecnologias",
+      setores: "Setores",
+      cases: "Cases",
+      blog: "Blog",
+      eventos: "Eventos",
+      "integra-acao": "Integra Ação",
+      empresa: "Empresa",
+      equipe: "Equipe",
+      certificacoes: "Certificações",
+      contato: "Contato",
+    };
+
+    const sectionOf = (url: string) => {
+      const first = url.split("/").filter(Boolean)[0] ?? "";
+      return SECTION_LABELS[first] ?? "Site";
+    };
+
+    /** URL de resultado precisa ser interna — defesa básica antes de virar href. */
+    const safeInternalUrl = (url: string) =>
+      url.startsWith("/") && !url.startsWith("//") ? url : "/";
+
+    async function ensurePagefind(): Promise<PagefindModule | null> {
+      if (pagefind || pagefindFailed) return pagefind;
+      try {
+        // Especificador variável: o arquivo só existe pós-build — o TS não
+        // deve tentar resolver o módulo em tempo de checagem.
+        const PAGEFIND_MODULE_PATH = "/pagefind/pagefind.js";
+        const mod: unknown = await import(
+          /* @vite-ignore */ PAGEFIND_MODULE_PATH
+        );
+        const pf = mod as PagefindModule;
+        await pf.init();
+        pagefind = pf;
+        return pf;
+      } catch {
+        // Índice ausente (astro dev sem build) — degradar com orientação.
+        pagefindFailed = true;
+        status.textContent =
+          "Busca indisponível neste ambiente: o índice é gerado no build (npm run build).";
+        return null;
+      }
+    }
+
+    function clearResults() {
+      while (resultsList.firstChild) {
+        resultsList.removeChild(resultsList.firstChild);
+      }
+    }
+
+    async function runSearch(query: string) {
+      const seq = ++searchSeq;
+      const trimmed = query.trim();
+      if (trimmed.length < 2) {
+        clearResults();
+        status.textContent =
+          trimmed.length === 0
+            ? "Digite para buscar — o índice é carregado sob demanda."
+            : "Digite ao menos 2 caracteres.";
+        return;
+      }
+
+      status.textContent = "Buscando…";
+      const pf = await ensurePagefind();
+      if (!pf) return;
+
+      const { results } = await pf.search(trimmed);
+      const top = await Promise.all(
+        results.slice(0, 12).map((r) => r.data()),
+      );
+      // Uma busca mais nova pode ter terminado antes — descarta resultado velho.
+      if (seq !== searchSeq) return;
+
+      clearResults();
+      if (top.length === 0) {
+        status.textContent = `Nenhum resultado para "${trimmed}".`;
+        return;
+      }
+
+      status.textContent = `${results.length} resultado${results.length === 1 ? "" : "s"} para "${trimmed}"${results.length > 12 ? " — 12 primeiros exibidos" : ""}.`;
+
+      for (const data of top) {
+        const li = document.createElement("li");
+        li.className =
+          "rounded-lg border border-integra-gray-200 bg-integra-white p-5 transition-colors hover:border-integra-gray-900";
+
+        const link = document.createElement("a");
+        link.href = safeInternalUrl(data.url);
+        link.className = "group block";
+
+        const section = document.createElement("p");
+        section.className =
+          "mb-1.5 font-mono text-[11px] uppercase tracking-widest text-integra-red-700";
+        section.textContent = sectionOf(data.url);
+
+        const title = document.createElement("p");
+        title.className =
+          "text-base font-semibold text-integra-gray-900 group-hover:text-integra-red-700 transition-colors";
+        title.textContent = data.meta.title ?? data.url;
+
+        const excerpt = document.createElement("p");
+        excerpt.className =
+          "mt-2 text-sm leading-relaxed text-integra-gray-700";
+        // O excerpt do Pagefind é derivado do conteúdo estático do próprio
+        // site com <mark> nos termos — fonte confiável, sem dados do usuário.
+        excerpt.innerHTML = `…${data.excerpt}…`;
+
+        link.appendChild(section);
+        link.appendChild(title);
+        link.appendChild(excerpt);
+        li.appendChild(link);
+        resultsList.appendChild(li);
+      }
+    }
+
+    searchInput.addEventListener("input", () => {
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(
+        () => runSearch(searchInput.value),
+        220,
+      );
+    });
+
+    // Deep-link: /busca/?q=plantpax
+    const initial = new URL(window.location.href).searchParams.get("q");
+    if (initial) {
+      searchInput.value = initial;
+      void runSearch(initial);
+    }
+    searchInput.focus();
+  }
+</script>

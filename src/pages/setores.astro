@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import ManualReference from "@/components/ManualReference.astro";
@@ -130,32 +131,22 @@ const solucoesContexto = [
   description="Setores industriais que atendemos: açúcar e etanol, agronegócio, alimentos, química, frigoríficos, ração, papel e celulose, saneamento. Encontre o seu setor."
   ogImage="/og/setores.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
-      <div>
-        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-          Setores
-        </p>
-        <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-          Setores onde já entregamos.
-        </h1>
-        <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-          A Integra atua estritamente B2B, com foco em indústrias de médio e
-          grande porte que operam processos críticos e contínuos. A escolha
-          dos setores reflete onde nossa equipe acumula experiência real, não
-          listas de marketing.
-        </p>
-      </div>
-      <ManualReference
-        image={cpwePlantwideZoning}
-        alt="Plant-wide zoning em níveis 0-5 com Cell/Area, Site Operations e Data Center"
-        title="Cada setor traduz para zonas, células e níveis funcionais"
-        source="Cisco + Rockwell Automation - CPwE Deep Dive Architecture"
-        caption="Referência pública CPwE mostra que cada setor é antes de tudo um conjunto de zonas funcionais, base para padronizar projeto, segurança e suporte."
-        loading="eager"
-      />
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Setores"
+    title="Setores onde já entregamos."
+    description="A Integra atua estritamente B2B, com foco em indústrias de médio e grande porte que operam processos críticos e contínuos. A escolha dos setores reflete onde nossa equipe acumula experiência real, não listas de marketing."
+    breadcrumbLeaf="Setores"
+  >
+    <ManualReference
+      slot="aside"
+      image={cpwePlantwideZoning}
+      alt="Plant-wide zoning em níveis 0-5 com Cell/Area, Site Operations e Data Center"
+      title="Cada setor traduz para zonas, células e níveis funcionais"
+      source="Cisco + Rockwell Automation - CPwE Deep Dive Architecture"
+      caption="Referência pública CPwE mostra que cada setor é antes de tudo um conjunto de zonas funcionais, base para padronizar projeto, segurança e suporte."
+      loading="eager"
+    />
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

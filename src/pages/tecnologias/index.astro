@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { GROUP_ORDER, getTechByGroup, techCatalog } from "@/data/techCatalog";
@@ -30,43 +31,25 @@ const totals = [
     }),
   ]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-        Catálogo técnico Integra
-      </p>
-      <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
-        <div>
-          <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-            Cada software, tecnologia e serviço com contexto de engenharia.
-          </h1>
-          <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
-            Esta seção organiza o conhecimento técnico da Integra por tema:
-            controle, supervisão, dados, infraestrutura, redes, cibersegurança
-            OT e sustentação. Rockwell segue como eixo principal, deviceWISE
-            entra como parceria formal em IIoT e Siemens, Elipse e Schneider
-            aparecem como tecnologias multi-vendor atendidas. As páginas usam
-            referências visuais públicas dos fabricantes e
-            explicam onde cada tecnologia entra, quais riscos reduz e quais
-            entregáveis o cliente recebe.
+  <PageHero
+    eyebrow="Catálogo técnico Integra"
+    title="Cada software, tecnologia e serviço com contexto de engenharia."
+    description="Esta seção organiza o conhecimento técnico da Integra por tema: controle, supervisão, dados, infraestrutura, redes, cibersegurança OT e sustentação. Rockwell segue como eixo principal, deviceWISE entra como parceria formal em IIoT e Siemens, Elipse e Schneider aparecem como tecnologias multi-vendor atendidas. As páginas usam referências visuais públicas dos fabricantes e explicam onde cada tecnologia entra, quais riscos reduz e quais entregáveis o cliente recebe."
+    breadcrumbLeaf="Tecnologias"
+  >
+    <div slot="aside" class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-3">
+      {totals.map((item) => (
+        <div class="bg-integra-gray-50 p-6">
+          <p class="font-mono text-3xl font-semibold text-integra-gray-900">
+            {item.value}
+          </p>
+          <p class="mt-2 text-sm leading-relaxed text-integra-gray-600">
+            {item.label}
           </p>
         </div>
-
-        <div class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-3">
-          {totals.map((item) => (
-            <div class="bg-integra-gray-50 p-6">
-              <p class="font-mono text-3xl font-semibold text-integra-gray-900">
-                {item.value}
-              </p>
-              <p class="mt-2 text-sm leading-relaxed text-integra-gray-600">
-                {item.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+      ))}
     </div>
-  </section>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

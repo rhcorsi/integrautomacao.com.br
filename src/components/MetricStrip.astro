@@ -1,0 +1,43 @@
+---
+/**
+ * MetricStrip.astro — faixa de fatos verificáveis em tipografia mono.
+ * Regra editorial: SOMENTE números públicos e comprováveis (fundação,
+ * contagens do próprio site, prazos-alvo publicados). Nunca métricas de
+ * vaidade nem resultados de clientes (confidenciais).
+ */
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  items?: Metric[];
+}
+
+const {
+  items = [
+    { value: "2016", label: "Ano de fundação · Maringá-PR" },
+    { value: "40+", label: "Tecnologias e serviços no catálogo técnico" },
+    { value: "9", label: "Setores industriais atendidos" },
+    { value: "1 dia útil", label: "Prazo-alvo de retorno inicial" },
+  ],
+} = Astro.props;
+---
+
+<section aria-label="Fatos sobre a Integra" class="border-b border-integra-gray-200 bg-integra-white">
+  <div class="container-fluid py-10 lg:py-12">
+    <dl class="grid gap-px overflow-hidden rounded-lg border border-integra-gray-200 bg-integra-gray-200 sm:grid-cols-2 lg:grid-cols-4">
+      {/* flex-col + order: valor em cima no visual, dt antes de dd no DOM. */}
+      {items.map((item) => (
+        <div class="flex flex-col bg-integra-gray-50 px-6 py-5">
+          <dt class="order-2 mt-1.5 text-xs font-medium leading-snug text-integra-gray-600">
+            {item.label}
+          </dt>
+          <dd class="order-1 font-mono text-2xl font-semibold tracking-tight text-integra-gray-900 lg:text-3xl">
+            {item.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

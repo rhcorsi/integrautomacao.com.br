@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import StandardsBadges from "@/components/StandardsBadges.astro";
@@ -130,79 +131,63 @@ const description =
     faqSchema(faq),
   ]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
-      <div>
-        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Integração de Sistemas · Rockwell Automation
-        </p>
-        <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-          Integrador Rockwell Automation no Brasil
-        </h1>
-        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
-          Integrador Rockwell Automation é a empresa de engenharia que projeta,
-          programa, testa e sustenta sistemas de automação sobre a plataforma
-          Rockwell — ControlLogix, PlantPAx, FactoryTalk e redes EtherNet/IP —
-          dentro do programa oficial PartnerNetwork. A Integra Automação
-          Industrial, de Maringá-PR, exerce esse papel desde 2016 e participa
-          do programa no nível Silver. A credencial publicada registra a
-          capacidade PlantPAx DCS Certified. A atuação inclui projetos no
-          Brasil em açúcar e etanol, agroindústria, alimentos, frigoríficos,
-          química, papel e celulose e saneamento.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-4">
-          <a
-            href="/contato/"
-            class="inline-flex items-center gap-2 rounded-md bg-integra-red px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
-          >
-            Falar com um engenheiro
-            <span aria-hidden="true">→</span>
-          </a>
-          <a
-            href="/certificacoes/silver-system-integrator/"
-            class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-6 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
-          >
-            Ver credencial Silver
-          </a>
-        </div>
-      </div>
-      <div class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-8">
-        <p class="mb-5 text-xs font-mono uppercase tracking-widest text-integra-gray-500">
-          Status e capacidades declaradas
-        </p>
-        <ul class="space-y-4">
-          <li class="flex items-start gap-3">
-            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
-            <span class="text-base text-integra-gray-900">
-              <strong>Silver System Integrator</strong> — programa de
-              integradores do Rockwell PartnerNetwork
-            </span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
-            <span class="text-base text-integra-gray-900">
-              <strong>PlantPAx DCS Certified</strong> — capacidade indicada
-              no documento publicado
-            </span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
-            <span class="text-base text-integra-gray-900">
-              <strong>Quatro disciplinas ativas</strong> — Control,
-              Visualization, Process e Power
-            </span>
-          </li>
-        </ul>
-        <p class="mt-6 text-sm leading-relaxed text-integra-gray-700">
-          O vínculo deve ser conferido no Partner Locator da Rockwell
-          Automation e na nossa
-          <a href="/certificacoes/silver-system-integrator/" class="font-semibold text-integra-red-700 hover:text-integra-red">página de credencial</a>.
-          Como status e diretórios podem mudar, use a informação vigente na
-          data da contratação.
-        </p>
-      </div>
+  <PageHero
+    eyebrow="Integração de Sistemas · Rockwell Automation"
+    title="Integrador Rockwell Automation no Brasil"
+    description="Integrador Rockwell Automation é a empresa de engenharia que projeta, programa, testa e sustenta sistemas de automação sobre a plataforma Rockwell — ControlLogix, PlantPAx, FactoryTalk e redes EtherNet/IP — dentro do programa oficial PartnerNetwork. A Integra Automação Industrial, de Maringá-PR, exerce esse papel desde 2016 e participa do programa no nível Silver. A credencial publicada registra a capacidade PlantPAx DCS Certified. A atuação inclui projetos no Brasil em açúcar e etanol, agroindústria, alimentos, frigoríficos, química, papel e celulose e saneamento."
+    breadcrumbLeaf="Integrador Rockwell Automation"
+  >
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a
+        href="/contato/"
+        class="inline-flex items-center gap-2 rounded-md bg-integra-red px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
+      >
+        Falar com um engenheiro
+        <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href="/certificacoes/silver-system-integrator/"
+        class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-6 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+      >
+        Ver credencial Silver
+      </a>
     </div>
-  </section>
+    <div slot="aside" class="rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-8">
+      <p class="mb-5 text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+        Status e capacidades declaradas
+      </p>
+      <ul class="space-y-4">
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+          <span class="text-base text-integra-gray-900">
+            <strong>Silver System Integrator</strong> — programa de
+            integradores do Rockwell PartnerNetwork
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+          <span class="text-base text-integra-gray-900">
+            <strong>PlantPAx DCS Certified</strong> — capacidade indicada
+            no documento publicado
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-integra-red text-[11px] text-integra-white" aria-hidden="true">✓</span>
+          <span class="text-base text-integra-gray-900">
+            <strong>Quatro disciplinas ativas</strong> — Control,
+            Visualization, Process e Power
+          </span>
+        </li>
+      </ul>
+      <p class="mt-6 text-sm leading-relaxed text-integra-gray-700">
+        O vínculo deve ser conferido no Partner Locator da Rockwell
+        Automation e na nossa
+        <a href="/certificacoes/silver-system-integrator/" class="font-semibold text-integra-red-700 hover:text-integra-red">página de credencial</a>.
+        Como status e diretórios podem mudar, use a informação vigente na
+        data da contratação.
+      </p>
+    </div>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid max-w-4xl py-20">

@@ -19,9 +19,12 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      // /api/ não é página; /404 é noindex e não deve ser rastreada via
-      // sitemap (sinal contraditório).
-      filter: (page) => !page.includes("/api/") && !page.includes("/404"),
+      // /api/ não é página; /404 e /busca são noindex e não devem entrar
+      // no sitemap (sinal contraditório).
+      filter: (page) =>
+        !page.includes("/api/") &&
+        !page.includes("/404") &&
+        !page.includes("/busca"),
     }),
     icon({
       include: {

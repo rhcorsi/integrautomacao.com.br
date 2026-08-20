@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import { faqSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
@@ -107,35 +108,31 @@ const faq = [
   breadcrumbLeaf="Automação Industrial no Paraná"
   jsonLd={[faqSchema(faq)]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-        Guia regional · Paraná
-      </p>
-      <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-        Automação Industrial no Paraná: como escolher a empresa certa
-      </h1>
-      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
-        Escolher uma empresa de automação industrial no Paraná é decidir quem
-        vai projetar, programar e sustentar os sistemas que controlam a sua
-        planta: PLCs, DCS, SCADA, redes industriais e cibersegurança OT. Este
-        guia apresenta os critérios técnicos dessa escolha — tipos de
-        fornecedor, credenciais verificáveis, testes documentados e suporte
-        pós-partida. Ele é mantido pela
-        <a
-          href="/automacao-industrial-maringa/"
-          class="font-medium text-integra-red-700 hover:underline"
-          >Integra Automação Industrial, de Maringá-PR</a
-        >, fundada em 2016,
-        <a
-          href="/integrador-rockwell/"
-          class="font-medium text-integra-red-700 hover:underline"
-          >participante no nível Silver do PartnerNetwork</a
-        >, com a capacidade PlantPAx DCS Certified indicada na credencial e
-        atuação no Paraná e em outros estados.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Guia regional · Paraná"
+    title="Automação Industrial no Paraná: como escolher a empresa certa"
+    breadcrumbLeaf="Automação Industrial no Paraná"
+  >
+    <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+      Escolher uma empresa de automação industrial no Paraná é decidir quem
+      vai projetar, programar e sustentar os sistemas que controlam a sua
+      planta: PLCs, DCS, SCADA, redes industriais e cibersegurança OT. Este
+      guia apresenta os critérios técnicos dessa escolha — tipos de
+      fornecedor, credenciais verificáveis, testes documentados e suporte
+      pós-partida. Ele é mantido pela
+      <a
+        href="/automacao-industrial-maringa/"
+        class="font-medium text-integra-red-700 hover:underline"
+        >Integra Automação Industrial, de Maringá-PR</a
+      >, fundada em 2016,
+      <a
+        href="/integrador-rockwell/"
+        class="font-medium text-integra-red-700 hover:underline"
+        >participante no nível Silver do PartnerNetwork</a
+      >, com a capacidade PlantPAx DCS Certified indicada na credencial e
+      atuação no Paraná e em outros estados.
+    </p>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

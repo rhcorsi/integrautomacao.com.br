@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import { Icon } from "astro-icon/components";
 import { formatEventDateRange } from "@/utils/eventDate";
@@ -73,40 +74,32 @@ const temas = [
   description="Conteúdo para quem projeta, opera e mantém sistemas industriais: newsletter técnica, webinars em preparação e eventos da Integra."
   ogImage="/og/integra-acao.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-28">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-4">
-        Marca de conteúdo · Integra Ação
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl lg:text-6xl max-w-4xl">
-        Conteúdo técnico para quem
-        <span class="text-integra-red">projeta, opera e mantém</span>
-        sistemas industriais.
-      </h1>
-      <p class="mt-8 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Integra Ação é a marca guarda-chuva da Integra Automação Industrial
-        para conteúdo educativo. Aqui reunimos a newsletter técnica, o formato
-        de webinars em preparação e o registro dos eventos em que a equipe atua.
-        O foco é o mesmo do nosso trabalho de engenharia: profundidade
-        técnica, sem ruído de marketing.
-      </p>
-      <div class="mt-10 flex flex-wrap gap-4">
-        <a
-          href="/integra-acao/newsletter/"
-          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
-        >
-          Inscrever-se na newsletter
-          <span aria-hidden="true">→</span>
-        </a>
-        <a
-          href="#formatos"
-          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
-        >
-          Ver formatos disponíveis
-        </a>
-      </div>
+  <PageHero
+    eyebrow="Marca de conteúdo · Integra Ação"
+    description="Integra Ação é a marca guarda-chuva da Integra Automação Industrial para conteúdo educativo. Aqui reunimos a newsletter técnica, o formato de webinars em preparação e o registro dos eventos em que a equipe atua. O foco é o mesmo do nosso trabalho de engenharia: profundidade técnica, sem ruído de marketing."
+    breadcrumbLeaf="Integra Ação"
+  >
+    <span slot="title"
+      >Conteúdo técnico para quem
+      <span class="text-integra-red">projeta, opera e mantém</span>
+      sistemas industriais.</span
+    >
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a
+        href="/integra-acao/newsletter/"
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors"
+      >
+        Inscrever-se na newsletter
+        <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href="#formatos"
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-integra-gray-900 border border-integra-gray-300 hover:border-integra-gray-900 rounded-md transition-colors"
+      >
+        Ver formatos disponíveis
+      </a>
     </div>
-  </section>
+  </PageHero>
 
   <section id="formatos" class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
 import FAQAccordion from "@/components/FAQAccordion.astro";
@@ -103,30 +104,26 @@ const faq = [
     faqSchema(faq),
   ]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-        Atendimento local · Maringá-PR
-      </p>
-      <h1 class="max-w-3xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-        Automação Industrial em Maringá e no Paraná
-      </h1>
-      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
-        A Integra Automação Industrial é uma empresa de engenharia e integração
-        de automação industrial com sede em Maringá-PR (Rua Topázio, 965),
-        fundada em 2016, que projeta, implanta e sustenta sistemas de controle,
-        SCADA, redes industriais e cibersegurança OT para plantas em todo o
-        Paraná e no Brasil. A empresa participa como
-        <a
-          href="/certificacoes/silver-system-integrator/"
-          class="font-medium text-integra-red-700 hover:underline"
-          >System Integrator no nível Silver do PartnerNetwork</a
-        >, com a capacidade PlantPAx DCS Certified registrada na credencial; a
-        equipe também trabalha com Siemens (TIA
-        Portal e PCS 7), Schneider Electric, Elipse E3 e Telit deviceWISE.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Atendimento local · Maringá-PR"
+    title="Automação Industrial em Maringá e no Paraná"
+    breadcrumbLeaf="Automação Industrial em Maringá"
+  >
+    <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+      A Integra Automação Industrial é uma empresa de engenharia e integração
+      de automação industrial com sede em Maringá-PR (Rua Topázio, 965),
+      fundada em 2016, que projeta, implanta e sustenta sistemas de controle,
+      SCADA, redes industriais e cibersegurança OT para plantas em todo o
+      Paraná e no Brasil. A empresa participa como
+      <a
+        href="/certificacoes/silver-system-integrator/"
+        class="font-medium text-integra-red-700 hover:underline"
+        >System Integrator no nível Silver do PartnerNetwork</a
+      >, com a capacidade PlantPAx DCS Certified registrada na credencial; a
+      equipe também trabalha com Siemens (TIA
+      Portal e PCS 7), Schneider Electric, Elipse E3 e Telit deviceWISE.
+    </p>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

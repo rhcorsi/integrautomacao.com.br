@@ -1,0 +1,98 @@
+---
+/**
+ * PageHero.astro — cabeçalho padrão das páginas internas.
+ *
+ * Traz para as páginas internas a mesma assinatura visual do hero da home:
+ * grid técnico sutil ao fundo (com `isolate` — sem ele o background opaco da
+ * section cobre as camadas -z-10), breadcrumb visual sincronizado com o
+ * JSON-LD e eyebrow com o acento da seção (vermelho padrão, azul-OT para
+ * temas de cibersegurança).
+ *
+ * Uso simples:
+ *   <PageHero eyebrow="Blog técnico" title="..." breadcrumbLeaf="Blog" />
+ * Com coluna lateral:
+ *   <PageHero ...><ManualReference slot="aside" ... /></PageHero>
+ * Conteúdo extra (badges, CTAs) vai no slot default, após a descrição.
+ */
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+
+interface Props {
+  eyebrow: string;
+  /** Título em texto puro. Para títulos com trechos em destaque, use o
+      slot name="title" (o prop torna-se apenas fallback). */
+  title?: string;
+  description?: string;
+  /** Acento da seção: red (padrão) ou ot (cibersegurança/redes). */
+  accent?: "red" | "ot";
+  /** Folha curta do breadcrumb visual — usar o mesmo valor do
+      breadcrumbLeaf passado ao BaseLayout. */
+  breadcrumbLeaf?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  accent = "red",
+  breadcrumbLeaf,
+} = Astro.props;
+
+const hasAside = Astro.slots.has("aside");
+const eyebrowColor = accent === "ot" ? "text-integra-ot" : "text-integra-red-700";
+const hatchColor =
+  accent === "ot" ? "rgba(0,58,93,0.08)" : "rgba(227,6,19,0.07)";
+---
+
+<section class="relative isolate overflow-hidden border-b border-integra-gray-200 bg-integra-white">
+  {/* Textura de grid técnico — mesma linguagem do hero da home. */}
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 opacity-[0.05]"
+    aria-hidden="true"
+    style="background-image: linear-gradient(var(--color-integra-gray-900) 1px, transparent 1px), linear-gradient(90deg, var(--color-integra-gray-900) 1px, transparent 1px); background-size: 56px 56px;"
+  >
+  </div>
+  {/* Hatch diagonal no canto direito, com o acento da seção. */}
+  <div
+    class="pointer-events-none absolute right-0 top-0 -z-10 hidden h-full w-1/3 lg:block"
+    aria-hidden="true"
+    style={`background-image: linear-gradient(135deg, ${hatchColor} 0, ${hatchColor} 1px, transparent 1px, transparent 16px); mask-image: linear-gradient(to left, black, transparent); -webkit-mask-image: linear-gradient(to left, black, transparent);`}
+  >
+  </div>
+
+  <div class="container-fluid py-16 lg:py-20">
+    {breadcrumbLeaf && <Breadcrumbs leaf={breadcrumbLeaf} />}
+
+    <div
+      class:list={[
+        "grid gap-10",
+        hasAside && "lg:grid-cols-[0.95fr_1.05fr] lg:items-end",
+      ]}
+    >
+      <div>
+        <p
+          class:list={[
+            "mb-3 text-xs font-mono uppercase tracking-widest",
+            eyebrowColor,
+          ]}
+        >
+          {eyebrow}
+        </p>
+        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+          <slot name="title">{title}</slot>
+        </h1>
+        {description && (
+          <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+            {description}
+          </p>
+        )}
+        <slot />
+      </div>
+
+      {hasAside && (
+        <div>
+          <slot name="aside" />
+        </div>
+      )}
+    </div>
+  </div>
+</section>

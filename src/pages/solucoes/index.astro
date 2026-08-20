@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import SolutionCard from "@/components/SolutionCard.astro";
 import LifecycleRail from "@/components/LifecycleRail.astro";
@@ -147,36 +148,27 @@ const mvpSolutions = [
     }),
   ]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Soluções por desafio
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Engenharia para modernizar sem concentrar risco.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        Organizamos cada frente a partir do problema da planta: risco de parada,
-        obsolescência, segurança, dados ou padronização. A entrega conecta
-        arquitetura, implantação, validação e sustentação com continuidade
-        técnica entre as fases.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a
-          href="/contato/?assunto=triagem"
-          class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
-        >
-          Solicitar triagem técnica <span aria-hidden="true">→</span>
-        </a>
-        <a
-          href="/cases/"
-          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
-        >
-          Ver cases e entregáveis
-        </a>
-      </div>
+  <PageHero
+    eyebrow="Soluções por desafio"
+    title="Engenharia para modernizar sem concentrar risco."
+    description="Organizamos cada frente a partir do problema da planta: risco de parada, obsolescência, segurança, dados ou padronização. A entrega conecta arquitetura, implantação, validação e sustentação com continuidade técnica entre as fases."
+    breadcrumbLeaf="Soluções"
+  >
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href="/contato/?assunto=triagem"
+        class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
+      >
+        Solicitar triagem técnica <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href="/cases/"
+        class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+      >
+        Ver cases e entregáveis
+      </a>
     </div>
-  </section>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

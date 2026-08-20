@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import teamPhoto from "@/assets/eventos/ena-2025-belo-horizonte/foto-01.jpg";
 import {
   COLLECTIVE_AUTHOR,
@@ -43,36 +44,27 @@ const teamLd = {
   ogImageHeight={teamPhoto.height}
   jsonLd={[teamLd]}
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-narrow py-16 lg:py-20">
-      <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
-        Autoria e responsabilidade editorial
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
-        Equipe técnica Integra.
-      </h1>
-      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
-        Os artigos sem autoria individual confirmada recebem uma assinatura
-        coletiva. Ela identifica a responsabilidade editorial da Integra sem
-        atribuir a uma pessoa específica um texto que foi produzido ou
-        revisado em equipe.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a
-          href="/blog/"
-          class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
-        >
-          Ler o blog técnico <span aria-hidden="true">→</span>
-        </a>
-        <a
-          href="/politica-editorial/"
-          class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
-        >
-          Consultar a política editorial
-        </a>
-      </div>
+  <PageHero
+    eyebrow="Autoria e responsabilidade editorial"
+    title="Equipe técnica Integra."
+    description="Os artigos sem autoria individual confirmada recebem uma assinatura coletiva. Ela identifica a responsabilidade editorial da Integra sem atribuir a uma pessoa específica um texto que foi produzido ou revisado em equipe."
+    breadcrumbLeaf="Equipe"
+  >
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a
+        href="/blog/"
+        class="inline-flex items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700"
+      >
+        Ler o blog técnico <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href="/politica-editorial/"
+        class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+      >
+        Consultar a política editorial
+      </a>
     </div>
-  </section>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-default py-16 lg:py-20">

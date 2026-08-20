@@ -160,8 +160,10 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     ]}
   >
     <a class="skip-link" href="#main">Pular para o conteúdo</a>
+    {/* data-pagefind-*: o índice de busca (Pagefind, gerado pós-build)
+        indexa só o <main>; Header/Footer carregam data-pagefind-ignore. */}
     <Header />
-    <main id="main" class="flex-1">
+    <main id="main" class="flex-1" data-pagefind-body>
       <slot />
     </main>
     <Footer />

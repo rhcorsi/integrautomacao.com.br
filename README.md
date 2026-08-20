@@ -159,11 +159,13 @@ site/
 
 | Componente | Propósito | Notas de uso |
 |---|---|---|
-| `Header` | Nav sticky + mega-menus (desktop ≥1440px) + menu mobile | Mega-menus de Cases/Blog/Eventos são dinâmicos (via `collections.ts`); contexto de contato é capturado no clique pelo script do BaseLayout |
+| `Header` | Nav sticky + mega-menus (desktop ≥1440px) + menu mobile + gatilho de busca | Mega-menus de Cases/Blog/Eventos são dinâmicos (via `collections.ts`); contexto de contato é capturado no clique pelo script do BaseLayout |
 | `Footer` | 4 colunas de nav + faixa de contato + legal | Usa `PHONE_COMMERCIAL`/`PHONE_WHATSAPP` nomeados |
+| `PageHero` | Cabeçalho padrão de páginas internas: textura de grid + breadcrumb visual + eyebrow por acento de seção | Slots: `title` (título com marcação), `aside` (coluna lateral), default (extras após a descrição). `isolate` é obrigatório para a textura -z-10 |
+| `MetricStrip` | Faixa de fatos verificáveis em mono | Só números públicos/comprováveis — nunca vaidade nem dados de cliente |
 | `HeroIntegridade` | Hero principal (light/dark) | A `section` tem `isolate` — **obrigatório** para as camadas decorativas `-z-10` renderizarem |
 | `AnimatedPlantDiagram` | SVG animado do fluxo Purdue (home) | `role="img"` com title/desc; pulsos via `offset-path` (decisão aceita: CLS/TBT zero); `min-w` + scroll horizontal no mobile |
-| `ArchitectureDiagram` | SVG estático Purdue/IDMZ | Usado em redes-iec-62443; idem scroll mobile |
+| `ArchitectureDiagram` | SVG estático Purdue/IDMZ | Usado em redes-iec-62443; hover esmaece as demais zonas (só `hover:hover`); legenda visível abaixo serve touch/keyboard |
 | `ManualReference` | Figura técnica com fonte rastreável | Props `sizes`/`widths` devem refletir a coluna real (não aceitar o default 800px em grids); link de fonte tem `aria-label` único |
 | `FeatureBlock` | Bloco feature alternado com imagem | `sizes` alinhado a ~600px de coluna |
 | `SectionHeader` | Cabeçalho de seção (eyebrow/h2/desc) | H2 fixo — cards internos devem usar H3 |
@@ -250,6 +252,21 @@ site/
   próprios (comparar propostas, validar credenciais).
 - `integra-acao/webinar` é `noindex` enquanto for placeholder — remover o
   noindex quando a primeira sessão confirmada for publicada.
+
+### Busca interna (Pagefind)
+
+- Índice estático gerado pós-build: `"build": "astro build && pagefind --site
+  dist"` — 111 páginas em pt-BR. Em `astro dev` o índice não existe e a
+  página `/busca/` degrada com aviso (nunca quebra).
+- **Indexação escopada:** `<main>` tem `data-pagefind-body`; Header/Footer
+  têm `data-pagefind-ignore`. A UI de `/busca/` se autoexclui do índice.
+- `/busca/` é **noindex** e fora do sitemap (página utilitária, não destino).
+- UI customizada em `src/pages/busca/index.astro` (dynamic import com
+  `@vite-ignore` de `/pagefind/pagefind.js`, debounce 220ms, deep-link
+  `?q=`). Não usar o `pagefind-ui` padrão — a UI própria segue o design
+  system.
+- **CSP:** `script-src` inclui `'wasm-unsafe-eval'` — obrigatório para o
+  WebAssembly do Pagefind. Não remover sem derrubar a busca em produção.
 
 ## Formulários (contato e newsletter)
 
@@ -767,7 +784,9 @@ _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 - [ ] Publicar artigos quando a revisão técnica e as fontes estiverem prontas;
       a qualidade editorial prevalece sobre uma cadência fixa.
 - [ ] Avaliar busca interna quando o volume e os dados de navegação demonstrarem
-      necessidade, sem adotar um limite arbitrário de itens.
+      necessidade, sem adotar um limite arbitrário de itens. ~~Implementada com
+      Pagefind em ago/2026 (ver "Busca interna").~~ Reavaliar somente se os
+      dados de uso mostrarem lacunas (filtros, pesos por seção).
 - [ ] Avaliar HSTS preload e DMARC `p=reject` após validar todos os subdomínios,
       remetentes e fluxos de recuperação envolvidos.
 - [ ] Versão em inglês (`/en/`) se mirar multinacionais

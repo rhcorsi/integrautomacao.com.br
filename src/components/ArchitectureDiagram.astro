@@ -30,7 +30,7 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
   viewBox="0 0 880 656"
   role="img"
   aria-labelledby="archdiag-title archdiag-desc"
-  class:list={["h-auto w-full min-w-[880px]", className]}
+  class:list={["archdiag-svg h-auto w-full min-w-[880px]", className]}
   xmlns="http://www.w3.org/2000/svg"
 >
   <title id="archdiag-title">
@@ -62,7 +62,7 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
   </g>
 
   {/* ── Enterprise Zone (N4-5) ─────────────────────────────────────── */}
-  <g>
+  <g class="archdiag-zone">
     <rect x="90" y="20" width="780" height="92" rx="8" fill={zoneFill} stroke={line}></rect>
     <text x="108" y="44" font-family={mono} font-size="11" letter-spacing="1.5" fill={sub}>
       ENTERPRISE ZONE · TI CORPORATIVA
@@ -107,7 +107,7 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
   </g>
 
   {/* ── IDMZ (N3.5) ────────────────────────────────────────────────── */}
-  <g>
+  <g class="archdiag-zone">
     <rect x="90" y="160" width="780" height="92" rx="8" fill="rgba(0,58,93,0.05)" stroke="rgba(0,58,93,0.35)"></rect>
     <text x="108" y="184" font-family={mono} font-size="11" letter-spacing="1.5" fill={ot}>
       IDMZ · ZONA DESMILITARIZADA INDUSTRIAL
@@ -152,7 +152,7 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
   </g>
 
   {/* ── Industrial Zone (N3) ───────────────────────────────────────── */}
-  <g>
+  <g class="archdiag-zone">
     <rect x="90" y="300" width="780" height="100" rx="8" fill={zoneFill} stroke={line}></rect>
     <text x="108" y="324" font-family={mono} font-size="11" letter-spacing="1.5" fill={red}>
       INDUSTRIAL ZONE · SITE OPERATIONS
@@ -203,7 +203,7 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
     { x: 360, name: "CELL/AREA ZONE · ÁREA B", net: "estrela gerenciada" },
     { x: 630, name: "CELL/AREA ZONE · ÁREA C", net: "PRP (alta disp.)" },
   ].map((zone) => (
-    <g>
+    <g class="archdiag-zone">
       <rect x={zone.x} y="432" width="240" height="156" rx="8" fill="#ffffff" stroke={cellLine}></rect>
       <text
         x={zone.x + 16}
@@ -249,3 +249,42 @@ const mono = "'JetBrains Mono Variable', ui-monospace, monospace";
   </g>
 </svg>
 </div>
+
+{/* Legenda visível das zonas: serve dispositivos touch (sem hover) e
+    reforça a leitura do diagrama para todos. */}
+<ul class="mt-6 grid gap-x-8 gap-y-3 text-sm leading-relaxed text-integra-gray-700 sm:grid-cols-2">
+  <li>
+    <strong class="font-semibold text-integra-gray-900">Enterprise Zone (N4-5):</strong>
+    TI corporativa — ERP, e-mail, BI. Nunca fala diretamente com o controle.
+  </li>
+  <li>
+    <strong class="font-semibold text-integra-gray-900">IDMZ (N3.5):</strong>
+    fronteira industrial — jump server, espelhos de dados e relays; único
+    ponto de contato permitido entre TI e OT.
+  </li>
+  <li>
+    <strong class="font-semibold text-integra-gray-900">Industrial Zone (N3):</strong>
+    site operations — servidores SCADA, historian, diretório OT e
+    virtualização com backup e DR.
+  </li>
+  <li>
+    <strong class="font-semibold text-integra-gray-900">Cell/Area Zones (N0-2):</strong>
+    controle por área — HMI local, CLP/DCS e I/O; cada zona isola falhas e
+    acessos das demais.
+  </li>
+</ul>
+
+<style>
+  /* Hover em uma zona esmaece as demais — só em dispositivos com hover real. */
+  .archdiag-zone {
+    transition: opacity 0.25s ease;
+  }
+  @media (hover: hover) {
+    .archdiag-svg:hover .archdiag-zone {
+      opacity: 0.3;
+    }
+    .archdiag-svg .archdiag-zone:hover {
+      opacity: 1;
+    }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
@@ -99,23 +100,12 @@ const programs = [
   description="Como a Integra classifica e comprova parcerias, níveis de programa, capacidades e tecnologias atendidas, sem tratar categorias distintas como equivalentes."
   ogImage="/og/certificacoes.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-24">
-      <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-        Credenciais e parcerias
-      </p>
-      <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-        Credibilidade verificável, sem misturar selo com experiência.
-      </h1>
-      <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-        A Integra separa parcerias formais, certificações, capacitações e
-        tecnologias atendidas. Rockwell Automation continua no centro do
-        posicionamento; Telit Cinterion deviceWISE entra como parceria formal
-        de IIoT; Siemens, Elipse e Schneider aparecem no catálogo técnico como
-        tecnologias multi-vendor atendidas com responsabilidade.
-      </p>
-    </div>
-  </section>
+  <PageHero
+    eyebrow="Credenciais e parcerias"
+    title="Credibilidade verificável, sem misturar selo com experiência."
+    description="A Integra separa parcerias formais, certificações, capacitações e tecnologias atendidas. Rockwell Automation continua no centro do posicionamento; Telit Cinterion deviceWISE entra como parceria formal de IIoT; Siemens, Elipse e Schneider aparecem no catálogo técnico como tecnologias multi-vendor atendidas com responsabilidade."
+    breadcrumbLeaf="Certificações"
+  />
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
     <div class="container-fluid py-20">

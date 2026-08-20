@@ -146,7 +146,7 @@ const allMegas: Record<string, MegaMenu> = {
 };
 ---
 
-<header class="sticky top-0 z-50 bg-integra-white shadow-sm">
+<header class="sticky top-0 z-50 bg-integra-white shadow-sm" data-pagefind-ignore>
   <!-- Top utility bar -->
   <div class="hidden lg:block bg-integra-gray-50 border-b border-integra-gray-200">
     <div class="container-fluid flex h-9 items-center justify-between text-xs">
@@ -346,8 +346,19 @@ const allMegas: Record<string, MegaMenu> = {
       </nav>
 
       <a
+        href="/busca/"
+        class="ml-auto hidden lg:inline-flex size-10 items-center justify-center rounded-md text-integra-gray-700 transition-colors hover:bg-integra-gray-100 hover:text-integra-red-700 min-[1440px]:ml-2"
+        aria-label="Buscar no site"
+        title="Buscar no site"
+      >
+        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+      </a>
+
+      <a
         href="/contato/?assunto=triagem"
-        class="hidden lg:inline-flex ml-auto min-[1440px]:ml-0 items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
+        class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
       >
         Solicitar triagem
         <span aria-hidden="true">→</span>
@@ -394,6 +405,15 @@ const allMegas: Record<string, MegaMenu> = {
     aria-label="Principal (mobile)"
   >
     <div class="container-default py-4 pb-8 grid gap-1">
+      <a
+        href="/busca/"
+        class="flex items-center gap-2.5 px-3 py-2.5 text-sm font-bold uppercase tracking-wider rounded-md transition-colors text-integra-gray-900 hover:bg-integra-gray-100"
+      >
+        <svg class="size-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        Buscar no site
+      </a>
       {NAV.map(({ href, label }) => {
         const mega = allMegas[href];
         if (!mega) {

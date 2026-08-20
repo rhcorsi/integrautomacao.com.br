@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import ValueCard from "@/components/ValueCard.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
@@ -104,41 +105,29 @@ const timeline = [
   description="Empresa brasileira de engenharia e integração de sistemas industriais, fundada em 2016 em Maringá-PR. Arquitetura, padronização e governança técnica."
   ogImage="/og/empresa.png"
 >
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
-      <div>
-        <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
-          Sobre a Integra
+  <PageHero
+    eyebrow="Sobre a Integra"
+    title="Engenharia para acompanhar o sistema do projeto à sustentação."
+    description="A Integra Automação Industrial é uma empresa de engenharia e integração tecnológica para o setor industrial, fundada em 2016 em Maringá-PR. Atuamos como parceiros de longo prazo na entrega de arquiteturas dimensionadas, seguras e documentadas, com foco em confiabilidade operacional e governança técnica do projeto à operação."
+    breadcrumbLeaf="Empresa"
+  >
+    <div slot="aside" class="relative">
+      <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10 bg-integra-white">
+        <Image
+          src={empresaHero}
+          alt="Imagem ilustrativa de centro de engenharia com controladores e telas de supervisão industrial"
+          widths={[400, 800, 1200]}
+          sizes="(min-width: 1024px) 600px, 100vw"
+          loading="eager"
+          decoding="async"
+          class="w-full aspect-[16/10] object-cover object-center"
+        />
+        <p class="absolute bottom-3 right-3 rounded-sm bg-integra-gray-950/85 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-integra-white">
+          Imagem ilustrativa
         </p>
-        <h1 class="text-4xl font-semibold text-integra-gray-900 sm:text-5xl max-w-3xl">
-          Engenharia para acompanhar o sistema do projeto à sustentação.
-        </h1>
-        <p class="mt-6 text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
-          A Integra Automação Industrial é uma empresa de engenharia e integração
-          tecnológica para o setor industrial, fundada em 2016 em Maringá-PR.
-          Atuamos como parceiros de longo prazo na entrega de arquiteturas
-          dimensionadas, seguras e documentadas, com foco em confiabilidade
-          operacional e governança técnica do projeto à operação.
-        </p>
-      </div>
-      <div class="relative">
-        <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10 bg-integra-white">
-          <Image
-            src={empresaHero}
-            alt="Imagem ilustrativa de centro de engenharia com controladores e telas de supervisão industrial"
-            widths={[400, 800, 1200]}
-            sizes="(min-width: 1024px) 600px, 100vw"
-            loading="eager"
-            decoding="async"
-            class="w-full aspect-[16/10] object-cover object-center"
-          />
-          <p class="absolute bottom-3 right-3 rounded-sm bg-integra-gray-950/85 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-integra-white">
-            Imagem ilustrativa
-          </p>
-        </div>
       </div>
     </div>
-  </section>
+  </PageHero>
 
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid py-20">
