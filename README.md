@@ -731,6 +731,16 @@ _dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@integrautomacao.com.br; fo=1"
 
 ## Backlog editorial e operacional
 
+- [ ] **Observatory — Polish (Speed → Observatory):** ativar em modo
+      **Lossless** (nunca Lossy: os diagramas/manuais têm texto pequeno e
+      compressão com perda destrói a legibilidade). Beneficia os cards PNG de
+      `/og/` e `/images/`; os WebP do `astro:assets` já são otimizados no
+      build com `sizes` corretos. O gargalo de LCP do site é texto (h1), não
+      imagem — Polish é ganho marginal, não prioridade.
+- [ ] **Observatory — Health Check (Smart Shield → Health Checks):** criar o
+      primeiro health check standalone para `https://integrautomacao.com.br/`
+      com notificação por e-mail em respostas 5XX. Não apontar para
+      `/api/*` (GET nelas responde 405 por design).
 - [ ] **P0 antes do próximo deploy:** concluir o gate de direitos de todos os
       ativos de terceiros em [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md),
       anexando comprovante interno ou substituindo/removendo o item.
