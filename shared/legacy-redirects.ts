@@ -53,6 +53,10 @@ export const LEGACY_PATH_REDIRECTS: Record<string, string> = {
   "/tela-2": "/",
   "/tela-3": "/",
   "/tela-7": "/",
+  // Página de downloads do site antigo (GSC: 404 rastreado em ago/2026):
+  // o equivalente atual é a página de certificações, que oferece o
+  // certificado Silver SI em PDF para download.
+  "/download": "/certificacoes/",
 };
 
 const LEGACY_CONTROL_PARAMS = new Set(["p", "page_id", "post_type"]);
