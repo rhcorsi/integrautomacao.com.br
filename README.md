@@ -954,9 +954,11 @@ como são:
       primeiro health check standalone para `https://integrautomacao.com.br/`
       com notificação por e-mail em respostas 5XX. Não apontar para
       `/api/*` (GET nelas responde 405 por design).
-- [ ] **P0 antes do próximo deploy:** concluir o gate de direitos de todos os
-      ativos de terceiros em [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md),
-      anexando comprovante interno ou substituindo/removendo o item.
+- [x] ~~**P0 antes do próximo deploy:** concluir o gate de direitos de todos os
+      ativos de terceiros~~ — **ENCERRADO em 20/08/2026**: os 44 ativos em uso
+      foram aprovados pelo titular (registro em
+      [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md)). O gate permanece
+      ativo para ativos NOVOS e para os 23 itens da biblioteca ainda fora de uso.
 - [ ] **P0 antes de usar Broadcasts da newsletter:** decidir e implementar
       double opt-in (link transacional assinado, expiração e Topic em `opt_out`
       até a confirmação) ou registrar decisão formal de produto/privacidade.
@@ -1013,8 +1015,10 @@ Documentos vivos no repositório:
 
 - [`SEO_ROADMAP.md`](./SEO_ROADMAP.md) — estratégia de SEO por cluster de
   intenção (o que já foi coberto e o que falta publicar).
-- [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md) — **gate jurídico P0**
-  dos ativos de terceiros (manuais de fabricantes).
+- [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md) — registro de direitos
+  dos ativos de terceiros. **Inventário em uso aprovado em 20/08/2026** (44/44);
+  o gate segue ativo para novos ativos e para itens da biblioteca ainda não
+  usados.
 
 Fora do repositório (pastas irmãs no diretório de trabalho): `docs/` (guias
 operacionais de Cloudflare/GSC), `Logomarca/` (identidade visual),
