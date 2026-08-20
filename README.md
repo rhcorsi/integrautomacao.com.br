@@ -311,8 +311,13 @@ Ordem de decisão (um único salto 301):
    `/author/`, `/portfolio-item/`…) e **URLs datadas do WordPress** — com
    exceções semânticas: `projeto-moinho` → o case, `uso-de-cookie` → a
    página de cookies; o restante → `/blog/`.
-5. `public/_redirects` permanece como fallback path-based (estáticos antes
-   dos splats). **Toda mudança de alias deve ser espelhada nos dois lugares.**
+5. `public/_redirects` é mantido **espelhado** com o mapa legado por
+   segurança e documentação, mas saiba: a documentação da Cloudflare afirma
+   que regras de `_redirects` **não se aplicam a requests servidos por Pages
+   Functions** — e como `_routes.json` inclui `/*`, na prática **somente o
+   middleware redireciona** hoje. O arquivo volta a ter efeito se um dia o
+   escopo de `_routes.json` for reduzido. **Toda mudança de alias deve ser
+   espelhada nos dois lugares.**
 6. Open-redirect guard: o pathname do request nunca vira URL relativa
    (`//host` seria protocol-relative).
 
