@@ -74,7 +74,7 @@ Cada página tem FAQ de engenharia com respostas diretas (versões, normas, hard
 
 - [Eventos e treinamentos](https://integrautomacao.com.br/eventos/): participação técnica em eventos Rockwell, Siemens, Telit e TI Safe.
 - [Cases](https://integrautomacao.com.br/cases/): projetos publicados (sanitizados, sem dados de clientes).
-- [Integra Ação](https://integrautomacao.com.br/integra-acao/): newsletter e webinars técnicos.
+- [Integra Ação](https://integrautomacao.com.br/integra-acao/): newsletter e webinars técnicos; inscrições usam confirmação explícita por e-mail (double opt-in).
 - [Política de privacidade](https://integrautomacao.com.br/politica-privacidade/)
 - [Política editorial](https://integrautomacao.com.br/politica-editorial/)
 - [Avisos legais](https://integrautomacao.com.br/avisos-legais/)

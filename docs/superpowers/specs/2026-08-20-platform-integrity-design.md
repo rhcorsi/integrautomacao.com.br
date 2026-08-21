@@ -1,12 +1,18 @@
 # Platform Integrity Design
 
-**Status:** Approved for implementation planning on 2026-08-20
+**Status:** Partially implemented; production remains in `legacy-bridge`
 
 **Scope:** SEO output integrity, Node and dependency determinism, CI/CD, Cloudflare Pages routing, cache/header ownership, environment-variable drift, and gated Cloudflare production changes.
 
+> **Atualização de 21/08/2026:** o contexto abaixo é o baseline anterior à
+> remediação. Node/SEO/ambiente e o verificador D4A já foram implementados;
+> static-first e a substituição do publicador ainda não. Estado atual:
+> [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
+
 ## Context
 
-The repository already has useful controls, but they do not form one end-to-end integrity chain:
+At design time, the repository already had useful controls, but they did not
+form one end-to-end integrity chain:
 
 - `.nvmrc` and `wrangler.jsonc` name the stale Node `22.12.0`, while `package.json`, `.env.example`, and `README.md` permit or describe broader values; the repaired contract upgrades every surface to the reviewed current Node 22 LTS patch `22.23.2`.
 - `src/pages/404.astro` says that the 404 must not emit a canonical URL, but `src/layouts/BaseLayout.astro` always emits both `rel="canonical"` and `og:url`.
@@ -15,7 +21,7 @@ The repository already has useful controls, but they do not form one end-to-end 
 - GitHub Actions are referenced by mutable major tags rather than immutable commit SHAs.
 - `public/_routes.json` invokes `functions/_middleware.ts` for all paths. Static pages therefore consume Functions routing and `public/_redirects` cannot own their redirects.
 - `public/_headers` gives long-lived cache policy to public files that do not carry content fingerprints and repeats response policy that should have one owner per response class.
-- `.env.example` still documents `RESEND_API_KEY`, but the repaired runtime
+- `.env.example` still documented `RESEND_API_KEY`, but the repaired runtime
   contract separates contact send, newsletter transactional send, and Contacts
   reconciliation credentials and adds an environment-specific newsletter
   confirmation origin; the old file also gives `NODE_VERSION=22` instead of the

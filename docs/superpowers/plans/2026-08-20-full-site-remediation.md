@@ -1,5 +1,14 @@
 # Full-Site Remediation Orchestration Plan
 
+> **Registro histórico — atualizado em 21/08/2026:** este arquivo preserva a
+> ordem e os gates usados durante a remediação; instruções de worktree,
+> autorização e bloqueios abaixo descrevem o momento da execução e não devem
+> ser tratadas como o estado operacional atual. O runtime da newsletter, C1/C2
+> de UX e a política `legacy-bridge` foram implementados; o release
+> `4049de9bfd1f6bd168dbf7beb7312313bfde5c14` está em produção. D4B/static-first,
+> workflow único e as demais tarefas não materializadas continuam fora do
+> release. Fonte atual: [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
+
 > **Execution mode:** Superpowers subagent-driven development, one implementation task at a time, test-first, with controller review after every task. The three detailed plans remain authoritative for task-level steps.
 
 **Goal:** Resolve the approved design, SEO, architecture, editorial, accessibility, Cloudflare, CI/CD, dependency, and newsletter-consent findings without losing traceability or conflating local proof with preview/production proof.

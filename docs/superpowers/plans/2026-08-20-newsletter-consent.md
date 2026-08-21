@@ -1,12 +1,20 @@
 # Newsletter Mailbox Consent Implementation Plan
 
+> **Registro histórico — runtime publicado em 21/08/2026:** D1, double opt-in,
+> confirmação explícita, ledger append-only, outbox e reconciliação Resend estão
+> implementados e a migration `0001_newsletter_consent.sql` foi aplicada em
+> preview e produção. Os checkboxes abaixo são passos originais, não um painel
+> de status. Preview com segredos próprios, aceitação com mailbox real e
+> autorização de Broadcast continuam gates externos. Fonte atual:
+> [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build a D1-authoritative double-opt-in newsletter workflow that proves mailbox control before Resend mutation and blocks Broadcast eligibility until forward reconciliation succeeds.
 
 **Architecture:** The initial Pages Function stores a pending request and a SHA-256 token digest in D1, then sends a transactional email whose token travels only in the URL fragment. A static landing performs an explicit confirmation POST; one conditional D1 update plus a database trigger atomically consumes the token, confirms consent, appends the ledger, and creates a Resend reconciliation job. Request-driven outbox processing reconciles forward and read-backs ambiguous provider mutations.
 
-**Tech Stack:** Astro 7, TypeScript 5.7, Cloudflare Pages Functions, Cloudflare D1/SQLite migrations, Web Crypto, Resend HTTP APIs, Vitest 4 with `@cloudflare/vitest-pool-workers` 0.19.1.
+**Tech Stack:** Astro 7, TypeScript 5.7, Cloudflare Pages Functions, Cloudflare D1/SQLite migrations, Web Crypto, Resend HTTP APIs, Vitest 4 with `@cloudflare/vitest-pool-workers` 0.20.3.
 
 **Spec:** `docs/superpowers/specs/2026-08-20-newsletter-consent-design.md`
 

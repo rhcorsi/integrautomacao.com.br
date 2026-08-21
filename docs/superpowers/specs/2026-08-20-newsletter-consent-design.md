@@ -1,15 +1,20 @@
 # Newsletter Mailbox Consent Design
 
-**Status:** Approved for implementation
+**Status:** Implemented and deployed; external mailbox/Broadcast gates remain
 
 **Date:** 2026-08-20
 
+> **Atualização de 21/08/2026:** o contexto abaixo descreve o fluxo anterior à
+> implementação. O design D1-authoritative está publicado, com migration
+> aplicada em preview/produção. Estado operacional e limites:
+> [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
+
 ## Context
 
-The current `POST /api/newsletter` workflow writes a contact, segment membership,
+At design time, the `POST /api/newsletter` workflow wrote a contact, segment membership,
 consent properties, and Topic opt-in directly to Resend after Turnstile succeeds.
 That proves a browser interaction but not control of the submitted mailbox. The
-newsletter must therefore move to double opt-in before any Broadcast is allowed.
+newsletter therefore had to move to double opt-in before any Broadcast was allowed.
 
 Cloudflare D1 is the authority for the consent lifecycle. Resend is a downstream
 delivery provider whose state is derived from a confirmed D1 record and can lag

@@ -7,13 +7,18 @@
 # the CDN cache.
 #
 # This workflow stays here as a manual fallback (workflow_dispatch) for
-# situations where the direct integration is unavailable or you want to
-# override an in-flight deploy.
+# situations where the direct integration is unavailable AND no automatic
+# deployment is in flight. Do not use it to override a running production
+# build.
 #
-# To activate full CI deploys instead of the direct integration:
-# 1. Disconnect the GitHub integration in Cloudflare Pages settings.
-# 2. Uncomment the `push`/`pull_request` triggers below.
-# 3. Configure the secrets listed in README.md → Opção B.
+# This legacy fallback still accepts a branch input and rebuilds independently;
+# it is not the deterministic artifact workflow proposed in the platform plan.
+# For production, leave the input as `main` and verify the resulting commit in
+# Cloudflare before promoting or announcing the release.
+#
+# Do not activate full CI deploys by merely uncommenting triggers. Implement the
+# SHA-pinned artifact workflow from the platform plan, validate it, then retire
+# the direct integration in a separately controlled cutover.
 
 name: Deploy to Cloudflare Pages (manual fallback)
 
@@ -21,7 +26,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Branch to deploy as on Cloudflare Pages"
+        description: "Branch to deploy (production must remain main)"
         required: false
         default: main
   # push:

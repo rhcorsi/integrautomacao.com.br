@@ -1,5 +1,11 @@
 # UX, SEO and Editorial Governance Implementation Plan
 
+> **Registro histórico — implementação parcial em 21/08/2026:** a lane UI com
+> `happy-dom`, o lock compartilhado de overlays e a navegação móvel acessível
+> (Tasks 1–2) foram implementados. As Tasks 3–12 continuam roadmap e não devem
+> ser inferidas como presentes apenas porque aparecem neste plano. Fonte do
+> release atual: [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Deliver accessible mobile navigation, field-level form errors, faceted Pagefind search, stable editorial ToCs, accessible image zoom, validated contextual relations, centralized metadata, generated `llms.txt`, and evidence-gated public-reference repairs without inventing claims.

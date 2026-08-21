@@ -1,8 +1,13 @@
 # UX, SEO e governança editorial — design aprovado
 
 **Data:** 2026-08-20
-**Status:** aprovado para planejamento; implementação ainda não iniciada
+**Status:** implementação parcial — Tasks 1–2 publicadas; Tasks 3–12 em roadmap
 **Escopo:** experiência de navegação, formulários, busca, sumário editorial, ampliação de imagens, relações contextuais, metadados editoriais, `llms.txt` e referências públicas.
+
+> **Atualização de 21/08/2026:** a lane UI, o lock de overlays e a navegação
+> móvel acessível estão implementados. O restante deste design continua
+> referência aprovada, não claim de produção. Estado atual:
+> [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
 
 ## 1. Objetivo e limites
 

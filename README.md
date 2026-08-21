@@ -12,16 +12,27 @@ formulários e para a normalização canônica de hosts, portas e URLs legadas.
 > acessibilidade e segurança. Ao mudar qualquer convenção aqui descrita,
 > atualize este arquivo no mesmo commit.
 
+O baseline funcional auditado, seus bindings, a migration D1 e os limites
+operacionais estão registrados em
+[`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md).
+
+**Escopo deste manual:** todos os módulos executáveis/configuráveis do
+repositório são catalogados abaixo, incluindo o fluxo completo de build,
+request, browser, Functions, D1, Resend, auditorias, testes, CI e deploy. Os
+arquivos MDX são inventariados por collection/rota porque seu corpo é conteúdo
+editorial, não uma segunda implementação de runtime; imagens/binários são
+governados pelo inventário de direitos.
+
 ## Estado atual (agosto/2026)
 
 | Indicador | Valor |
 |---|---|
-| Páginas geradas | 111 (inclui `/busca/`, noindex) |
+| Páginas geradas | 112 (inclui `/busca/` e confirmação da newsletter, ambas noindex) |
 | Lighthouse mobile | 98 Performance · 100 A11y · 100 BP · 100 SEO |
 | Lighthouse desktop | 100 em todas as categorias |
 | Core Web Vitals (lab, mobile) | FCP 1,7s · LCP 2,1s · TBT 0 · CLS 0 |
 | Busca interna | Pagefind — 111 páginas indexadas em pt-BR |
-| Testes das Functions | 25/25 passando |
+| Testes automatizados | 574/574: Workers 447 · Node 87 · UI 40 |
 | Auditoria editorial (`audit:editorial`) | aprovada sem ocorrências |
 | Conteúdo | 13 posts · 1 case · 11 eventos · 41 páginas de tecnologia · 9 setores · 7 soluções · 2 serviços |
 
@@ -33,11 +44,14 @@ formulários e para a normalização canônica de hosts, portas e URLs legadas.
 ## Comandos
 
 ```bash
-npm install              # instala dependências
+npm ci                   # instala exatamente o package-lock.json
 npm run dev              # http://localhost:4321
 npm run check            # astro check (TypeScript + content collections)
 npm run build            # gera dist/
-npm test                 # testes isolados das Pages Functions no runtime Workers
+npm test                 # Workers → Node → UI (as três lanes, nessa ordem)
+npm run test:workers     # Pages Functions no runtime Workers
+npm run test:node        # políticas, output e scripts no runtime Node
+npm run test:ui          # controladores DOM no happy-dom
 npm run types:check      # valida os tipos gerados do ambiente Cloudflare
 npm run preview          # serve dist/ localmente
 npm run pages:dev        # serve dist/ + functions/ via wrangler
@@ -55,6 +69,15 @@ npm run pages:dev        # serve dist/ + functions/ via wrangler
 | `audit:utf8` | 100% dos arquivos com UTF-8 válido (sem mojibake/BOM quebrado) |
 | `audit:faqs` | **Zero FAQ duplicada** no catálogo de 240+ perguntas |
 | `audit:html` | Auditoria editorial do HTML: títulos 30–65 chars, datas do JSON-LD com `<time>` visível correspondente, FAQPage espelhando o conteúdo, etc. |
+
+Gates complementares, executados separadamente:
+
+```bash
+npm run audit:seo            # contrato SEO do dist/ já gerado
+npm run audit:deploy-policy  # política legacy-bridge/static-first
+npm run audit:deps           # auditoria high + auditoria completa
+npm run types:generate       # após alterar wrangler.jsonc ou bindings
+```
 
 ### Geradores de assets e scripts utilitários (`scripts/`)
 
@@ -106,11 +129,18 @@ site/
 │   └── .well-known/         # security.txt
 ├── functions/               # Cloudflare Pages Functions e middleware
 │   ├── _middleware.ts       # host/porta/protocolo canônicos + redirects legados + headers da API
-│   ├── _shared/             # env.ts, http.ts (limites de body/resposta), turnstile.ts
+│   ├── _shared/             # env/http/turnstile + domínio da newsletter
+│   │   └── newsletter/      # crypto, e-mail, D1 store, provider e reconciliação
 │   ├── types.d.ts           # bindings gerados por wrangler types
 │   └── api/
 │       ├── contact.ts       # POST /api/contact (Turnstile + Resend)
-│       └── newsletter.ts    # POST /api/newsletter (Contacts/Segments/Topics)
+│       ├── newsletter.ts    # POST inicial: D1 pending + e-mail de confirmação
+│       └── newsletter/
+│           └── confirm.ts   # POST atômico da confirmação + reconciliação
+├── migrations/
+│   └── 0001_newsletter_consent.sql # schema D1, ledger, tokens, jobs e view
+├── config/
+│   └── deployment-phase.json # modo de roteamento auditado (legacy-bridge)
 ├── shared/
 │   └── legacy-redirects.ts  # mapa de redirects legados (espelhar em public/_redirects)
 ├── src/
@@ -134,7 +164,7 @@ site/
 │       ├── turnstile.ts     # resolução da site key (build time)
 │       └── eventDate.ts     # datas de eventos em pt-BR (partes UTC)
 ├── scripts/                 # quality gates (verify*.cjs) + geradores de assets
-├── tests/                   # vitest no runtime Workers (contact, newsletter, http, middleware)
+├── tests/                   # Vitest: Workers; tests/node; tests/ui (happy-dom)
 ├── astro.config.mjs
 ├── tsconfig.json
 ├── wrangler.jsonc           # configuração única do Cloudflare Pages
@@ -145,7 +175,7 @@ site/
 └── package.json
 ```
 
-## Inventário de rotas (111 páginas)
+## Inventário de rotas (112 páginas)
 
 | Seção | Rotas | Origem |
 |---|---|---|
@@ -158,7 +188,7 @@ site/
 | `/blog/` | 14 | índice + 13 posts `.mdx` |
 | `/cases/` | 2 | índice + projeto-moinho |
 | `/eventos/` | 12 | índice + 11 eventos `.mdx` |
-| `/integra-acao/` | 3 | índice + newsletter + webinar (webinar é **noindex** enquanto placeholder) |
+| `/integra-acao/` | 4 | índice + newsletter + confirmação + webinar (confirmação e webinar são **noindex**) |
 | Legais | 4 | politica-privacidade, uso-de-cookies, politica-editorial, avisos-legais |
 | Utilitárias | 2 | `/busca/` (noindex, fora do sitemap), `/404.html` (noindex, fora do sitemap) |
 | Feeds/meta | — | `/rss.xml`, `/sitemap-index.xml`, `/llms.txt`, `/.well-known/security.txt` |
@@ -248,11 +278,280 @@ Os valores abaixo alimentam header, footer, contato, JSON-LD e og — mudam
 | `EventDate` | Data/intervalo de eventos | **Nunca colapsar ranges** — ver regra em "Auditoria editorial" |
 | `CtaBlock`, `FeatureBlock`… | — | Botões primário/secundário seguem os mesmos tokens em todo o site |
 
+## Fluxo completo de execução
+
+Esta seção liga a entrada de cada fluxo ao último efeito observável. Ela é a
+referência para descobrir **onde** alterar comportamento sem espalhar lógica
+duplicada.
+
+### 1. Build estático
+
+1. `npm run build` executa `astro build` e depois `pagefind --site dist`.
+2. `astro.config.mjs` fixa o site canônico, output estático, prefetch em
+   `hover`, MDX, sitemap, ícones Lucide, Tailwind v4 e `assetsInlineLimit: 0`
+   para não gerar JavaScript executável inline.
+3. `src/content.config.ts` valida frontmatter de blog, cases e eventos. Os
+   helpers de `src/utils/collections.ts` removem drafts e ordenam publicações.
+4. Rotas estáticas e `getStaticPaths()` das rotas dinâmicas montam cada página.
+5. `BaseLayout.astro` resolve canonical/noindex, metadados sociais, fontes,
+   JSON-LD, Header/Footer e scripts globais. `serializeJsonLd()` escapa `<`.
+6. `@astrojs/sitemap` chama `shouldIncludeInSitemap()`; APIs e rotas noindex
+   nunca entram no sitemap.
+7. O build copia `_headers`, `_redirects` e `_routes.json` para `dist/`.
+8. Pagefind indexa o `<main data-pagefind-body>` das páginas que processa,
+   respeita marcadores locais `data-pagefind-ignore` e gera `dist/pagefind/`.
+   `noindex` de robôs e inclusão no Pagefind são políticas distintas.
+
+### 2. GET de uma página pública
+
+1. Cloudflare recebe host, protocolo, porta, path e query.
+2. `public/_routes.json` deixa assets pesados fora de Functions, mas o modo
+   `legacy-bridge` envia as demais rotas ao middleware.
+3. `functions/_middleware.ts::onRequest()` valida host de produção, remove
+   porta/protocolo alternativo e consulta `resolveLegacyRedirect()`.
+4. Havendo redirect, responde em um salto para o apex HTTPS e preserva apenas
+   a query permitida pelo contrato do alias.
+5. Sem redirect, chama `context.next()`. Respostas `/api/` recebem hardening e
+   `no-store`; páginas/arquivos recebem a política declarada em `_headers`.
+6. O browser carrega assets Astro com hash e cache imutável; HTML permanece
+   revalidável.
+
+### 3. POST de contato
+
+1. `ContactForm.astro` valida conveniência no cliente, coleta contexto do CTA e
+   envia JSON para `/api/contact` com Turnstile e timeout de 20s.
+2. `functions/api/contact.ts` exige método/origin válidos, limita bytes,
+   normaliza campos e trata honeypot sem revelar a detecção.
+3. `verifyTurnstile()` chama `siteverify` com deadline e resposta limitada.
+4. Com validação aceita, a Function usa `RESEND_SEND_API_KEY`, remetente e
+   destino dedicados. O provider tem timeout de 10s e até 3 tentativas para
+   condições transitórias; retry mantém payload e idempotency key estáveis.
+5. A resposta usa `jsonResponse()`, `no-store` e mensagem pública limitada;
+   logs estruturados não contêm corpo, e-mail ou token.
+
+### 4. POST inicial da newsletter
+
+1. `NewsletterForm.astro` envia nome, e-mail, ciência de consentimento,
+   Turnstile e origem contextual para `/api/newsletter`.
+2. `functions/api/newsletter.ts::onRequestPost()` valida Content-Type, limite
+   de 8.000 bytes, campos, Origin/Sec-Fetch-Site e coerência entre ambiente,
+   request host e `NEWSLETTER_CONFIRMATION_ORIGIN`.
+3. A Function gera 32 bytes aleatórios; somente o SHA-256 do token é gravado.
+4. `createNewsletterStore().registerPending()` grava subscription, evidência,
+   ledger `request_received` e token em uma transação D1 protegida contra
+   colisão/rebind.
+5. A resposta HTTP é sempre neutra (`202`) após armazenamento válido. Quando há e-mail novo a entregar,
+   `sendConfirmationEmail()` roda em `waitUntil` com chave transacional e link
+   cujo token fica no fragmento `#token=...`.
+6. Entrega/falha atualiza o estado por CAS. Uma limpeza limitada de pendências
+   antigas e um drain de reconciliação também podem rodar em `waitUntil`.
+
+### 5. Confirmação da newsletter
+
+1. `/integra-acao/newsletter/confirmar/` é estática, noindex e não faz POST
+   automaticamente.
+2. `createNewsletterConfirmationController()` lê o fragmento uma vez, remove-o
+   cedo com `history.replaceState` e só habilita a ação explícita do usuário.
+3. `postNewsletterConfirmation()` envia JSON para
+   `/api/newsletter/confirm`, usa timeout de 12s, `redirect: "error"`, limita a
+   resposta a 4 KiB e classifica status/body de forma fail-closed.
+4. `functions/api/newsletter/confirm.ts` valida o token, calcula um único hash
+   e chama `consumeConfirmation()`.
+5. O D1 executa UPDATE condicional + trigger: consome token uma vez, move a
+   subscription para `confirmed`, copia a evidência imutável, acrescenta
+   `mailbox_confirmed` ao ledger e cria o job `resend_reconcile`.
+6. Confirmação nova e replay legítimo retornam estados públicos seguros;
+   expirado e inválido não revelam dados internos. O drain do provider roda em
+   `waitUntil`.
+
+### 6. Reconciliação Resend
+
+1. `drainNewsletterJobs()` trabalha no máximo 2 jobs dentro de 25s.
+2. O store reivindica o job com lease de 30s e usa `attempts` como fencing
+   token: worker antigo não pode concluir depois de reclaim.
+3. `createResendNewsletterProvider()` faz read/mutation/read-back de Contact,
+   quatro properties, Segment e Topic com respostas limitadas e
+   `redirect: "error"`.
+4. Opt-out global prevalece sobre qualquer evidência local e bloqueia o job.
+5. Sucesso inequívoco marca `provider_state=reconciled`; ambiguidade ou falha
+   volta a `pending` com backoff 1, 5, 15, 60 e 360 minutos.
+6. IDs de provider, chaves e endereços não entram em respostas públicas nem
+   eventos estruturados. Broadcast continua bloqueado até read-back atual.
+
+### 7. Navegação e overlays no browser
+
+1. `Header.astro` entrega markup desktop/mobile e importa
+   `initMobileNavigation()`.
+2. O controller mede a altura real do header, abre/fecha o painel, contém Tab,
+   devolve foco, fecha por Escape/link/click externo e encerra no breakpoint
+   desktop.
+3. `overlayLock.ts` mantém um conjunto de owners. O primeiro lock congela o
+   overflow da raiz; somente o último release restaura o valor anterior.
+4. Ambos são testados sem depender do Astro em `tests/ui/` com `happy-dom`.
+
+## Catálogo completo de módulos
+
+### Layout, configuração e conteúdo tipado
+
+| Arquivo | Responsabilidade e contrato |
+|---|---|
+| `astro.config.mjs` | Configuração única do Astro: domínio canônico, output estático, MDX, sitemap filtrado, ícones, Tailwind, prefetch e assets JS externos. |
+| `src/layouts/BaseLayout.astro` | Shell de toda página: `<head>`, canonical/noindex, OG/Twitter, JSON-LD, fontes, skip-link, Header, main, Footer e scripts globais. Props de SEO devem chegar aqui, não ser reimplementadas por página. |
+| `src/content.config.ts` | Schemas das coleções `blog`, `cases` e `eventos`; falha o build quando frontmatter obrigatório ou tipos estão errados. |
+| `src/styles/global.css` | Tailwind v4, tokens de marca, tipografia, containers, estados de foco, reduced-motion, impressão e utilities globais. |
+| `tsconfig.json` | TypeScript estrito, aliases `~/` e `@/`, tipos Astro/Workers e exclusão de `dist`/`node_modules`. |
+| `wrangler.jsonc` | Projeto Pages, compatibility date, vars públicas, origem de confirmação e bindings D1 separados por ambiente. Segredos nunca entram neste arquivo. |
+
+### Utilitários de `src/utils/`
+
+| Arquivo / export | Função |
+|---|---|
+| `site.ts` — `Phone`, `MegaMenuPromo`, `MegaMenuColumn`, `MegaMenu`, `SITE`, `COMPANY`, `PHONE_COMMERCIAL`, `PHONE_WHATSAPP`, `NAV`, `MEGA_MENUS` | Fonte única de identidade, contatos e navegação. Consumidores não devem inferir telefone pela posição do array. |
+| `schema.ts` — `ORG_ID`, `serializeJsonLd`, `organizationSchema`, `websiteSchema`, `breadcrumbItems`, `breadcrumbSchema`, `articleSchema`, `serviceSchema`, `faqSchema`, `itemListSchema`, `eventSchema`, `techArticleSchema` | Constrói JSON-LD coerente e referências por `@id`; `serializeJsonLd` é obrigatório antes de `set:html`. |
+| `collections.ts` — `getPublishedPosts`, `getPublishedCases`, `getPublishedEventos` | Busca as collections, exclui drafts e aplica ordenação estável usada em rotas e menus. |
+| `eventDate.ts` — `isoEventDate`, `formatEventDate`, `formatEventDateRange` | Mantém ISO para máquina e texto pt-BR para UI sem deslocamento acidental de timezone. |
+| `seo-policy.ts` — `NOINDEX_PATHS`, `normalizeSeoPath`, `shouldIncludeInSitemap`, `resolveCanonicalUrl` | Uma política compartilhada para canonical, noindex e sitemap; rejeita APIs e normaliza apenas a barra final duplicada. |
+| `turnstile.ts` — `resolveTurnstileSiteKey` | Valida a site key pública no build e devolve vazio para ausente/placeholder, mantendo formulário fail-closed. |
+| `webform.ts` — `FormStatusTone`, `TurnstileWindow`, `TURNSTILE_API_SRC`, `ensureTurnstileScript`, `turnstileRendered`, `watchTurnstileBlocked`, `setFormStatus`, `responseMessage`, `FORM_FETCH_TIMEOUT_MS`, `networkErrorMessage` | Primitivos browser dos formulários: script único, fallback de ad-blocker, status acessível, parsing defensivo e copy de erro. |
+
+### Dados canônicos de `src/data/`
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `authors.ts` — `COLLECTIVE_AUTHOR`, `COMPANY_FOUNDING`, `TEAM_MEMBERS` | Autor coletivo, fundação e equipe; fornece IDs/URLs usados pelo schema editorial. |
+| `caseRelations.ts` | `TechLink`, `CaseSolution`, `TECH_LINKS` e `CASE_SOLUTIONS`; relações contextuais explícitas, não inferidas por texto. |
+| `sourceRegistry.ts` | `PublicSourceReference`, registry normalizado de fontes públicas e `publicSourceFor()`; distingue fonte citada de material apenas relacionado. |
+| `techCatalog.ts` — `TechGroup`, `TechPage`, `GROUP_ORDER`, `CATALOG_PUBLISHED`, `CATALOG_REVIEWED_BY`, `techCatalog`, `TECH_REVIEW_DATES`, `techCatalogBySlug` e helpers | Tipos, 41 entradas do catálogo, grupos, FAQs, relações e `getTechReview`, `getTechBySlug`, `getTechByGroup`, `getRelatedTech`. Valida slugs/datas no carregamento. |
+
+### Rotas Astro e sua origem
+
+| Família | Arquivos / comportamento |
+|---|---|
+| Raiz e legais | `index.astro`; `404.astro`; `avisos-legais.astro`; `politica-editorial.astro`; `politica-privacidade.astro`; `uso-de-cookies.astro`. A 404 é noindex e sem canonical. |
+| Empresa e contato | `empresa.astro`; `equipe/index.astro`; `contato.astro`; `integrador-rockwell.astro`; `certificacoes.astro`; `certificacoes/silver-system-integrator.astro`. |
+| Automação regional | `automacao-industrial.astro`; `automacao-industrial-maringa.astro`; `automacao-industrial-parana.astro`. Cada URL possui intenção própria; não canonicalizar umas nas outras. |
+| Serviços | `servicos/index.astro`; `servicos/programacao-clp.astro`; `servicos/comissionamento-industrial.astro`. |
+| Soluções | `solucoes/index.astro` mais `plantpax`, `factorytalk`, `redes-iec-62443`, `modernizacao-scada`, `migracao-plc`, `pi-system` e `data-centers`. |
+| Cibersegurança OT | `ciberseguranca-ot.astro`, página técnica própria com artigo/FAQ/glossário. |
+| Setores | `setores.astro` mais 9 páginas em `setores/`: açúcar/etanol, alimentos/bebidas, armazenagem de grãos, etanol de milho, fábricas de ração, frigoríficos, papel/celulose, química/fertilizantes e saneamento. |
+| Tecnologias | `tecnologias/index.astro` e `tecnologias/[slug].astro`; `getStaticPaths()` nasce das 41 entradas de `techCatalog`. |
+| Blog | `blog/index.astro` e `blog/[...slug].astro`; lista/renderiza somente collection publicada, com schema e OG por slug/fallback. |
+| Cases | `cases/index.astro` e `cases/[...slug].astro`; collection publicada, relações explícitas e imagens sanitizadas. |
+| Eventos | `eventos/index.astro` e `eventos/[...slug].astro`; collection publicada, datas UTC-estáveis e `Event` JSON-LD. |
+| Integra Ação | `integra-acao/index.astro`; `newsletter.astro`; `newsletter/confirmar.astro`; `webinar.astro`. Confirmação e webinar permanecem noindex. |
+| Busca | `busca/index.astro`; shell noindex da UI Pagefind, índice criado apenas no build. |
+| Feed | `rss.xml.ts::GET()`; gera RSS dos posts publicados e aponta para `rss.xsl`. |
+
+### Controladores browser de `src/scripts/`
+
+| Arquivo / export | Responsabilidade |
+|---|---|
+| `overlayLock.ts` — `acquireOverlayLock`, `releaseOverlayLock`, `clearOverlayLocks` | Lock reentrante por token para overlays; preserva/restaura o overflow inline original. |
+| `mobileNavigation.ts` — `initMobileNavigation` | Estado do menu mobile, foco, Tab/Escape, ResizeObserver/fallback, breakpoint e teardown idempotente. Ignora controles disabled, ocultos ou com `tabIndex < 0`. |
+| `newsletterConfirmation.ts` — `ConfirmationUiState`, `ConfirmationPostResult`, `ConfirmationHttpDependencies`, `NewsletterConfirmationDependencies`, `ConfirmationElementPort`, `ConfirmationButtonPort`, `ConfirmationRenderElements`, `CONFIRMATION_RESPONSE_MAX_BYTES`, `createNewsletterConfirmationController`, `classifyConfirmationHttpResponse`, `postNewsletterConfirmation`, `createNewsletterConfirmationRenderer` | Máquina de estados `idle/ready/submitting/confirmed/already-processed/expired/error`, transporte seguro do token e renderização acessível por portas testáveis. |
+
+### Pages Functions e domínio server-side
+
+| Arquivo / export | Responsabilidade |
+|---|---|
+| `functions/_middleware.ts::onRequest` | Canonicaliza host/protocolo/porta, aplica redirects legados, chama a próxima camada e endurece respostas API. |
+| `functions/_shared/env.ts` — `ContactEnv`, `NewsletterEnv`, `NewsletterInitialEnv` | Tipos dos bindings públicos e encrypted de contato/newsletter; documenta nomes sem guardar valores. |
+| `functions/_shared/http.ts` — `LimitedJsonResult`, `LimitedTextResult`, `isRecord`, `isJsonContentType`, `readRequestJsonLimited`, `readResponseJsonLimited`, `drainResponseLimited`, `fetchWithTimeout`, `jsonResponse`, `methodNotAllowed`, `logWorkerEvent` | Boundary HTTP compartilhada: limites reais de stream, JSON defensivo, timeout, cancelamento/drain e logs minimizados. |
+| `functions/_shared/turnstile.ts` — `TurnstileResult`, `verifyTurnstile` | Verifica token no endpoint oficial com timeout de 10s, teto de 16 KiB e resultado trivalente `valid/invalid/unavailable`. |
+| `functions/api/contact.ts` | `onRequestPost` implementa método/origin, honeypot, validação, Turnstile e e-mail Resend idempotente; `onRequestGet`, `onRequestPut`, `onRequestPatch` e `onRequestDelete` retornam 405. |
+| `functions/api/newsletter.ts` | `onRequestPost` implementa anti-enumeração, coerência ambiente/origem, D1 pending, e-mail transacional, cleanup e drain; `onRequestGet`, `onRequestHead`, `onRequestPut`, `onRequestPatch`, `onRequestDelete` e `onRequestOptions` retornam 405. |
+| `functions/api/newsletter/confirm.ts` | `parseConfirmationPayload` e `onRequestPost`: token de 43 chars, hash único, consumo atômico, cleanup e reconciliação; `onRequestGet`, `onRequestHead`, `onRequestPut`, `onRequestPatch`, `onRequestDelete` e `onRequestOptions` retornam 405. |
+| `newsletter/types.ts` — política e limites | `CONSENT_POLICY_VERSION`, `CONSENT_TEXT`, `TOKEN_TTL_MS`, `UNDELIVERED_STALE_MS`, `PENDING_RETENTION_MS`, `RECONCILIATION_LEASE_MS`, `RECONCILIATION_DRAIN_BUDGET_MS`, `RECONCILIATION_MAX_JOBS`, `RECONCILIATION_D1_MARGIN_MS`, `RECONCILIATION_MAX_HTTP_MS`, `RECONCILIATION_MIN_CLAIM_BUDGET_MS`, `RECONCILIATION_MUTATION_RESERVE_MS`, `RECONCILIATION_RETRY_MINUTES`, `RESEND_PROVIDER_MAX_RESPONSE_BYTES`, `NEWSLETTER_INTERNAL_ID_MAX_CODE_UNITS`, `RESEND_OPAQUE_ID_MAX_CODE_UNITS` e `RESEND_CONTACTS_API_KEY_MAX_CODE_UNITS`. |
+| `newsletter/types.ts` — contratos e funções | `ConfirmationToken`, `RegisterPendingInput`, `RegisterPendingResult`, `NewsletterPendingStore`, `ConsumeConfirmationInput`, `ConsumeConfirmationResult`, `NewsletterStore`, `ProviderConsentEvidence`, `ReconciliationClock`, `ReconciliationErrorCode`, `ReconciliationJob`, `ClaimReconciliationJobInput`, `ReconciliationTransitionInput`, `NewsletterReconciliationStore`, `assertNewsletterOpaqueValue` e `normalizeNewsletterEmail`. |
+| `newsletter/crypto.ts` — `generateConfirmationToken`, `isConfirmationToken`, `hashConfirmationToken` | Geração Web Crypto, validação base64url e SHA-256 do token; raw token não é persistido. |
+| `newsletter/email.ts` — `ConfirmationEmailErrorCode`, `ConfirmationEmailInput`, `ConfirmationEmailResult`, `sendConfirmationEmail` | Monta texto/HTML determinísticos, valida origem HTTPS, envia com idempotência e faz um retry limitado sem mudar bytes/key. |
+| `newsletter/store.ts` — `reconciliationRetryDelayMinutes`, `createNewsletterStore` | Store D1: register, delivery CAS, cleanup, consume, claim, success/block/retry e transições append-only. |
+| `newsletter/provider.ts` — `ProviderEvidenceState`, `ProviderMutationResult`, `NewsletterProvider`, `ResendNewsletterProviderConfig`, `ContactReference`, `ProviderSnapshot`, `BoundedProviderRequest`, `createResendNewsletterProvider` | Adapter Contacts/Properties/Segments/Topics, parsing limitado, opt-out global e read-back de mutações ambíguas. |
+| `newsletter/reconcile.ts` — `ReconcileNewsletterJobInput`, `DrainNewsletterJobsInput`, `reconcileNewsletterJob`, `drainNewsletterJobs` | Orquestra provider/store dentro do orçamento, fencing e backoff persistido. |
+| `functions/types.d.ts` | Tipos gerados por `wrangler types`; regenere, não edite manualmente. |
+
+### Redirects, D1 e política de deploy
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `shared/legacy-redirects.ts` — `LEGACY_POST_REDIRECTS`, `LEGACY_PATH_REDIRECTS`, `resolveLegacyRedirect` | Mapas para query/path/prefixos WordPress; preserva apenas parâmetros permitidos e impede open redirect. |
+| `public/_redirects` | Espelho path-based/fallback das rotas legadas; `audit:redirects` exige coerência com o mapa compartilhado. |
+| `public/_routes.json` | Define quais requests atravessam Pages Functions no modo atual. |
+| `public/_headers` | CSP, headers de segurança e cache por classe de recurso. APIs permanecem `no-store`. |
+| `migrations/0001_newsletter_consent.sql` | Cria subscriptions, ledger, tokens, jobs, índices, triggers e a view de candidatos reconciliados. |
+| `config/deployment-phase.json` | Desired state mínimo do roteamento; atualmente `legacy-bridge`. |
+| `scripts/verifyDeploymentPolicy.mjs` | Parser fail-closed que correlaciona phase, routes, middleware e headers e rejeita combinações inseguras de legacy/static-first. |
+
+### Scripts de build, auditoria e manutenção
+
+| Script | Responsabilidade |
+|---|---|
+| `auditEditorialHtml.cjs` | Inspeciona todo HTML de `dist`: metadata, datas visíveis, FAQs e contrato estrutural. |
+| `editorialMetadataPolicy.cjs` | Regra isolada de canonical/`og:url`, especialmente para 404. |
+| `verifySeoOutput.mjs` — `inspectSeoOutput` | Cruza HTML, canonical, robots e sitemap com a política de SEO. |
+| `verifyRoutes.cjs` | Verifica arquivos, links, fragments e IDs internos do output gerado. |
+| `verifyRedirects.cjs` | Valida sintaxe, duplicatas, chains, destinos e paridade do mapa legado. |
+| `verifyTechnicalTerminology.cjs` | Procura grafias proibidas de produtos/normas no texto visível. |
+| `verifyAllProse.cjs` | Regras editoriais mecânicas no source. |
+| `verifyUtf8.cjs` | Inventaria texto tracked/untracked sem seguir symlink/junction, valida UTF-8 estrito e falha fechada em erro de infraestrutura. |
+| `checkTechCatalogFaqs.cjs` | Extrai perguntas do catálogo e falha em duplicatas; erro de leitura é fatal. |
+| `checkEncoding3.cjs` | Diagnóstico pontual de encoding em `src/`; não pertence ao gate principal. |
+| `compareFaqs.cjs` | Comparação manual de FAQs das soluções. |
+| `listAllSolutionFaqs.cjs` | Lista FAQs de solução para revisão editorial. |
+| `generateFavicons.mjs` | Gera ICO e apple-touch-icon a partir do SVG da marca. |
+| `generate_og_images.py` | Gera cards OG 1200×630 para seções/conteúdo. |
+
+### Suítes de teste
+
+| Lane | Arquivos e contrato |
+|---|---|
+| Workers | `contact`, `http`, `middleware`, `newsletter`, `newsletter-email`, `newsletter-store`, `newsletter-confirm`, `newsletter-confirm-page`, `newsletter-reconcile`; roda com Miniflare/D1 e migrations reais. |
+| Node | `seo-policy`, `editorial-metadata-policy`, `deployment-policy`, `newsletter-confirm-page-output`, `check-tech-catalog-faqs`, `verify-utf8`; prova scripts, políticas e build output sem usar o pool Workers. |
+| UI | `overlayLock` e `mobileNavigation`; usa `happy-dom`, módulos isolados e DOM recriado por caso. |
+| Harness | `tests/setup.ts` aplica migration no D1 de teste; `tests/helpers.ts` fornece env/context/fetch controlados. Fetch inesperado é bloqueado nos testes que interagem com provedores. |
+
+Detalhamento por arquivo:
+
+| Teste | O que prova |
+|---|---|
+| `tests/http.test.ts` | Contagem real de bytes UTF-8, JSON limitado, cancelamento e deadlines de upstream. |
+| `tests/middleware.test.ts` | Host/porta/protocolo, aliases, pass-through e headers API. |
+| `tests/contact.test.ts` | Método, body, Turnstile, honeypot, Resend, retry/idempotência e falhas de configuração/provedor. |
+| `tests/newsletter.test.ts` | Origin/Sec-Fetch, resposta neutra, D1 pending, envio assíncrono, cleanup, isolamento e logs. |
+| `tests/newsletter-email.test.ts` | Escape HTML, token somente no fragmento, origem, payload/key idênticos no retry e resposta limitada. |
+| `tests/newsletter-store.test.ts` | Schema/triggers, concorrência, replay, expiração, CAS de entrega, retenção, lease/fencing e transições append-only. |
+| `tests/newsletter-confirm.test.ts` | Gramática do token, método/body, confirmação/replay/expiração/inválido e scheduling. |
+| `tests/newsletter-confirm-page.test.ts` | Controller, fragment removal, zero auto-POST, classificador HTTP, renderer e acessibilidade. |
+| `tests/newsletter-reconcile.test.ts` | Adapter Resend, properties/Segment/Topic, read-back, opt-out, deadlines, muitos drains e retries duráveis. |
+| `tests/node/seo-policy.test.ts` | Normalização, canonical/noindex/sitemap e inspeção do output. |
+| `tests/node/editorial-metadata-policy.test.ts` | Canonical e `og:url` em rotas comuns e 404. |
+| `tests/node/deployment-policy.test.ts` | Phase/routes/middleware/headers, correlação de código e escapes legacy/static-first. |
+| `tests/node/newsletter-confirm-page-output.test.ts` | Build real da página de confirmação, metadata, assets e ausência de token no output. |
+| `tests/node/check-tech-catalog-faqs.test.ts` | Saídas 0/1/2 do auditor e falha fatal de leitura. |
+| `tests/node/verify-utf8.test.ts` | Inventário Git, UTF-8 inválido/válido, junctions, nomes extremos e códigos de saída. |
+| `tests/ui/mobileNavigation.test.ts` | Foco, bordas de Tab, Escape, click externo, breakpoint, resize, teardown e storage/fetch ausentes. |
+| `tests/ui/overlayLock.test.ts` | Owners múltiplos, duplicata/release desconhecido, ordem, overflow original e cleanup. |
+
+### CI, dependências e arquivos de controle
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `package.json` / `package-lock.json` | Scripts, Node 22.23.2, npm 10.9.8, dependências exatas/revisadas e overrides de segurança. |
+| `.nvmrc`, `.npmrc` | Runtime único e instalação de binários opcionais necessários no Linux do Pages. |
+| `vitest.config.ts` | Lane Workers, D1 Miniflare e exclusão explícita de Node/UI. |
+| `vitest.node.config.ts` | Lane Node pura. |
+| `vitest.ui.config.ts` | Lane `happy-dom`. |
+| `.github/workflows/ci.yml` | `npm ci`, Astro check, build, smoke e artifact de PR. |
+| `.github/workflows/deploy.yml` | Fallback manual; não é o publicador automático e não substitui o cutover SHA-pinned planejado. |
+| `.github/dependabot.yml` | Atualizações automatizadas de npm e Actions conforme a cadência registrada. |
+| `.github/ISSUE_TEMPLATE/*` / `PULL_REQUEST_TEMPLATE.md` | Entrada padronizada de bug/conteúdo e checklist de revisão/publicação. |
+
 ## SEO técnico
 
 ### Canonical e hosts
 
-- Canonical automático em toda página (`BaseLayout`), sempre apex + https.
+- Canonical automático nas páginas normais (`BaseLayout`), sempre apex +
+  https. A 404 passa `canonical={false}` e não emite canonical nem `og:url`.
 - O middleware (abaixo) consolida host, porta, protocolo e aliases legados
   em **um único 301** — nunca criar cadeias de redirects.
 - `trailingSlash: "ignore"` no Astro; URLs publicadas sempre com `/` final.
@@ -295,8 +594,8 @@ Os valores abaixo alimentam header, footer, contato, JSON-LD e og — mudam
 
 ### Sitemap e RSS
 
-- `@astrojs/sitemap` com filtro: exclui `/api/` **e `/404`** (noindex não
-  entra no sitemap — sinais contraditórios).
+- `@astrojs/sitemap` usa `shouldIncludeInSitemap()`: exclui `/api/*` e todo o
+  conjunto `NOINDEX_PATHS` (404, busca, webinar e confirmação).
 - `rss.xml.ts`: blog apenas, com `/rss.xsl`, `dc:creator` em CDATA;
   description do feed alinhada à página `/blog/`.
 - A página 404 não declara canonical (noindex + canonical se contradizem).
@@ -367,13 +666,37 @@ Arquitetura client-side em `src/utils/webform.ts` (compartilhado):
 
 ### Server-side (Pages Functions)
 
-- `functions/api/contact.ts`: Turnstile + Resend (chave Sending access).
-- `functions/api/newsletter.ts`: Contacts/Segments/Topics (chave Full
-  access); `409 GLOBAL_OPT_OUT` preserva descadastro global.
-- `functions/_shared/`: limites de body/resposta, timeout, idempotência,
-  logs estruturados sem PII.
+- `functions/api/contact.ts`: Turnstile + Resend com chave **Sending access**
+  exclusiva do formulário de contato.
+- `functions/api/newsletter.ts`: Turnstile, registro de consentimento
+  **pendente** no D1 e envio do e-mail de confirmação com uma segunda chave
+  **Sending access**, exclusiva da newsletter. A resposta pública é neutra e
+  não revela se o endereço já existe.
+- `functions/api/newsletter/confirm.ts`: consome o token por `POST`, uma única
+  vez, e deixa a confirmação, o ledger e o job de reconciliação atômicos no
+  D1. O token viaja no fragmento da URL e é removido do endereço antes do
+  request, evitando vazamento em logs e referrers.
+- `functions/_shared/newsletter/reconcile.ts`: depois da confirmação, reconcilia
+  Contacts/Segment/Topic e as quatro propriedades de evidência no Resend. Um
+  opt-out global nunca é revertido.
+- `functions/_shared/newsletter/store.ts`: D1 como autoridade local, ledger
+  append-only, tokens de uso único, limpeza limitada e outbox com lease/fencing.
+- `functions/_shared/`: limites de body/resposta, deadlines, idempotência e
+  logs estruturados sem PII, raw token ou e-mail.
 - Rate limiting recomendado (Cloudflare Security → Rate Limiting): 3-5
   req/10s por IP em `/api/contact` e `/api/newsletter`, ação Block.
+
+### Estado da newsletter
+
+- Token de confirmação: 32 bytes aleatórios, TTL de 24 horas e somente o
+  SHA-256 persistido.
+- Pedido pendente sem confirmação: retenção máxima de 30 dias; limpeza em
+  lotes limitados.
+- D1 de preview e produção são separados. A migration inicial já foi aplicada
+  nos dois; consulte [`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md).
+- **BROADCAST BLOQUEADO:** a view local só produz candidatos. Antes de enviar,
+  é obrigatório fazer read-back atual no Resend e excluir opt-outs globais ou
+  de Topic.
 
 ## Redirects e canonicalização (`functions/_middleware.ts`)
 
@@ -670,14 +993,21 @@ Antes de publicar qualquer case/post derivado de propostas internas:
 |---|---|---|---|
 | `PUBLIC_TURNSTILE_SITE_KEY` | **build** | pública (vai para o HTML) | `turnstile.ts` → widgets dos formulários |
 | `TURNSTILE_SECRET_KEY` | runtime (Pages) | encrypted | `functions/_shared/turnstile.ts` (verificação server-side) |
-| `RESEND_SEND_API_KEY` | runtime | encrypted | `api/contact.ts` (somente POST /emails) |
-| `RESEND_CONTACTS_API_KEY` | runtime | encrypted | `api/newsletter.ts` (Contacts/Segments/Topics) |
-| `RESEND_SEGMENT_ID` | runtime | encrypted | `api/newsletter.ts` — segmento Integra Ação |
-| `RESEND_TOPIC_ID` | runtime | encrypted | `api/newsletter.ts` — preferência explícita (opt_out até confirmar) |
+| `RESEND_TRANSACTIONAL_API_KEY` | runtime | encrypted | `api/newsletter.ts` — e-mail de confirmação, somente POST /emails |
+| `RESEND_SEND_API_KEY` | runtime | encrypted | `api/contact.ts` — envio do contato, somente POST /emails |
+| `RESEND_CONTACTS_API_KEY` | runtime | encrypted | reconciliador da newsletter — Contacts/Segments/Topics |
+| `RESEND_SEGMENT_ID` | runtime | encrypted | reconciliador — segmento Integra Ação |
+| `RESEND_TOPIC_ID` | runtime | encrypted | reconciliador — preferência explícita após confirmar |
+| `NEWSLETTER_CONFIRMATION_ORIGIN` | runtime | não secreta, específica por ambiente | origem HTTPS usada no link de confirmação; apex em produção, preview no ambiente de preview |
 | `CONTACT_EMAIL_TO` | runtime | encrypted | destino do contato (comercial@) |
 | `CONTACT_EMAIL_FROM` | runtime | encrypted | remetente (`noreply@forms.` — subdomínio dedicado do Resend) |
 | `NODE_VERSION` | build | — | `22.23.2` no Pages/CI (ver `.nvmrc`: 22.23.2) |
 | `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` | CI (GitHub secrets) | secret | só na Opção B de deploy |
+
+`NEWSLETTER_DB` é binding D1, não variável textual. Os nomes e IDs por ambiente
+ficam em `wrangler.jsonc`; valores secretos ficam apenas no dashboard da
+Cloudflare. `.env.example` e `.dev.vars.example` listam nomes, nunca valores
+reais.
 
 ## Serviços de terceiros
 
@@ -711,7 +1041,24 @@ site publica `llms.txt`. Manter o "managed robots.txt" da Cloudflare
 
 ## Deploy
 
-Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesmo tempo.
+O publicador ativo é a **conexão direta GitHub → Cloudflare Pages**. O
+`deploy.yml` existe somente como fallback manual. Nunca use os dois ao mesmo
+tempo.
+
+Baseline funcional observado em 21/08/2026, antes desta atualização
+documental. Um push posterior em `main` gera outro deployment; para identificar
+o deployment mais recente, consulte a conexão Git no painel da Cloudflare.
+
+| Item | Valor |
+|---|---|
+| Branch | `main` |
+| Commit técnico auditado | `4049de9bfd1f6bd168dbf7beb7312313bfde5c14` |
+| Deployment imutável auditado | `4cff75a6-7fae-41f3-b617-c7e7d087debe` |
+| Modo de roteamento | `legacy-bridge` |
+| D1 de produção | migration `0001_newsletter_consent.sql` aplicada |
+
+Para evidência detalhada e limites conhecidos, consulte
+[`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md).
 
 ### Opção A — Conexão direta GitHub ↔ Cloudflare Pages (mais simples)
 
@@ -727,29 +1074,32 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
 
    ```
    NODE_VERSION              = 22.23.2
-   PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
-   TURNSTILE_SECRET_KEY      = <secret>       # encrypted
-   RESEND_SEND_API_KEY       = <sending key>  # encrypted; somente POST /emails
-   RESEND_CONTACTS_API_KEY   = <full key>     # encrypted; somente newsletter
-   RESEND_SEGMENT_ID         = <Segment ID>   # encrypted — newsletter Integra Ação
-   RESEND_TOPIC_ID           = <Topic ID>     # encrypted — preferência explícita da newsletter
-   CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
-   CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com.br
+    PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
+    TURNSTILE_SECRET_KEY      = <secret>       # encrypted
+    RESEND_TRANSACTIONAL_API_KEY = <sending key> # encrypted; confirmação da newsletter
+    RESEND_SEND_API_KEY       = <sending key>  # encrypted; contato
+    RESEND_CONTACTS_API_KEY   = <full key>     # encrypted; reconciliação da newsletter
+    RESEND_SEGMENT_ID         = <Segment ID>   # encrypted — newsletter Integra Ação
+    RESEND_TOPIC_ID           = <Topic ID>     # encrypted — preferência explícita da newsletter
+    NEWSLETTER_CONFIRMATION_ORIGIN = https://integrautomacao.com.br
+    CONTACT_EMAIL_TO          = comercial@integrautomacao.com.br
+    CONTACT_EMAIL_FROM        = noreply@forms.integrautomacao.com.br
    ```
 
    Marque todas as variáveis server-side como **Encrypted** para não vazarem nos logs:
-   `TURNSTILE_SECRET_KEY`, `RESEND_SEND_API_KEY`, `RESEND_CONTACTS_API_KEY`,
+   `TURNSTILE_SECRET_KEY`, `RESEND_TRANSACTIONAL_API_KEY`,
+   `RESEND_SEND_API_KEY`, `RESEND_CONTACTS_API_KEY`,
    `RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`,
    `CONTACT_EMAIL_TO` e `CONTACT_EMAIL_FROM`.
    `PUBLIC_TURNSTILE_SITE_KEY` precisa existir no ambiente de build; se faltar,
    o formulário aparece como indisponível e não cai mais em `mailto:` automático.
    Não use placeholders como `<site key pública do Turnstile>`; a site key
    pública atual é `0x4AAAAAADKRCm67kAoc7SHU`.
-   Crie duas chaves distintas no Resend: uma chave **Sending access** restrita
-   ao domínio de envio para `RESEND_SEND_API_KEY`, usada só pelo contato, e uma
-   chave **Full access** para `RESEND_CONTACTS_API_KEY`, usada pelo workflow de
-   Contacts/Segments/Topics. Não reutilize a chave full-access no endpoint de
-   contato; registre owner, data de criação e rotação das duas chaves.
+   Crie três chaves distintas no Resend: uma **Sending access** restrita ao
+   domínio de envio para `RESEND_TRANSACTIONAL_API_KEY`, outra **Sending
+   access** para `RESEND_SEND_API_KEY`, e uma **Full access** para
+   `RESEND_CONTACTS_API_KEY`. Não reutilize a chave full-access em endpoints de
+   envio; registre owner, data de criação e rotação das três chaves.
    `RESEND_SEGMENT_ID` e `RESEND_TOPIC_ID` são obrigatórios e usam o modelo
    atual de Contacts + Segments + Topics do Resend. Crie o Topic com padrão
    `opt_out` e selecione esse Topic em todo Broadcast da Integra Ação. Crie
@@ -757,11 +1107,25 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    `newsletter_policy_version`, `newsletter_consent_source` e
    `newsletter_consent_text`. A API devolve indisponibilidade se Segment ou
    Topic não estiver configurado e nunca confirma inscrição não registrada.
-   O estado `unsubscribed` do Resend é global: se um contato já estiver em
-   descadastro global, a Function preserva essa escolha e responde `409`
-   (`GLOBAL_OPT_OUT`). A preferência da Integra Ação é controlada pelo Topic;
-   não reative contatos manualmente sem confirmar o pedido pelo canal de
+   O estado `unsubscribed` do Resend é global: se um contato estiver em
+   descadastro global, o reconciliador preserva essa escolha e bloqueia o job
+   com estado `blocked_global_opt_out`. O POST inicial continua neutro e não
+   enumera essa condição. A preferência da Integra Ação é controlada pelo
+   Topic; não reative contatos manualmente sem confirmar o pedido pelo canal de
    privacidade.
+
+   O binding `NEWSLETTER_DB` e os bancos separados de preview/produção estão
+   declarados em `wrangler.jsonc`. A migration `0001_newsletter_consent.sql` já
+   foi aplicada nos dois bancos do projeto atual. Em ambiente novo, aplique
+   primeiro em preview e somente depois da aceitação em produção:
+
+   ```bash
+   npx wrangler d1 migrations apply NEWSLETTER_DB --env preview --remote
+   npx wrangler d1 migrations apply NEWSLETTER_DB --env production --remote
+   ```
+
+   `NEWSLETTER_CONFIRMATION_ORIGIN` deve ser HTTPS, sem path/query/fragment e
+   nunca pode apontar o preview para o banco/origem de produção.
 
 5. Em **Custom domains**, mantenha/adicione apenas domínios que servem páginas:
    `integrautomacao.com.br`, `www.integrautomacao.com.br` e, se usados,
@@ -772,11 +1136,13 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
    Esse subdomínio é dedicado ao Resend como domínio de envio transacional e
    deve existir apenas nos registros DNS exigidos pelo Resend.
 
-### Opção B — Deploy via GitHub Actions (uma fonte da verdade no CI)
+### Opção B — fallback manual via GitHub Actions
 
-O workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) faz
-o build e o deploy via `wrangler pages deploy`. Em PRs gera preview com
-URL postada como comentário. Em pushes para `main` deploya para produção.
+O workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) está
+limitado a `workflow_dispatch`. Os triggers de PR e push estão comentados, logo
+ele **não** gera preview nem publica `main` automaticamente no estado atual.
+Quando acionado manualmente, faz build e `wrangler pages deploy`; use apenas se
+a integração direta estiver indisponível e não houver build concorrente.
 
 **Secrets necessários** (Settings → Secrets and variables → Actions):
 
@@ -786,17 +1152,18 @@ URL postada como comentário. Em pushes para `main` deploya para produção.
 | `CLOUDFLARE_ACCOUNT_ID`      | Visível no dashboard CF, painel direito de qualquer página |
 | `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare → Turnstile → Site → Public site key |
 
-Os secrets server-side (`TURNSTILE_SECRET_KEY`, `RESEND_SEND_API_KEY`,
+Os secrets server-side (`TURNSTILE_SECRET_KEY`,
+`RESEND_TRANSACTIONAL_API_KEY`, `RESEND_SEND_API_KEY`,
 `RESEND_CONTACTS_API_KEY`,
 `RESEND_SEGMENT_ID`, `RESEND_TOPIC_ID`, `CONTACT_EMAIL_*`) ficam **só no Cloudflare Pages**, não no GitHub —
 porque eles são consumidos pela Pages Function em runtime, não pelo
 build.
 
-> **Escolha apenas uma das opções.** Misturar Opção A (auto-build do CF
+> **Escolha apenas um publicador.** Misturar Opção A (auto-build do CF
 > com base no Git) com Opção B (deploy via Actions) gera deploys
 > duplicados e disputa de CDN cache.
 >
-> Por padrão neste repositório a **Opção A está ativa** (CF Pages
+> Neste repositório a **Opção A está ativa** (CF Pages
 > conectado ao GitHub fazendo build automático). O workflow
 > `deploy.yml` está com triggers `push`/`pull_request` comentados e
 > roda apenas via `workflow_dispatch` (Actions → Deploy → Run workflow)
@@ -805,6 +1172,11 @@ build.
 > da Cloudflare.
 
 ## Branch protection (recomendado)
+
+**Estado atual:** o repositório privado não tem ruleset/proteção obrigatória
+para `main` no plano disponível. As regras abaixo são o desired state; até que
+possam ser habilitadas, revisão, CI verde e proibição de force-push são
+controles operacionais.
 
 Settings → Branches → Add branch ruleset → Apply to **default branch**:
 
@@ -821,7 +1193,9 @@ Settings → Branches → Add branch ruleset → Apply to **default branch**:
 Roda em push/PR para `main` e via dispatch. Job **"Lint and build"**
 (ubuntu, Node do `.nvmrc`, `npm ci`): `astro check` → `npm run build`
 (que inclui o Pagefind) → smoke-test do `dist/`. É o status check exigido
-pela branch protection sugerida acima.
+pela branch protection sugerida acima. O workflow atual não roda `npm test`;
+por isso as três lanes continuam parte obrigatória do gate local antes do
+push.
 
 ### Remotes git
 
@@ -860,11 +1234,19 @@ por padrão. Ajuste acesso e retenção no dashboard conforme a política intern
 
 ## Testes das Functions
 
-Os testes usam o runtime Workers com Vitest. Eles cobrem limites de body UTF-8,
-validação Turnstile, retry idempotente de e-mail e os cenários de compensação da
-newsletter, incluindo respostas perdidas após uma mutação no Resend. O teste do
-middleware cobre canonicalização de host + porta (`:2096`), combinação de
-redirects em um único salto e o hardening de headers das respostas `/api/`.
+`npm test` executa três lanes isoladas e em ordem fixa:
+
+1. **Workers:** Pages Functions, D1, Turnstile, Resend, confirmação, store,
+   reconciliação, HTTP e middleware.
+2. **Node:** políticas de SEO/deploy, scripts editoriais, UTF-8 e inspeção do
+   output gerado.
+3. **UI:** controladores DOM de navegação/overlays no `happy-dom`.
+
+A lane Workers cobre limites de body UTF-8, respostas neutras, retry
+idempotente de e-mail, atomicidade D1, uso único do token, lease/fencing e
+ambiguidades após mutação no Resend. O teste do middleware cobre
+canonicalização de host + porta (`:2096`), redirects em um único salto e o
+hardening das respostas `/api/`.
 
 ```bash
 npm test
@@ -941,6 +1323,11 @@ como são:
    foto real na home, reveal escalonado, diagrama de arquitetura interativo.
 5. **Correção de mojibake** — strings do `AnimatedPlantDiagram` corrompidas
    por edição em PowerShell Latin-1; restauradas e varredura geral limpa.
+6. **Onda de segurança e consentimento** — double opt-in com D1 autoritativo,
+   token curto de uso único, ledger append-only, reconciliação Resend com
+   outbox/fencing, respostas anti-enumeração, confirmação no fragmento e três
+   lanes de teste. Publicada em produção em 21/08/2026; evidência operacional em
+   [`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md).
 
 ## Backlog editorial e operacional
 
@@ -959,22 +1346,23 @@ como são:
       foram aprovados pelo titular (registro em
       [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md)). O gate permanece
       ativo para ativos NOVOS e para os 23 itens da biblioteca ainda fora de uso.
-- [ ] **P0 antes de usar Broadcasts da newsletter:** decidir e implementar
-      double opt-in (link transacional assinado, expiração e Topic em `opt_out`
-      até a confirmação) ou registrar decisão formal de produto/privacidade.
-      Turnstile prova uma interação, não o controle da caixa postal; o aceite
-      atual do formulário, isoladamente, não autentica o titular do e-mail.
+- [x] ~~**P0 implementar double opt-in da newsletter**~~ — **PUBLICADO em
+      21/08/2026**: D1 autoritativo, link transacional, expiração, uso único,
+      confirmação explícita e reconciliação pós-confirmação. Turnstile continua
+      sendo apenas defesa anti-bot; a prova de caixa postal vem do link.
+- [ ] **P0 antes de usar Broadcasts da newsletter:** executar read-back atual
+      no Resend para cada candidato, excluir opt-out global/Topic, confirmar as
+      quatro propriedades de evidência e registrar a autorização operacional.
+      A view `newsletter_broadcast_recipients`, isoladamente, não autoriza envio.
 - [ ] **CI:** falhar o build de produção se `PUBLIC_TURNSTILE_SITE_KEY` estiver
       ausente/placeholder — sem a key, os formulários renderizam o estado de
       indisponibilidade (fail-closed por design, mas silencioso).
 - [ ] **CSP reporting:** avaliar endpoint de `report-to`/`report-uri` (ex.:
       um Pages Function gravando métrica estruturada) para tornar violações de
       CSP visíveis em produção — hoje elas são silenciosas.
-- [ ] Definir orçamento global de tempo para os workflows de contato e
-      newsletter e, para mutações da newsletter, uma via de compensação
-      independente (por exemplo, Queue/Workflow). Cada chamada já tem deadline,
-      mas tentativas sequenciais podem somar latência maior durante
-      indisponibilidade prolongada do provedor.
+- [x] ~~Definir orçamento e compensação da newsletter~~ — reconciliador com
+      orçamento total de 25s, no máximo 2 jobs, lease de 30s, fencing, timeout
+      HTTP de 4s e backoff persistido. O contato mantém timeout próprio de 20s.
 - [ ] Adicionar páginas setoriais somente quando houver conteúdo próprio,
       fontes primárias e evidências publicáveis para o segmento.
 - [ ] Publicar novos cases apenas com autorização, anonimização e distinção
@@ -994,6 +1382,9 @@ como são:
 | Sintoma | Causa provável | Ação |
 |---|---|---|
 | Formulário mostra "temporariamente indisponível" em produção | `PUBLIC_TURNSTILE_SITE_KEY` ausente/placeholder no build | Conferir env var no Pages e rebuildar |
+| Newsletter responde indisponível antes de gravar | `NEWSLETTER_DB`, Turnstile ou origem de confirmação ausente/incoerente | Conferir bindings do ambiente; nunca apontar preview para produção |
+| Pedido fica pendente sem e-mail | `RESEND_TRANSACTIONAL_API_KEY`/remetente ausente ou falha de entrega | Consultar eventos minimizados e o ledger D1; não reenviar manualmente alterando estado |
+| Confirmação ocorreu, mas Resend não reconciliou | job `pending`/`leased`, configuração de Contacts/Segment/Topic ou read-back ambíguo | Conferir estados agregados no D1 e executar o drain por fluxo normal; manter Broadcast bloqueado |
 | Busca mostra "índice gerado no build" | `astro dev` não tem `/pagefind/` | Normal em dev; testar com `npm run build` + `pages:dev` |
 | Build falha na etapa Pagefind (CI/Pages) | binário linux ausente | Pagefind está em `dependencies` por isso; conferir `.npmrc` `include=optional` intacto |
 | og:image quebrado no WhatsApp/LinkedIn | Card fora da convenção de nome | Verificar se o arquivo existe em `public/og/`; a convenção tem fallback automático |
@@ -1012,6 +1403,8 @@ pós-lançamento) é mantido internamente, fora do repositório.
 
 Documentos vivos no repositório:
 
+- [`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md) — release ativo,
+  bindings, migration D1, provas públicas, limites e gate de Broadcast.
 - [`SEO_ROADMAP.md`](./SEO_ROADMAP.md) — estratégia de SEO por cluster de
   intenção (o que já foi coberto e o que falta publicar).
 - [`ASSET_RIGHTS_REVIEW.md`](./ASSET_RIGHTS_REVIEW.md) — registro de direitos

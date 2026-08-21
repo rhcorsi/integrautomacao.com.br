@@ -1,5 +1,6 @@
 # Copy to .dev.vars for `npm run pages:dev`.
 # Never commit real values.
+# NEWSLETTER_DB is supplied by wrangler.jsonc; do not add a database ID here.
 
 TURNSTILE_SECRET_KEY=
 RESEND_TRANSACTIONAL_API_KEY=

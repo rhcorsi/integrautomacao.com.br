@@ -2,6 +2,11 @@
 
 Objetivo: tornar a Integra a referência brasileira mais útil e confiável para buscas relacionadas a automação industrial, integração de sistemas e problemas de OT. O objetivo orienta priorização; não representa promessa de posição, tráfego ou prazo.
 
+> **Estado em 21/08/2026:** roadmap editorial vivo. O release técnico atual
+> gera 112 páginas, mantém 111 no índice Pagefind e está registrado em
+> [`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md). Itens não marcados
+> abaixo continuam backlog; não são promessa de publicação ou prazo.
+
 ## Princípios obrigatórios
 
 1. Uma URL proprietária para cada intenção: solução para contratação, serviço para execução, tecnologia para entendimento técnico, artigo para pergunta/decisão, setor para aplicação e case para evidência.
@@ -39,7 +44,7 @@ Objetivo: tornar a Integra a referência brasileira mais útil e confiável para
 
 ### Ciclo 1 — arquitetura e conversão
 
-Status revisado em 2026-07-13:
+Status revisado em 2026-08-21:
 
 - [x] Diferenciar as intenções de migração PLC, PlantPAx e data center industrial por título, introdução e crosslinks, sem `noindex` ou canonical cruzado.
 - [x] Criar links bidirecionais tecnologia ↔ guia e links contextuais case → solução/tecnologia.

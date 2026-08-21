@@ -1,5 +1,11 @@
 # Revisão de direitos dos ativos de terceiros
 
+> **Revalidado em 21/08/2026:** o release de produção
+> `4049de9bfd1f6bd168dbf7beb7312313bfde5c14` não adicionou nem substituiu
+> ativos em `public/` ou `src/assets/` desde este inventário. A decisão 44/44
+> permanece válida e o gate abaixo continua obrigatório para qualquer ativo
+> novo. Estado do release: [`docs/PRODUCTION_STATUS.md`](./docs/PRODUCTION_STATUS.md).
+
 Status em **20 de agosto de 2026**: **APROVADO — gate encerrado para o
 inventário em uso (44/44).**
 

@@ -15,8 +15,11 @@
 
 - [ ] `npm run check` passa sem erros
 - [ ] `npm run build` passa sem erros
-- [ ] Revisei a página afetada no `*.pages.dev` (preview do CF)
+- [ ] `npm test` passa nas lanes Workers, Node e UI
+- [ ] `npm run types:check` passa (obrigatório ao alterar bindings/Wrangler)
+- [ ] Revisei o output afetado; se o preview tem bindings próprios, também revisei o `*.pages.dev`
 - [ ] Sem secrets ou credenciais commitados
+- [ ] Atualizei `README.md`/`docs/PRODUCTION_STATUS.md` se alterei arquitetura, deploy, bindings, rotas ou operação
 - [ ] Conteúdo derivado de propostas internas foi sanitizado (sem cliente, valores, arquitetura específica)
 - [ ] Links internos novos foram testados
 - [ ] Imagens novas têm `alt` e estão otimizadas via `astro:assets`

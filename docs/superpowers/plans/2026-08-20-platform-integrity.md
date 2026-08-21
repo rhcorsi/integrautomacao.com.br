@@ -1,5 +1,13 @@
 # Platform Integrity Implementation Plan
 
+> **Registro histórico — implementação parcial em 21/08/2026:** política SEO,
+> Node/dependências, contratos de ambiente e o verificador D4A foram
+> implementados. Produção continua em `routingMode: legacy-bridge`, publicada
+> pela integração GitHub → Cloudflare Pages. Static-first/D4B, artefato único,
+> workflow substituto, desired state completo e retirada do auto-deploy não
+> fazem parte do release atual. Os passos abaixo preservam o plano aprovado;
+> fonte operacional: [`../../PRODUCTION_STATUS.md`](../../PRODUCTION_STATUS.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build one deterministic, policy-checked path from an exact `main` commit to a SHA-256-manifested Cloudflare Pages production deployment, while correcting SEO, routing, cache, environment, and dependency drift.
