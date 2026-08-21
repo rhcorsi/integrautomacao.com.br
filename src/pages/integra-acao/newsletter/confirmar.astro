@@ -1,0 +1,120 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Confirme sua inscrição"
+  description="Confirme explicitamente seu endereço de e-mail para concluir a inscrição na newsletter Integra Ação."
+  canonical="/integra-acao/newsletter/confirmar/"
+  noindex={true}
+  nofollow={true}
+>
+  <Fragment slot="head">
+    <script>
+      import {
+        createNewsletterConfirmationController,
+        createNewsletterConfirmationRenderer,
+        postNewsletterConfirmation,
+      } from "@/scripts/newsletterConfirmation";
+
+      const status = document.querySelector<HTMLElement>(
+        "[data-confirmation-status]",
+      );
+      const button = document.querySelector<HTMLButtonElement>(
+        "[data-confirmation-button]",
+      );
+      const recovery = document.querySelector<HTMLElement>(
+        "[data-confirmation-recovery]",
+      );
+
+      if (status && button && recovery) {
+        const render = createNewsletterConfirmationRenderer({
+          button,
+          recovery,
+          status,
+        });
+        const postConfirmation = (token: string) =>
+          postNewsletterConfirmation(token, {
+            request: (input, init) => fetch(input, init),
+            timeoutSignal: (timeoutMs) => AbortSignal.timeout(timeoutMs),
+          });
+        const controller = createNewsletterConfirmationController({
+          readFragment: () => window.location.hash,
+          currentPath: () => window.location.pathname,
+          replaceUrl: (path) => history.replaceState(null, "", path),
+          postConfirmation,
+          render,
+        });
+
+        button.addEventListener("click", () => {
+          void controller.confirm();
+        });
+        controller.initialize();
+      }
+    </script>
+  </Fragment>
+
+  <section
+    data-pagefind-ignore
+    class="border-b border-integra-gray-200 bg-integra-gray-50"
+  >
+    <div class="container-fluid py-20 sm:py-24">
+      <div class="mx-auto max-w-2xl rounded-lg border border-integra-gray-200 bg-integra-white p-7 shadow-sm sm:p-10">
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Integra Ação · Newsletter técnica
+        </p>
+        <h1 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Confirme sua inscrição na newsletter.
+        </h1>
+        <p class="mt-5 text-base leading-relaxed text-integra-gray-700">
+          Abrir este link não confirma nada. Para concluir, use o botão abaixo
+          de forma explícita.
+        </p>
+
+        <div class="mt-8 grid gap-5">
+          <p
+            data-confirmation-status
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            class="min-h-[1.5rem] text-sm leading-relaxed text-integra-gray-700"
+          >
+            Use o botão para verificar o link e concluir a confirmação.
+          </p>
+          <button
+            data-confirmation-button
+            type="button"
+            disabled
+            class="inline-flex w-full items-center justify-center rounded-md bg-integra-red px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-red-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
+          >
+            Confirmar inscrição
+          </button>
+          <p
+            data-confirmation-recovery
+            class="text-sm leading-relaxed text-integra-gray-700"
+          >
+            Precisa solicitar outro link? Retorne ao
+            <a
+              href="/integra-acao/newsletter/"
+              class="font-semibold text-integra-red-700 underline underline-offset-2 hover:text-integra-red-700"
+            >
+              formulário da newsletter
+            </a>.
+          </p>
+          <noscript>
+            <p class="rounded-md border border-integra-gray-300 bg-integra-gray-50 p-4 text-sm leading-relaxed text-integra-gray-800">
+              A confirmação exige JavaScript. Retorne ao
+              <a
+                href="/integra-acao/newsletter/"
+                class="font-semibold text-integra-red-700 underline underline-offset-2"
+              >
+                formulário da newsletter
+              </a>
+              para solicitar novas instruções.
+            </p>
+          </noscript>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

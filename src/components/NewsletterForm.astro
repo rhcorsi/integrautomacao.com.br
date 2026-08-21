@@ -58,10 +58,12 @@ const hasTurnstile = turnstileSiteKey.length > 0;
   <!-- LGPD opt-in -->
   <label class="flex items-start gap-3 text-sm text-integra-gray-700">
     <input
+      id="nl-lgpd"
       type="checkbox"
       name="lgpd"
       required
       value="1"
+      aria-describedby="nl-lgpd-help"
       class="mt-1 size-4 rounded border-integra-gray-300 text-integra-red-700 focus:ring-integra-red"
     />
     <span>
@@ -75,6 +77,9 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       </a>. Posso cancelar a inscrição a qualquer momento. <span class="text-integra-red" aria-hidden="true">*</span>
     </span>
   </label>
+  <p id="nl-lgpd-help" class="text-xs leading-relaxed text-integra-gray-600">
+    A inscrição só fica ativa depois que você abre o e-mail e confirma explicitamente o endereço.
+  </p>
 
   <!-- Honeypot -->
   <div aria-hidden="true" class="hidden">
@@ -186,6 +191,9 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     type TurnstileWindow,
   } from "@/utils/webform";
 
+  const NEWSLETTER_ACCEPTED_MESSAGE =
+    "Se o endereço puder receber a newsletter, enviaremos as próximas instruções por e-mail.";
+
   const newsletterForms =
     document.querySelectorAll<HTMLFormElement>("[data-newsletter-form]");
 
@@ -241,7 +249,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 
       const formData = new FormData(form);
       if (formData.get("website")) {
-        setFormStatus(status, "Inscrição registrada.", "success");
+        setFormStatus(status, NEWSLETTER_ACCEPTED_MESSAGE, "success");
         form.reset();
         return;
       }
@@ -277,11 +285,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
         });
 
         if (response.ok) {
-          setFormStatus(
-            status,
-            "Inscrição confirmada. Você receberá as próximas edições publicadas.",
-            "success",
-          );
+          setFormStatus(status, NEWSLETTER_ACCEPTED_MESSAGE, "success");
           form.reset();
           return;
         }

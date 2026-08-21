@@ -75,4 +75,5 @@ try {
 
 } catch (err) {
   console.error("Error checking techCatalog.ts:", err.message);
+  process.exitCode = 2;
 }

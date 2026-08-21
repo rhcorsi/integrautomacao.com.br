@@ -3,6 +3,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import tailwindcss from "@tailwindcss/vite";
+import { shouldIncludeInSitemap } from "./src/utils/seo-policy";
 
 export default defineConfig({
   site: "https://integrautomacao.com.br",
@@ -19,12 +20,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      // /api/ não é página; /404 e /busca são noindex e não devem entrar
-      // no sitemap (sinal contraditório).
-      filter: (page) =>
-        !page.includes("/api/") &&
-        !page.includes("/404") &&
-        !page.includes("/busca"),
+      filter: shouldIncludeInSitemap,
     }),
     icon({
       include: {
