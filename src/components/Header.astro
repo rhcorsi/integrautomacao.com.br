@@ -146,7 +146,7 @@ const allMegas: Record<string, MegaMenu> = {
 };
 ---
 
-<header class="sticky top-0 z-50 bg-integra-white shadow-sm" data-pagefind-ignore>
+<header class="sticky top-0 z-50 bg-integra-white shadow-sm" data-pagefind-ignore data-site-header>
   <!-- Top utility bar -->
   <div class="hidden lg:block bg-integra-gray-50 border-b border-integra-gray-200">
     <div class="container-fluid flex h-9 items-center justify-between text-xs">
@@ -401,7 +401,7 @@ const allMegas: Record<string, MegaMenu> = {
   <!-- Mobile nav: absolutely positioned beneath the header bar, scrollable when content overflows. -->
   <nav
     id="mobile-nav"
-    class="min-[1440px]:hidden hidden absolute inset-x-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain border-t border-integra-gray-200 bg-integra-white shadow-lg"
+    class="min-[1440px]:hidden hidden absolute inset-x-0 top-full mobile-nav-panel overflow-y-auto overscroll-contain border-t border-integra-gray-200 bg-integra-white shadow-lg"
     aria-label="Principal (mobile)"
   >
     <div class="container-default py-4 pb-8 grid gap-1">
@@ -474,32 +474,9 @@ const allMegas: Record<string, MegaMenu> = {
 </header>
 
 <script>
-  const toggle =
-    document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
-  const menu = document.getElementById("mobile-nav");
-  const iconOpen = document.querySelector<HTMLElement>("[data-icon-open]");
-  const iconClose = document.querySelector<HTMLElement>("[data-icon-close]");
+  import { initMobileNavigation } from "@/scripts/mobileNavigation";
 
-  if (toggle && menu && iconOpen && iconClose) {
-    const setOpen = (open: boolean) => {
-      menu.classList.toggle("hidden", !open);
-      toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-      iconOpen.classList.toggle("hidden", open);
-      iconClose.classList.toggle("hidden", !open);
-    };
-
-    toggle.addEventListener("click", () => {
-      setOpen(menu.classList.contains("hidden"));
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !menu.classList.contains("hidden")) {
-        setOpen(false);
-        toggle.focus();
-      }
-    });
-  }
+  initMobileNavigation();
 
   for (const wrapper of document.querySelectorAll<HTMLElement>(
     "[data-desktop-mega]",

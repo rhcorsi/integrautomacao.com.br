@@ -1,7 +1,23 @@
+import { env } from "cloudflare:workers";
+import type { D1Migration as TestD1Migration } from "@cloudflare/vitest-pool-workers";
 import type { ContactEnv, NewsletterEnv } from "../functions/_shared/env";
 
+declare global {
+  namespace Cloudflare {
+    interface Env {
+      TEST_MIGRATIONS: TestD1Migration[];
+    }
+  }
+}
+
+declare module "cloudflare:test" {
+  interface ProvidedEnv extends NewsletterEnv {
+    TEST_MIGRATIONS: D1Migration[];
+  }
+}
+
 export const contactEnv: ContactEnv = {
-  NODE_VERSION: "22.12.0",
+  NODE_VERSION: "22.23.2",
   CONTACT_EMAIL_FROM: "noreply@forms.integrautomacao.com.br",
   CONTACT_EMAIL_TO: "comercial@integrautomacao.com.br",
   PUBLIC_TURNSTILE_SITE_KEY: "0x4AAAAAADKRCm67kAoc7SHU",
@@ -10,9 +26,14 @@ export const contactEnv: ContactEnv = {
 };
 
 export const newsletterEnv: NewsletterEnv = {
-  NODE_VERSION: "22.12.0",
+  NODE_VERSION: "22.23.2",
+  CONTACT_EMAIL_FROM: "noreply@forms.integrautomacao.com.br",
+  NEWSLETTER_DB: env.NEWSLETTER_DB,
   PUBLIC_TURNSTILE_SITE_KEY: "0x4AAAAAADKRCm67kAoc7SHU",
+  NEWSLETTER_CONFIRMATION_ORIGIN: "https://integrautomacao.com.br",
   RESEND_CONTACTS_API_KEY: "resend-contacts-key",
+  RESEND_SEND_API_KEY: "resend-send-key",
+  RESEND_TRANSACTIONAL_API_KEY: "resend-transactional-key",
   RESEND_SEGMENT_ID: "segment-newsletter",
   RESEND_TOPIC_ID: "topic-newsletter",
   TURNSTILE_SECRET_KEY: "turnstile-secret",
@@ -42,7 +63,11 @@ export function jsonRequest(
 ): Request {
   return new Request(`https://integrautomacao.com.br${path}`, {
     method,
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      origin: "https://integrautomacao.com.br",
+      "sec-fetch-site": "same-origin",
+    },
     body: method === "GET" || method === "HEAD" ? undefined : JSON.stringify(body),
   });
 }
@@ -51,11 +76,15 @@ export function pagesContext<Env>(
   request: Request,
   env: Env,
   next: () => Promise<Response> = async () => new Response("next"),
+  waitUntilCapture?: Promise<unknown>[],
 ): EventContext<Env, string, Record<string, unknown>> {
   return {
     request,
     functionPath: new URL(request.url).pathname,
-    waitUntil: () => undefined,
+    waitUntil: (promise: Promise<unknown>) => {
+      waitUntilCapture?.push(promise);
+      void promise.catch(() => undefined);
+    },
     passThroughOnException: () => undefined,
     next,
     env: {
@@ -84,8 +113,9 @@ export async function requestDetails(
   init?: RequestInit,
 ): Promise<{ body: string; headers: Headers; method: string; url: URL }> {
   const request = new Request(input, init);
+  const body = new TextDecoder().decode(await request.arrayBuffer());
   return {
-    body: await request.text(),
+    body,
     headers: request.headers,
     method: request.method,
     url: new URL(request.url),

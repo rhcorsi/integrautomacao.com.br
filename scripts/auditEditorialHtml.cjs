@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { metadataPolicyViolations } = require("./editorialMetadataPolicy.cjs");
 
 const distDir = path.join(__dirname, "..", "dist");
 const detailLimit = Number.parseInt(process.env.AUDIT_EDITORIAL_MAX_DETAILS || "120", 10);
@@ -115,7 +116,7 @@ function warn(route, rule, message) {
   warnings.push({ route, rule, message });
 }
 
-const requiredOpenGraph = ["og:title", "og:description", "og:type", "og:url", "og:image", "og:image:alt"];
+const requiredOpenGraph = ["og:title", "og:description", "og:type", "og:image", "og:image:alt"];
 const requiredTwitter = ["twitter:card", "twitter:title", "twitter:description", "twitter:image", "twitter:image:alt"];
 const requiresGovernedReview = (route) =>
   (route.startsWith("/setores/") && route !== "/setores/") ||
@@ -311,9 +312,11 @@ for (const file of files) {
 
   const canonicals = canonicalHrefs(head);
   const canonical = canonicals[0];
-  if (canonicals.length !== 1 || !canonical) {
-    error(route, "canonical", `esperado 1 link canonical não vazio; encontrado(s): ${canonicals.length}`);
-  } else {
+  const ogUrls = metaContents(head, "property", "og:url");
+  for (const violation of metadataPolicyViolations(route, { canonicals, ogUrls })) {
+    error(route, violation.rule, violation.message);
+  }
+  if (route !== "/404.html" && canonicals.length === 1 && canonical) {
     try {
       const url = new URL(canonical);
       if (url.protocol !== "https:") error(route, "canonical", `canonical deve usar HTTPS: ${canonical}`);

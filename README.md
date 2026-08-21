@@ -27,8 +27,8 @@ formulários e para a normalização canônica de hosts, portas e URLs legadas.
 
 ## Pré-requisitos
 
-- Node.js **22 LTS** (verifique com `node -v`; o repo tem `.nvmrc`)
-- npm 10+
+- Node.js **22.23.2** (verifique com `node -v`; o repo tem `.nvmrc`)
+- npm **10.9.8** (verifique com `npm --version`; o `package.json` recusa outra versão para desenvolvimento)
 
 ## Comandos
 
@@ -141,7 +141,7 @@ site/
 ├── .npmrc                   # include=optional — SEM ele, npm ci no Linux do
 │                            # Pages omite binários opcionais (lightningcss,
 │                            # emnapi, pagefind) e o build quebra
-├── .nvmrc                   # Node 22.12.0 (CI e Pages leem daqui)
+├── .nvmrc                   # Node 22.23.2 (CI e Pages leem daqui)
 └── package.json
 ```
 
@@ -676,7 +676,7 @@ Antes de publicar qualquer case/post derivado de propostas internas:
 | `RESEND_TOPIC_ID` | runtime | encrypted | `api/newsletter.ts` — preferência explícita (opt_out até confirmar) |
 | `CONTACT_EMAIL_TO` | runtime | encrypted | destino do contato (comercial@) |
 | `CONTACT_EMAIL_FROM` | runtime | encrypted | remetente (`noreply@forms.` — subdomínio dedicado do Resend) |
-| `NODE_VERSION` | build | — | `22` no Pages/CI (ver `.nvmrc`: 22.12.0) |
+| `NODE_VERSION` | build | — | `22.23.2` no Pages/CI (ver `.nvmrc`: 22.23.2) |
 | `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` | CI (GitHub secrets) | secret | só na Opção B de deploy |
 
 ## Serviços de terceiros
@@ -726,7 +726,7 @@ Existem **dois caminhos** de deploy. Use o que preferir — não os dois ao mesm
 4. Em **Settings → Environment Variables → Production**, adicione:
 
    ```
-   NODE_VERSION              = 22
+   NODE_VERSION              = 22.23.2
    PUBLIC_TURNSTILE_SITE_KEY = <site key>     # public — vai para o HTML
    TURNSTILE_SECRET_KEY      = <secret>       # encrypted
    RESEND_SEND_API_KEY       = <sending key>  # encrypted; somente POST /emails

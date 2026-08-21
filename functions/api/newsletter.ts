@@ -1,23 +1,24 @@
-/**
- * Cloudflare Pages Function — POST /api/newsletter
- *
- * Registers explicit consent in Resend Contacts + Segments + Topics. A Topic
- * opt-in is the final sending gate. Existing global opt-outs are never reset
- * automatically and no partially completed workflow is reported as success.
- */
-
-import type { NewsletterEnv } from "../_shared/env";
+import type { NewsletterInitialEnv } from "../_shared/env";
 import {
-  drainResponseLimited,
-  fetchWithTimeout,
   isJsonContentType,
   isRecord,
   jsonResponse,
   logWorkerEvent,
   methodNotAllowed,
   readRequestJsonLimited,
-  readResponseJsonLimited,
 } from "../_shared/http";
+import { generateConfirmationToken } from "../_shared/newsletter/crypto";
+import {
+  type ConfirmationEmailErrorCode,
+  sendConfirmationEmail,
+} from "../_shared/newsletter/email";
+import { drainNewsletterJobs } from "../_shared/newsletter/reconcile";
+import { createNewsletterStore } from "../_shared/newsletter/store";
+import {
+  CONSENT_POLICY_VERSION,
+  CONSENT_TEXT,
+  normalizeNewsletterEmail,
+} from "../_shared/newsletter/types";
 import { verifyTurnstile } from "../_shared/turnstile";
 
 interface NewsletterPayload {
@@ -28,46 +29,33 @@ interface NewsletterPayload {
   "cf-turnstile-response": string;
 }
 
-interface ConsentEvidence {
-  newsletter_consent_at: string;
-  newsletter_policy_version: string;
-  newsletter_consent_source: string;
-  newsletter_consent_text: string;
-}
-
-interface ResendContact {
-  id: string;
-  email: string;
-  unsubscribed: boolean;
-}
-
-type TopicSubscription = "missing" | "opt_in" | "opt_out";
-
-type ContactLookup =
-  | { kind: "error" }
-  | { kind: "exists"; contact: ResendContact }
-  | { kind: "missing" };
-
-type SubscriptionResult =
-  | { ok: true; alreadyExists?: boolean; mode: "contacts" }
-  | { ok: false; kind: "global-opt-out" | "provider"; status: number };
+type RequestEnvironment = "loopback" | "preview" | "production";
 
 const MAX_BODY_BYTES = 8_000;
-const RESEND_TIMEOUT_MS = 10_000;
-const RESEND_RESPONSE_BYTES = 32_768;
-const CONSENT_POLICY_VERSION = "2026-07-13";
-const CONSENT_TEXT =
-  "Concordo em receber a newsletter Integra Ação e com o tratamento dos meus dados conforme a Política de Privacidade. Posso cancelar a inscrição a qualquer momento.";
+const MAX_NAME_LENGTH = 120;
+const MAX_EMAIL_LENGTH = 180;
+const MAX_TURNSTILE_TOKEN_LENGTH = 2_048;
+const MAX_CONSENT_SOURCE_LENGTH = 200;
+const CLEANUP_LIMIT = 20;
+const PRODUCTION_CONFIRMATION_ORIGIN = "https://integrautomacao.com.br";
+const PAGES_ROOT_HOST = "integrautomacao-com-br.pages.dev";
+const PAGES_PREVIEW_SUFFIX = `.${PAGES_ROOT_HOST}`;
+const PRODUCTION_REQUEST_HOSTS = new Set([
+  "integrautomacao.com.br",
+  "www.integrautomacao.com.br",
+  "newsletter.integrautomacao.com.br",
+  "webinar.integrautomacao.com.br",
+  "eventos.integrautomacao.com.br",
+  PAGES_ROOT_HOST,
+]);
+const LOOPBACK_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-const singleLine = (value: string, max: number) =>
-  value
-    .replace(/[\u0000-\u001f\u007f]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, max);
-
-const isEmail = (value: string) =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) && value.length <= 180;
+const NEUTRAL_RESPONSE = {
+  ok: true,
+  message:
+    "Se o endereço puder receber a newsletter, enviaremos as próximas instruções por e-mail.",
+};
 
 function parsePayload(value: unknown): NewsletterPayload | null {
   if (!isRecord(value)) return null;
@@ -77,7 +65,6 @@ function parsePayload(value: unknown): NewsletterPayload | null {
   const lgpd = value.lgpd;
   const token = value["cf-turnstile-response"];
   const website = value.website;
-
   if (
     typeof name !== "string" ||
     typeof email !== "string" ||
@@ -92,614 +79,172 @@ function parsePayload(value: unknown): NewsletterPayload | null {
     name,
     email,
     lgpd,
-    "cf-turnstile-response": token,
     website,
+    "cf-turnstile-response": token,
   };
 }
 
-function resendHeaders(apiKey: string): Record<string, string> {
-  return {
-    Authorization: `Bearer ${apiKey}`,
-    "Content-Type": "application/json",
-    "User-Agent": "integrautomacao-newsletter/2.0",
-  };
+function normalizeName(value: string): string {
+  return value
+    .normalize("NFKC")
+    .replace(/[\u0000-\u001f\u007f]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-async function resendFetch(
-  input: string,
-  init: RequestInit,
-): Promise<Response> {
-  const first = await fetchWithTimeout(input, init, RESEND_TIMEOUT_MS);
-  if (first.status !== 429) return first;
-
-  const retryAfter = Number(first.headers.get("retry-after") ?? "1");
-  const waitMs = Number.isFinite(retryAfter)
-    ? Math.min(Math.max(retryAfter * 1_000, 250), 2_000)
-    : 1_000;
-  await drainResponseLimited(first, RESEND_RESPONSE_BYTES);
-  await new Promise((resolve) => setTimeout(resolve, waitMs));
-  return fetchWithTimeout(input, init, RESEND_TIMEOUT_MS);
+function validEmail(value: string): boolean {
+  return value.length <= MAX_EMAIL_LENGTH && EMAIL_PATTERN.test(value);
 }
 
-async function parseResendRecord(
-  response: Response,
-): Promise<Record<string, unknown> | null> {
-  const decoded = await readResponseJsonLimited(response, RESEND_RESPONSE_BYTES);
-  return decoded.ok && isRecord(decoded.value) ? decoded.value : null;
-}
-
-async function lookupContact(
-  email: string,
-  apiKey: string,
-  requestId: string,
-): Promise<ContactLookup> {
-  const response = await resendFetch(
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}`,
-    { method: "GET", headers: resendHeaders(apiKey) },
-  );
-  if (response.status === 404) {
-    await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-    return { kind: "missing" };
+function classifyRequestUrl(url: URL): RequestEnvironment | null {
+  const hostname = url.hostname.toLowerCase();
+  if (PRODUCTION_REQUEST_HOSTS.has(hostname)) {
+    return url.protocol === "https:" && url.port === ""
+      ? "production"
+      : null;
   }
-  if (!response.ok) {
-    await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-    logWorkerEvent("error", "newsletter_contact_lookup_failed", {
-      requestId,
-      providerStatus: response.status,
-    });
-    return { kind: "error" };
+  if (hostname !== PAGES_ROOT_HOST && hostname.endsWith(PAGES_PREVIEW_SUFFIX)) {
+    return url.protocol === "https:" && url.port === "" ? "preview" : null;
   }
+  if (LOOPBACK_HOSTS.has(hostname)) {
+    return url.protocol === "http:" || url.protocol === "https:"
+      ? "loopback"
+      : null;
+  }
+  return null;
+}
 
-  const contact = await parseResendRecord(response);
+function validateRequestOrigin(
+  request: Request,
+): { kind: RequestEnvironment; url: URL } | null {
+  const requestUrl = new URL(request.url);
+  const kind = classifyRequestUrl(requestUrl);
+  if (!kind) return null;
+
+  const originHeader = request.headers.get("origin");
+  if (!originHeader || originHeader === "null") return null;
+  let parsedOrigin: URL;
+  try {
+    parsedOrigin = new URL(originHeader);
+  } catch {
+    return null;
+  }
   if (
-    !contact ||
-    typeof contact.id !== "string" ||
-    typeof contact.email !== "string" ||
-    typeof contact.unsubscribed !== "boolean"
+    originHeader !== parsedOrigin.origin ||
+    parsedOrigin.origin !== requestUrl.origin
   ) {
-    logWorkerEvent("error", "newsletter_contact_lookup_invalid_response", {
-      requestId,
-    });
-    return { kind: "error" };
-  }
-
-  return {
-    kind: "exists",
-    contact: {
-      id: contact.id,
-      email: contact.email,
-      unsubscribed: contact.unsubscribed,
-    },
-  };
-}
-
-async function listContainsId(
-  endpoint: string,
-  targetId: string,
-  apiKey: string,
-  requestId: string,
-  event: string,
-): Promise<boolean | null> {
-  const response = await resendFetch(endpoint, {
-    method: "GET",
-    headers: resendHeaders(apiKey),
-  });
-  if (!response.ok) {
-    await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-    logWorkerEvent("error", event, {
-      requestId,
-      providerStatus: response.status,
-    });
     return null;
   }
 
-  const decoded = await parseResendRecord(response);
-  if (!decoded || !Array.isArray(decoded.data)) {
-    logWorkerEvent("error", `${event}_invalid_response`, { requestId });
-    return null;
+  const fetchSite = request.headers.get("sec-fetch-site");
+  if (fetchSite !== null && fetchSite !== "same-origin") return null;
+  return { kind, url: requestUrl };
+}
+
+function validPreviewConfirmationOrigin(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
   }
-  return decoded.data.some(
-    (entry) => isRecord(entry) && entry.id === targetId,
+  const hostname = url.hostname.toLowerCase();
+  return (
+    value === url.origin &&
+    url.protocol === "https:" &&
+    url.username === "" &&
+    url.password === "" &&
+    url.port === "" &&
+    hostname !== PAGES_ROOT_HOST &&
+    hostname.endsWith(PAGES_PREVIEW_SUFFIX)
   );
 }
 
-async function contactHasSegment(
-  email: string,
-  segmentId: string,
-  apiKey: string,
-  requestId: string,
-): Promise<boolean | null> {
-  return listContainsId(
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}/segments`,
-    segmentId,
-    apiKey,
-    requestId,
-    "newsletter_segment_lookup_failed",
-  );
-}
-
-async function getTopicSubscription(
-  email: string,
-  topicId: string,
-  apiKey: string,
-  requestId: string,
-): Promise<TopicSubscription | null> {
-  const response = await resendFetch(
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}/topics`,
-    { method: "GET", headers: resendHeaders(apiKey) },
-  );
-  if (!response.ok) {
-    await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-    logWorkerEvent("error", "newsletter_topic_lookup_failed", {
-      requestId,
-      providerStatus: response.status,
-    });
-    return null;
+function coherentConfirmationOrigin(
+  requestEnvironment: RequestEnvironment,
+  confirmationOrigin: string | undefined,
+): boolean {
+  if (!confirmationOrigin) return false;
+  if (requestEnvironment === "production") {
+    return confirmationOrigin === PRODUCTION_CONFIRMATION_ORIGIN;
   }
-
-  const decoded = await parseResendRecord(response);
-  if (!decoded || !Array.isArray(decoded.data)) {
-    logWorkerEvent("error", "newsletter_topic_lookup_invalid_response", {
-      requestId,
-    });
-    return null;
+  if (requestEnvironment === "preview") {
+    return validPreviewConfirmationOrigin(confirmationOrigin);
   }
-
-  const topic = decoded.data.find(
-    (entry) =>
-      isRecord(entry) &&
-      entry.id === topicId &&
-      (entry.subscription === "opt_in" || entry.subscription === "opt_out"),
-  );
-  if (!isRecord(topic)) return "missing";
-  return topic.subscription === "opt_in" ? "opt_in" : "opt_out";
-}
-
-async function updateContactEvidence(
-  email: string,
-  apiKey: string,
-  evidence: ConsentEvidence,
-  requestId: string,
-): Promise<boolean> {
-  const response = await resendFetch(
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}`,
-    {
-      method: "PATCH",
-      headers: resendHeaders(apiKey),
-      body: JSON.stringify({ properties: evidence }),
-    },
-  );
-  await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-  if (response.ok) return true;
-  logWorkerEvent("error", "newsletter_evidence_update_failed", {
-    requestId,
-    providerStatus: response.status,
-  });
   return false;
 }
 
-async function addContactToSegment(
-  email: string,
-  segmentId: string,
-  apiKey: string,
+function safeConsentSource(requestUrl: URL, referer: string | null): string {
+  if (referer) {
+    try {
+      const source = new URL(referer);
+      if (source.origin === requestUrl.origin) {
+        return source.pathname.slice(0, MAX_CONSENT_SOURCE_LENGTH);
+      }
+    } catch {
+      // Fall back to the endpoint path; no header content is persisted.
+    }
+  }
+  return requestUrl.pathname.slice(0, MAX_CONSENT_SOURCE_LENGTH);
+}
+
+function hasD1Binding(value: unknown): value is D1Database {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "prepare" in value &&
+    typeof value.prepare === "function" &&
+    "batch" in value &&
+    typeof value.batch === "function"
+  );
+}
+
+async function markDeliveryFailed(
+  store: ReturnType<typeof createNewsletterStore>,
+  tokenId: string,
+  errorCode: ConfirmationEmailErrorCode,
   requestId: string,
-): Promise<{ added: boolean; ok: boolean }> {
+  attempts: 1 | 2,
+  providerStatus?: number,
+): Promise<void> {
   try {
-    const response = await resendFetch(
-      `https://api.resend.com/contacts/${encodeURIComponent(email)}/segments/${encodeURIComponent(segmentId)}`,
-      { method: "POST", headers: resendHeaders(apiKey) },
+    const transitioned = await store.markConfirmationEmailFailed(
+      tokenId,
+      errorCode,
+      new Date(),
     );
-    await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-    if (response.ok) return { added: true, ok: true };
-    if (response.status === 409 || response.status === 422) {
-      const confirmed = await contactHasSegment(
-        email,
-        segmentId,
-        apiKey,
-        requestId,
-      );
-      return { added: false, ok: confirmed === true };
-    }
-    if (response.status >= 500) {
-      const confirmed = await contactHasSegment(
-        email,
-        segmentId,
-        apiKey,
-        requestId,
-      );
-      if (confirmed === true) {
-        logWorkerEvent("warn", "newsletter_segment_add_ambiguity_confirmed", {
-          requestId,
-          providerStatus: response.status,
-        });
-        return { added: true, ok: true };
-      }
-    }
-    logWorkerEvent("error", "newsletter_segment_add_failed", {
+    logWorkerEvent(transitioned ? "warn" : "info", "newsletter_delivery_failed", {
       requestId,
-      providerStatus: response.status,
+      tokenId,
+      state: transitioned ? "failed" : "cas_false",
+      errorCode,
+      attempts,
+      providerStatus,
     });
-    return { added: false, ok: false };
-  } catch (error) {
-    // The provider may have committed the membership before the response was
-    // lost. Read it back and classify it as ours so a later failure compensates
-    // it; this function is called only after the initial snapshot was absent.
-    const confirmed = await contactHasSegment(
-      email,
-      segmentId,
-      apiKey,
+  } catch {
+    logWorkerEvent("error", "newsletter_delivery_failed_cas_exception", {
       requestId,
-    ).catch(() => null);
-    if (confirmed === true) {
-      logWorkerEvent("warn", "newsletter_segment_add_ambiguity_confirmed", {
-        requestId,
-      });
-      return { added: true, ok: true };
-    }
-    logWorkerEvent("error", "newsletter_segment_add_exception", {
-      requestId,
-      errorType: error instanceof Error ? error.name : "UnknownError",
+      tokenId,
+      state: "cas_exception",
+      errorCode,
+      attempts,
+      providerStatus,
     });
-    return { added: false, ok: false };
   }
 }
 
-async function removeContactFromSegment(
-  email: string,
-  segmentId: string,
-  apiKey: string,
-  requestId: string,
-): Promise<boolean> {
-  const endpoint =
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}` +
-    `/segments/${encodeURIComponent(segmentId)}`;
-
-  let providerStatus: number | undefined;
-  let errorType: string | undefined;
-  for (let attempt = 1; attempt <= 2; attempt += 1) {
-    try {
-      const response = await resendFetch(endpoint, {
-        method: "DELETE",
-        headers: resendHeaders(apiKey),
-      });
-      providerStatus = response.status;
-      await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-      if (response.ok || response.status === 404) return true;
-    } catch (error) {
-      errorType = error instanceof Error ? error.name : "UnknownError";
-    }
-  }
-  logWorkerEvent("error", "newsletter_segment_rollback_failed", {
-    requestId,
-    severity: "critical",
-    providerStatus,
-    errorType,
-  });
-  return false;
-}
-
-async function optInTopic(
-  email: string,
-  topicId: string,
-  apiKey: string,
-  requestId: string,
-): Promise<boolean> {
-  const response = await resendFetch(
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}/topics`,
-    {
-      method: "PATCH",
-      headers: resendHeaders(apiKey),
-      body: JSON.stringify({
-        topics: [{ id: topicId, subscription: "opt_in" }],
-      }),
-    },
-  );
-  await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-  if (response.ok) return true;
-
-  logWorkerEvent("error", "newsletter_topic_opt_in_failed", {
-    requestId,
-    providerStatus: response.status,
-  });
-  return false;
-}
-
-async function restoreTopicOptOut(
-  email: string,
-  topicId: string,
-  apiKey: string,
-  requestId: string,
-): Promise<boolean> {
-  const endpoint =
-    `https://api.resend.com/contacts/${encodeURIComponent(email)}/topics`;
-
-  let providerStatus: number | undefined;
-  let errorType: string | undefined;
-  for (let attempt = 1; attempt <= 2; attempt += 1) {
-    try {
-      const response = await resendFetch(endpoint, {
-        method: "PATCH",
-        headers: resendHeaders(apiKey),
-        body: JSON.stringify({
-          topics: [{ id: topicId, subscription: "opt_out" }],
-        }),
-      });
-      providerStatus = response.status;
-      await drainResponseLimited(response, RESEND_RESPONSE_BYTES);
-      if (response.ok) return true;
-    } catch (error) {
-      errorType = error instanceof Error ? error.name : "UnknownError";
-    }
-  }
-  logWorkerEvent("error", "newsletter_topic_rollback_failed", {
-    requestId,
-    severity: "critical",
-    providerStatus,
-    errorType,
-  });
-  return false;
-}
-
-async function subscribeExistingContact(
-  contact: ResendContact,
-  segmentId: string,
-  topicId: string,
-  apiKey: string,
-  evidence: ConsentEvidence,
-  requestId: string,
-): Promise<SubscriptionResult> {
-  if (contact.unsubscribed) {
-    logWorkerEvent("info", "newsletter_global_opt_out_preserved", { requestId });
-    return { ok: false, kind: "global-opt-out", status: 409 };
-  }
-
-  // Depois do lookup inevitável por e-mail, use o ID opaco do provedor em
-  // todas as URLs subsequentes para minimizar PII em infraestrutura.
-  const contactRef = contact.id;
-
-  const [hasSegment, topicSubscription] = await Promise.all([
-    contactHasSegment(contactRef, segmentId, apiKey, requestId),
-    getTopicSubscription(contactRef, topicId, apiKey, requestId),
-  ]);
-  if (hasSegment === null || topicSubscription === null) {
-    return { ok: false, kind: "provider", status: 502 };
-  }
-
-  let segmentAdded = false;
-  try {
-    if (!hasSegment) {
-      const segment = await addContactToSegment(
-        contactRef,
-        segmentId,
-        apiKey,
-        requestId,
-      );
-      if (!segment.ok) {
-        return { ok: false, kind: "provider", status: 502 };
-      }
-      segmentAdded = segment.added;
-    }
-
-    // Evidence is stored before the Topic sending gate. It remains a truthful
-    // record of the submitted consent even if a later provider operation fails.
-    if (
-      !(await updateContactEvidence(
-        contactRef,
-        apiKey,
-        evidence,
-        requestId,
-      ))
-    ) {
-      if (segmentAdded) {
-        await removeContactFromSegment(
-          contactRef,
-          segmentId,
-          apiKey,
-          requestId,
-        );
-      }
-      return { ok: false, kind: "provider", status: 502 };
-    }
-
-    if (
-      topicSubscription !== "opt_in" &&
-      !(await optInTopic(contactRef, topicId, apiKey, requestId))
-    ) {
-      // A provider can apply a mutation and still lose the HTTP response. Read
-      // back the sending gate before deciding whether the workflow succeeded.
-      const confirmed = await getTopicSubscription(
-        contactRef,
-        topicId,
-        apiKey,
-        requestId,
-      );
-      if (confirmed === "opt_in") {
-        return { ok: true, alreadyExists: true, mode: "contacts" };
-      }
-
-      // Both "missing" and the documented opt_out state are non-sending. A
-      // conservative opt_out compensates an ambiguous failed PATCH.
-      await restoreTopicOptOut(
-        contactRef,
-        topicId,
-        apiKey,
-        requestId,
-      );
-      if (segmentAdded) {
-        await removeContactFromSegment(
-          contactRef,
-          segmentId,
-          apiKey,
-          requestId,
-        );
-      }
-      return { ok: false, kind: "provider", status: 502 };
-    }
-
-    return { ok: true, alreadyExists: true, mode: "contacts" };
-  } catch (error) {
-    // A request failure after a segment mutation must not leave a newly added
-    // audience membership behind. Topic was the final gate, so restoring
-    // opt_out is always conservative when its outcome is unknown.
-    if (topicSubscription !== "opt_in") {
-      await restoreTopicOptOut(
-        contactRef,
-        topicId,
-        apiKey,
-        requestId,
-      ).catch(() => false);
-    }
-    if (segmentAdded) {
-      await removeContactFromSegment(
-        contactRef,
-        segmentId,
-        apiKey,
-        requestId,
-      ).catch(() => false);
-    }
-    logWorkerEvent("error", "newsletter_existing_workflow_exception", {
-      requestId,
-      errorType: error instanceof Error ? error.name : "UnknownError",
-    });
-    return { ok: false, kind: "provider", status: 502 };
-  }
-}
-
-async function subscribeContact(
-  segmentId: string,
-  topicId: string,
-  apiKey: string,
-  contact: { email: string; first_name: string; last_name: string },
-  evidence: ConsentEvidence,
-  requestId: string,
-): Promise<SubscriptionResult> {
-  try {
-    const lookup = await lookupContact(contact.email, apiKey, requestId);
-    if (lookup.kind === "error") {
-      return { ok: false, kind: "provider", status: 502 };
-    }
-    if (lookup.kind === "exists") {
-      return subscribeExistingContact(
-        lookup.contact,
-        segmentId,
-        topicId,
-        apiKey,
-        evidence,
-        requestId,
-      );
-    }
-
-    // For a brand-new contact, this single create request records the explicit
-    // newsletter consent and establishes global + Topic subscription together.
-    const createInit: RequestInit = {
-      method: "POST",
-      headers: {
-        ...resendHeaders(apiKey),
-        "Idempotency-Key": `newsletter-${requestId}`,
-      },
-      body: JSON.stringify({
-        ...contact,
-        unsubscribed: false,
-        segments: [{ id: segmentId }],
-        topics: [{ id: topicId, subscription: "opt_in" }],
-        properties: evidence,
-      }),
-    };
-
-    let create: Response;
-    try {
-      create = await resendFetch("https://api.resend.com/contacts", createInit);
-    } catch (error) {
-      // A create can commit and then lose its response. Confirm the resulting
-      // global state before returning an error or performing any further write.
-      const applied = await lookupContact(
-        contact.email,
-        apiKey,
-        requestId,
-      ).catch((): ContactLookup => ({ kind: "error" }));
-      if (applied.kind === "exists") {
-        logWorkerEvent("warn", "newsletter_create_ambiguity_confirmed", {
-          requestId,
-        });
-        return subscribeExistingContact(
-          applied.contact,
-          segmentId,
-          topicId,
-          apiKey,
-          evidence,
-          requestId,
-        );
-      }
-      logWorkerEvent("error", "newsletter_contact_create_exception", {
-        requestId,
-        errorType: error instanceof Error ? error.name : "UnknownError",
-      });
-      return { ok: false, kind: "provider", status: 502 };
-    }
-    await drainResponseLimited(create, RESEND_RESPONSE_BYTES);
-    if (create.ok) return { ok: true, mode: "contacts" };
-
-    // Race: another request may create the contact after our lookup. Re-read
-    // the complete contact state before deciding whether mutation is allowed.
-    if (
-      create.status === 409 ||
-      create.status === 422 ||
-      create.status >= 500
-    ) {
-      const raced = await lookupContact(contact.email, apiKey, requestId);
-      if (raced.kind === "exists") {
-        return subscribeExistingContact(
-          raced.contact,
-          segmentId,
-          topicId,
-          apiKey,
-          evidence,
-          requestId,
-        );
-      }
-    }
-
-    logWorkerEvent("error", "newsletter_contact_create_failed", {
-      requestId,
-      providerStatus: create.status,
-    });
-    return { ok: false, kind: "provider", status: 502 };
-  } catch (error) {
-    logWorkerEvent("error", "newsletter_resend_exception", {
-      requestId,
-      errorType: error instanceof Error ? error.name : "UnknownError",
-    });
-    return { ok: false, kind: "provider", status: 502 };
-  }
-}
-
-export const onRequestPost: PagesFunction<NewsletterEnv> = async ({
-  request,
-  env,
-}) => {
+export const onRequestPost: PagesFunction<NewsletterInitialEnv> = async (
+  context,
+) => {
+  const { env, request } = context;
   const requestId = crypto.randomUUID();
   const respond = (data: unknown, status = 200) =>
     jsonResponse(data, status, requestId);
+  const neutral = () => respond(NEUTRAL_RESPONSE, 202);
 
-  if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_CONTACTS_API_KEY) {
-    logWorkerEvent("error", "newsletter_configuration_missing", {
-      requestId,
-      binding: "TURNSTILE_OR_RESEND_KEY",
-    });
-    return respond(
-      { ok: false, message: "Configuração de inscrição indisponível." },
-      503,
-    );
-  }
-  if (!env.RESEND_SEGMENT_ID || !env.RESEND_TOPIC_ID) {
-    logWorkerEvent("error", "newsletter_configuration_missing", {
-      requestId,
-      binding: "RESEND_SEGMENT_OR_TOPIC_ID",
-    });
-    return respond(
-      { ok: false, message: "Lista de inscrição temporariamente indisponível." },
-      503,
-    );
+  const requestOrigin = validateRequestOrigin(request);
+  if (!requestOrigin) {
+    return respond({ ok: false, message: "Origem da requisição inválida." }, 400);
   }
 
   if (!isJsonContentType(request.headers.get("content-type"))) {
@@ -717,38 +262,63 @@ export const onRequestPost: PagesFunction<NewsletterEnv> = async ({
   if (!payload) {
     return respond({ ok: false, message: "Campos inválidos." }, 400);
   }
-
-  if (payload.website) return respond({ ok: true });
+  if (payload.website) return neutral();
   if (payload.lgpd !== "1") {
     return respond(
-      { ok: false, message: "É necessário concordar com a Política de Privacidade." },
+      {
+        ok: false,
+        message: "É necessário concordar com a Política de Privacidade.",
+      },
       400,
     );
   }
 
-  const name = singleLine(payload.name, 121);
-  const email = singleLine(payload.email, 181).toLowerCase();
-  const token = payload["cf-turnstile-response"].trim();
-  if (name.length < 2 || name.length > 120) {
+  const name = normalizeName(payload.name);
+  const email = normalizeNewsletterEmail(payload.email);
+  const turnstileToken = payload["cf-turnstile-response"].trim();
+  if (name.length < 2 || name.length > MAX_NAME_LENGTH) {
     return respond({ ok: false, message: "Nome inválido." }, 400);
   }
-  if (!isEmail(email)) {
+  if (!validEmail(email)) {
     return respond({ ok: false, message: "E-mail inválido." }, 400);
   }
-  if (!token || token.length > 2_048) {
+  if (
+    !turnstileToken ||
+    turnstileToken.length > MAX_TURNSTILE_TOKEN_LENGTH
+  ) {
     return respond(
       { ok: false, message: "Verificação de segurança ausente." },
       403,
     );
   }
 
-  const requestHostname = new URL(request.url).hostname;
+  if (!env.TURNSTILE_SECRET_KEY) {
+    logWorkerEvent("error", "newsletter_configuration_missing", {
+      requestId,
+      binding: "TURNSTILE_SECRET_KEY",
+    });
+    return respond(
+      { ok: false, message: "Configuração de inscrição indisponível." },
+      503,
+    );
+  }
+  if (!hasD1Binding(env.NEWSLETTER_DB)) {
+    logWorkerEvent("error", "newsletter_configuration_missing", {
+      requestId,
+      binding: "NEWSLETTER_DB",
+    });
+    return respond(
+      { ok: false, message: "Inscrição temporariamente indisponível." },
+      503,
+    );
+  }
+
   const turnstile = await verifyTurnstile({
     action: "newsletter-form",
-    expectedHostname: requestHostname,
+    expectedHostname: requestOrigin.url.hostname,
     ip: request.headers.get("CF-Connecting-IP") ?? undefined,
     secret: env.TURNSTILE_SECRET_KEY,
-    token,
+    token: turnstileToken,
   });
   if (turnstile === "unavailable") {
     logWorkerEvent("warn", "newsletter_turnstile_unavailable", { requestId });
@@ -767,71 +337,147 @@ export const onRequestPost: PagesFunction<NewsletterEnv> = async ({
     );
   }
 
-  const parts = name.split(/\s+/);
-  const contact = {
-    email,
-    first_name: parts[0]?.slice(0, 80) ?? "",
-    last_name: parts.slice(1).join(" ").slice(0, 80),
-  };
-  let consentSource = new URL(request.url).pathname;
-  const referer = request.headers.get("referer");
-  if (referer) {
-    try {
-      const sourceUrl = new URL(referer);
-      if (sourceUrl.hostname === requestHostname) {
-        consentSource = sourceUrl.pathname;
-      }
-    } catch {
-      // Invalid header: preserve the safe source derived from the endpoint.
-    }
-  }
-  const evidence: ConsentEvidence = {
-    newsletter_consent_at: new Date().toISOString(),
-    newsletter_policy_version: CONSENT_POLICY_VERSION,
-    newsletter_consent_source: consentSource.slice(0, 200),
-    newsletter_consent_text: CONSENT_TEXT,
-  };
-
-  const result = await subscribeContact(
-    env.RESEND_SEGMENT_ID,
-    env.RESEND_TOPIC_ID,
-    env.RESEND_CONTACTS_API_KEY,
-    contact,
-    evidence,
-    requestId,
+  const registrationNow = new Date();
+  const subscriptionId = crypto.randomUUID();
+  const tokenId = crypto.randomUUID();
+  const confirmationToken = await generateConfirmationToken();
+  const consentSource = safeConsentSource(
+    requestOrigin.url,
+    request.headers.get("referer"),
   );
+  const store = createNewsletterStore(env.NEWSLETTER_DB);
 
-  if (!result.ok && result.kind === "global-opt-out") {
+  let registration: Awaited<ReturnType<typeof store.registerPending>>;
+  try {
+    registration = await store.registerPending({
+      subscriptionId,
+      tokenId,
+      tokenSha256: confirmationToken.sha256,
+      name,
+      email,
+      policyVersion: CONSENT_POLICY_VERSION,
+      consentText: CONSENT_TEXT,
+      consentSource,
+      requestId,
+      now: registrationNow,
+    });
+  } catch (error) {
+    logWorkerEvent("error", "newsletter_registration_store_exception", {
+      requestId,
+      errorType: error instanceof Error ? error.name : "UnknownError",
+    });
     return respond(
-      {
-        ok: false,
-        code: "GLOBAL_OPT_OUT",
-        message:
-          "Este e-mail possui um descadastro global. Para proteger sua preferência, não o reativamos automaticamente. Escreva para privacidade@integrautomacao.com.br para solicitar a reinscrição.",
-      },
-      409,
+      { ok: false, message: "Inscrição temporariamente indisponível." },
+      503,
     );
   }
-  if (!result.ok) {
-    return respond(
-      {
-        ok: false,
-        message:
-          "Não foi possível registrar a inscrição agora. Tente novamente em instantes.",
-      },
-      502,
-    );
+
+  if (registration.kind === "send") {
+    const deliveryWork = (async () => {
+      const transactionalApiKey = env.RESEND_TRANSACTIONAL_API_KEY;
+      const emailFrom = env.CONTACT_EMAIL_FROM;
+      const confirmationOrigin = env.NEWSLETTER_CONFIRMATION_ORIGIN;
+      if (
+        !transactionalApiKey ||
+        !emailFrom ||
+        !confirmationOrigin ||
+        !coherentConfirmationOrigin(
+          requestOrigin.kind,
+          confirmationOrigin,
+        )
+      ) {
+        await markDeliveryFailed(
+          store,
+          registration.tokenId,
+          "configuration",
+          requestId,
+          1,
+        );
+        return;
+      }
+
+      const delivery = await sendConfirmationEmail({
+        apiKey: transactionalApiKey,
+        from: emailFrom,
+        to: email,
+        name,
+        rawToken: confirmationToken.raw,
+        tokenId: registration.tokenId,
+        confirmationOrigin,
+      });
+      if (!delivery.ok) {
+        await markDeliveryFailed(
+          store,
+          registration.tokenId,
+          delivery.errorCode,
+          requestId,
+          delivery.attempts,
+          delivery.providerStatus,
+        );
+        return;
+      }
+
+      try {
+        const transitioned = await store.markConfirmationEmailSent(
+          registration.tokenId,
+          delivery.messageId,
+          new Date(),
+        );
+        logWorkerEvent(transitioned ? "info" : "warn", "newsletter_delivery_sent", {
+          requestId,
+          tokenId: registration.tokenId,
+          state: transitioned ? "sent" : "cas_false",
+          attempts: delivery.attempts,
+        });
+      } catch {
+        logWorkerEvent("error", "newsletter_delivery_sent_cas_exception", {
+          requestId,
+          tokenId: registration.tokenId,
+          state: "cas_exception",
+          attempts: delivery.attempts,
+        });
+      }
+    })().catch(() => {
+      logWorkerEvent("error", "newsletter_delivery_continuation_exception", {
+        requestId,
+        tokenId: registration.tokenId,
+        state: "continuation_exception",
+      });
+    });
+    context.waitUntil(deliveryWork);
   }
 
-  logWorkerEvent("info", "newsletter_subscription_confirmed", {
-    requestId,
-    existingContact: result.alreadyExists ?? false,
-  });
-  return respond({
-    ok: true,
-    alreadyExists: result.alreadyExists ?? false,
-    mode: result.mode,
-  });
+  const cleanupWork = store
+    .purgeExpiredPending(registrationNow, CLEANUP_LIMIT)
+    .then((purged) => {
+      if (purged > 0) {
+        logWorkerEvent("info", "newsletter_pending_cleanup", {
+          requestId,
+          state: "purged",
+          purged,
+        });
+      }
+    })
+    .catch(() => {
+      logWorkerEvent("error", "newsletter_pending_cleanup_exception", {
+        requestId,
+        state: "cleanup_exception",
+      });
+    });
+  context.waitUntil(cleanupWork);
+
+  const reconciliationWork = drainNewsletterJobs({ runtimeEnv: env }).catch(
+    () => {
+      logWorkerEvent("error", "newsletter_provider_reconciliation", {
+        requestId,
+        step: "initial_drain",
+        result: "exception",
+      });
+    },
+  );
+  context.waitUntil(reconciliationWork);
+
+  return neutral();
 };
 
 const onlyPost = () =>
@@ -840,6 +486,8 @@ const onlyPost = () =>
   );
 
 export const onRequestGet: PagesFunction = onlyPost;
+export const onRequestHead: PagesFunction = onlyPost;
 export const onRequestPut: PagesFunction = onlyPost;
 export const onRequestPatch: PagesFunction = onlyPost;
 export const onRequestDelete: PagesFunction = onlyPost;
+export const onRequestOptions: PagesFunction = onlyPost;

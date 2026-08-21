@@ -3,6 +3,7 @@ import "@/styles/global.css";
 import interLatinWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import { resolveCanonicalUrl } from "@/utils/seo-policy";
 import { SITE } from "@/utils/site";
 import { organizationSchema, breadcrumbSchema, serializeJsonLd } from "@/utils/schema";
 
@@ -17,7 +18,8 @@ interface Props {
   ogImageHeight?: number;
   ogType?: "website" | "article";
   noindex?: boolean;
-  canonical?: string;
+  nofollow?: boolean;
+  canonical?: string | URL | false;
   bodyClass?: string;
   /** Schema.org blocks específicos da página (Article, Service, etc.). */
   jsonLd?: Record<string, unknown>[];
@@ -34,6 +36,7 @@ const {
   ogImageHeight = 630,
   ogType = "website",
   noindex = false,
+  nofollow = false,
   canonical,
   bodyClass = "",
   jsonLd = [],
@@ -41,7 +44,7 @@ const {
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE.shortName}` : SITE.defaultTitle;
-const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE.url);
+const canonicalURL = resolveCanonicalUrl(canonical, Astro.url.pathname, SITE.url);
 const ogImageBySection: Record<string, string> = {
   blog: "/og/blog.png",
   "automacao-industrial": "/og/solucoes.png",
@@ -91,7 +94,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href={canonicalURL.toString()} />
+    {canonicalURL && <link rel="canonical" href={canonicalURL.toString()} />}
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -119,7 +122,13 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     <meta name="description" content={description} />
     <meta
       name="robots"
-      content={noindex ? "noindex,nofollow" : "max-image-preview:large"}
+      content={
+        noindex
+          ? nofollow
+            ? "noindex,nofollow"
+            : "noindex,follow"
+          : "max-image-preview:large"
+      }
     />
 
     <!-- Open Graph -->
@@ -127,7 +136,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:url" content={canonicalURL.toString()} />
+    {canonicalURL && <meta property="og:url" content={canonicalURL.toString()} />}
     <meta property="og:image" content={ogImageURL.toString()} />
     <meta property="og:image:width" content={String(ogImageWidth)} />
     <meta property="og:image:height" content={String(ogImageHeight)} />

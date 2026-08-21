@@ -161,6 +161,11 @@
   }
 }
 
+.mobile-nav-panel {
+  max-height: calc(100vh - var(--site-header-height, 5rem));
+  max-height: calc(100dvh - var(--site-header-height, 5rem));
+}
+
 /*
  * Impressão limpa: remove o chrome do site (header, footer, skip-link) e
  * deixa só o conteúdo principal. Beneficia artigos, guias e a ferramenta

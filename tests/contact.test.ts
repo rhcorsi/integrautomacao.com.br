@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   onRequestGet,
   onRequestPost,
@@ -11,7 +11,31 @@ import {
   validContactPayload,
 } from "./helpers";
 
+const CONTACT_TEST_NETWORK_BLOCKED = "CONTACT_TEST_NETWORK_BLOCKED";
+const TURNSTILE_URL =
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const RESEND_EMAIL_URL = "https://api.resend.com/emails";
+
+const fetchUrl = (input: RequestInfo | URL): string =>
+  input instanceof Request ? input.url : String(input);
+
+const blockUnexpectedFetch = (input: RequestInfo | URL): never => {
+  throw new Error(`${CONTACT_TEST_NETWORK_BLOCKED}: ${fetchUrl(input)}`);
+};
+
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch").mockRejectedValue(
+    new Error(CONTACT_TEST_NETWORK_BLOCKED),
+  );
+});
+
 describe("POST /api/contact", () => {
+  it("fails closed before a provider fixture is installed", async () => {
+    await expect(
+      globalThis.fetch("data:application/json,{}"),
+    ).rejects.toThrow(CONTACT_TEST_NETWORK_BLOCKED);
+  });
+
   it("rejects unsupported methods", async () => {
     const response = await onRequestGet(
       pagesContext(
@@ -25,7 +49,7 @@ describe("POST /api/contact", () => {
   });
 
   it("returns 413 for a streamed body over the byte limit", async () => {
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const fetchSpy = vi.mocked(globalThis.fetch);
     const request = jsonRequest("/api/contact", {
       ...validContactPayload,
       message: "á".repeat(9_000),
@@ -39,7 +63,7 @@ describe("POST /api/contact", () => {
   });
 
   it("rejects oversized primary fields instead of truncating them", async () => {
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const fetchSpy = vi.mocked(globalThis.fetch);
     const oversizedEmail = `${"a".repeat(175)}@x.com`;
 
     const emailResponse = await onRequestPost(
@@ -67,9 +91,19 @@ describe("POST /api/contact", () => {
   });
 
   it("distinguishes an invalid Turnstile token from provider downtime", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      turnstileResponse("contact-form", { hostname: "attacker.example" }),
+    const fetchMock = vi.mocked(globalThis.fetch).mockImplementation(
+      async (input) => {
+        if (fetchUrl(input) === TURNSTILE_URL) {
+          return turnstileResponse("contact-form", {
+            hostname: "attacker.example",
+          });
+        }
+        return blockUnexpectedFetch(input);
+      },
     );
+    await expect(
+      fetchMock("data:application/json,unexpected-provider"),
+    ).rejects.toThrow(CONTACT_TEST_NETWORK_BLOCKED);
     const invalid = await onRequestPost(
       pagesContext(
         jsonRequest("/api/contact", validContactPayload),
@@ -78,9 +112,12 @@ describe("POST /api/contact", () => {
     );
     expect(invalid.status).toBe(403);
 
-    vi.spyOn(globalThis, "fetch").mockRejectedValue(
-      new TypeError("provider unavailable"),
-    );
+    fetchMock.mockImplementation(async (input) => {
+      if (fetchUrl(input) === TURNSTILE_URL) {
+        throw new TypeError("provider unavailable");
+      }
+      return blockUnexpectedFetch(input);
+    });
     const unavailable = await onRequestPost(
       pagesContext(
         jsonRequest("/api/contact", validContactPayload),
@@ -91,8 +128,16 @@ describe("POST /api/contact", () => {
   });
 
   it("retries Turnstile internal errors and reports provider unavailability", async () => {
-    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      Response.json({ success: false, "error-codes": ["internal-error"] }),
+    const fetchSpy = vi.mocked(globalThis.fetch).mockImplementation(
+      async (input) => {
+        if (fetchUrl(input) === TURNSTILE_URL) {
+          return Response.json({
+            success: false,
+            "error-codes": ["internal-error"],
+          });
+        }
+        return blockUnexpectedFetch(input);
+      },
     );
 
     const response = await onRequestPost(
@@ -113,11 +158,12 @@ describe("POST /api/contact", () => {
   it("retries exactly once with the same Resend body and idempotency key", async () => {
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const resendCalls: Array<{ body: string; idempotencyKey: string | null }> = [];
-    vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
-      const url = new URL(input instanceof Request ? input.url : String(input));
-      if (url.hostname === "challenges.cloudflare.com") {
+    vi.mocked(globalThis.fetch).mockImplementation(async (input, init) => {
+      const url = fetchUrl(input);
+      if (url === TURNSTILE_URL) {
         return turnstileResponse("contact-form");
       }
+      if (url !== RESEND_EMAIL_URL) return blockUnexpectedFetch(input);
 
       resendCalls.push({
         body: String(init?.body ?? ""),
@@ -144,11 +190,12 @@ describe("POST /api/contact", () => {
   it("retries a concurrent idempotent request with the same key", async () => {
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const resendKeys: Array<string | null> = [];
-    vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
-      const url = new URL(input instanceof Request ? input.url : String(input));
-      if (url.hostname === "challenges.cloudflare.com") {
+    vi.mocked(globalThis.fetch).mockImplementation(async (input, init) => {
+      const url = fetchUrl(input);
+      if (url === TURNSTILE_URL) {
         return turnstileResponse("contact-form");
       }
+      if (url !== RESEND_EMAIL_URL) return blockUnexpectedFetch(input);
       resendKeys.push(new Headers(init?.headers).get("idempotency-key"));
       return resendKeys.length === 1
         ? Response.json(
@@ -174,11 +221,12 @@ describe("POST /api/contact", () => {
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
     vi.spyOn(console, "error").mockImplementation(() => undefined);
     let resendCalls = 0;
-    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
-      const url = new URL(input instanceof Request ? input.url : String(input));
-      if (url.hostname === "challenges.cloudflare.com") {
+    vi.mocked(globalThis.fetch).mockImplementation(async (input) => {
+      const url = fetchUrl(input);
+      if (url === TURNSTILE_URL) {
         return turnstileResponse("contact-form");
       }
+      if (url !== RESEND_EMAIL_URL) return blockUnexpectedFetch(input);
       resendCalls += 1;
       return new Response("upstream", { status: 503 });
     });
