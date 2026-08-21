@@ -14,7 +14,8 @@
   // URL). Se o projeto migrar para Workers, reavaliar observability aqui.
   "vars": {
     "NODE_VERSION": "22.23.2",
-    "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU"
+    "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU",
+    "NEWSLETTER_CONFIRMATION_ORIGIN": "https://integrautomacao.com.br"
   },
   "d1_databases": [
     {
@@ -29,7 +30,8 @@
     "preview": {
       "vars": {
         "NODE_VERSION": "22.23.2",
-        "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU"
+        "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU",
+        "NEWSLETTER_CONFIRMATION_ORIGIN": "https://codex-resolve-all-audit.integrautomacao-com-br.pages.dev"
       },
       "d1_databases": [
         {
@@ -43,7 +45,8 @@
     "production": {
       "vars": {
         "NODE_VERSION": "22.23.2",
-        "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU"
+        "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADKRCm67kAoc7SHU",
+        "NEWSLETTER_CONFIRMATION_ORIGIN": "https://integrautomacao.com.br"
       },
       "d1_databases": [
         {
