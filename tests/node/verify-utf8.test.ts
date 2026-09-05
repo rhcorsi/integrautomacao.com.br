@@ -182,7 +182,9 @@ describe("verifyUtf8 CLI", () => {
       "external-secret.ts",
       Uint8Array.of(0xff),
     );
-    await writeFixture(root, ".gitignore", "safe/ignored-linked/\n");
+    // A trailing slash matches directories, but not POSIX symbolic links.
+    // Ignore the entry itself for both POSIX links and Windows junctions.
+    await writeFixture(root, ".gitignore", "/safe/ignored-linked\n");
     await mkdir(join(root, "safe"), { recursive: true });
 
     try {
@@ -207,6 +209,20 @@ describe("verifyUtf8 CLI", () => {
       }
       throw error;
     }
+
+    const ignoredFixtureEntries = spawnSync(
+      "git",
+      ["-C", root, "check-ignore", "--stdin", "-z"],
+      {
+        encoding: "utf8",
+        input: "safe/ignored-linked\0safe/linked\0",
+      },
+    );
+    expect(ignoredFixtureEntries.error).toBeUndefined();
+    expect(ignoredFixtureEntries.status).toBe(0);
+    expect(ignoredFixtureEntries.stdout.split("\0").filter(Boolean)).toEqual([
+      "safe/ignored-linked",
+    ]);
 
     const lsFilesLogPath = join(controlRoot, "ls-files-calls.jsonl");
     const checkIgnoreLogPath = join(controlRoot, "check-ignore-calls.jsonl");

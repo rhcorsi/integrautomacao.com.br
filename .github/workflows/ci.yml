@@ -7,6 +7,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -15,11 +18,18 @@ jobs:
   build:
     name: Lint and build
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 20
+    env:
+      ASTRO_TELEMETRY_DISABLED: "1"
+      WRANGLER_SEND_METRICS: "false"
+      WRANGLER_WRITE_LOGS: "false"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -27,14 +37,52 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      - name: Verify Node.js and npm contract
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+          const nodeVersion = readFileSync('.nvmrc', 'utf8').trim();
+          assert.equal(process.version, `v${nodeVersion}`);
+          assert.equal(pkg.engines.node, nodeVersion);
+          assert.equal(`npm@${execFileSync('npm', ['--version'], { encoding: 'utf8' }).trim()}`, pkg.packageManager);
+          NODE
+
       - name: Install dependencies
         run: npm ci
 
       - name: Astro check (TypeScript + content collections)
         run: npm run check
 
+      - name: Check generated Cloudflare types
+        run: npm run types:check
+
+      - name: Tests (Workers + Node + UI)
+        run: npm test
+
+      - name: Audit repository policies
+        run: |
+          npm run audit:deploy-policy
+          npm run audit:utf8
+          npm run audit:prose
+          npm run audit:faqs
+
+      - name: Audit dependencies (all severities)
+        run: npm run audit:deps
+
       - name: Build site
         run: npm run build
+
+      # Use the existing dist; audit:editorial would rebuild it unnecessarily.
+      - name: Audit built output
+        run: |
+          npm run audit:routes
+          npm run audit:redirects
+          npm run audit:terminology
+          npm run audit:html
+          npm run audit:seo
 
       - name: Smoke-test built output
         run: |
@@ -44,8 +92,9 @@ jobs:
           test -f dist/rss.xml
           test -f dist/_redirects
           test -f dist/_headers
-          # Confirm at least one Astro asset (hashed bundle) is produced
-          ls dist/_astro/ | head -3
+          test -f dist/_routes.json
+          test -f dist/pagefind/pagefind.js
+          test -n "$(find dist/_astro -maxdepth 1 -type f -print -quit)"
           echo "Smoke checks passed"
 
       - name: Upload build artifact
@@ -54,4 +103,5 @@ jobs:
         with:
           name: dist-${{ github.sha }}
           path: dist/
+          if-no-files-found: error
           retention-days: 7
