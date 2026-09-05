@@ -1193,18 +1193,21 @@ Settings → Branches → regra clássica **main**:
 - Restrict deletions
 - Block force pushes
 
-A revisão humana das claims é um gate editorial independente da contagem de
-aprovações de PR. O lote de redesign com decisões P1 pendentes permanece em
-PR/preview até revisão real e aprovação de `npm run audit:claims:release`.
-O cadastro e os scripts `audit:claims` pertencem à PR de evolução. O gate
-estrutural dessa PR valida somente a integridade do cadastro; as regras e o
-escopo estão em [docs/GITHUB_OPERATIONS.md](docs/GITHUB_OPERATIONS.md).
+A revisão das claims é um gate editorial independente da contagem de
+aprovações de PR. `audit:claims` valida a integridade do cadastro; ao final,
+`audit:claims:release` exige evidências de revisão para publicar. P1 admite
+revisão documental por IA com fontes, localizadores, dossiê e fingerprint
+correspondente ao texto. P0 exige aprovação humana real. `documented` nunca
+é apresentado como `approved`; pendências, fontes inválidas e evidências
+incompatíveis continuam bloqueadas. O artifact de preview é guardado antes
+desse gate. [Dossiê da revisão](docs/reviews/2026-09-05-technical-release.md).
+As regras estão em [docs/GITHUB_OPERATIONS.md](docs/GITHUB_OPERATIONS.md).
 
 ### CI (`.github/workflows/ci.yml`)
 
 Roda em push/PR para `main` e via dispatch. Job **"Lint and build"**
 (Ubuntu, contrato exato de Node/npm, `npm ci`): Astro check → tipos Cloudflare →
-`npm test` (Workers, Node e UI) → políticas de deploy,
+`npm test` (Workers, Node e UI) → políticas de deploy e claims estruturais,
 UTF-8, prosa, FAQs e dependências → `npm run build` com Pagefind → auditorias
 de rotas, redirects, terminologia, HTML e SEO → smoke do `dist/` e artifact de
 PR. É o status check exigido pela proteção de `main`.

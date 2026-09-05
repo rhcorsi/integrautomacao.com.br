@@ -34,6 +34,8 @@
     "audit:faqs": "node scripts/checkTechCatalogFaqs.cjs",
     "audit:html": "node scripts/auditEditorialHtml.cjs",
     "audit:seo": "node scripts/verifySeoOutput.mjs dist",
+    "audit:claims": "node scripts/verifyTechnicalClaims.mjs",
+    "audit:claims:release": "node scripts/verifyTechnicalClaims.mjs --strict-release",
     "audit:deps:high": "npm audit --audit-level=high",
     "audit:deps": "npm run audit:deps:high && npm audit",
     "audit:editorial": "npm run build && npm run audit:routes && npm run audit:redirects && npm run audit:terminology && npm run audit:prose && npm run audit:utf8 && npm run audit:faqs && npm run audit:html",

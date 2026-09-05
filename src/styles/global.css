@@ -237,6 +237,18 @@
 }
 
 /* Premium Technical Utilities */
+:where(main h2[id], main h3[id], main section[id], main div[id]) {
+  scroll-margin-top: calc(var(--site-header-height, 150px) + 1.5rem);
+}
+main :where(h1, h2, h3) { text-wrap: balance; }
+:where(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--color-integra-ot);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+}
+
 @utility bg-premium-dark {
   background: radial-gradient(circle at 50% 0%, var(--color-integra-gray-900) 0%, var(--color-integra-gray-950) 100%);
 }

@@ -12,11 +12,14 @@ exato de `.nvmrc`, npm de `packageManager`, instalação pelo lockfile e token c
 permissão somente de leitura do conteúdo. As etapas são:
 
 1. `npm ci`, `npm run check`, `npm run types:check` e `npm test` completo.
-2. Políticas de deploy, UTF-8, prosa, FAQs e dependências
+2. Políticas de deploy e claims estruturais, UTF-8, prosa, FAQs e dependências
    em todas as severidades (`npm run audit:deps`).
 3. Um `npm run build`, incluindo Pagefind, seguido das auditorias de rotas,
    redirects, terminologia, HTML e SEO sobre o mesmo `dist/`.
 4. Smoke dos arquivos essenciais, assets e Pagefind; artifact de PR por 7 dias.
+5. Gate estrito `audit:claims:release`, depois de guardar o artifact para revisão.
+   P1 exige revisão documental comprovada ou aprovação humana real; P0 exige
+   aprovação humana. Registros pendentes e provas inválidas impedem merge.
 
 `audit:editorial` não é chamado no CI porque ele faria outro build. O teste
 Node da confirmação de newsletter cria um build temporário próprio para provar
@@ -42,23 +45,32 @@ Proteção clássica de `main` aplicada e confirmada pela API em 05/09/2026:
 - manter o número mínimo de aprovações de PR em zero para o mantenedor único.
 
 O número zero evita depender de autoaprovação de PR. A revisão editorial
-humana abaixo continua independente. O check obrigatório está vinculado ao
+abaixo continua independente. O check obrigatório está vinculado ao
 aplicativo GitHub Actions (ID 15368). Conferir novamente a configuração em
 cada release; manter o nome do check evita invalidar essa regra.
 
 ## Claims e autorização editorial
 
-Na branch de evolução, `npm run audit:claims` confere a integridade do cadastro de decisões e fontes;
+`npm run audit:claims` confere a integridade do cadastro de decisões e fontes;
 **não concede aprovação técnica humana**. `npm run audit:claims:release` é o
-gate estrito e exige os registros de revisão efetivos. Esses scripts e o cadastro
-pertencem à PR de evolução; não estão incluídos neste lote de infraestrutura.
+gate de publicação e exige os registros de revisão efetivos.
 
-No lote de redesign de 04/09/2026 existem dez decisões P1 ainda pendentes de
-revisão humana: T01/T02/T03/T04/T05/T07/T08/T09/T13/T17. A política de publicação
-é manter esse lote em PR/preview até que a revisão real seja registrada e o
-gate estrito passe. CI estrutural verde, aprovação de infraestrutura e permissão
-para publicar não são evidência dessa revisão. Correções isoladas de dependências
-e CI podem seguir em PR próprio sem transportar o conteúdo editorial pendente.
+A política de 05/09/2026 distingue `documented` (revisão documental por IA) de
+`approved` (aprovação técnica humana real). As dez decisões P1 do redesign
+foram conferidas com fontes primárias e receberam dossiê de evidências,
+localizadores, revisor identificado como IA, data e fingerprint SHA-256.
+O [dossiê](reviews/2026-09-05-technical-release.md) registra o resultado por ID.
+
+P1 documental só passa com fonte vigente, tipo de evidência elegível e prova
+correspondente ao conteúdo revisado. Alterar texto, escopo ou fonte invalida
+o fingerprint. O arquivo de prova deve existir em `docs/reviews/` e conter
+o par ID/fingerprint; ausências, caminhos fora desse diretório e provas
+incompatíveis reprovam. A checagem não concede certificação factual automática.
+
+P0 continua exigindo aprovação humana; evidências de laboratório, campo e
+documentos internos não recebem liberação documental por IA. Permissão de
+publicação não é registrada como aprovação técnica humana. O check obrigatório
+permanece ativo, sem `continue-on-error` ou desvio da proteção da branch.
 
 ## Publicador automático e fallback
 

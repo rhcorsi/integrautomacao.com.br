@@ -1,0 +1,21 @@
+---
+interface Props {
+  items: { id: string; text: string }[];
+  label?: string;
+}
+const { items, label = "Nesta página" } = Astro.props;
+---
+{items.length > 0 && (
+  <nav class="technical-toc" aria-label={label} data-pagefind-ignore>
+    <p class="font-mono text-[11px] uppercase tracking-widest text-integra-gray-600">{label}</p>
+    <ul>
+      {items.map((item) => <li><a href={`#${item.id}`}>{item.text}</a></li>)}
+    </ul>
+  </nav>
+)}
+<style>
+  .technical-toc { border-block: 1px solid var(--color-integra-gray-200); padding-block: 1.2rem; margin-block: 1.5rem; }
+  ul { display: flex; flex-wrap: wrap; gap: .35rem 1.5rem; margin-top: .6rem; }
+  a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: .875rem; font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-integra-gray-300); text-underline-offset: .25em; }
+  a:hover { color: var(--color-integra-red-700); text-decoration-color: currentColor; }
+</style>

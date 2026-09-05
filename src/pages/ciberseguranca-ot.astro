@@ -234,7 +234,7 @@ const faq = [
   },
   {
     q: "O que é IDMZ?",
-    a: "IDMZ é a zona desmilitarizada industrial: a camada entre a rede corporativa e a rede industrial. Serviços que precisam ser acessados pelos dois lados — réplicas de historian, servidores de atualização, brokers de acesso remoto — ficam nela, de modo a evitar tráfego direto entre a TI e o chão de fábrica. Se algo na IDMZ for comprometido, essa camada pode ser isolada sem parar o processo.",
+    a: "IDMZ é a zona desmilitarizada industrial: a camada entre a rede corporativa e a rede industrial. Serviços que precisam ser acessados pelos dois lados — réplicas de historian, servidores de atualização, brokers de acesso remoto — podem ficar nela para evitar tráfego direto entre TI e chão de fábrica. A resposta a um comprometimento depende da arquitetura, das dependências e dos procedimentos testados; isolar a IDMZ não garante continuidade do processo em todo cenário.",
   },
   {
     q: "Quanto tempo leva um diagnóstico de cibersegurança OT?",
@@ -477,7 +477,7 @@ const glossarySchema = {
       <SectionHeader
         eyebrow="Quem executa importa"
         title="Por que o integrador de automação é ator central"
-        description="Consultoria aponta o risco; a proteção acontece quando alguém altera rede, servidores e controladores sem parar a produção. Essa execução é trabalho de engenharia de automação."
+        description="O diagnóstico vira proteção quando se transforma em mudanças de rede, servidores e controle, com fases, janelas e critérios de validação definidos pelo risco operacional. Essa execução exige engenharia de automação."
         accent={true}
       />
       <div class="grid gap-6 md:grid-cols-2">
@@ -498,6 +498,7 @@ const glossarySchema = {
         </p>
         <div class="mt-4 flex flex-wrap gap-4">
           <a href="/solucoes/redes-iec-62443/" class="text-sm font-semibold text-integra-red-700 hover:underline">Conhecer a solução de redes e IEC 62443 →</a>
+          <a href="/blog/isa-iec-62443-gestao-operacoes/" class="text-sm font-semibold text-integra-red-700 hover:underline">Ler sobre gestão e operações na ISA/IEC 62443 →</a>
           <a href="/servicos/" class="text-sm font-semibold text-integra-red-700 hover:underline">Ver serviços de engenharia →</a>
           <a href="/automacao-industrial/" class="text-sm font-semibold text-integra-red-700 hover:underline">Guia de automação industrial →</a>
         </div>

@@ -27,6 +27,7 @@ interface Props {
   /** Folha curta do breadcrumb visual — usar o mesmo valor do
       breadcrumbLeaf passado ao BaseLayout. */
   breadcrumbLeaf?: string;
+  variant?: "compact" | "editorial" | "solution";
 }
 
 const {
@@ -35,6 +36,7 @@ const {
   description,
   accent = "red",
   breadcrumbLeaf,
+  variant = "editorial",
 } = Astro.props;
 
 const hasAside = Astro.slots.has("aside");
@@ -59,7 +61,7 @@ const hatchColor =
   >
   </div>
 
-  <div class="container-fluid py-16 lg:py-20">
+  <div class:list={["container-fluid", variant === "compact" ? "py-7 lg:py-10" : variant === "solution" ? "py-12 lg:py-16" : "py-10 lg:py-14"]}>
     {breadcrumbLeaf && <Breadcrumbs leaf={breadcrumbLeaf} />}
 
     <div
@@ -77,11 +79,11 @@ const hatchColor =
         >
           {eyebrow}
         </p>
-        <h1 class="max-w-4xl text-4xl font-semibold text-integra-gray-900 sm:text-5xl">
+        <h1 class:list={["max-w-4xl font-semibold tracking-tight text-integra-gray-900", variant === "compact" ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl"]}>
           <slot name="title">{title}</slot>
         </h1>
         {description && (
-          <p class="mt-6 max-w-3xl text-lg leading-relaxed text-integra-gray-700 lg:text-xl">
+          <p class:list={["max-w-3xl leading-relaxed text-integra-gray-700", variant === "compact" ? "mt-4 text-base" : "mt-5 text-lg lg:text-xl"]}>
             {description}
           </p>
         )}

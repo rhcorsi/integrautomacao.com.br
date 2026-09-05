@@ -65,6 +65,7 @@ jobs:
       - name: Audit repository policies
         run: |
           npm run audit:deploy-policy
+          npm run audit:claims
           npm run audit:utf8
           npm run audit:prose
           npm run audit:faqs
@@ -105,3 +106,8 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 7
+
+      # Validate documentary evidence and its fingerprint without attributing
+      # AI source checks to a human. P0 still requires real human approval.
+      - name: Verify technical evidence for release
+        run: npm run audit:claims:release

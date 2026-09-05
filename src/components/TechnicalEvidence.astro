@@ -1,0 +1,68 @@
+---
+import { technicalClaimsForPage } from "@/data/technicalClaims";
+import { technicalClaimPresentation } from "@/data/technicalClaimPresentation";
+import { technicalSourceById } from "@/data/sourceRegistry";
+
+interface Props {
+  pagePath: string;
+  title?: string;
+}
+
+const { pagePath, title = "Evidência técnica deste conteúdo" } = Astro.props;
+const claims = technicalClaimsForPage(pagePath);
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const checkedSourceCount = claims.filter((claim) => claim.sourceIds.length > 0).length;
+const internalEvidenceCount = claims.filter((claim) => claim.evidenceKind === "internal-evidence-required").length;
+---
+
+{claims.length > 0 && (
+  <aside data-technical-evidence class="my-8 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-4" aria-labelledby="technical-evidence-title">
+    <h2 id="technical-evidence-title" class="text-lg font-semibold text-integra-gray-900">{title}</h2>
+    <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
+      {checkedSourceCount > 0 && `${checkedSourceCount} ${checkedSourceCount === 1 ? "registro possui fonte pública conferida" : "registros possuem fontes públicas conferidas"}. `}
+      {internalEvidenceCount > 0 && `${internalEvidenceCount} ${internalEvidenceCount === 1 ? "registro requer evidência interna ainda não auditada" : "registros requerem evidência interna ainda não auditada"}. `}
+      A situação de revisão aparece em cada item; este recorte não aprova o catálogo inteiro nem substitui validação de projeto, FAT ou SAT.
+    </p>
+    <div class="mt-3 divide-y divide-integra-gray-200 border-y border-integra-gray-200">
+      {claims.map((claim) => {
+        const presentation = technicalClaimPresentation(claim);
+        return (
+          <details class="group bg-white px-3 py-2" data-technical-claim-id={claim.id} data-review-status={claim.status}>
+            <summary class="cursor-pointer list-none py-1 text-sm text-integra-gray-900 marker:hidden">
+              <span class="font-semibold">{claim.product}</span>
+              <span class="ml-2 text-xs text-integra-gray-600">{presentation.evidenceLabel}</span>
+              <span class="float-right ml-3 text-integra-red-700 group-open:rotate-45" aria-hidden="true">+</span>
+              <span class="mt-1 block text-xs text-integra-gray-600">{presentation.reviewLabel}</span>
+            </summary>
+            <div class="pb-2 pt-3 text-xs leading-relaxed text-integra-gray-700">
+              <p class="text-sm text-integra-gray-900">{claim.statement}</p>
+              <p class="mt-2"><strong>Versão/escopo:</strong> {claim.applicableVersions.join("; ")}</p>
+              {claim.sourceIds.length > 0 ? (
+                <ul class="mt-2 space-y-1">
+                  {claim.sourceIds.map((sourceId) => {
+                    const source = technicalSourceById(sourceId);
+                    return source && (
+                      <li data-technical-source-id={source.id}>
+                        <a class="font-semibold underline underline-offset-2 hover:no-underline" href={source.canonicalUrl} target="_blank" rel="noopener noreferrer">
+                          {source.title}
+                        </a>
+                        {` · ${source.documentRevision} · ${claim.sourceLocator} · acesso ${dateFormatter.format(new Date(`${source.accessedAt}T00:00:00Z`))}`}
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p class="mt-2 font-semibold text-integra-red-700">{claim.sourceLocator}</p>
+              )}
+            </div>
+          </details>
+        );
+      })}
+    </div>
+  </aside>
+)}

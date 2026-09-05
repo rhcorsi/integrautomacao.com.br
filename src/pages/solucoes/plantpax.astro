@@ -1,4 +1,6 @@
 ---
+import TechnicalToc from "@/components/TechnicalToc.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { faqSchema, serviceSchema } from "@/utils/schema";
 import SectionHeader from "@/components/SectionHeader.astro";
@@ -125,8 +127,9 @@ const faq = [
   ]}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+    <div class="container-fluid grid gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:py-14">
       <div>
+        <Breadcrumbs leaf="PlantPAx" />
         <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3">
           Solução · DCS Moderno
         </p>
@@ -140,6 +143,7 @@ const faq = [
           5.x, a equipe confirma release, hardware, bibliotecas, licenças e
           documentação antes de definir sustentação ou migração.
         </p>
+        <a href="/contato/?assunto=plantpax" class="mt-7 inline-flex min-h-11 items-center gap-2 rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-white hover:bg-integra-red-700">Discutir arquitetura PlantPAx <span aria-hidden="true">→</span></a>
       </div>
       <ManualReference
         image={plantpaxReference}
@@ -152,8 +156,12 @@ const faq = [
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid py-20">
+  <div class="container-fluid"><TechnicalToc items={[
+    {id: "aplicacao", text: "Quando considerar"}, {id: "escopo", text: "Escopo e entregáveis"},
+    {id: "arquitetura", text: "Arquiteturas de referência"}, {id: "perguntas", text: "Perguntas técnicas"},
+  ]} /></div>
+  <section id="aplicacao" class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-12 lg:py-16">
       <SectionHeader
         eyebrow="Quando faz sentido"
         title="Problemas que esta solução resolve"
@@ -183,8 +191,8 @@ const faq = [
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200">
-    <div class="container-fluid py-20 max-w-4xl">
+  <section id="escopo" class="border-b border-integra-gray-200">
+    <div class="container-fluid py-12 lg:py-16 max-w-4xl">
       <SectionHeader
         eyebrow="Como atuamos"
         title="Da arquitetura ao data book"
@@ -213,7 +221,7 @@ const faq = [
 
       <DeliverableList items={deliverables} twoColumn={true} />
 
-      <div class="my-14">
+      <div id="arquitetura" class="my-14">
         <SectionHeader
           eyebrow="Referências públicas aplicadas"
           title="O que os manuais viram dentro do projeto"
@@ -271,7 +279,7 @@ const faq = [
         ]}
       />
 
-      <FAQAccordion items={faq} />
+      <div id="perguntas"><FAQAccordion items={faq} /></div>
     </div>
   </section>
 

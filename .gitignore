@@ -41,3 +41,7 @@ Thumbs.db
 
 # tests
 coverage/
+
+# Local review evidence and private Search Console exports
+.superpowers/
+docs/GSC_BASELINE_*.md

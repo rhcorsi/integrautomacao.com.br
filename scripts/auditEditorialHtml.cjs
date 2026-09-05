@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { metadataPolicyViolations } = require("./editorialMetadataPolicy.cjs");
+const { hasUnambiguousManualSource } = require("./manualSourcePolicy.cjs");
 
 const distDir = path.join(__dirname, "..", "dist");
 const detailLimit = Number.parseInt(process.env.AUDIT_EDITORIAL_MAX_DETAILS || "120", 10);
@@ -270,16 +271,17 @@ for (const file of files) {
   )) {
     manualReferenceNumber += 1;
     const referenceHtml = match[1];
-    const sourceLinks = [...referenceHtml.matchAll(/<a\b[^>]*>/gi)].filter((link) => {
+    const sourceHrefsIn = (fragment) => [...fragment.matchAll(/<a\b[^>]*>/gi)].filter((link) => {
       const href = attribute(link[0], "href") || "";
       const target = attribute(link[0], "target");
       return href.startsWith("https://") && target === "_blank";
-    });
-    const referenceText = visibleText(referenceHtml);
-    if (
-      sourceLinks.length !== 1 ||
-      !/(abrir documento citado|consultar documentação oficial relacionada)/i.test(referenceText)
-    ) {
+    }).map((link) => attribute(link[0], "href"));
+    const captionHtml = referenceHtml.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption\s*>/i)?.[1] ?? "";
+    if (!hasUnambiguousManualSource({
+      sourceHrefs: sourceHrefsIn(referenceHtml),
+      captionHrefs: sourceHrefsIn(captionHtml),
+      captionText: visibleText(captionHtml),
+    })) {
       error(
         route,
         "manual-source",

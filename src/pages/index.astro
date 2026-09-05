@@ -80,19 +80,26 @@ const evidence = [
 >
   <HeroIntegridade
     eyebrow="Engenharia com Integridade · Especialista Rockwell"
-    title="Automação industrial para plantas"
-    highlight="em que parar não é opção."
-    description="Projetamos, modernizamos e sustentamos sistemas Rockwell e multivendor com arquitetura documentada, cutover validado e continuidade técnica do diagnóstico ao pós-partida."
+    title="Automação industrial."
+    highlight="Da arquitetura à operação."
+    description="Engenharia, modernização e sustentação de sistemas Rockwell e multivendor. Premissas documentadas, testes definidos por escopo e continuidade técnica para a sua planta."
     primaryCta={{ href: "/contato/?assunto=triagem", label: "Solicitar triagem técnica" }}
     secondaryCta={{ href: "/solucoes/", label: "Ver soluções" }}
     statusLine="Maringá-PR · atuação nacional · Silver System Integrator"
   >
+    <form action="/busca/" method="get" role="search" class="mt-7 max-w-xl">
+      <label for="home-search" class="mb-2 block text-sm font-semibold text-integra-gray-900">Consulte o acervo técnico</label>
+      <div class="flex rounded-md border border-integra-gray-300 bg-white p-1 shadow-sm">
+        <input id="home-search" name="q" type="search" placeholder="PlantPAx, IEC 62443, migração de PLC…" class="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm" />
+        <button type="submit" class="rounded-sm bg-integra-gray-900 px-4 py-2.5 text-sm font-semibold text-white">Buscar</button>
+      </div>
+    </form>
     <AnimatedPlantDiagram slot="media" />
   </HeroIntegridade>
 
   <!-- Rockwell Silver System Integrator highlight -->
   <section class="border-y border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid py-12 lg:py-14">
+    <div class="container-fluid py-6 lg:py-8">
       <a
         href="/certificacoes/silver-system-integrator/"
         class="group grid gap-8 items-center lg:grid-cols-[auto_1fr_auto]"
@@ -101,7 +108,7 @@ const evidence = [
           <Image
             src={rockwellSilver}
             alt="Silver System Integrator, A Rockwell Automation Partner"
-            class="h-20 lg:h-24 w-auto"
+            class="h-14 lg:h-16 w-auto"
             widths={[200, 320, 480]}
             sizes="(min-width: 1024px) 320px, 240px"
             loading="lazy"
@@ -112,7 +119,7 @@ const evidence = [
           <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-2">
             PartnerNetwork · nível Silver
           </p>
-          <h2 class="text-xl font-semibold text-integra-gray-900 lg:text-2xl">
+          <h2 class="text-lg font-semibold text-integra-gray-900">
             PartnerNetwork no nível Silver, com capacidade PlantPAx DCS Certified
           </h2>
           <p class="mt-2 text-sm leading-relaxed text-integra-gray-700 lg:text-base max-w-2xl">
@@ -131,6 +138,79 @@ const evidence = [
   <CredentialStrip />
 
   <MetricStrip />
+
+  <section id="encontre-seu-caminho" class="border-b border-integra-gray-200 bg-white">
+    <div class="container-fluid py-12 lg:py-16">
+      <p class="font-mono text-xs uppercase tracking-widest text-integra-red-700">Três caminhos para avançar</p>
+      <h2 class="mt-3 max-w-3xl text-3xl font-semibold text-integra-gray-900 sm:text-4xl">Comece pela sua necessidade.</h2>
+      <div class="mt-8 grid divide-y divide-integra-gray-200 border-y border-integra-gray-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+        {[
+          { n: "01", title: "Tenho um desafio na planta", text: "Modernização, controle de processo, redes, dados ou sustentação. Entenda escopo e próximo passo.", href: "/solucoes/", cta: "Explorar soluções" },
+          { n: "02", title: "Preciso de uma resposta técnica", text: "Consulte tecnologias, requisitos, limites de aplicação e referências de fabricantes.", href: "/tecnologias/", cta: "Consultar tecnologias" },
+          { n: "03", title: "Quero avaliar a experiência", text: "Conheça o relato de projeto publicado, o método de entrega e a equipe responsável.", href: "/cases/projeto-moinho/", cta: "Examinar o case" },
+        ].map((item) => <a href={item.href} class="group block py-7 md:px-7 md:first:pl-0 md:last:pr-0">
+          <p class="font-mono text-xs text-integra-red-700">{item.n}</p>
+          <h3 class="mt-3 text-xl font-semibold text-integra-gray-900 group-hover:text-integra-red-700">{item.title}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-integra-gray-700">{item.text}</p>
+          <span class="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-integra-red-700">{item.cta} <span aria-hidden="true">→</span></span>
+        </a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-12 lg:py-16 grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
+      <div><p class="font-mono text-xs uppercase tracking-widest text-integra-red-700">Da necessidade ao escopo</p><h2 class="mt-3 text-3xl font-semibold text-integra-gray-900">O que precisa evoluir na sua operação?</h2></div>
+      <div class="divide-y divide-integra-gray-300">
+        {[
+          ["Modernizar o controle e a supervisão", "Migração de PLC, SCADA e governança de telas e alarmes.", "/solucoes/modernizacao-scada/"],
+          ["Estruturar o controle de processo", "Arquitetura DCS, bibliotecas, engenharia e critérios de teste.", "/solucoes/plantpax/"],
+          ["Revisar redes e segurança OT", "Zonas, conduítes, infraestrutura e responsabilidades de operação.", "/solucoes/redes-iec-62443/"],
+          ["Dar contexto aos dados industriais", "Coleta, histórico, integração e uso da informação da planta.", "/solucoes/pi-system/"],
+        ].map(([title, text, href]) => <a href={href} class="group flex items-center justify-between gap-5 py-5"><div><h3 class="text-lg font-semibold text-integra-gray-900 group-hover:text-integra-red-700">{title}</h3><p class="mt-1 text-sm leading-relaxed text-integra-gray-700">{text}</p></div><span class="text-xl text-integra-red-700" aria-hidden="true">→</span></a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-12 lg:py-16">
+      <div class="grid gap-10 rounded-lg border border-integra-gray-200 bg-integra-white p-7 lg:grid-cols-[0.85fr_1.15fr] lg:p-10">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">
+            Case publicado · Agronegócio e moagem
+          </p>
+          <h2 class="mt-4 text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+            Modernização de supervisão sem parada total da planta.
+          </h2>
+        </div>
+        <div>
+          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+            O projeto foi conduzido em operação contínua, com cutover por área,
+            rollback validado, governança de alarmes alinhada à ISA-18.2,
+            FAT/SAT, treinamento e documentação as-built. O cliente permanece
+            preservado por confidencialidade; contexto, abordagem, entregáveis e
+            resultado estão documentados no case.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a
+              href="/cases/projeto-moinho/"
+              class="inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
+            >
+              Ler case completo <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href="/contato/?assunto=portfolio"
+              class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
+            >
+              Solicitar portfólio sob NDA
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <LifecycleRail />
 
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid grid gap-10 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-20">
@@ -156,6 +236,7 @@ const evidence = [
           Consultar o guia completo de automação industrial
           <span aria-hidden="true">→</span>
         </a>
+        <p class="mt-4 text-sm leading-relaxed text-integra-gray-700"><a class="font-semibold text-integra-red-700 underline underline-offset-4" href="/empresa/">Conheça a Integra</a>, com base em Maringá e atuação nacional. Consulte o <a class="font-semibold text-integra-red-700 underline underline-offset-4" href="/automacao-industrial-parana/">atendimento em automação industrial no Paraná</a> para enquadrar o contexto regional.</p>
         <div class="mt-7 flex flex-wrap gap-3">
           {[
             { href: "/tecnologias/tc-devicewise/", label: "TC deviceWISE" },
@@ -186,7 +267,7 @@ const evidence = [
   </section>
 
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-16 lg:py-20">
+    <div class="container-fluid py-12 lg:py-16">
       <div class="grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-start">
         <div>
           <p class="mb-4 text-xs font-mono uppercase tracking-widest text-integra-red-700">
@@ -225,7 +306,7 @@ const evidence = [
   </section>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid py-16 lg:py-20">
+    <div class="container-fluid py-12 lg:py-16">
       <div class="mb-10 max-w-3xl">
         <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
           Decisões verificáveis
@@ -240,7 +321,7 @@ const evidence = [
           com uma base técnica comum.
         </p>
       </div>
-      <div class="grid gap-6 lg:grid-cols-3">
+      <details class="group"><summary class="cursor-pointer py-4 text-base font-semibold text-integra-red-700">Consultar três diagramas de referência: PlantPAx, FactoryTalk e CPwE</summary><div class="mt-5 grid gap-6 lg:grid-cols-3">
         <ManualReference
           image={plantpaxReference}
           alt="Arquitetura média PlantPAx com PASS, servidores, estações e controladores"
@@ -269,12 +350,99 @@ const evidence = [
           widths={[480, 800, 1200]}
           sizes="(min-width: 1536px) 580px, (min-width: 1024px) 400px, 100vw"
         />
+      </div></details>
+    </div>
+  </section>
+
+  <FeatureBlock
+    eyebrow="Plataforma · DCS Moderno"
+    title="PlantPAx: arquitetura plant-wide com biblioteca padronizada"
+    description="Sistema de controle distribuído da Rockwell Automation. Avaliamos bases PlantPAx 3.x, 4.x e 5.x conforme release, hardware, bibliotecas e documentação aplicável antes de definir sustentação ou migração."
+    bullets={[
+      "Biblioteca de objetos de processo (PlantPAx Library) padronizada",
+      "Controladores ControlLogix (incluindo série P) e CompactLogix",
+      "Servidores virtualizados com redundância opcional por camada",
+      "Integração OPC UA + AF Templates para PI System / AVEVA",
+    ]}
+    image={plantpaxReference}
+    imageAlt="Arquitetura média PlantPAx com PASS e estações"
+    imagePosition="right"
+    primaryCta={{ href: "/solucoes/plantpax/", label: "Conhecer PlantPAx" }}
+    secondaryCta={{ href: "/contato/?assunto=plantpax", label: "Falar sobre projeto" }}
+    variant="light"
+  />
+
+  <FeatureBlock
+    eyebrow="Suíte · Supervisão e Informação"
+    title="FactoryTalk: do chão de fábrica ao dashboard executivo"
+    description="View SE, Optix, Batch, Historian, AssetCentre e ThinManager configurados como suíte coesa. Governança de alarmes ISA-18.2, padronização de telas e auditoria de mudanças."
+    bullets={[
+      "<strong>FactoryTalk View SE</strong> e <strong>Optix</strong> para supervisão",
+      "<strong>Batch</strong> conforme ISA-88 com receitas padronizadas",
+      "<strong>Historian</strong> + <strong>AssetCentre</strong> com auditoria de mudanças",
+      "<strong>ThinManager</strong> para gestão de thin clients industriais",
+    ]}
+    image={factorytalkReference}
+    imageAlt="Arquitetura distribuída FactoryTalk View SE"
+    imagePosition="left"
+    primaryCta={{ href: "/solucoes/factorytalk/", label: "Conhecer FactoryTalk" }}
+    variant="light"
+  />
+
+  <FeatureBlock
+    eyebrow="Cibersegurança OT · IEC 62443"
+    title="Redes industriais que protegem a operação por design"
+    description="Topologia, segmentação, switches Stratix/Cisco e arquiteturas alinhadas ao CPwE. Cibersegurança OT do projeto à operação, com defense-in-depth e zonas de segurança IEC 62443."
+    bullets={[
+      "Arquitetura CPwE (Converged Plantwide Ethernet)",
+      "Segmentação Purdue + IDMZ entre IT e OT",
+      "Anel DLR e redundância paralela PRP para alta disponibilidade",
+      "Arquitetura orientada à IEC 62443 SL-T por zona + NIST SP 800-82",
+    ]}
+    image={cpweReference}
+    imageAlt="Arquitetura CPwE mostrando integração OT e IT"
+    imagePosition="right"
+    primaryCta={{ href: "/solucoes/redes-iec-62443/", label: "Ver cibersegurança OT" }}
+    secondaryCta={{ href: "/contato/?assunto=redes-cyber", label: "Solicitar triagem OT" }}
+    variant="ot"
+  />
+
+  <section class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-10 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+      <div>
+        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
+          Dados e melhoria contínua
+        </p>
+        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+          Historian, borda, IIoT e rastreabilidade como parte da arquitetura.
+        </h2>
+        <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
+          A Integra não atua só no controle. O escopo cobre FactoryTalk
+          Historian, ThingWorx, Kepware, FactoryTalk Edge Gateway, DataMosaix,
+          Batch, integração com MES/ERP, backup, virtualização e governança OT.
+        </p>
+        <a
+          href="/solucoes/pi-system/"
+          class="mt-7 inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
+        >
+          Ver dados industriais
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
+      <ManualReference
+        image={historianReference}
+        alt="Diagrama lógico FactoryTalk Historian com fontes de dados, coleta, servidor e apresentação"
+        title="FactoryTalk Historian Logical Diagram"
+        source="Rockwell Automation · FactoryTalk Historian Reference Architectures"
+        caption="Referência visual para conectar coleta, armazenamento, apresentação, clientes e fontes de dados industriais."
+        widths={[640, 800, 1200, 1600]}
+        sizes="(min-width: 1536px) 720px, (min-width: 1024px) 640px, 100vw"
+      />
     </div>
   </section>
 
   <section class="bg-premium-dark text-integra-white">
-    <div class="container-fluid py-20 lg:py-28">
+    <div class="container-fluid py-12 lg:py-16">
       <div class="max-w-3xl mb-14">
         <p class="text-xs font-mono uppercase tracking-widest text-integra-red-300 mb-4">
           O que entregamos
@@ -332,133 +500,6 @@ const evidence = [
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid py-16 lg:py-20">
-      <div class="grid gap-10 rounded-lg border border-integra-gray-200 bg-integra-white p-7 lg:grid-cols-[0.85fr_1.15fr] lg:p-10">
-        <div>
-          <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700">
-            Case publicado · Agronegócio e moagem
-          </p>
-          <h2 class="mt-4 text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
-            Modernização de supervisão sem parada total da planta.
-          </h2>
-        </div>
-        <div>
-          <p class="text-base leading-relaxed text-integra-gray-700 lg:text-lg">
-            O projeto foi conduzido em operação contínua, com cutover por área,
-            rollback validado, governança de alarmes alinhada à ISA-18.2,
-            FAT/SAT, treinamento e documentação as-built. O cliente permanece
-            preservado por confidencialidade; contexto, abordagem, entregáveis e
-            resultado estão documentados no case.
-          </p>
-          <div class="mt-7 flex flex-wrap gap-3">
-            <a
-              href="/cases/projeto-moinho/"
-              class="inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-5 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
-            >
-              Ler case completo <span aria-hidden="true">→</span>
-            </a>
-            <a
-              href="/contato/?assunto=portfolio"
-              class="inline-flex items-center gap-2 rounded-md border border-integra-gray-300 px-5 py-3 text-sm font-semibold text-integra-gray-900 transition-colors hover:border-integra-gray-900"
-            >
-              Solicitar portfólio sob NDA
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <FeatureBlock
-    eyebrow="Plataforma · DCS Moderno"
-    title="PlantPAx: arquitetura plant-wide com biblioteca padronizada"
-    description="Sistema de controle distribuído da Rockwell Automation. Avaliamos bases PlantPAx 3.x, 4.x e 5.x conforme release, hardware, bibliotecas e documentação aplicável antes de definir sustentação ou migração."
-    bullets={[
-      "Biblioteca de objetos de processo (PlantPAx Library) padronizada",
-      "Controladores ControlLogix (incluindo série P) e CompactLogix",
-      "Servidores virtualizados com redundância opcional por camada",
-      "Integração OPC UA + AF Templates para PI System / AVEVA",
-    ]}
-    image={plantpaxReference}
-    imageAlt="Arquitetura média PlantPAx com PASS e estações"
-    imagePosition="right"
-    primaryCta={{ href: "/solucoes/plantpax/", label: "Conhecer PlantPAx" }}
-    secondaryCta={{ href: "/contato/?assunto=plantpax", label: "Falar sobre projeto" }}
-    variant="light"
-  />
-
-  <FeatureBlock
-    eyebrow="Suíte · Supervisão e Informação"
-    title="FactoryTalk: do chão de fábrica ao dashboard executivo"
-    description="View SE, Optix, Batch, Historian, AssetCentre e ThinManager configurados como suíte coesa. Governança de alarmes ISA-18.2, padronização de telas e auditoria de mudanças."
-    bullets={[
-      "<strong>FactoryTalk View SE</strong> e <strong>Optix</strong> para supervisão",
-      "<strong>Batch</strong> conforme ISA-88 com receitas padronizadas",
-      "<strong>Historian</strong> + <strong>AssetCentre</strong> com auditoria de mudanças",
-      "<strong>ThinManager</strong> para gestão de thin clients industriais",
-    ]}
-    image={factorytalkReference}
-    imageAlt="Arquitetura distribuída FactoryTalk View SE"
-    imagePosition="left"
-    primaryCta={{ href: "/solucoes/factorytalk/", label: "Conhecer FactoryTalk" }}
-    variant="light"
-  />
-
-  <FeatureBlock
-    eyebrow="Cibersegurança OT · IEC 62443"
-    title="Redes industriais que protegem a operação por design"
-    description="Topologia, segmentação, switches Stratix/Cisco e arquiteturas alinhadas ao CPwE. Cibersegurança OT do projeto à operação, com defense-in-depth e zonas de segurança IEC 62443."
-    bullets={[
-      "Arquitetura CPwE (Converged Plantwide Ethernet)",
-      "Segmentação Purdue + IDMZ entre IT e OT",
-      "Anel DLR e redundância paralela PRP para alta disponibilidade",
-      "Arquitetura orientada à IEC 62443 SL-T por zona + NIST SP 800-82",
-    ]}
-    image={cpweReference}
-    imageAlt="Arquitetura CPwE mostrando integração OT e IT"
-    imagePosition="right"
-    primaryCta={{ href: "/solucoes/redes-iec-62443/", label: "Ver cibersegurança OT" }}
-    secondaryCta={{ href: "/contato/?assunto=redes-cyber", label: "Solicitar triagem OT" }}
-    variant="ot"
-  />
-
-  <LifecycleRail />
-
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-10 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-      <div>
-        <p class="mb-3 text-xs font-mono uppercase tracking-widest text-integra-red-700">
-          Dados e melhoria contínua
-        </p>
-        <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
-          Historian, borda, IIoT e rastreabilidade como parte da arquitetura.
-        </h2>
-        <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
-          A Integra não atua só no controle. O escopo cobre FactoryTalk
-          Historian, ThingWorx, Kepware, FactoryTalk Edge Gateway, DataMosaix,
-          Batch, integração com MES/ERP, backup, virtualização e governança OT.
-        </p>
-        <a
-          href="/solucoes/pi-system/"
-          class="mt-7 inline-flex items-center gap-2 rounded-md bg-integra-gray-900 px-6 py-3 text-sm font-semibold text-integra-white transition-colors hover:bg-integra-black"
-        >
-          Ver dados industriais
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-      <ManualReference
-        image={historianReference}
-        alt="Diagrama lógico FactoryTalk Historian com fontes de dados, coleta, servidor e apresentação"
-        title="FactoryTalk Historian Logical Diagram"
-        source="Rockwell Automation · FactoryTalk Historian Reference Architectures"
-        caption="Referência visual para conectar coleta, armazenamento, apresentação, clientes e fontes de dados industriais."
-        widths={[640, 800, 1200, 1600]}
-        sizes="(min-width: 1536px) 720px, (min-width: 1024px) 640px, 100vw"
-      />
-    </div>
-  </section>
-
   <section class="border-b border-integra-gray-200 bg-integra-white">
     <div class="container-fluid grid gap-10 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-20">
       <figure class="reveal">
@@ -488,8 +529,9 @@ const evidence = [
         <p class="mt-5 text-base leading-relaxed text-integra-gray-700 lg:text-lg">
           A Integra está presente nos encontros técnicos do setor — ENA, ROK
           Technology, ELETRODAY, jornadas Siemens, roadshows de segurança OT.
-          É lá que a equipe valida releases, conversa com fabricantes e traz
-          para o projeto o que a documentação ainda não escreveu.
+          Esses encontros ampliam o repertório da equipe e o contato com fabricantes.
+          Compatibilidade, suporte e aplicação no projeto continuam sujeitos
+          à documentação da versão e aos testes definidos no escopo.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
           <a
@@ -510,7 +552,7 @@ const evidence = [
   </section>
 
   <section class="border-y border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid py-20 lg:py-28">
+    <div class="container-fluid py-12 lg:py-16">
       <div class="max-w-3xl mb-14">
         <p class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-4">
           Manifesto

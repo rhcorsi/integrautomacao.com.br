@@ -930,7 +930,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Como o AssetCentre ajuda em auditoria IEC 62443?",
-        a: "Gera trilha de auditoria de mudança em ativos OT, log de acesso e backup periódico, três controles que IEC 62443-2-4 exige documentar. Não substitui a auditoria, mas alimenta evidência.",
+        a: "O AssetCentre pode apoiar evidências de inventário, mudanças, acesso e recuperação. O vínculo com a IEC 62443 precisa identificar parte, edição, requisito, responsabilidade e cobertura efetivamente testada; a presença do produto não demonstra conformidade do sistema.",
       },
     ],
     relatedSolutions: factorytalkRelated,
@@ -1341,7 +1341,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso virtualizar controlador (SoftLogix)?",
-        a: "SoftLogix existe e roda em VM, mas não recomendamos para controle crítico, tempo de scan e jitter de hipervisor não atendem requisitos de muitos processos. Para controle, ControlLogix físico continua padrão.",
+        a: "As notas oficiais do SoftLogix 5800 v23 informam que a execução em ambiente virtualizado não é suportada. Consulte o lifecycle e os requisitos da versão instalada; uma execução experimental não demonstra suporte do fabricante.",
       },
       {
         q: "Snapshot de VM substitui backup?",
@@ -1483,7 +1483,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "MFA é viável em planta OT?",
-        a: "Sim para acesso administrativo e remoto (engenheiros, manutenção). Para operadores em sala de controle, MFA frequentemente é substituído por estação fisicamente protegida + login com cartão. A política depende do nível de segurança SL-T.",
+        a: "MFA é uma boa prática para acesso remoto a OT. A autenticação deve considerar função e cenário operacional. Quando uma restrição técnica ou operacional impedir MFA, documente o risco, os controles compensatórios, a aprovação responsável e os testes de acesso normal e emergencial; cartão ou proteção física isoladamente não demonstram MFA.",
       },
       {
         q: "Posso ter Forest separado para OT?",
@@ -1540,7 +1540,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Como proteger os backups industriais contra ransomware?",
-        a: "Utilizamos a estratégia de backup 3-2-1 adaptada a ambientes industriais: 3 cópias dos dados, em 2 mídias diferentes, sendo pelo menos 1 cópia totalmente offline e isolada (air-gapped) ou imutável. Os repositórios de backup na IDMZ não devem compartilhar credenciais com o Active Directory corporativo, impedindo que uma infecção na rede de TI alcance e apague os backups de automação.",
+        a: "A estratégia deve ser definida pelo cenário de recuperação e pode combinar cópias criptografadas, isoladas, offline ou imutáveis. Separar identidades e limitar caminhos de acesso reduz o risco de propagação, mas precisa ser combinado com menor privilégio, atualização, monitoramento e restauração testada.",
       },
       {
         q: "Backup de aplicação industrial cabe em backup corporativo?",
@@ -1548,7 +1548,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Com que frequência testar o restore dos backups OT?",
-        a: "Recomendamos um teste no mínimo trimestral para sistemas críticos e sempre após mudanças relevantes de arquitetura. Restore não testado é backup que não existe. Em plantas com janela de parada anual, testamos o restore em ambiente de laboratório/espelho durante o ano para validar o procedimento antes de precisar dele na prática.",
+        a: "A frequência deve seguir criticidade, RTO/RPO, mudanças e cenários de ameaça. Teste também após alterações relevantes que possam afetar a recuperação. Sempre que possível, valide o procedimento em ambiente controlado e registre alcance, resultado e pendências; a evidência documental não substitui um exercício representativo.",
       },
       {
         q: "Plano de DR (Disaster Recovery) para OT precisa ser site offsite?",
@@ -1691,11 +1691,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Posso ter EtherNet/IP em fibra ótica?",
-        a: "Sim. Anel de fibra com switches Stratix ou Cisco IE é padrão para distâncias longas e ambientes ruidosos. Latência de fibra é desprezível para EtherNet/IP.",
+        a: "Sim, quando transceptores, switches, distâncias, topologia e orçamento de latência são compatíveis com a aplicação. A fibra ajuda em distância e imunidade eletromagnética, mas sua latência e a dos equipamentos devem entrar no dimensionamento e nos testes.",
       },
       {
         q: "Qual a diferença entre DLR e PRP?",
-        a: "DLR é anel com cura rápida (&lt;3 ms em anel de 50 nós), tecnologia ODVA da especificação EtherNet/IP (origem Rockwell) para topologia de anel. PRP é redundância paralela (duas redes simultâneas com seleção do primeiro pacote), para tolerância a falha total de rede. Use cases distintos.",
+        a: "DLR é um protocolo de resiliência em anel da ODVA; o guia CPwE publica exemplos de recuperação de poucos milissegundos sob parâmetros determinados de participantes e beacon. PRP usa duas redes em paralelo e descarta a duplicata recebida. São arquiteturas distintas: dimensione e teste topologia, tempos e continuidade da aplicação para o modo de falha previsto.",
       },
       {
         q: "CPwE exige hardware Cisco e Rockwell juntos?",
@@ -1704,6 +1704,13 @@ export const techCatalog: TechPage[] = [
     ],
     relatedSolutions: cyberRelated,
     relatedTech: ["iec-62443-nist-ot", "protocolos-industriais", "monitoramento-redes-industriais"],
+    relatedGuides: [
+      {
+        href: "/blog/cpwe-rede-converged/",
+        label: "Como aplicar CPwE a uma rede industrial convergente",
+        description: "Critérios de arquitetura, segmentação e operação para conectar os princípios do CPwE ao projeto de rede.",
+      },
+    ],
     relatedCases: moinhoCaseRelated,
   },
   {
@@ -1760,11 +1767,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Modbus TCP é seguro em planta industrial?",
-        a: "Não tem autenticação nem criptografia nativa, é protocolo dos anos 70 modernizado para Ethernet. Use somente em zonas seguras e com segmentação de VLAN. Para integração externa, prefira OPC UA.",
+        a: "O Modbus TCP tradicional não oferece autenticação nem criptografia. Modbus Security adiciona TLS e certificados quando essa variante é suportada pelo produto e firmware. Em qualquer caso, defina zonas, conduítes e controle efetivo dos fluxos; uma VLAN isolada não comprova autorização nem fiscalização.",
       },
       {
         q: "OPC UA é o substituto definitivo de OPC Classic?",
-        a: "Sim. OPC Classic (DA, HDA, AE) depende de DCOM, é difícil de configurar e furado em segurança. OPC UA tem segurança nativa (TLS, X.509), modelagem de informação rica e roda multi-plataforma. Migração é caminho único.",
+        a: "Não existe resposta universal. OPC UA oferece identidade de aplicações, políticas e modos de segurança, mas o mecanismo depende do mapeamento: UA-TCP/UA-SC/UA-Binary usa UASC, enquanto outros mapeamentos podem usar TLS. Avalie certificados, confiança, autorização, configuração e dependências do legado antes de decidir a migração do OPC Classic.",
       },
       {
         q: "IEC 61850 cabe na planta de processo?",
@@ -2115,7 +2122,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Com que frequência fazer backup de programa PLC?",
-        a: "Sempre que houver alteração + backup periódico (diário ou semanal) automatizado via AssetCentre. Para áreas críticas, backup de cada commit, com versionamento.",
+        a: "Capture mudanças aprovadas e defina a periodicidade pelo RPO, criticidade, ritmo de alteração e capacidade de restauração. Automação e versionamento podem reduzir lacunas, mas a frequência e a ferramenta devem ser validadas para cada tipo de ativo.",
       },
       {
         q: "Quem responde por manutenção preventiva: Integra ou cliente?",
@@ -2251,7 +2258,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Auditoria de OT é igual à de IT?",
-        a: "Não. Critério é diferente, disponibilidade dominante sobre confidencialidade, ciclos de vida longos, normas distintas (IEC 62443 vs ISO 27001). Auditor IT puro frequentemente erra escopo OT por desconhecimento.",
+        a: "Uma auditoria OT precisa incluir impactos físicos, restrições operacionais e o ciclo de vida industrial. ISO/IEC 27001 e ISA/IEC 62443 podem ser complementares; a competência da equipe, as responsabilidades e o escopo aplicável devem ser comprovados.",
       },
       {
         q: "Quem audita IEC 62443 no Brasil?",
@@ -2398,7 +2405,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto dura um treinamento de operação?",
-        a: "A duração depende da complexidade da aplicação e do perfil dos usuários. Treinamentos podem ser de poucas horas a vários dias, sempre com prática em ambiente espelho e material entregável (apresentação, manual e procedimentos de operação).",
+        a: "A duração depende da complexidade da aplicação e do perfil dos usuários. O escopo deve definir prática em ambiente seguro e representativo quando disponível, além dos materiais e procedimentos necessários; não se presume a existência de ambiente espelho em toda planta.",
       },
       {
         q: "Documentação fica em PDF ou em sistema vivo?",
@@ -2561,11 +2568,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto custa o deviceWISE?",
-        a: "Modelo de assinatura por gateway + módulos. Custo varia conforme volume e features (cloud, on-prem, conectores específicos). Pay-as-you-grow permite começar pequeno e escalar conforme retorno aparece.",
+        a: "O licenciamento depende do componente, das conexões e dos recursos contratados. O deviceWISE EDGE pode ter opções perpétuas ou por assinatura; módulos, suporte de atualização e condições comerciais precisam ser confirmados na proposta vigente.",
       },
       {
         q: "Posso integrar deviceWISE com SAP / Oracle?",
-        a: "Sim. Plataforma traz conectores para REST, SOAP, ODBC, MQTT, Kafka, OPC UA, AMQP. Integrar com SAP ECC, S/4HANA, Oracle ERP é caso comum em projetos de rastreabilidade.",
+        a: "Depende da edição, plataforma, versão e transporte licenciado. Para integrar SAP ou Oracle, confirme o produto de destino, a interface suportada, autenticação, licença e status do transporte na documentação e na proposta vigentes; a marca do sistema não comprova compatibilidade de cada conector.",
       },
     ],
     relatedSolutions: dataRelated,
@@ -2588,7 +2595,7 @@ export const techCatalog: TechPage[] = [
     imageAlt: "TIA Selection Tool, interface de configuração rápida de portfólio Siemens com TIA Portal e SIMATIC",
     imageTitle: "TIA Selection Tool: a porta de entrada do TIA Portal",
     imageSource: simaticSt70Source,
-    imageCaption: "Print público do catálogo SIMATIC ST 70 (2025): TIA Selection Tool é a ferramenta gratuita Siemens para configurar projetos no TIA Portal, com QR e versão desktop ou nuvem.",
+    imageCaption: "Print público do catálogo SIMATIC ST 70 (2025): TIA Selection Tool auxilia a seleção e a configuração de dispositivos e permite intercâmbio de dados de hardware com o TIA Portal; não substitui o ambiente de programação.",
     useCases: [
       "Programação e manutenção de PLCs SIMATIC S7-1200 e S7-1500.",
       "Expansão de sistemas existentes com IHMs, redes PROFINET e bibliotecas de projeto.",
@@ -2627,7 +2634,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "TIA Portal substitui o STEP 7 Classic?",
-        a: "Para projetos novos, sim, Siemens descontinuou novo desenvolvimento em STEP 7 Classic. Base instalada com STEP 7 Classic continua suportada para manutenção, mas evolução exige migração para TIA Portal.",
+        a: "TIA Portal é o ambiente de engenharia de diversas famílias SIMATIC atuais. STEP 7 Classic permanece relevante em arquiteturas compatíveis, inclusive em releases de PCS 7; evolução e migração dependem do produto, hardware e versões, sem uma regra universal.",
       },
       {
         q: "TIA Portal é compatível com S7-300 e S7-400?",
@@ -2776,7 +2783,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "WinCC Unified substitui WinCC Classic?",
-        a: "Para projetos novos, é a recomendação. WinCC Unified é arquitetura web/HTML5, escalável e moderna. WinCC Classic continua mantida para base instalada. Migração é projeto, não update.",
+        a: "WinCC Unified e WinCC V8 atendem cenários diferentes. A seleção deve comparar arquitetura, redundância, engenharia, integrações, licenças e requisitos operacionais; migrar entre plataformas é um projeto específico, não uma atualização automática.",
       },
       {
         q: "PCS 7 e PlantPAx convivem na mesma planta?",
@@ -2999,11 +3006,11 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Quanto custa licença Control Expert?",
-        a: "Modelo Schneider por engenheiro/instalação. Existe versão Small (M340) e Large (todas as CPUs). Cotação via canal Schneider varia.",
+        a: "As licenças S, L e XL cobrem conjuntos distintos de controladores e CPUs. A seleção depende do código exato da CPU, dos opcionais e da modalidade vigente, incluindo requisitos safety quando aplicáveis; preço e SKU devem ser confirmados por cotação.",
       },
       {
         q: "Posso programar M580 sem Control Expert?",
-        a: "Não diretamente, Control Expert é o ambiente oficial. Existem ferramentas paralelas para diagnóstico (EcoStruxure Operator Terminal Expert para HMI; Web Designer para web), mas a lógica é sempre Control Expert.",
+        a: "Para os controladores Modicon cobertos pela matriz do Control Expert, a engenharia da lógica usa a edição compatível desse ambiente. Ferramentas de HMI e web têm papéis diferentes; confirme CPU, firmware, versão, edição e opcionais antes de definir o conjunto de software.",
       },
     ],
     relatedSolutions: multiVendorRelated,
@@ -3064,7 +3071,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Machine Expert substitui SoMachine?",
-        a: "Sim. Machine Expert é o nome moderno e abrangente para programação de máquinas Schneider (Modicon M2xx, M241, M251, M262, M218). SoMachine continua suportado em base instalada, mas projetos novos vão para Machine Expert.",
+        a: "A sucessão depende do controlador e da release. Machine Expert atende M241, M251 e M262 nas combinações documentadas; M221 usa Machine Expert Basic, e o M218 saiu do Machine Expert a partir da versão 2.2. Para legado M218, confirme a versão anterior disponível, firmware, região e caminho de migração.",
       },
       {
         q: "Machine Expert programa servoacionamentos Lexium?",
