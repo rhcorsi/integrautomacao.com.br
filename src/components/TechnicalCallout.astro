@@ -1,5 +1,5 @@
 ---
-import { Icon } from "astro-icon/components";
+import Icon from "@/components/BrandIcon.astro";
 
 interface Props {
   variant?: "note" | "warning" | "ot";
@@ -36,13 +36,13 @@ const v = variantStyles[variant];
 ---
 
 <aside
-  class:list={["my-6 rounded-md border-l-2 p-5", v.border, v.bg]}
+  class:list={["my-6 rounded-sm border-l-2 p-5", v.border, v.bg]}
   role="note"
 >
   <div class="flex items-start gap-3">
     <Icon name={v.icon} class={`size-5 mt-0.5 shrink-0 ${v.iconColor}`} aria-hidden="true" />
     <div class="flex-1">
-      <p class="text-xs font-mono uppercase tracking-wider text-integra-gray-500 mb-1">
+      <p class="text-xs font-sans uppercase tracking-wider text-integra-gray-500 mb-1">
         {v.label}
       </p>
       <div class="text-sm leading-relaxed text-integra-gray-900">

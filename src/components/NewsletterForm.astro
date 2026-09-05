@@ -36,7 +36,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       autocomplete="name"
       minlength="2"
       maxlength="120"
-      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/40 text-integra-gray-900"
+      class="px-4 py-3 rounded-sm border border-integra-gray-500 bg-integra-white focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
     />
   </div>
 
@@ -51,7 +51,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
       required
       autocomplete="email"
       maxlength="180"
-      class="px-4 py-3 rounded-md border border-integra-gray-300 bg-integra-white focus:outline-none focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/40 text-integra-gray-900"
+      class="px-4 py-3 rounded-sm border border-integra-gray-500 bg-integra-white focus:border-integra-gray-900 focus:ring-2 focus:ring-integra-red/20 text-integra-gray-900"
     />
   </div>
 
@@ -103,7 +103,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
         data-turnstile-fallback
         hidden
         role="alert"
-        class="rounded-md border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
+        class="rounded-sm border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
       >
         <p class="font-semibold text-integra-gray-900">
           Verificação de segurança bloqueada pelo navegador.
@@ -123,7 +123,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
   ) : (
     <div
       role="alert"
-      class="rounded-md border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
+      class="rounded-sm border border-integra-red/30 bg-integra-red/5 p-4 text-sm leading-relaxed text-integra-gray-800"
     >
       <p class="font-semibold text-integra-gray-900">
         Inscrição temporariamente indisponível.
@@ -143,7 +143,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 
   {/* Sem JavaScript o fetch não roda e a API só aceita JSON. */}
   <noscript>
-    <div class="rounded-md border border-integra-gray-300 bg-integra-gray-50 p-4 text-sm leading-relaxed text-integra-gray-800">
+    <div class="rounded-sm border border-integra-gray-300 bg-integra-gray-50 p-4 text-sm leading-relaxed text-integra-gray-800">
       <p class="font-semibold text-integra-gray-900">
         A inscrição exige JavaScript.
       </p>
@@ -171,7 +171,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     <button
       type="submit"
       disabled={!hasTurnstile}
-      class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+      class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-sm transition-colors"
     >
       Inscrever-se
       <span aria-hidden="true">→</span>

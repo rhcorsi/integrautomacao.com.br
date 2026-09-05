@@ -21,7 +21,7 @@ const internalEvidenceCount = claims.filter((claim) => claim.evidenceKind === "i
 ---
 
 {claims.length > 0 && (
-  <aside data-technical-evidence class="my-8 rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-4" aria-labelledby="technical-evidence-title">
+  <aside data-technical-evidence class="my-8 rounded-sm border border-integra-gray-200 bg-integra-gray-50 p-4" aria-labelledby="technical-evidence-title">
     <h2 id="technical-evidence-title" class="text-lg font-semibold text-integra-gray-900">{title}</h2>
     <p class="mt-2 text-sm leading-relaxed text-integra-gray-700">
       {checkedSourceCount > 0 && `${checkedSourceCount} ${checkedSourceCount === 1 ? "registro possui fonte pública conferida" : "registros possuem fontes públicas conferidas"}. `}

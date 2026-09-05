@@ -31,70 +31,47 @@ const {
 } = Astro.props;
 
 const dark = variant === "dark";
-const gridColor = dark ? "rgba(255,255,255,0.06)" : "var(--color-integra-gray-900)";
-const hatchColor = dark ? "rgba(227,6,19,0.16)" : "rgba(227,6,19,0.08)";
 
 const primaryHref = primaryCta.href;
 const secondaryHref = secondaryCta.href;
 ---
 
-{/*
-  `isolate` cria o stacking context da section: sem ele, o background opaco
-  da própria section é pintado SOBRE as camadas decorativas `-z-10`,
-  tornando grid e hatch invisíveis.
-*/}
 <section
   class:list={[
-    "relative isolate overflow-hidden border-b",
+    "brand-hero relative isolate overflow-hidden border-b",
     dark
-      ? "border-integra-gray-800 bg-premium-dark text-integra-white"
-      : "border-integra-gray-200 bg-integra-white",
+      ? "brand-dark border-integra-gray-800 bg-premium-dark text-integra-white"
+      : "border-integra-gray-200 bg-integra-gray-100",
   ]}
 >
-  <div
-    class:list={[
-      "pointer-events-none absolute inset-0 -z-10",
-      dark ? "opacity-100" : "opacity-[0.04]",
-    ]}
-    aria-hidden="true"
-    style={`background-image: linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px); background-size: 64px 64px;`}
-  >
-  </div>
-  <div
-    class:list={[
-      "pointer-events-none absolute right-0 top-0 -z-10 h-full w-1/3 border-l",
-      dark ? "border-white/5" : "border-integra-gray-200/70",
-    ]}
-    aria-hidden="true"
-    style={`background-image: linear-gradient(135deg, ${hatchColor} 0, ${hatchColor} 1px, transparent 1px, transparent 18px);`}
-  >
-  </div>
+  <div class="hero-line pointer-events-none absolute inset-x-0 top-8 -z-10 border-t" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute right-0 bottom-0 -z-10 h-32 w-4 bg-integra-red lg:h-2/3 lg:w-6" aria-hidden="true"></div>
 
-  <div class="container-fluid py-10 lg:py-16">
+  <div class="container-fluid py-12 lg:py-20">
     <div
-      class="grid gap-10 items-center lg:grid-cols-[1.15fr_0.85fr] lg:gap-12"
+      class="grid gap-10 items-center lg:grid-cols-[1.08fr_0.92fr] lg:gap-12"
     >
       <div>
         <p
           class:list={[
-            "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider mb-6",
+            "inline-flex items-center gap-3 border-l-2 px-3 py-1.5 text-[11px] font-sans uppercase tracking-wider mb-6",
             dark
-              ? "border-white/15 bg-white/5 text-integra-gray-300"
-              : "border-integra-gray-200 bg-integra-gray-50 text-integra-gray-700",
+              ? "border-integra-red text-integra-gray-100"
+              : "border-integra-red text-integra-gray-700",
           ]}
         >
-          <span class="hero-status-dot size-1.5 rounded-full bg-integra-red"></span>
+          <span class="size-1.5 bg-integra-red" aria-hidden="true"></span>
           {eyebrow}
         </p>
         <h1
           class:list={[
-            "text-4xl font-semibold tracking-tight sm:text-5xl xl:text-6xl",
+            "text-4xl font-extrabold tracking-tight sm:text-5xl xl:text-6xl leading-[1.08]",
             dark ? "text-white" : "text-integra-gray-900",
           ]}
         >
           {title}{" "}
           {highlight && (
-            <span class="text-integra-red">{highlight}</span>
+            <span class:list={["block sm:inline", dark ? "text-integra-gray-100" : "text-integra-red"]}>{highlight}</span>
           )}
         </h1>
         <p
@@ -109,7 +86,7 @@ const secondaryHref = secondaryCta.href;
           <a
             href={primaryHref}
             class:list={[
-              "group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-md transition-colors",
+              "group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-sm transition-colors",
               "text-integra-white bg-integra-red hover:bg-integra-red-700",
             ]}
           >
@@ -119,7 +96,7 @@ const secondaryHref = secondaryCta.href;
           <a
             href={secondaryHref}
             class:list={[
-              "inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-md transition-colors border",
+              "inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-sm transition-colors border",
               dark
                 ? "text-white border-white/25 hover:border-white/60"
                 : "text-integra-gray-900 bg-integra-white border-integra-gray-300 hover:border-integra-gray-900",
@@ -132,13 +109,13 @@ const secondaryHref = secondaryCta.href;
         {statusLine && (
           <p
             class:list={[
-              "mt-6 font-mono text-[11px] uppercase tracking-wider",
+              "mt-6 font-sans text-[11px] uppercase tracking-wider",
               dark ? "text-integra-gray-400" : "text-integra-gray-500",
             ]}
           >
             <span
               aria-hidden="true"
-              class={dark ? "text-integra-red-300" : "text-integra-red-700"}
+              class={dark ? "text-integra-white" : "text-integra-red-700"}
             >//</span>
             {" "}{statusLine}
           </p>
@@ -148,7 +125,7 @@ const secondaryHref = secondaryCta.href;
       <slot name="media">
         {heroImage && (
           <div class="relative">
-            <div class="relative overflow-hidden rounded-lg shadow-2xl ring-1 ring-integra-gray-900/10 bg-integra-white">
+            <div class="relative overflow-hidden rounded-sm shadow-sm ring-1 ring-integra-gray-900/10 bg-integra-white">
               <Image
                 src={heroImage}
                 alt={heroAlt}
@@ -168,18 +145,9 @@ const secondaryHref = secondaryCta.href;
 </section>
 
 <style>
-  @media (prefers-reduced-motion: no-preference) {
-    .hero-status-dot {
-      animation: hero-blink 2.4s ease-in-out 2;
-    }
-  }
-  @keyframes hero-blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.35;
-    }
-  }
+  .hero-line { border-color: var(--color-integra-gray-300); }
+  .brand-dark .hero-line { border-color: rgb(243 240 241 / .18); }
+  .brand-dark :global(form[role="search"] label) { color: var(--color-integra-gray-100); }
+  .brand-dark :global(form[role="search"] input) { color: var(--color-integra-gray-900); }
+  .brand-dark :global(form[role="search"] input:focus-visible) { outline-color: var(--color-integra-red); }
 </style>

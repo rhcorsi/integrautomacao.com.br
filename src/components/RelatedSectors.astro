@@ -28,12 +28,12 @@ const { title, description, items } = Astro.props;
       {items.map((item) => (
         <a
           href={item.href}
-          class="group rounded-lg border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
+          class="group rounded-sm border border-integra-gray-200 bg-integra-gray-50 p-6 transition-colors hover:border-integra-gray-900"
         >
           {/* Eyebrow decorativo: idêntico em todos os cards, vira ruído em
               leitores de tela dentro de um link por card. */}
           <p
-            class="mb-3 flex items-center justify-between font-mono text-xs uppercase tracking-widest text-integra-red-700"
+            class="mb-3 flex items-center justify-between font-sans text-xs uppercase tracking-widest text-integra-red-700"
             aria-hidden="true"
           >
             Setor industrial

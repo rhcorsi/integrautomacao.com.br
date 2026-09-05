@@ -42,17 +42,17 @@ const dialogTitleId = `figure-${randomUUID()}`;
 <figure
   data-manual-reference="true"
   class:list={[
-    "overflow-hidden rounded-lg border shadow-xl",
+    "overflow-hidden rounded-sm border border-t-2 shadow-none",
     dark
-      ? "border-white/10 bg-integra-gray-950 text-integra-white"
-      : "border-integra-gray-200 bg-integra-white text-integra-gray-900",
+      ? "brand-dark border-white/25 border-t-integra-red bg-integra-gray-950 text-integra-white"
+      : "border-integra-gray-200 border-t-integra-red bg-integra-white text-integra-gray-900",
   ]}
 >
   <div class={dark ? "bg-integra-gray-950 p-4" : "bg-integra-gray-50 p-4"}>
     <p
       class:list={[
-        "mb-2 font-mono text-[11px] uppercase tracking-widest",
-        dark ? "text-integra-red-300" : eyebrowColor,
+        "mb-2 font-sans text-[11px] uppercase tracking-widest",
+        dark ? "text-integra-gray-100" : eyebrowColor,
       ]}
     >
       {eyebrow}
@@ -107,7 +107,7 @@ const dialogTitleId = `figure-${randomUUID()}`;
     ]}
   >
     <p>{caption}</p>
-    <p class:list={["font-mono uppercase tracking-wider", dark ? "text-white/80" : "text-integra-gray-700"]}>
+    <p class:list={["font-sans uppercase tracking-wider", dark ? "text-white/80" : "text-integra-gray-700"]}>
       Fonte: {source}
       {publicSource && (
         <>
@@ -137,10 +137,10 @@ const dialogTitleId = `figure-${randomUUID()}`;
   initManualFigures();
 </script>
 <style>
-  .manual-dialog { width: min(96vw, 100rem); max-width: 96vw; max-height: 94dvh; padding: 0; margin: auto; border: 1px solid #d4d4d4; border-radius: .5rem; background: white; color: #1a1a1a; }
+  .manual-dialog { width: min(96vw, 100rem); max-width: 96vw; max-height: 94dvh; padding: 0; margin: auto; border: 1px solid var(--color-integra-gray-300); border-radius: .125rem; background: white; color: var(--color-integra-gray-900); --focus-color: var(--color-integra-red); }
   .manual-dialog::backdrop { background: rgb(0 0 0 / .75); }
-  .manual-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 1rem; border-bottom: 1px solid #ddd; font-weight: 600; }
-  .manual-dialog-heading button { flex-shrink: 0; min-height: 44px; padding: .5rem 1rem; border: 1px solid #aaa; border-radius: .25rem; cursor: pointer; }
+  .manual-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 1rem; border-bottom: 1px solid var(--color-integra-gray-200); background: var(--color-integra-gray-100); font-weight: 600; }
+  .manual-dialog-heading button { flex-shrink: 0; min-height: 44px; padding: .5rem 1rem; border: 1px solid var(--color-integra-gray-500); border-radius: .125rem; cursor: pointer; }
   .manual-dialog-image { overflow: auto; max-height: 65dvh; background: white; }
   .manual-dialog-image img { display: block; width: auto; max-width: none; min-width: 100%; height: auto; }
   .manual-dialog-caption { padding: 1rem; font-size: .8rem; line-height: 1.6; }
