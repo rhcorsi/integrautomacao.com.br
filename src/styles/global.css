@@ -1,63 +1,82 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/*
- * Fontes auto-hospedadas, apenas subsets latin + latin-ext (site pt-BR).
- * Os imports completos do @fontsource embutiam cyrillic/greek/vietnamese
- * no CSS crítico sem nenhum uso. Blocos copiados do pacote instalado.
- */
+/* Fontes locais: Roboto e Montserrat (referência provisória do PPTX),
+ * JetBrains Mono em código. Apenas latin/latin-ext; font-display: swap.
+ * Fontes e licenças: docs/rebranding/TIPOGRAFIA-E-ICONES.md. */
 @font-face {
-  font-family: "Inter Variable";
+  font-family: 'Roboto Variable';
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("../../node_modules/@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  src: url(../../node_modules/@fontsource-variable/roboto/files/roboto-latin-ext-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
+
 @font-face {
-  font-family: "Inter Variable";
+  font-family: 'Roboto Variable';
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2") format("woff2-variations");
+  src: url(../../node_modules/@fontsource-variable/roboto/files/roboto-latin-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
+
 @font-face {
-  font-family: "JetBrains Mono Variable";
+  font-family: 'Montserrat Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 800;
-  src: url("../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-ext-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  src: url(../../node_modules/@fontsource-variable/montserrat/files/montserrat-latin-ext-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
+
 @font-face {
-  font-family: "JetBrains Mono Variable";
+  font-family: 'Montserrat Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../../node_modules/@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Variable';
   font-style: normal;
   font-display: swap;
   font-weight: 100 800;
-  src: url("../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+  src: url(../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-ext-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
 @theme {
   /* Brand colors - Integra */
-  --color-integra-red: #e30613;
-  --color-integra-red-300: #ff5a63;
-  --color-integra-red-700: #b40510;
-  --color-integra-red-800: #8a040c;
+  --color-integra-red: #d30000;
+  --color-integra-red-300: #ffb3b3;
+  --color-integra-red-700: #ac0000;
+  --color-integra-red-800: #850000;
 
-  --color-integra-black: #1a1a1a;
-  --color-integra-gray-950: #111111;
-  --color-integra-gray-900: #1a1a1a;
-  --color-integra-gray-800: #2c2c2c;
+  --color-integra-black: #282828;
+  --color-integra-gray-950: #282828;
+  --color-integra-gray-900: #282828;
+  --color-integra-gray-800: #383536;
   --color-integra-gray-700: #4a4a4a;
   --color-integra-gray-600: #5f5f5f;
   --color-integra-gray-500: #666666;
   --color-integra-gray-400: #a8a8a8;
   --color-integra-gray-300: #c9c9c9;
-  --color-integra-gray-200: #e4e4e4;
-  --color-integra-gray-100: #f5f5f5;
-  --color-integra-gray-50: #fafafa;
+  --color-integra-gray-200: #ded8db;
+  --color-integra-gray-100: #f3f0f1;
+  --color-integra-gray-50: #faf9f9;
   --color-integra-white: #ffffff;
 
   /* OT/Cybersecurity accent - only for OT-themed sections */
@@ -65,8 +84,9 @@
   --color-integra-ot-700: #002a44;
 
   /* Typography */
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+  --font-sans: "Roboto Variable", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, sans-serif;
+  --font-display: "Montserrat Variable", "Roboto Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code",
     Consolas, monospace;
 
@@ -84,7 +104,6 @@
     text-size-adjust: 100%;
     scroll-behavior: smooth;
     font-family: var(--font-sans);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   body {
@@ -97,9 +116,10 @@
 
   h1, h2, h3, h4, h5, h6 {
     color: inherit;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-weight: 750;
     line-height: 1.15;
-    letter-spacing: 0;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 
@@ -123,8 +143,8 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-integra-red);
-    outline-offset: 3px;
+    outline: 3px solid var(--focus-color, var(--color-integra-red));
+    outline-offset: 4px;
     border-radius: 2px;
   }
 
@@ -236,13 +256,21 @@
   }
 }
 
-/* Premium Technical Utilities */
+/* Focus follows the surface; white technical figures remain readable in dark sections. */
+:where(.brand-dark, .bg-premium-dark, .bg-premium-dark-card, section.bg-integra-gray-950, section.bg-integra-gray-900, section.bg-integra-ot) {
+  --focus-color: var(--color-integra-white);
+}
+:where(.bg-integra-white, .bg-white, .bg-integra-gray-50, .bg-integra-gray-100) {
+  --focus-color: var(--color-integra-red);
+}
+
+/* Technical navigation utilities */
 :where(main h2[id], main h3[id], main section[id], main div[id]) {
   scroll-margin-top: calc(var(--site-header-height, 150px) + 1.5rem);
 }
 main :where(h1, h2, h3) { text-wrap: balance; }
 :where(button, a, input, select, textarea, summary):focus-visible {
-  outline: 3px solid var(--color-integra-ot);
+  outline: 3px solid var(--focus-color, var(--color-integra-red));
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -250,10 +278,10 @@ main :where(h1, h2, h3) { text-wrap: balance; }
 }
 
 @utility bg-premium-dark {
-  background: radial-gradient(circle at 50% 0%, var(--color-integra-gray-900) 0%, var(--color-integra-gray-950) 100%);
+  background: var(--color-integra-black);
 }
 @utility bg-premium-dark-card {
-  background: linear-gradient(135deg, var(--color-integra-gray-900) 0%, #151515 100%);
+  background: var(--color-integra-gray-800);
 }
 
 /*

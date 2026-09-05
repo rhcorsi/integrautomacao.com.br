@@ -17,7 +17,7 @@ const items = breadcrumbItems(Astro.url.pathname, leaf);
 
 {items.length > 1 && (
   <nav aria-label="Trilha de navegação" class="mb-6">
-    <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono uppercase tracking-widest text-integra-gray-500">
+    <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-sans uppercase tracking-widest text-integra-gray-500">
       {items.map((item, i) => {
         const isLeaf = i === items.length - 1;
         return (

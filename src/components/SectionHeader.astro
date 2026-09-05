@@ -21,14 +21,14 @@ const { eyebrow, title, description, align = "left", accent = false } =
   {eyebrow && (
     <p
       class:list={[
-        "text-xs font-mono uppercase tracking-widest mb-3",
+        "text-xs font-sans font-semibold uppercase tracking-widest mb-4 border-l-2 border-integra-red pl-3",
         accent ? "text-integra-red-700" : "text-integra-gray-500",
       ]}
     >
       {eyebrow}
     </p>
   )}
-  <h2 class="text-3xl font-semibold text-integra-gray-900 sm:text-4xl">
+  <h2 class="text-3xl font-extrabold text-integra-gray-900 sm:text-4xl">
     {title}
   </h2>
   {description && (

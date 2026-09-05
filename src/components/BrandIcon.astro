@@ -1,0 +1,60 @@
+---
+import type { ComponentProps } from "astro/types";
+import { Icon } from "astro-icon/components";
+
+type Props = ComponentProps<typeof Icon>;
+
+// Brand manual p.42: Tabler Icons. Keep content data and its semantic names
+// stable; translate presentation only, at build time (no client JavaScript).
+const tablerNames: Record<string, string> = {
+  activity: "activity",
+  beef: "meat",
+  braces: "braces",
+  "calendar-days": "calendar-week",
+  check: "check",
+  "check-check": "checks",
+  "clipboard-check": "clipboard-check",
+  cpu: "cpu",
+  database: "database",
+  droplet: "droplet",
+  droplets: "droplets",
+  "file-check-2": "file-check",
+  "file-cog": "file-settings",
+  "flask-conical": "flask",
+  gauge: "gauge",
+  handshake: "heart-handshake",
+  "heart-handshake": "heart-handshake",
+  info: "info-circle",
+  "layers-3": "stack-3",
+  "layout-dashboard": "layout-dashboard",
+  "life-buoy": "lifebuoy",
+  "list-checks": "list-check",
+  mail: "mail",
+  medal: "medal",
+  "monitor-cog": "device-desktop-cog",
+  network: "network",
+  "refresh-cw": "refresh",
+  replace: "replace",
+  scale: "scale",
+  server: "server",
+  shield: "shield",
+  "shield-check": "shield-check",
+  tractor: "tractor",
+  trees: "trees",
+  "trending-up": "trending-up",
+  "triangle-alert": "alert-triangle",
+  utensils: "tools-kitchen-2",
+  video: "video",
+  wheat: "wheat",
+  wrench: "tool",
+};
+
+const { name, ...props } = Astro.props;
+const semanticName = name.startsWith("lucide:") ? name.slice(7) : undefined;
+if (semanticName && !tablerNames[semanticName]) {
+  throw new Error(`Missing brand icon mapping for ${name}`);
+}
+const brandName = semanticName ? `tabler:${tablerNames[semanticName]}` : name;
+---
+
+<Icon name={brandName} {...props} />

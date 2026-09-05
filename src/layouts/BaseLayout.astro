@@ -1,6 +1,6 @@
 ---
 import "@/styles/global.css";
-import interLatinWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+import montserratLatinWoff2 from "@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { resolveCanonicalUrl } from "@/utils/seo-policy";
@@ -108,12 +108,12 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
       href={new URL("/rss.xml", SITE.url).toString()}
     />
 
-    {/* Fonte do texto LCP: preload do subset latin da Inter variável. */}
+    {/* Fonte dos títulos: preload do subset latin da Montserrat variável. */}
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href={interLatinWoff2}
+      href={montserratLatinWoff2}
       crossorigin
     />
 

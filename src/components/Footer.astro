@@ -1,6 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import logoColorido from "@/assets/logos/Colorido.png";
 import EmailLink from "@/components/EmailLink.astro";
 import { SITE, COMPANY, PHONE_COMMERCIAL, PHONE_WHATSAPP } from "@/utils/site";
 
@@ -72,27 +70,27 @@ const legalLinks = [
 ];
 ---
 
-<footer class="relative bg-integra-white border-t border-integra-gray-200" data-pagefind-ignore>
+<footer class="brand-dark relative bg-integra-black text-integra-white border-t border-integra-gray-700" data-pagefind-ignore>
   <!-- Top: brand + 4 navigation columns -->
   <div class="container-fluid py-16 lg:py-20">
     <div class="grid gap-12 lg:grid-cols-12">
       <div class="lg:col-span-4 space-y-6">
-        <Image
-          src={logoColorido}
+        <img
+          src="/images/brand/integra-logo-dark.svg"
           alt={SITE.name}
-          class="h-12 w-auto"
-          widths={[200, 320]}
-          sizes="200px"
+          class="h-20 w-auto"
+          width="1581"
+          height="613"
           loading="lazy"
           decoding="async"
         />
-        <p class="text-sm leading-relaxed text-integra-gray-700 max-w-sm">
+        <p class="text-sm leading-relaxed text-integra-gray-300 max-w-sm">
           Engenharia e integração de sistemas industriais para plantas
           críticas. Arquitetura, padronização, segurança operacional e
           governança técnica de longo prazo.
         </p>
         <div
-          class="flex flex-wrap gap-x-3 gap-y-2 text-xs font-mono uppercase tracking-wider text-integra-gray-500"
+          class="flex flex-wrap gap-x-3 gap-y-2 text-xs font-sans uppercase tracking-wider text-integra-gray-400"
         >
           <span>Maringá-PR</span>
           <span aria-hidden="true">·</span>
@@ -102,7 +100,7 @@ const legalLinks = [
           <a
             href={COMPANY.social.linkedin}
             rel="noopener noreferrer"
-            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red-700 hover:bg-integra-gray-100 transition-colors"
+            class="inline-flex size-9 items-center justify-center rounded-sm text-integra-gray-300 hover:text-integra-white hover:bg-integra-gray-700 transition-colors"
             aria-label="LinkedIn"
           >
             <svg
@@ -118,7 +116,7 @@ const legalLinks = [
           </a>
           <EmailLink
             email={COMPANY.email}
-            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red-700 hover:bg-integra-gray-100 transition-colors"
+            class="inline-flex size-9 items-center justify-center rounded-sm text-integra-gray-300 hover:text-integra-white hover:bg-integra-gray-700 transition-colors"
             ariaLabel="E-mail"
           >
             <svg
@@ -139,7 +137,7 @@ const legalLinks = [
           <a
             href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
             rel="noopener noreferrer"
-            class="inline-flex size-9 items-center justify-center rounded-full text-integra-gray-700 hover:text-integra-red-700 hover:bg-integra-gray-100 transition-colors"
+            class="inline-flex size-9 items-center justify-center rounded-sm text-integra-gray-300 hover:text-integra-white hover:bg-integra-gray-700 transition-colors"
             aria-label="WhatsApp"
           >
             <svg
@@ -160,7 +158,7 @@ const legalLinks = [
         {columns.map((col) => (
           <nav class="grid gap-3 content-start" aria-label={col.title}>
             <h2
-              class="text-sm font-semibold text-integra-gray-900 uppercase tracking-wide mb-2"
+              class="text-sm font-semibold text-integra-white uppercase tracking-wide mb-2"
             >
               {col.title}
             </h2>
@@ -168,7 +166,7 @@ const legalLinks = [
               <a
                 href={link.href}
                 {...(("external" in link && link.external) && { rel: "noopener noreferrer" })}
-                class="text-sm text-integra-gray-700 hover:text-integra-red-700 transition-colors w-fit"
+                class="text-sm text-integra-gray-300 hover:text-integra-white transition-colors w-fit"
               >
                 {link.label}
               </a>
@@ -180,46 +178,46 @@ const legalLinks = [
   </div>
 
   <!-- Mid: contact strip -->
-  <div class="border-t border-integra-gray-200 bg-integra-gray-50">
+  <div class="border-t border-integra-gray-700 bg-integra-gray-800">
     <div class="container-fluid py-8 lg:py-10">
       <div class="grid gap-8 md:grid-cols-3">
         <div>
-          <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
+          <h3 class="text-xs font-sans uppercase tracking-widest text-integra-gray-400 mb-3">
             Contato comercial
           </h3>
           <EmailLink
             email={COMPANY.email}
-            class="text-base font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors block break-all"
+            class="text-base font-medium text-integra-white hover:text-integra-white transition-colors block break-all"
           >
             {COMPANY.email}
           </EmailLink>
           <a
             href={`tel:${phoneCommercial.value.replace(/\s+/g, "")}`}
-            class="mt-1 text-sm text-integra-gray-700 hover:text-integra-red-700 transition-colors block"
+            class="mt-1 text-sm text-integra-gray-300 hover:text-integra-white transition-colors block"
           >
             {phoneCommercial.display}
           </a>
         </div>
         <div>
-          <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
+          <h3 class="text-xs font-sans uppercase tracking-widest text-integra-gray-400 mb-3">
             WhatsApp / Direto
           </h3>
           <a
             href={`https://wa.me/${phoneWhatsApp.value.replace(/[^\d]/g, "")}`}
             rel="noopener noreferrer"
-            class="text-base font-medium text-integra-gray-900 hover:text-integra-red-700 transition-colors block"
+            class="text-base font-medium text-integra-white hover:text-integra-white transition-colors block"
           >
             {phoneWhatsApp.display}
           </a>
-          <p class="mt-1 text-xs font-mono text-integra-gray-500">
+          <p class="mt-1 text-xs font-mono text-integra-gray-400">
             Prazo-alvo de retorno inicial: 1 dia útil
           </p>
         </div>
         <div>
-          <h3 class="text-xs font-mono uppercase tracking-widest text-integra-gray-500 mb-3">
+          <h3 class="text-xs font-sans uppercase tracking-widest text-integra-gray-400 mb-3">
             Endereço
           </h3>
-          <address class="not-italic text-sm text-integra-gray-700 leading-relaxed">
+          <address class="not-italic text-sm text-integra-gray-300 leading-relaxed">
             {COMPANY.address.street}<br />
             {COMPANY.address.city} - {COMPANY.address.state} · CEP {COMPANY.address.postalCode}
           </address>
@@ -229,9 +227,9 @@ const legalLinks = [
   </div>
 
   <!-- Bottom: copyright + legal links -->
-  <div class="border-t border-integra-gray-200">
+  <div class="border-t border-integra-gray-700">
     <div
-      class="container-fluid py-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between text-xs text-integra-gray-500"
+      class="container-fluid py-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between text-xs text-integra-gray-400"
     >
       <p>
         © {year} {COMPANY.legalName} · CNPJ {COMPANY.taxId}
@@ -240,21 +238,21 @@ const legalLinks = [
         {legalLinks.map((link) => (
           <a
             href={link.href}
-            class="hover:text-integra-gray-900 transition-colors"
+            class="hover:text-integra-white transition-colors"
           >
             {link.label}
           </a>
         ))}
       </div>
-      <p class="font-mono uppercase tracking-wider">
+      <p class="font-sans uppercase tracking-wider">
         {SITE.tagline}
       </p>
     </div>
   </div>
 
-  <!-- Brand strip, subtle red gradient at the very bottom -->
+  <!-- Faixa da marca em cor plana. -->
   <div
-    class="h-1 w-full bg-gradient-to-r from-integra-red via-integra-red-700 to-integra-red"
+    class="h-1 w-full bg-integra-red"
     aria-hidden="true"
   ></div>
 </footer>

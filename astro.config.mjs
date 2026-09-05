@@ -24,7 +24,7 @@ export default defineConfig({
     }),
     icon({
       include: {
-        lucide: ["*"],
+        tabler: ["*"],
       },
     }),
   ],
