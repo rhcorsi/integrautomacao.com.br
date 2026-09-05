@@ -19,6 +19,8 @@ export function technicalClaimPresentation(claim: TechnicalClaim) {
   let reviewLabel: string;
   if (claim.status === "approved" && claim.humanApproval) {
     reviewLabel = `Validação humana aprovada em ${formatDate(claim.humanApproval.approvedAt)}`;
+  } else if (claim.status === "documented") {
+    reviewLabel = `Fontes revisadas com IA em ${formatDate(claim.reviewedAt)}; validação humana não registrada`;
   } else if (claim.status === "superseded") {
     reviewLabel = "Registro substituído; não usar como evidência vigente";
   } else if (claim.reviewKind === "gap-recorded-ai") {

@@ -1193,12 +1193,14 @@ Settings → Branches → regra clássica **main**:
 - Restrict deletions
 - Block force pushes
 
-A revisão humana das claims é um gate editorial independente da contagem de
-aprovações de PR. O lote de redesign com decisões P1 pendentes permanece em
-PR/preview até revisão real e aprovação de `npm run audit:claims:release`.
-O gate `audit:claims` do CI valida somente a integridade do cadastro. Ao final,
-`audit:claims:release` bloqueia o check obrigatório até existir revisão humana
-real de todas as P0/P1. O artifact de preview é guardado antes desse gate.
+A revisão das claims é um gate editorial independente da contagem de
+aprovações de PR. `audit:claims` valida a integridade do cadastro; ao final,
+`audit:claims:release` exige evidências de revisão para publicar. P1 admite
+revisão documental por IA com fontes, localizadores, dossiê e fingerprint
+correspondente ao texto. P0 exige aprovação humana real. `documented` nunca
+é apresentado como `approved`; pendências, fontes inválidas e evidências
+incompatíveis continuam bloqueadas. O artifact de preview é guardado antes
+desse gate. [Dossiê da revisão](docs/reviews/2026-09-05-technical-release.md).
 As regras estão em [docs/GITHUB_OPERATIONS.md](docs/GITHUB_OPERATIONS.md).
 
 ### CI (`.github/workflows/ci.yml`)

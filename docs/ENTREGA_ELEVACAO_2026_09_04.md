@@ -2,7 +2,7 @@
 
 Implementação de 04/09/2026, baseada no plano aprovado e no commit `d89ea474f7dfa8d52e6a81eaa167f0280d151fef`.
 
-**Estado:** código implementado e validado localmente, preparado na branch `codex/elevacao-2026-09-04` para revisão no GitHub. O envio foi autorizado pelo titular. A integração em produção continua condicionada à revisão técnica humana registrada, conforme [decisões para liberação](REVISAO_TECNICA_PARA_PRODUCAO.md). Autorização de envio não é registrada como aprovação factual das afirmações técnicas.
+**Estado atualizado em 05/09/2026:** implementação na PR #18, com revisão documental das dez decisões P1 concluída e critérios de publicação atualizados. O [dossiê de evidências](reviews/2026-09-05-technical-release.md) distingue conferência por IA de aprovação técnica humana. A publicação exige CI aprovado no commit da PR e conferência do deployment correspondente. A autorização operacional não foi registrada como assinatura técnica humana.
 
 ## Resultado implementado
 
@@ -12,12 +12,21 @@ Implementação de 04/09/2026, baseada no plano aprovado e no commit `d89ea474f7
 | Consulta técnica | Sumários na solução PlantPAx, nas 41 tecnologias e nos templates de artigos/cases; figuras ampliáveis com fonte, Escape e retorno de foco |
 | Contato | Introdução compacta e formulário antes das modalidades; assunto PlantPAx preservado; telefone e empresa continuam opcionais |
 | Busca | Lotes de 12, contagem, todos os resultados acessíveis, filtros por conteúdo, proteção contra consultas antigas/cliques repetidos e recuperação de erro |
-| Conteúdo | Correções de suporte/versão/licenciamento, protocolos e recomendações absolutas; 22 decisões e 20 fontes registradas; conferência documental não apresentada como aprovação humana |
+| Conteúdo | Correções de suporte/versão/licenciamento, protocolos e recomendações absolutas; 22 decisões e 25 fontes registradas; conferência documental não apresentada como aprovação humana |
 | SEO | URLs e política de indexação preservadas; quatro conexões contextuais adicionadas; expectativa obsoleta de FAQ rich result removida |
 | Evidência comercial | Três briefs de coleta preparados; relato existente de Moinho preservado como qualitativo; imagem ilustrativa deixou de preceder o conteúdo do case |
 | Medição | Contrato de eventos local sem envio externo; baseline real de 28 dias no GSC; cliques, solicitações aceitas e leads qualificados permanecem conceitos distintos |
 
-## Evidência de validação
+## Validação final de 05/09/2026
+
+- **693 testes aprovados:** 447 Workers, 180 Node e 66 UI; 88 testes focam a política documental e sua CLI.
+- **Astro check:** 164 arquivos, zero erros, avisos e hints; tipos Cloudflare verificados.
+- **Build:** 112 páginas HTML e índice Pagefind com 110 páginas; auditorias de rotas, redirects, terminologia, HTML e SEO aprovadas.
+- **Publicação documental:** gate estrito aprovado com 22 decisões e 25 fontes; prova de cada revisão vinculada ao conteúdo por fingerprint.
+- **Dependências:** `npm audit` sem vulnerabilidades. Políticas de deploy, prosa, UTF-8 e FAQs aprovadas.
+- CI do GitHub deve confirmar novamente esses controles no commit enviado antes do merge; a produção é verificada pelo SHA do deployment e pelas URLs públicas.
+
+## Evidência da validação inicial de 04/09/2026
 
 - **618 testes:** 447 de backend/Workers, 105 de políticas/Node e 66 de interface, todos aprovados. Falhas de paginação e foco encontradas na revisão foram reproduzidas com testes antes da correção.
 - **Astro check:** 164 arquivos, zero erro, aviso ou hint. Ambiente: Node 22.23.2 e npm 10.9.8.
@@ -37,14 +46,14 @@ O baseline do Search Console foi conferido e permanece na documentação privada
 
 [Contrato de mensuração](MEASUREMENT.md) · [Briefs dos dossiês](CASE_EVIDENCE_BRIEFS.md) · [Mapa de preservação da home](HOME_CONTENT_MAP_2026_09_04.md).
 
-## Pendências para produção e próximos ciclos
+## Revisão de liberação e próximos ciclos
 
-1. **Revisão humana real:** `npm run audit:claims:release` permanece deliberadamente reprovado em dez decisões P1 — T01/T02/T03/T04/T05/T07/T08/T09/T13/T17. As correções estão documentadas, mas não foi inventada assinatura humana. O gate normal verifica integridade do cadastro; não concede essa aprovação. Também há decisões P2 pendentes de revisão.
+1. **Revisão documental concluída:** T01/T02/T03/T04/T05/T07/T08/T09/T13/T17 receberam fontes primárias conferidas, localizadores precisos e dossiê vinculado ao texto. A data da fonte Telit foi corrigida; a referência Siemens usa cópia oficial acessível; cinco fontes complementares foram cadastradas. O gate aceita esse estado documental com proveniência por IA, preserva a exigência humana de P0 e rejeita provas ausentes ou desatualizadas. As decisões P2 mantêm seu estado explícito.
 2. **Dossiês e credenciais:** não foi feita inspeção privada dos registros de FAT/SAT, cutover, rollback e autorizações do cliente; credenciais existentes precisam de confirmação do titular/emissor para nova liberação. Nenhum case, resultado ou credencial foi inventado.
 3. **Validação externa de uso:** não foram inventados participantes para o teste formativo com cinco pessoas previsto no plano. Os testes automatizados e a navegação assistida não o substituem.
 4. **Operação do contato:** os testes locais verificam regras e estados; não foi enviado contato real nem comprovada entrega de e-mail em produção. O envio completo em homologação com Turnstile e o recebimento devem integrar o aceite operacional.
 5. **Funil, performance e evolução:** não há adaptador externo para os novos eventos; métricas comerciais e Core Web Vitals de campo permanecem N/D. Coleta e leituras de 30/60/90 dias dependem de ativação autorizada, dados e tempo transcorrido.
-6. **Publicação:** o envio ao GitHub está autorizado; a PR de evolução aguarda a aprovação técnica do lote antes de integrar a `main`, que dispara a produção. Depois, conferir URLs canônicas, classes de redirect, sitemap, busca e contato na revisão efetivamente publicada.
+6. **Publicação:** integração da PR #18 autorizada após os checks obrigatórios. O merge em `main` dispara a produção. Conferir URLs canônicas, classes de redirect, sitemap, busca e contato na revisão efetivamente publicada; o resultado do deployment deve corresponder ao commit integrado.
 
 A exigência editorial é encerrar erros conhecidos com evidência e revisão. Testes de software e fontes consultadas não permitem prometer ausência absoluta de erro em todo o conhecimento de engenharia.
 

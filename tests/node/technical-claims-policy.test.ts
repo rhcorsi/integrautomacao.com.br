@@ -1,5 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { spawnSync } from "node:child_process";
+import { copyFileSync, mkdirSync, mkdtempSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import {
+  fingerprintTechnicalClaim,
   validateTechnicalClaims,
   type ClaimPolicyInput,
 } from "../../scripts/technicalClaimsPolicy";
@@ -42,6 +47,317 @@ const validInput = (): ClaimPolicyInput => ({
       status: "pending-human",
     },
   ],
+});
+
+// SHA-256 of this fixture's substantive claim and referenced source metadata.
+const fixtureFingerprint = "6f8a7fc370a55836e6581606769ad6f7f0b6eb43d644f9f0699ea29de09a3c46";
+const documentedInput = (): ClaimPolicyInput => {
+  const input = validInput();
+  input.strictRelease = true;
+  input.claims[0].status = "documented";
+  input.claims[0].documentaryReview = {
+    reviewerId: "source-check-ai",
+    reviewedAt: "2026-09-04",
+    evidencePath: "docs/reviews/test-review.md",
+    fingerprint: fixtureFingerprint,
+  };
+  return input;
+};
+
+describe("documentary release policy", () => {
+  it("accepts a P1 decision with a registered documentary review bound to its wording and sources", () => {
+    expect(validateTechnicalClaims(documentedInput())).toEqual([]);
+  });
+
+  it("produces the independently calculated SHA-256 for the reviewed fixture", () => {
+    const input = validInput();
+    expect(fingerprintTechnicalClaim(input.claims[0], input.sources)).toBe(fixtureFingerprint);
+  });
+
+  it.each(["engineering-inference", "characterized", "editorial-process"] as const)(
+    "accepts a correctly bound %s documentary review", (evidenceKind) => {
+      const input = documentedInput();
+      input.claims[0].evidenceKind = evidenceKind;
+      if (evidenceKind === "editorial-process") input.claims[0].sourceIds = [];
+      input.claims[0].documentaryReview!.fingerprint = fingerprintTechnicalClaim(input.claims[0], input.sources);
+      expect(validateTechnicalClaims(input)).toEqual([]);
+    },
+  );
+
+  it("does not invalidate technical text for a new access date or unrelated source", () => {
+    const input = documentedInput();
+    input.sources[0].accessedAt = "2026-09-05";
+    input.sources.push({ ...input.sources[0], id: "S02", canonicalUrl: "https://example.com/other" });
+    expect(validateTechnicalClaims(input)).toEqual([]);
+  });
+
+  it("rejects an unknown runtime status instead of allowing it to bypass release", () => {
+    const input = validInput();
+    input.strictRelease = true;
+    input.claims[0].status = "published" as never;
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-claim-status");
+  });
+
+  it("rejects an unknown priority instead of silently skipping strict release checks", () => {
+    const input = validInput();
+    input.strictRelease = true;
+    input.claims[0].priority = "P9" as never;
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-claim-priority");
+  });
+
+  it.each(["statement", "decision", "product", "sourceLocator"] as const)(
+    "rejects a signed documentary claim with blank %s", (key) => {
+      const input = documentedInput();
+      input.claims[0][key] = " \t ";
+      input.claims[0].documentaryReview!.fingerprint = fingerprintTechnicalClaim(input.claims[0], input.sources);
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("incomplete-documentary-claim");
+    },
+  );
+
+  it.each([
+    [], [""], [" "], ["relative/path/"], ["//example.com/path/"], ["/path"],
+    ["/../path/"], ["/path/?query=1"], ["/path/#section"], ["/path\\other/"], ["/path/ /"],
+  ].map((pagePaths) => ({ pagePaths })))("rejects documentary scope without canonical absolute page paths: $pagePaths", ({ pagePaths }) => {
+    const input = documentedInput();
+    input.claims[0].pagePaths = pagePaths;
+    input.claims[0].documentaryReview!.fingerprint = fingerprintTechnicalClaim(input.claims[0], input.sources);
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-page-paths");
+  });
+
+  it.each([[], [""], [" \t "], ["REV-A", ""]].map((applicableVersions) => ({ applicableVersions })))(
+    "rejects documentary scope without nonempty applicable versions: $applicableVersions", ({ applicableVersions }) => {
+      const input = documentedInput();
+      input.claims[0].applicableVersions = applicableVersions;
+      input.claims[0].documentaryReview!.fingerprint = fingerprintTechnicalClaim(input.claims[0], input.sources);
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-versions");
+    },
+  );
+
+  it.each(["title", "manufacturer", "documentRevision", "canonicalUrl"] as const)(
+    "rejects a current documentary source with blank %s", (key) => {
+      const input = documentedInput();
+      input.sources[0][key] = " \t ";
+      input.claims[0].documentaryReview!.fingerprint = fingerprintTechnicalClaim(input.claims[0], input.sources);
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-source");
+    },
+  );
+
+  it.each([
+    "not-a-url", "http://example.com/manual", "file:///manual", "https:example.com",
+    "https://example.com/a b", "https://user:password@example.com/manual",
+  ])("rejects a documentary source without a canonical HTTPS URL: %s", (canonicalUrl) => {
+    const input = documentedInput();
+    input.sources[0].canonicalUrl = canonicalUrl;
+    input.claims[0].documentaryReview!.fingerprint = fingerprintTechnicalClaim(input.claims[0], input.sources);
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-source");
+  });
+
+  it("requires human approval for P0 even when documentary proof is recorded", () => {
+    const input = documentedInput();
+    input.claims[0].priority = "P0";
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("critical-human-required");
+  });
+
+  it("rejects documentary status without its evidence record", () => {
+    const input = documentedInput();
+    delete input.claims[0].documentaryReview;
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("missing-documentary-review");
+  });
+
+  it.each([
+    "https://example.com/review.md", "../docs/reviews/review.md", "docs/reviews/../review.md",
+    "docs/reviews\\review.md", "C:/docs/reviews/review.md", "docs/reviews/review.txt",
+  ])("rejects unsafe documentary evidence path %s", (evidencePath) => {
+    const input = documentedInput();
+    input.claims[0].documentaryReview!.evidencePath = evidencePath;
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-path");
+  });
+
+  it.each(["lab", "field", "internal-evidence-required"] as const)(
+    "does not treat %s evidence as completed documentary verification", (evidenceKind) => {
+      const input = documentedInput();
+      input.claims[0].evidenceKind = evidenceKind;
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("ineligible-documentary-evidence");
+    },
+  );
+
+  it("rejects a documentary review attributed to a human or an unregistered AI", () => {
+    const input = documentedInput();
+    input.reviewers[0].kind = "human";
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-reviewer");
+    input.reviewers = [];
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("invalid-documentary-reviewer");
+  });
+
+  it("rejects a documentary reviewer or date that differs from the claim review", () => {
+    const input = documentedInput();
+    input.reviewers.push({ id: "other-ai", displayName: "Outra IA", kind: "ai" });
+    input.claims[0].documentaryReview!.reviewerId = "other-ai";
+    input.claims[0].documentaryReview!.reviewedAt = "2026-09-05";
+    const codes = validateTechnicalClaims(input).map((item) => item.code);
+    expect(codes).toContain("invalid-documentary-reviewer");
+    expect(codes).toContain("invalid-documentary-date");
+  });
+
+  it("requires a real matching calendar date and source-checked AI review", () => {
+    const input = documentedInput();
+    input.claims[0].reviewedAt = "2026-02-30";
+    input.claims[0].documentaryReview!.reviewedAt = "2026-02-30";
+    input.claims[0].reviewKind = "gap-recorded-ai";
+    const codes = validateTechnicalClaims(input).map((item) => item.code);
+    expect(codes).toContain("invalid-documentary-date");
+    expect(codes).toContain("invalid-documentary-reviewer");
+  });
+
+  it("rejects documentary support without a registered source", () => {
+    const input = documentedInput();
+    input.claims[0].sourceIds = [];
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("documentary-without-source");
+  });
+
+  it.each(["statement", "decision", "sourceLocator"] as const)(
+    "invalidates documentary proof after changing %s", (key) => {
+      const input = documentedInput();
+      input.claims[0][key] += " Alterado.";
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("documentary-fingerprint-mismatch");
+    },
+  );
+
+  it.each(["pagePaths", "applicableVersions", "sourceIds"] as const)(
+    "invalidates documentary proof after changing %s scope", (key) => {
+      const input = documentedInput();
+      input.claims[0][key].push("new-scope");
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("documentary-fingerprint-mismatch");
+    },
+  );
+
+  it.each(["0".repeat(64), fixtureFingerprint.toUpperCase(), ""])(
+    "rejects an invalid documentary digest %s", (fingerprint) => {
+      const input = documentedInput();
+      input.claims[0].documentaryReview!.fingerprint = fingerprint;
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("documentary-fingerprint-mismatch");
+    },
+  );
+
+  it.each(["canonicalUrl", "documentRevision", "status"] as const)(
+    "invalidates documentary proof after changing source %s", (key) => {
+      const input = documentedInput();
+      if (key === "status") input.sources[0].status = "superseded";
+      else input.sources[0][key] += "-changed";
+      expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("documentary-fingerprint-mismatch");
+    },
+  );
+
+  it("does not promote AI review into a human attestation", () => {
+    const input = documentedInput();
+    input.claims[0].humanApproval = { approvedBy: "source-check-ai", approvedAt: "2026-09-04" };
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("unexpected-human-approval");
+  });
+
+  it("continues allowing a P2 pending decision while blocking P1 pending", () => {
+    const input = validInput();
+    input.strictRelease = true;
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("critical-pending-human");
+    input.claims[0].priority = "P2";
+    expect(validateTechnicalClaims(input)).toEqual([]);
+  });
+
+  it("rejects changing a critical pending claim to superseded to bypass release", () => {
+    const input = validInput();
+    input.strictRelease = true;
+    input.claims[0].status = "superseded";
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("critical-pending-human");
+    input.claims[0].priority = "P0";
+    expect(validateTechnicalClaims(input).map((item) => item.code)).toContain("critical-human-required");
+  });
+
+  it("labels documentary review as AI review with no registered human validation", () => {
+    const presentation = technicalClaimPresentation(documentedInput().claims[0]);
+    expect(presentation.reviewLabel).toContain("IA");
+    expect(presentation.reviewLabel).toContain("validação humana não registrada");
+    expect(presentation.reviewLabel).not.toContain("aprovada");
+  });
+});
+
+describe("documentary evidence release CLI", () => {
+  const fixtureRoots: string[] = [];
+  afterEach(() => {
+    for (const root of fixtureRoots.splice(0)) rmSync(root, { recursive: true, force: true });
+  });
+
+  function cliFixture() {
+    const root = mkdtempSync(join(tmpdir(), "integra-claim-release-"));
+    fixtureRoots.push(root);
+    for (const directory of ["scripts", "src/data", "docs/reviews"]) mkdirSync(join(root, directory), { recursive: true });
+    for (const name of ["verifyTechnicalClaims.mjs", "technicalClaimsPolicy.ts"]) {
+      copyFileSync(resolve("scripts", name), join(root, "scripts", name));
+    }
+    const input = documentedInput();
+    const claims = [input.claims[0], ...Array.from({ length: 21 }, (_, index) => ({
+      ...validInput().claims[0], id: `T${String(index + 2).padStart(2, "0")}`, priority: "P2",
+    }))];
+    const sources = [input.sources[0], ...Array.from({ length: 24 }, (_, index) => ({
+      ...input.sources[0], id: `S${String(index + 2).padStart(2, "0")}`,
+      canonicalUrl: `https://example.com/another-manual-${index + 2}`,
+    }))];
+    writeFileSync(join(root, "src/data/technicalClaims.ts"),
+      `export const technicalClaims = ${JSON.stringify(claims)};\nexport const technicalReviewers = ${JSON.stringify(input.reviewers)};\n`);
+    writeFileSync(join(root, "src/data/sourceRegistry.ts"), `export const technicalSources = ${JSON.stringify(sources)};\n`);
+    const evidencePath = join(root, "docs/reviews/test-review.md");
+    return {
+      root, evidencePath,
+      run: (...args: string[]) => spawnSync(process.execPath, [join(root, "scripts/verifyTechnicalClaims.mjs"), ...args], {
+        cwd: root, encoding: "utf8",
+      }),
+    };
+  }
+
+  it("releases the exact registered batch only when its documentary evidence exists", () => {
+    const fixture = cliFixture();
+    writeFileSync(fixture.evidencePath, `# Documentary review\n\nT01: ${fixtureFingerprint}\n`);
+    const result = fixture.run("--strict-release");
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("25 fontes");
+  });
+
+  it("rejects a missing evidence file even in the structural CLI", () => {
+    const result = cliFixture().run();
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("missing-documentary-evidence");
+  });
+
+  it.each([
+    `T02: ${fixtureFingerprint}`,
+    "T01: " + "0".repeat(64),
+    `T01 has been reviewed.\nT02: ${fixtureFingerprint}`,
+  ])("rejects evidence not binding this claim ID to its fingerprint: %s", (evidence) => {
+    const fixture = cliFixture();
+    writeFileSync(fixture.evidencePath, evidence);
+    const result = fixture.run("--strict-release");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("documentary-evidence-mismatch");
+  });
+
+  it("rejects evidence reached through a docs/reviews directory link outside the repository", () => {
+    const fixture = cliFixture();
+    const outside = mkdtempSync(join(tmpdir(), "integra-claim-evidence-"));
+    fixtureRoots.push(outside);
+    renameSync(join(fixture.root, "docs/reviews"), join(fixture.root, "docs/unused-reviews"));
+    symlinkSync(outside, join(fixture.root, "docs/reviews"), process.platform === "win32" ? "junction" : "dir");
+    writeFileSync(fixture.evidencePath, `T01: ${fixtureFingerprint}`);
+    const result = fixture.run("--strict-release");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("unsafe-documentary-evidence");
+  });
+
+  it("rejects unknown CLI flags instead of accepting a documentary bypass", () => {
+    const fixture = cliFixture();
+    writeFileSync(fixture.evidencePath, `T01: ${fixtureFingerprint}`);
+    const result = fixture.run("--strict-release", "--skip-documentary-evidence");
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("unsupported-option");
+  });
 });
 
 describe("technical claim policy", () => {

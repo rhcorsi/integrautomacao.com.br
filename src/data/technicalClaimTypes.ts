@@ -21,6 +21,14 @@ export interface HumanApproval {
   approvedAt: string;
 }
 
+/** Source review records an AI documentary check, never human approval. */
+export interface DocumentaryReview {
+  reviewerId: string;
+  reviewedAt: string;
+  evidencePath: string;
+  fingerprint: string;
+}
+
 export interface TechnicalClaim {
   id: string;
   pagePaths: string[];
@@ -42,6 +50,7 @@ export interface TechnicalClaim {
   reviewedAt: string;
   reviewerId: string;
   reviewKind: "source-checked-ai" | "gap-recorded-ai" | "human-reviewed";
-  status: "approved" | "pending-human" | "superseded";
+  status: "approved" | "documented" | "pending-human" | "superseded";
   humanApproval?: HumanApproval;
+  documentaryReview?: DocumentaryReview;
 }

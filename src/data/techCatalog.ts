@@ -1483,7 +1483,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "MFA é viável em planta OT?",
-        a: "A autenticação deve ser definida por função e cenário operacional. Quando uma restrição técnica ou operacional impedir MFA, documente o risco, os controles compensatórios, a aprovação responsável e os testes de acesso normal e emergencial; cartão ou proteção física isoladamente não demonstram MFA.",
+        a: "MFA é uma boa prática para acesso remoto a OT. A autenticação deve considerar função e cenário operacional. Quando uma restrição técnica ou operacional impedir MFA, documente o risco, os controles compensatórios, a aprovação responsável e os testes de acesso normal e emergencial; cartão ou proteção física isoladamente não demonstram MFA.",
       },
       {
         q: "Posso ter Forest separado para OT?",
@@ -1540,7 +1540,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "Como proteger os backups industriais contra ransomware?",
-        a: "A estratégia deve ser definida pelo cenário de recuperação e pode combinar cópias isoladas, offline ou imutáveis. Separar identidades e limitar caminhos de acesso reduz o risco de propagação, mas precisa ser combinado com menor privilégio, atualização, monitoramento e restauração testada.",
+        a: "A estratégia deve ser definida pelo cenário de recuperação e pode combinar cópias criptografadas, isoladas, offline ou imutáveis. Separar identidades e limitar caminhos de acesso reduz o risco de propagação, mas precisa ser combinado com menor privilégio, atualização, monitoramento e restauração testada.",
       },
       {
         q: "Backup de aplicação industrial cabe em backup corporativo?",
@@ -1771,7 +1771,7 @@ export const techCatalog: TechPage[] = [
       },
       {
         q: "OPC UA é o substituto definitivo de OPC Classic?",
-        a: "Não existe resposta universal. OPC UA oferece identidade de aplicações, políticas e modos de segurança, mas o mecanismo depende do transporte: UA TCP usa UASC, enquanto outros mapeamentos podem usar TLS. Avalie certificados, confiança, autorização, configuração e dependências do legado antes de decidir a migração do OPC Classic.",
+        a: "Não existe resposta universal. OPC UA oferece identidade de aplicações, políticas e modos de segurança, mas o mecanismo depende do mapeamento: UA-TCP/UA-SC/UA-Binary usa UASC, enquanto outros mapeamentos podem usar TLS. Avalie certificados, confiança, autorização, configuração e dependências do legado antes de decidir a migração do OPC Classic.",
       },
       {
         q: "IEC 61850 cabe na planta de processo?",

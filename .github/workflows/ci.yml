@@ -107,7 +107,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      # Keep the preview artifact reviewable, but block main until the real
-      # human technical review is recorded in the claim registry.
-      - name: Require technical content approval for release
+      # Validate documentary evidence and its fingerprint without attributing
+      # AI source checks to a human. P0 still requires real human approval.
+      - name: Verify technical evidence for release
         run: npm run audit:claims:release
