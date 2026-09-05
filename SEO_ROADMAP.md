@@ -9,6 +9,18 @@ Objetivo: tornar a Integra a referência brasileira mais útil e confiável para
 
 ## Princípios obrigatórios
 
+### Lote local de 04/09/2026 — elevação do portal
+
+Implementação em revisão local; o estado de produção acima permanece separado.
+
+- Correções de suporte, versão, licenciamento e recomendações no catálogo, com 22 decisões documentadas em `src/data/technicalClaims.ts`. Conferência documental assistida por IA não equivale à aprovação humana de engenharia.
+- Busca com carregamento em lotes e filtros por intenção, sumários de leitura, figuras ampliáveis e contato antecipado no celular.
+- Home com caminhos de contratação, consulta técnica e experiência; URLs e profundidade do acervo preservadas.
+- Conexões editoriais para CPwE, gestão ISA/IEC 62443, atuação no Paraná e empresa. As páginas já eram navegáveis; este lote reforça contexto no conteúdo.
+- FAQs continuam úteis para o leitor e coerentes com o markup. Não há meta de FAQ rich result: o Google retirou esse recurso em 07/05/2026 ([registro oficial](https://developers.google.com/search/updates#may-2026)).
+- Próximos cases dependem de dossiê e autorização, conforme [briefs de evidência](docs/CASE_EVIDENCE_BRIEFS.md). Medição e limites em [MEASUREMENT.md](docs/MEASUREMENT.md).
+- GSC, leads qualificados e resultado de 30/60/90 dias só serão preenchidos a partir de dados efetivamente disponíveis, com recorte e denominador. Nenhum crescimento ou posição é prometido.
+
 1. Uma URL proprietária para cada intenção: solução para contratação, serviço para execução, tecnologia para entendimento técnico, artigo para pergunta/decisão, setor para aplicação e case para evidência.
 2. Conteúdo nasce de experiência, documentação primária e dúvidas reais. Não publicar permutações de palavras-chave, páginas de cidade sem presença comprovada ou textos gerados apenas para ranking.
 3. Cases, métricas, clientes, certificações e depoimentos só entram com evidência verificável. Informação protegida por NDA pode ser anonimizada, nunca inventada.

@@ -266,6 +266,12 @@ const hasTurnstile = turnstileSiteKey.length > 0;
     watchTurnstileBlocked,
     type TurnstileWindow,
   } from "@/utils/webform";
+  import {
+    classifyRequestFailure,
+    emitPortalMetric,
+    isAcceptedResponse,
+    metricSubject,
+  } from "@/scripts/portalMetrics";
 
   interface ContactContext {
     cta?: string;
@@ -455,6 +461,16 @@ const hasTurnstile = turnstileSiteKey.length > 0;
 
     applyContactContext();
 
+    const emitFormStarted = () => {
+      emitPortalMetric(
+        "form_started",
+        { subject: metricSubject(subjectSelect?.value) },
+        { onceKey: "contact-form" },
+      );
+    };
+    form.addEventListener("input", emitFormStarted, { once: true });
+    form.addEventListener("change", emitFormStarted, { once: true });
+
     // Ad-blocker bloqueia challenges.cloudflare.com: revela o fallback com
     // os canais diretos em vez de deixar o widget vazio para sempre.
     watchTurnstileBlocked(form, () => {
@@ -487,6 +503,7 @@ const hasTurnstile = turnstileSiteKey.length > 0;
           "Preencha os campos obrigatórios antes de enviar.",
           "error",
         );
+        emitPortalMetric("request_failed", { failure_code: "validation" });
         return;
       }
 
@@ -508,6 +525,9 @@ const hasTurnstile = turnstileSiteKey.length > 0;
             : `A verificação de segurança não carregou (bloqueador de conteúdo?). Escreva para ${contactEmail}.`,
           "error",
         );
+        emitPortalMetric("request_failed", {
+          failure_code: "turnstile_missing",
+        });
         return;
       }
 
@@ -529,7 +549,14 @@ const hasTurnstile = turnstileSiteKey.length > 0;
           signal: AbortSignal.timeout(FORM_FETCH_TIMEOUT_MS),
         });
 
-        if (response.ok) {
+        const data: unknown = await response.json().catch(() => null);
+        const backendAccepted = isAcceptedResponse(response.ok, data);
+
+        if (backendAccepted) {
+          emitPortalMetric("request_accepted", {
+            subject: metricSubject(subjectSelect?.value),
+            channel: "contact_form",
+          });
           setFormStatus(
             status,
             "Contexto recebido. Nosso prazo-alvo de retorno inicial é de 1 dia útil.",
@@ -540,7 +567,9 @@ const hasTurnstile = turnstileSiteKey.length > 0;
           return;
         }
 
-        const data: unknown = await response.json().catch(() => null);
+        emitPortalMetric("request_failed", {
+          failure_code: response.ok ? "invalid_response" : "server_rejected",
+        });
         setFormStatus(
           status,
           responseMessage(data) ??
@@ -548,7 +577,9 @@ const hasTurnstile = turnstileSiteKey.length > 0;
           "error",
         );
       } catch (error) {
-        console.error(error);
+        emitPortalMetric("request_failed", {
+          failure_code: classifyRequestFailure(error),
+        });
         setFormStatus(status, networkErrorMessage(contactEmail), "error");
       } finally {
         submitBtn?.removeAttribute("disabled");

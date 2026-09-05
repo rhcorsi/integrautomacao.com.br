@@ -70,14 +70,14 @@ const secondaryHref = secondaryCta.href;
   >
   </div>
 
-  <div class="container-fluid py-20 lg:py-28">
+  <div class="container-fluid py-10 lg:py-16">
     <div
-      class="grid gap-12 items-center lg:grid-cols-[1.1fr_1fr] lg:gap-16"
+      class="grid gap-10 items-center lg:grid-cols-[1.15fr_0.85fr] lg:gap-12"
     >
       <div>
         <p
           class:list={[
-            "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-mono uppercase tracking-widest mb-8",
+            "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider mb-6",
             dark
               ? "border-white/15 bg-white/5 text-integra-gray-300"
               : "border-integra-gray-200 bg-integra-gray-50 text-integra-gray-700",
@@ -88,7 +88,7 @@ const secondaryHref = secondaryCta.href;
         </p>
         <h1
           class:list={[
-            "text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl",
+            "text-4xl font-semibold tracking-tight sm:text-5xl xl:text-6xl",
             dark ? "text-white" : "text-integra-gray-900",
           ]}
         >
@@ -110,9 +110,7 @@ const secondaryHref = secondaryCta.href;
             href={primaryHref}
             class:list={[
               "group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-md transition-colors",
-              dark
-                ? "text-integra-white bg-integra-red hover:bg-integra-red-700"
-                : "text-integra-white bg-integra-gray-900 hover:bg-integra-black",
+              "text-integra-white bg-integra-red hover:bg-integra-red-700",
             ]}
           >
             {primaryCta.label}
@@ -130,10 +128,11 @@ const secondaryHref = secondaryCta.href;
             {secondaryCta.label}
           </a>
         </div>
+        <slot />
         {statusLine && (
           <p
             class:list={[
-              "mt-10 font-mono text-xs uppercase tracking-widest",
+              "mt-6 font-mono text-[11px] uppercase tracking-wider",
               dark ? "text-integra-gray-400" : "text-integra-gray-500",
             ]}
           >
@@ -171,7 +170,7 @@ const secondaryHref = secondaryCta.href;
 <style>
   @media (prefers-reduced-motion: no-preference) {
     .hero-status-dot {
-      animation: hero-blink 2.4s ease-in-out infinite;
+      animation: hero-blink 2.4s ease-in-out 2;
     }
   }
   @keyframes hero-blink {

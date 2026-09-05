@@ -2,6 +2,7 @@
 import { render } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import TechnicalToc from "@/components/TechnicalToc.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import CtaBlock from "@/components/CtaBlock.astro";
 import TechnicalCallout from "@/components/TechnicalCallout.astro";
@@ -22,7 +23,8 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+const tocItems = headings.filter((heading) => heading.depth === 2).map((heading) => ({ id: heading.slug, text: heading.text }));
 
 const formattedDate = entry.data.pubDate.toLocaleDateString("pt-BR", {
   day: "numeric",
@@ -85,7 +87,7 @@ const relatedSolutions = CASE_SOLUTIONS[entry.id] ?? [];
 >
   <article>
     <header class="border-b border-integra-gray-200 bg-integra-white">
-      <div class="container-default py-16 lg:py-20">
+      <div class="container-default py-10 lg:py-14">
         <Breadcrumbs leaf={entry.data.title} />
         <p
           class="text-xs font-mono uppercase tracking-widest text-integra-red-700 mb-3"
@@ -103,6 +105,8 @@ const relatedSolutions = CASE_SOLUTIONS[entry.id] ?? [];
         <p class="text-lg leading-relaxed text-integra-gray-700 max-w-3xl lg:text-xl">
           {entry.data.summary}
         </p>
+        <p class="mt-5 max-w-3xl text-sm leading-relaxed text-integra-gray-600">Relato técnico publicado pela Integra, com cliente preservado. Os resultados descritos são qualitativos; esta página não disponibiliza os registros privados de aceite.</p>
+        <a href="/contato/?assunto=portfolio" class="mt-6 inline-flex min-h-11 items-center rounded-md bg-integra-red px-5 py-3 text-sm font-semibold text-white hover:bg-integra-red-700">Discutir um contexto semelhante →</a>
         {entry.data.tech.length > 0 && (
           <ul class="mt-8 flex flex-wrap gap-2">
             {entry.data.tech.map((t) => (
@@ -124,7 +128,16 @@ const relatedSolutions = CASE_SOLUTIONS[entry.id] ?? [];
           </ul>
         )}
       </div>
+        <div class="container-narrow"><TechnicalToc items={tocItems} /></div>
     </header>
+
+    <section class="border-b border-integra-gray-200">
+      <div class="container-narrow py-10 lg:py-14">
+        <div class="prose prose-lg max-w-none prose-headings:text-integra-gray-900 prose-a:text-integra-red-700 hover:prose-a:underline prose-strong:text-integra-gray-900 prose-code:bg-integra-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:text-sm">
+          <Content components={{ aside: TechnicalCallout }} />
+        </div>
+      </div>
+    </section>
 
     {entry.data.heroImage && (
       <div class="border-b border-integra-gray-200 bg-integra-gray-100">
@@ -136,9 +149,9 @@ const relatedSolutions = CASE_SOLUTIONS[entry.id] ?? [];
                 alt={entry.data.heroAlt ?? entry.data.title}
                 widths={[800, 1200, 1600]}
                 sizes="(min-width: 1024px) 1100px, 100vw"
-                loading="eager"
+                loading="lazy"
                 decoding="async"
-                class="w-full"
+                class="w-full max-h-80 object-contain"
               />
               {entry.data.heroIllustrative && (
                 <span class="absolute bottom-3 right-3 rounded-sm bg-integra-gray-950/85 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-integra-white">
@@ -157,16 +170,8 @@ const relatedSolutions = CASE_SOLUTIONS[entry.id] ?? [];
       </div>
     )}
 
-    <section class="border-b border-integra-gray-200">
-      <div class="container-narrow py-16 lg:py-20">
-        <div class="prose prose-lg max-w-none prose-headings:text-integra-gray-900 prose-a:text-integra-red-700 hover:prose-a:underline prose-strong:text-integra-gray-900 prose-code:bg-integra-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:text-sm">
-          <Content components={{ aside: TechnicalCallout }} />
-        </div>
-      </div>
-    </section>
-
     {(relatedTechnologies.length > 0 || relatedSolutions.length > 0) && (
-      <section class="border-b border-integra-gray-200 bg-integra-gray-50">
+      <section data-pagefind-ignore class="border-b border-integra-gray-200 bg-integra-gray-50">
         <div class="container-default py-16">
           <p class="mb-3 font-mono text-xs uppercase tracking-widest text-integra-red-700">
             Do case para a arquitetura

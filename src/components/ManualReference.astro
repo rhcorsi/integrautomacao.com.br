@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { publicSourceFor } from "@/data/sourceRegistry";
+import { randomUUID } from "node:crypto";
 
 interface Props {
   image: ImageMetadata;
@@ -35,6 +36,7 @@ const {
 const dark = theme === "dark";
 const eyebrowColor = theme === "ot" ? "text-integra-ot" : "text-integra-red-700";
 const publicSource = publicSourceFor(source);
+const dialogTitleId = `figure-${randomUUID()}`;
 ---
 
 <figure
@@ -75,6 +77,27 @@ const publicSource = publicSourceFor(source);
     />
   </div>
 
+  <a
+    data-figure-open
+    href={image.src}
+    aria-label={`Ampliar figura: ${title}`}
+    class:list={["flex min-h-11 items-center justify-between border-t px-4 py-3 text-sm font-semibold underline underline-offset-4", dark ? "border-white/10 text-white" : "border-integra-gray-200 text-integra-red-700"]}
+  >
+    Ampliar figura <span aria-hidden="true">↗</span>
+  </a>
+  <dialog aria-labelledby={dialogTitleId} class="manual-dialog" data-pagefind-ignore>
+    <div class="manual-dialog-heading">
+      <p id={dialogTitleId}>{title}</p>
+      <button type="button" data-figure-close autofocus>Fechar <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="manual-dialog-image" tabindex="0" role="region" aria-label="Figura completa; role para consultar os detalhes">
+      <img src={image.src} alt={alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+    </div>
+    <div class="manual-dialog-caption">
+      <p>{caption}</p>
+      <p>Fonte: {source}{publicSource && <> · <a href={publicSource.href} target="_blank" rel="noopener noreferrer">{publicSource.linkLabel}</a></>}</p>
+    </div>
+  </dialog>
   <figcaption
     class:list={[
       "space-y-2 border-t p-4 text-xs leading-relaxed",
@@ -106,4 +129,20 @@ const publicSource = publicSourceFor(source);
       )}
     </p>
   </figcaption>
+
 </figure>
+
+<script>
+  import { initManualFigures } from "@/scripts/manualFigures";
+  initManualFigures();
+</script>
+<style>
+  .manual-dialog { width: min(96vw, 100rem); max-width: 96vw; max-height: 94dvh; padding: 0; margin: auto; border: 1px solid #d4d4d4; border-radius: .5rem; background: white; color: #1a1a1a; }
+  .manual-dialog::backdrop { background: rgb(0 0 0 / .75); }
+  .manual-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 1rem; border-bottom: 1px solid #ddd; font-weight: 600; }
+  .manual-dialog-heading button { flex-shrink: 0; min-height: 44px; padding: .5rem 1rem; border: 1px solid #aaa; border-radius: .25rem; cursor: pointer; }
+  .manual-dialog-image { overflow: auto; max-height: 65dvh; background: white; }
+  .manual-dialog-image img { display: block; width: auto; max-width: none; min-width: 100%; height: auto; }
+  .manual-dialog-caption { padding: 1rem; font-size: .8rem; line-height: 1.6; }
+  .manual-dialog-caption a { text-decoration: underline; text-underline-offset: .2em; }
+</style>

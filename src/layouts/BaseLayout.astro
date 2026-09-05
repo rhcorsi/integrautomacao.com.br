@@ -67,6 +67,12 @@ const ogImageBySection: Record<string, string> = {
   tecnologias: "/og/tecnologias.png",
 };
 const firstPathSegment = Astro.url.pathname.split("/").filter(Boolean)[0] ?? "";
+const contentKinds: Record<string, string> = {
+  tecnologias: "technology", solucoes: "solution", servicos: "solution",
+  setores: "sector", cases: "case", eventos: "event", blog: "guide-article",
+  "automacao-industrial": "guide-article", "ciberseguranca-ot": "guide-article",
+};
+const contentKind = contentKinds[firstPathSegment] ?? "institutional";
 const ogImage = requestedOgImage ?? ogImageBySection[firstPathSegment] ?? "/og/default.png";
 const ogImageURL = new URL(ogImage, SITE.url);
 const socialImageAlt = ogImageAlt ?? title ?? SITE.name;
@@ -120,6 +126,7 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta data-pagefind-filter="content_kind[content]" content={contentKind} />
     <meta
       name="robots"
       content={
@@ -177,15 +184,28 @@ const jsonLdBlocks = [organizationSchema(), breadcrumb, ...jsonLd].filter(
     </main>
     <Footer />
     <script>
+      import { emitPortalMetric } from "@/scripts/portalMetrics";
       const CONTACT_CONTEXT_KEY = "integra:contact-context";
       const CONTACT_CONTEXT_TTL_MS = 30 * 60 * 1_000;
 
       document.addEventListener("click", (event) => {
         if (!(event.target instanceof Element)) return;
+        const clickedLink = event.target.closest<HTMLAnchorElement>("a[href]");
+        if (clickedLink?.matches('[data-manual-reference] a[target="_blank"], [data-technical-evidence] a[target="_blank"]')) {
+          emitPortalMetric("source_opened", { source_kind: "technical_reference" });
+        }
+        if (clickedLink?.matches('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]')) {
+          emitPortalMetric("cta_clicked", { cta_id: "contact_alternative" });
+        }
         const link = event.target.closest<HTMLAnchorElement>(
           'a[href^="/contato"]',
         );
         if (!link) return;
+
+        emitPortalMetric("cta_clicked", {
+          cta_id: link.closest("header") ? "header_contact" :
+            window.location.pathname === "/solucoes/plantpax/" ? "plantpax_architecture" : "primary_contact",
+        });
 
         try {
           const createdAt = Date.now();

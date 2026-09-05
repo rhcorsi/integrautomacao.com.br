@@ -541,8 +541,9 @@ Detalhamento por arquivo:
 | `vitest.config.ts` | Lane Workers, D1 Miniflare e exclusão explícita de Node/UI. |
 | `vitest.node.config.ts` | Lane Node pura. |
 | `vitest.ui.config.ts` | Lane `happy-dom`. |
-| `.github/workflows/ci.yml` | `npm ci`, Astro check, build, smoke e artifact de PR. |
-| `.github/workflows/deploy.yml` | Fallback manual; não é o publicador automático e não substitui o cutover SHA-pinned planejado. |
+| `.github/workflows/ci.yml` | Instalação pelo lockfile, contrato Node/npm, Astro/types, testes Workers/Node/UI, auditorias, um build, smoke e artifact de PR. |
+| `.github/workflows/deploy.yml` | Fallback manual de `main` no SHA do evento, condicionado ao CI desse SHA; reconstrói o site e não substitui o cutover por artefato planejado. |
+| `docs/GITHUB_OPERATIONS.md` | Gates de CI, política de proteção de `main`, revisão editorial e procedimento do fallback. |
 | `.github/dependabot.yml` | Atualizações automatizadas de npm e Actions conforme a cadência registrada. |
 | `.github/ISSUE_TEMPLATE/*` / `PULL_REQUEST_TEMPLATE.md` | Entrada padronizada de bug/conteúdo e checklist de revisão/publicação. |
 
@@ -1138,11 +1139,16 @@ Para evidência detalhada e limites conhecidos, consulte
 
 ### Opção B — fallback manual via GitHub Actions
 
-O workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) está
-limitado a `workflow_dispatch`. Os triggers de PR e push estão comentados, logo
-ele **não** gera preview nem publica `main` automaticamente no estado atual.
-Quando acionado manualmente, faz build e `wrangler pages deploy`; use apenas se
-a integração direta estiver indisponível e não houver build concorrente.
+O workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) aceita
+somente `workflow_dispatch` em `main`, sem input de branch. Exige um CI de push
+aprovado para o SHA do evento, faz checkout desse SHA e reconstrói o site.
+O fallback falha antes do build se a chave pública Turnstile estiver ausente ou
+contiver um placeholder, usando o mesmo validador dos formulários.
+Antes do envio, confere se `main` continua no mesmo commit; o comando fixa
+`--branch=main` e `--commit-hash` do evento. Use apenas se a integração direta
+estiver indisponível e não houver build concorrente. O ambiente GitHub
+`production` deve aceitar somente `main`. Procedimento e limites em
+[docs/GITHUB_OPERATIONS.md](docs/GITHUB_OPERATIONS.md).
 
 **Secrets necessários** (Settings → Secrets and variables → Actions):
 
@@ -1165,37 +1171,49 @@ build.
 >
 > Neste repositório a **Opção A está ativa** (CF Pages
 > conectado ao GitHub fazendo build automático). O workflow
-> `deploy.yml` está com triggers `push`/`pull_request` comentados e
-> roda apenas via `workflow_dispatch` (Actions → Deploy → Run workflow)
-> como fallback manual. Para trocar para Opção B, descomente os
-> triggers nesse workflow e desconecte a integração direta no painel
-> da Cloudflare.
+> `deploy.yml` roda apenas via `workflow_dispatch` (Actions → Deploy →
+> Run workflow) como fallback manual. Uma troca para Actions como publicador
+> automático exige implementar e validar o fluxo por artefato e executar um
+> cutover específico da integração direta; não basta adicionar triggers.
 
-## Branch protection (recomendado)
+## Proteção de main
 
-**Estado atual:** o repositório privado não tem ruleset/proteção obrigatória
-para `main` no plano disponível. As regras abaixo são o desired state; até que
-possam ser habilitadas, revisão, CI verde e proibição de force-push são
-controles operacionais.
+Proteção clássica de `main` aplicada e confirmada pela API em 05/09/2026,
+incluindo administradores e sem bypass. O check está vinculado ao aplicativo
+GitHub Actions. Revalidar a configuração remota em cada release.
 
-Settings → Branches → Add branch ruleset → Apply to **default branch**:
+Settings → Branches → regra clássica **main**:
 
-- Require a pull request before merging (1 approval mínima)
+- Require a pull request before merging (zero aprovações mínimas para o mantenedor único)
 - Require status checks to pass before merging:
   - `Lint and build` (do workflow CI)
+  - Require branches to be up to date before merging
 - Require conversation resolution before merging
 - Require linear history (opcional, mantém histórico limpo)
 - Restrict deletions
 - Block force pushes
 
+A revisão humana das claims é um gate editorial independente da contagem de
+aprovações de PR. O lote de redesign com decisões P1 pendentes permanece em
+PR/preview até revisão real e aprovação de `npm run audit:claims:release`.
+O gate `audit:claims` do CI valida somente a integridade do cadastro. Ao final,
+`audit:claims:release` bloqueia o check obrigatório até existir revisão humana
+real de todas as P0/P1. O artifact de preview é guardado antes desse gate.
+As regras estão em [docs/GITHUB_OPERATIONS.md](docs/GITHUB_OPERATIONS.md).
+
 ### CI (`.github/workflows/ci.yml`)
 
 Roda em push/PR para `main` e via dispatch. Job **"Lint and build"**
-(ubuntu, Node do `.nvmrc`, `npm ci`): `astro check` → `npm run build`
-(que inclui o Pagefind) → smoke-test do `dist/`. É o status check exigido
-pela branch protection sugerida acima. O workflow atual não roda `npm test`;
-por isso as três lanes continuam parte obrigatória do gate local antes do
-push.
+(Ubuntu, contrato exato de Node/npm, `npm ci`): Astro check → tipos Cloudflare →
+`npm test` (Workers, Node e UI) → políticas de deploy e claims estruturais,
+UTF-8, prosa, FAQs e dependências → `npm run build` com Pagefind → auditorias
+de rotas, redirects, terminologia, HTML e SEO → smoke do `dist/` e artifact de
+PR. É o status check exigido pela proteção de `main`.
+
+O workflow produz o `dist/` uma vez e chama as auditorias individualmente;
+`audit:editorial` faria outro build. O teste Node da confirmação de newsletter
+mantém seu build temporário independente. CI aprovado prova esses contratos
+automatizados, sem substituir revisão editorial nem verificação em produção.
 
 ### Remotes git
 
@@ -1354,9 +1372,10 @@ como são:
       no Resend para cada candidato, excluir opt-out global/Topic, confirmar as
       quatro propriedades de evidência e registrar a autorização operacional.
       A view `newsletter_broadcast_recipients`, isoladamente, não autoriza envio.
-- [ ] **CI:** falhar o build de produção se `PUBLIC_TURNSTILE_SITE_KEY` estiver
-      ausente/placeholder — sem a key, os formulários renderizam o estado de
-      indisponibilidade (fail-closed por design, mas silencioso).
+- [ ] **Build automático do Pages:** estender ao publicador Git a rejeição de
+      `PUBLIC_TURNSTILE_SITE_KEY` ausente/placeholder. O fallback manual Actions
+      já possui esse gate antes do build; sem a key, os formulários renderizam
+      o estado de indisponibilidade (fail-closed por design).
 - [ ] **CSP reporting:** avaliar endpoint de `report-to`/`report-uri` (ex.:
       um Pages Function gravando métrica estruturada) para tornar violações de
       CSP visíveis em produção — hoje elas são silenciosas.

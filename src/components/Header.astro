@@ -168,7 +168,7 @@ const allMegas: Record<string, MegaMenu> = {
 
   <!-- Main header bar -->
   <div class="border-b border-integra-gray-200">
-    <div class="container-fluid flex h-20 items-center gap-8 lg:h-28">
+    <div class="container-fluid flex h-20 items-center gap-4 lg:h-28 min-[1536px]:gap-8">
       <a
         href="/"
         class="flex items-center gap-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-integra-red rounded-sm"
@@ -179,7 +179,7 @@ const allMegas: Record<string, MegaMenu> = {
         <Image
           src={logoColorido}
           alt="Integra Automação Industrial"
-          class="h-16 w-auto lg:h-20"
+          class="h-16 w-auto min-[1536px]:h-20"
           widths={[320, 480, 720]}
           sizes="(min-width: 1024px) 250px, 200px"
           loading="eager"
@@ -187,7 +187,7 @@ const allMegas: Record<string, MegaMenu> = {
         />
       </a>
 
-      <nav class="hidden min-[1440px]:flex items-center gap-1 ml-auto" aria-label="Principal">
+      <nav class="hidden min-[1440px]:flex items-center gap-0.5 min-[1536px]:gap-1 ml-auto" aria-label="Principal">
         {NAV.map(({ href, label }) => {
           const mega = allMegas[href];
           if (!mega) {
@@ -195,7 +195,7 @@ const allMegas: Record<string, MegaMenu> = {
               <a
                 href={href}
                 class:list={[
-                  "px-3 py-2 text-[13px] font-bold uppercase tracking-wider rounded-md transition-colors",
+                  "px-2 min-[1536px]:px-3 py-2 text-[13px] font-bold uppercase tracking-wider rounded-md transition-colors",
                   isActive(href)
                     ? "text-integra-red-700"
                     : "text-integra-gray-900 hover:text-integra-red-700",
@@ -213,12 +213,11 @@ const allMegas: Record<string, MegaMenu> = {
           };
           const megaId = `mega-menu-${href.replace(/^\/+|\/+$/g, "").replace(/[^a-z0-9-]/gi, "-")}`;
           return (
-            <div class="group/menu" data-desktop-mega>
+            <div class="group/menu" data-desktop-mega data-mega-state="closed">
               <a
                 href={href}
                 class:list={[
-                  "inline-flex items-center gap-1 px-3 py-2 text-[13px] font-bold uppercase tracking-wider rounded-md transition-colors",
-                  "group-hover/menu:text-integra-red-700 group-focus-within/menu:text-integra-red-700",
+                  "inline-flex items-center gap-1 px-2 min-[1536px]:px-3 py-2 text-[13px] font-bold uppercase tracking-wider rounded-md transition-colors",
                   isActive(href)
                     ? "text-integra-red-700"
                     : "text-integra-gray-900 hover:text-integra-red-700",
@@ -235,7 +234,8 @@ const allMegas: Record<string, MegaMenu> = {
               </a>
               {/* Bridge: keeps the full-width menu open while the cursor leaves the nav item. */}
               <div
-                class="fixed inset-x-0 top-[7rem] z-[59] h-9 invisible pointer-events-none group-hover/menu:visible group-hover/menu:pointer-events-auto group-focus-within/menu:visible group-focus-within/menu:pointer-events-auto"
+                class="fixed inset-x-0 top-[7rem] z-[59] h-9 invisible pointer-events-none"
+                data-mega-bridge
                 aria-hidden="true"
               />
               <div
@@ -244,8 +244,6 @@ const allMegas: Record<string, MegaMenu> = {
                 class:list={[
                   "fixed inset-x-0 top-[9.25rem] z-[60]",
                   "invisible opacity-0 -translate-y-1 pointer-events-none transition-all duration-150",
-                  "group-hover/menu:visible group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto",
-                  "group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-focus-within/menu:translate-y-0 group-focus-within/menu:pointer-events-auto",
                 ]}
               >
                 <div class="relative border-y border-integra-gray-200 bg-integra-white shadow-2xl">
@@ -358,7 +356,7 @@ const allMegas: Record<string, MegaMenu> = {
 
       <a
         href="/contato/?assunto=triagem"
-        class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
+        class="hidden lg:inline-flex items-center gap-2 px-4 min-[1536px]:px-5 py-2.5 text-sm font-semibold text-integra-white bg-integra-red hover:bg-integra-red-700 rounded-md transition-colors shrink-0"
       >
         Solicitar triagem
         <span aria-hidden="true">→</span>
@@ -475,29 +473,27 @@ const allMegas: Record<string, MegaMenu> = {
 
 <script>
   import { initMobileNavigation } from "@/scripts/mobileNavigation";
+  import { initDesktopNavigation } from "@/scripts/desktopNavigation";
 
   initMobileNavigation();
-
-  for (const wrapper of document.querySelectorAll<HTMLElement>(
-    "[data-desktop-mega]",
-  )) {
-    const trigger =
-      wrapper.querySelector<HTMLElement>("[data-mega-trigger]");
-    if (!trigger) continue;
-
-    const setExpanded = (expanded: boolean) => {
-      trigger.setAttribute("aria-expanded", String(expanded));
-    };
-
-    wrapper.addEventListener("mouseenter", () => setExpanded(true));
-    wrapper.addEventListener("mouseleave", () => setExpanded(false));
-    wrapper.addEventListener("focusin", () => setExpanded(true));
-    wrapper.addEventListener("focusout", (event) => {
-      if (!(event.relatedTarget instanceof Node)) {
-        setExpanded(false);
-      } else if (!wrapper.contains(event.relatedTarget)) {
-        setExpanded(false);
-      }
-    });
-  }
+  initDesktopNavigation();
 </script>
+
+<style>
+  [data-desktop-mega][data-mega-state="open"] [data-mega-trigger] {
+    color: var(--color-integra-red-700);
+  }
+  [data-desktop-mega][data-mega-state="open"] [data-mega-trigger] svg {
+    transform: rotate(180deg);
+  }
+  [data-desktop-mega][data-mega-state="open"] [data-mega-bridge] {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  [data-desktop-mega][data-mega-state="open"] [data-mega-panel] {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+</style>

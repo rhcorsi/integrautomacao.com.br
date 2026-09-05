@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import TechnicalToc from "@/components/TechnicalToc.astro";
+import TechnicalEvidence from "@/components/TechnicalEvidence.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import ManualReference from "@/components/ManualReference.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
@@ -67,7 +69,7 @@ const jsonLdBlocks =
   jsonLd={jsonLdBlocks}
 >
   <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+    <div class="container-fluid grid gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:py-14">
       <div>
         <Breadcrumbs leaf={item.shortTitle} />
         <p
@@ -118,8 +120,12 @@ const jsonLdBlocks =
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid py-20">
+  <div class="container-fluid"><TechnicalToc items={[
+    {id: "aplicacao", text: "Quando considerar"}, {id: "metodo", text: "Método e escopo"},
+    {id: "entregaveis", text: "Entregáveis e referências"}, {id: "perguntas", text: "Perguntas de engenharia"},
+  ]} /></div>
+  <section id="aplicacao" class="border-b border-integra-gray-200 bg-integra-gray-50">
+    <div class="container-fluid py-12 lg:py-16">
       <SectionHeader
         eyebrow="Onde entra"
         title="Quando faz sentido considerar"
@@ -144,9 +150,10 @@ const jsonLdBlocks =
     </div>
   </section>
 
-  <section class="border-b border-integra-gray-200 bg-integra-white">
-    <div class="container-fluid grid gap-12 py-20 lg:grid-cols-[0.9fr_1.1fr]">
+  <section id="metodo" class="border-b border-integra-gray-200 bg-integra-white">
+    <div class="container-fluid grid gap-12 py-12 lg:py-16 lg:grid-cols-[0.9fr_1.1fr]">
       <div>
+        {item.slug === "ethernet-ip-cpwe" && <p class="mb-6 text-base leading-relaxed text-integra-gray-700">Para relacionar topologia, segmentação e integração OT/IT, consulte o <a href="/blog/cpwe-rede-converged/" class="font-semibold text-integra-red-700 underline underline-offset-4">guia de rede convergente CPwE</a> e confronte suas premissas com a base instalada.</p>}
         <SectionHeader
           eyebrow="Método Integra"
           title="Como transformamos tecnologia em entrega mantível"
@@ -165,7 +172,8 @@ const jsonLdBlocks =
   </section>
 
   <section class="border-b border-integra-gray-200 bg-integra-gray-50">
-    <div class="container-fluid max-w-5xl py-20">
+    <div class="container-fluid max-w-5xl py-12 lg:py-16">
+      <div id="entregaveis"></div>
       <DeliverableList
         title="Entregáveis típicos"
         items={item.deliverables}
@@ -177,13 +185,14 @@ const jsonLdBlocks =
         standards={item.standards}
       />
 
-      <FAQAccordion title="Perguntas de engenharia" items={item.faq} />
+      <div id="perguntas"><FAQAccordion title="Perguntas de engenharia" items={item.faq} /></div>
+      <TechnicalEvidence pagePath={Astro.url.pathname} />
     </div>
   </section>
 
   {(related.length > 0 || item.relatedSolutions.length > 0 || (item.relatedGuides?.length ?? 0) > 0 || (item.relatedCases?.length ?? 0) > 0) && (
-    <section class="border-b border-integra-gray-200 bg-integra-white">
-      <div class="container-fluid py-20">
+    <section data-pagefind-ignore class="border-b border-integra-gray-200 bg-integra-white">
+      <div class="container-fluid py-12 lg:py-16">
         <SectionHeader
           eyebrow="Relacionados"
           title="Continue pelo contexto certo"

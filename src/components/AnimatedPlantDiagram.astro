@@ -50,23 +50,22 @@ const otText = "#003a5d";
   {/* Barra de título do painel, estilo estação de supervisão */}
   <div class="flex items-center justify-between border-b border-integra-gray-200 bg-integra-gray-50 px-4 py-2.5">
     <p class="font-mono text-[10px] uppercase tracking-widest text-integra-gray-500">
-      Supervisão · visão geral da planta
+      Arquitetura ilustrativa
     </p>
-    <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-emerald-700">
-      <span class="apd-status inline-block size-1.5 rounded-full bg-emerald-500"></span>
-      operacional
+    <p class="font-mono text-[10px] uppercase tracking-wider text-integra-gray-600">
+      Visão conceitual
     </p>
   </div>
 
   {/* Em telas estreitas o diagrama manteria textos de ~5px físicos se
       escalasse livremente: o min-w preserva a legibilidade e o container
       ganha rolagem horizontal (padrão de tabelas/diagramas técnicos). */}
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Diagrama conceitual em camadas; role horizontalmente para consultar a figura completa">
   <svg
     viewBox="0 0 560 612"
     role="img"
     aria-labelledby="apd-title apd-desc"
-    class="h-auto w-full min-w-[560px]"
+    class="h-auto w-full min-w-[560px] xl:min-w-0"
     xmlns="http://www.w3.org/2000/svg"
   >
     <title id="apd-title">Fluxo de dados da planta, do campo ao corporativo</title>
@@ -200,19 +199,16 @@ const otText = "#003a5d";
     .apd-dot {
       offset-path: var(--apd-path);
       offset-rotate: 0deg;
-      animation: apd-flow var(--apd-dur, 3s) linear infinite;
+      animation: apd-flow 2s linear 1;
       animation-delay: var(--apd-delay, 0s);
     }
     .apd-dot-down {
       animation-direction: reverse;
     }
     .apd-ring {
-      animation: apd-ping 3.2s ease-out infinite;
+      animation: apd-ping 3.2s ease-out 1;
       transform-box: fill-box;
       transform-origin: center;
-    }
-    .apd-status {
-      animation: apd-blink 2.4s ease-in-out infinite;
     }
   }
 

@@ -2,7 +2,7 @@
 title: "PlantPAx 5.x vs 4.x: o que mudou e quando migrar"
 description: "Comparativo técnico entre PlantPAx 5.x e 4.x: instruções embarcadas no firmware, alarmes no controlador, requisitos de versão e quando migrar."
 pubDate: 2026-06-10
-updatedDate: 2026-07-12
+updatedDate: 2026-09-04
 tags: ["PlantPAx", "DCS", "Migração"]
 draft: false
 ---
@@ -103,9 +103,10 @@ Para uma planta que opera 4.x estável, o ganho não é cosmético:
   e comunicação por exceção, o PASS (Process Automation System Server) carrega
   menos — e aplicações grandes podem cortar servidores de dados redundantes,
   segundo a Rockwell.
-- **Diagnóstico automático de dispositivos.** Instrumentos e drives
-  EtherNet/IP entregam diagnóstico aos objetos de processo sem engenharia
-  adicional por dispositivo.
+- **Diagnóstico integrado de dispositivos.** Dispositivos e combinações
+  suportadas podem fornecer diagnósticos aos objetos de processo e reduzir a
+  engenharia de integração. Perfil, firmware, biblioteca, configuração e testes
+  ainda precisam ser confirmados para a release adotada.
 - **Padronização blindada.** Instruções de firmware não podem ser editadas.
   A revisão e a funcionalidade ficam preservadas em todos os projetos — o que
   protege a governança do padrão, mas exige repensar qualquer customização
@@ -187,12 +188,11 @@ tática válida, mas exige lifecycle e compatibilidade documentados. E se o seu 
 SLC 500 ou DCS de outro fabricante — a discussão é outra: veja
 [migração de PLCs e sistemas legados](/solucoes/migracao-plc/).
 
-A Integra Automação Industrial (Maringá-PR, desde 2016) participa do programa
-de integradores da Rockwell Automation no nível Silver e possui capacidade
-PlantPAx declarada no programa. Executa
-desde o diagnóstico de aderência 4.x→5.x até a conversão de biblioteca,
-telas e filosofia de alarmes em setores como açúcar e etanol, alimentos e
-papel e celulose.
+A Integra atua em diagnóstico de aderência 4.x→5.x, planejamento de conversão
+de biblioteca, telas e filosofia de alarmes. Credenciais de fabricante e seu
+escopo são informações mutáveis: consulte a
+[página de certificações](/certificacoes/) e confirme o status vigente no canal
+oficial antes de usá-las como critério de contratação.
 
 ## Perguntas frequentes
 
@@ -238,9 +238,10 @@ correspondentes listadas no Selection Guide PROCES-SG001 da Rockwell.
 ### A PlantPAx 4.x ainda é suportada?
 
 A biblioteca 4.10 continua disponível no portal da Rockwell como previous
-release e segue operando normalmente em plantas existentes. Porém, todo o
-desenvolvimento novo está na linha 5.x; para um horizonte de operação de dez
-anos ou mais, o planejamento de modernização deve assumir a 5.x como destino.
+release. Disponibilidade para download não comprova suporte de toda combinação
+instalada: confirme controlador, firmware, software e lifecycle. As releases de
+sistema atuais consultadas estão na linha 5.x; a decisão de destino e prazo deve
+seguir a matriz da release e o horizonte operacional de cada planta.
 
 ---
 
